@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/shahinrahimi/go-freelancer-sdk/v1"
+	freelancer "github.com/shahinrahimi/go-freelancer-sdk/freelancer/v1"
 )
 
 func main() {
@@ -91,7 +91,7 @@ func main() {
 		return
 	}
 	for pr, p := range res4.Result.Countries {
-		log.Printf("Country #%d: %s", pr, p.Name, p.Code)
+		log.Printf("Country #%d: %s, %s", pr, p.Name, p.Code)
 	}
 
 	res5, err := c.NewListCategoriesService().Do(context.Background())
