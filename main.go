@@ -111,7 +111,7 @@ func main() {
 	ps.SetProjects(projectsID)
 	ps.SetLocationDetails(true)
 	ps.SetUserLocationDetails(true)
-	res7, err := ps.Do(context.Background())
+	res6, err := ps.Do(context.Background())
 	if err != nil {
 		if handledError, ok := err.(*freelancer.APIError2); ok {
 			log.Printf("Handled error: %s", handledError)
@@ -120,11 +120,24 @@ func main() {
 		log.Printf("Unhandled Error: %s", err)
 		return
 	}
-	for pr, p := range res7.Result.Projects {
+	for pr, p := range res6.Result.Projects {
 		log.Printf("Project #%d: %s", pr, p.Title)
 		log.Printf("Project #%d: %s", pr, p.SeoURL)
 		//log.Printf("Project #%d: %s", pr, p.Description)
 		log.Printf("Project #%d: %s", pr, p.Location.City)
+	}
+
+	res7, err := c.NewListCurrenciesService().Do(context.Background())
+	if err != nil {
+		if handledError, ok := err.(*freelancer.APIError2); ok {
+			log.Printf("Handled error: %s", handledError)
+			return
+		}
+		log.Printf("Unhandled Error: %s", err)
+		return
+	}
+	for pr, p := range res7.Result.Currencies {
+		log.Printf("Currency #%d: %s", pr, p.Name)
 	}
 
 }
