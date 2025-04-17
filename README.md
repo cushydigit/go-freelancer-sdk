@@ -20,6 +20,7 @@ This library provides a simple, typed client for accessing Freelancer.com servic
 
 ```bash
 go get github.com/cushydigit/freelancer-go-sdk
+```
 
 ## 🚀 Quick Example
 
