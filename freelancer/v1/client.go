@@ -45,6 +45,7 @@ func NewClient(apiToken string) *Client {
 		HTTPClient: &http.Client{},
 		apiToken:   apiToken,
 		baseURL:    BaseAPIMainURL,
+		Debug: 			false,		
 	}
 }
 

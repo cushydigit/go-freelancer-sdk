@@ -24,6 +24,61 @@ go get github.com/cushydigit/freelancer-go-sdk
 
 ## 🚀 Quick Example
 
+```
+func example() {
+	// create freelancer clinet
+	c := freelancer.NewClient("YOUR-ACCESS-TOKEN")
+
+	// create active project service 
+	s := c.NewListActiveProjectsService()
+
+	// get results
+	res, err := s.Do(context.Background())
+
+	// basic error handler
+	if err != nil {
+		log.Printf("error: %v", err)
+	} 
+
+	// loop through projects
+	for index, p := range res.Result.Projects {
+		log.Printf("Project-%d\tTitle: ", index, p.Title)
+	}
+}
+
+```
+```
+func example2() {
+	// create freelancer clinet
+	c := freelancer.NewClient("YOUR-ACCESS-TOKEN")
+
+	// create active project service 
+	s := c.NewListActiveProjectsService()
+
+	// list projects base on query
+	s.SetQuery("Go Python")
+
+	// filter projects base on type
+	s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectTypeFixed})
+
+	// include projects full description
+	s.SetFullDescription(true)
+
+	// get results
+	res, err := s.Do(context.Background())
+
+	// basic error handler
+	if err != nil {
+		log.Printf("error: %v", err)
+	} 
+
+	// loop through projects
+	for index, p := range res.Result.Projects {
+		log.Printf("Project-%d\ttype: \nDesctiption: %s", index, p.Title, p.Description)
+	}
+
+}
+```
 ## 🛠️ Usage
 
 ## 📂 Project Structure

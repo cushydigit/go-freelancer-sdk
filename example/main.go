@@ -9,22 +9,82 @@ import (
 	freelancer "github.com/shahinrahimi/go-freelancer-sdk/freelancer/v1"
 )
 
+
+func quickExmaple() {
+	// create freelancer clinet
+	c := freelancer.NewClient("YOUR-ACCESS-TOKEN")
+
+	// create active project service 
+	s := c.NewListActiveProjectsService()
+
+	// get results
+	res, err := s.Do(context.Background())
+
+	// basic error handler
+	if err != nil {
+		log.Printf("error: %v", err)
+	} 
+
+	// loop through projects
+	for index, p := range res.Result.Projects {
+		log.Printf("Project-%d\tTitle: ", index, p.Title)
+	}
+}
+
+
+func quickExample2() {
+	// create freelancer clinet
+	c := freelancer.NewClient("YOUR-ACCESS-TOKEN")
+
+	// create active project service 
+	s := c.NewListActiveProjectsService()
+
+	// list projects base on query
+	s.SetQuery("Go Python")
+
+	// filter projects base on type
+	s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectTypeFixed})
+
+	// include projects full description
+	s.SetFullDescription(true)
+
+	// get results
+	res, err := s.Do(context.Background())
+
+	// basic error handler
+	if err != nil {
+		log.Printf("error: %v", err)
+	} 
+
+	// loop through projects
+	for index, p := range res.Result.Projects {
+		log.Printf("Project-%d\ttype: \nDesctiption: %s", index, p.Title, p.Description)
+	}
+
+}
+
+
 func main() {
 
-	// Create a new client
+	// load .env file 
 	if err := godotenv.Load(); err != nil {
 		panic(err)
 	}
 
+	// get freelancer token
 	token := os.Getenv("FREELANCER_ACCESS_TOKEN")
 	if token == "" {
 		panic("FREELANCER_ACCESS_TOKEN is not set")
 	}
+	// create freelancer client
 	c := freelancer.NewClient(token)
-	c.SetBaseUrl(freelancer.BaseAPIMainURL)
-	c.Debug = false
 
-	pas := c.NewListActiveProjectsService()
+	// set BaseUrl main or sandbox freelancer.con api
+	c.SetBaseUrl(freelancer.BaseAPIMainURL)
+	
+	// list active projects
+	service := c.NewListActiveProjectsService()
+
 	pas.SetQuery("python json")
 	pas.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectTypeFixed})
 	pas.SetProjectUpgrades([]freelancer.ProjectUpgradeType{freelancer.ProjectUpgradeTypeSealed})
