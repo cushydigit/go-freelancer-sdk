@@ -9,12 +9,11 @@ import (
 	freelancer "github.com/shahinrahimi/go-freelancer-sdk/freelancer/v1"
 )
 
-
-func quickExmaple() {
-	// create freelancer clinet
+func quickExample() {
+	// create freelancer client
 	c := freelancer.NewClient("YOUR-ACCESS-TOKEN")
 
-	// create active project service 
+	// create active project service
 	s := c.NewListActiveProjectsService()
 
 	// get results
@@ -23,7 +22,7 @@ func quickExmaple() {
 	// basic error handler
 	if err != nil {
 		log.Printf("error: %v", err)
-	} 
+	}
 
 	// loop through projects
 	for index, p := range res.Result.Projects {
@@ -31,12 +30,11 @@ func quickExmaple() {
 	}
 }
 
-
 func quickExample2() {
-	// create freelancer clinet
+	// create freelancer client
 	c := freelancer.NewClient("YOUR-ACCESS-TOKEN")
 
-	// create active project service 
+	// create active project service
 	s := c.NewListActiveProjectsService()
 
 	// list projects base on query
@@ -54,7 +52,7 @@ func quickExample2() {
 	// basic error handler
 	if err != nil {
 		log.Printf("error: %v", err)
-	} 
+	}
 
 	// loop through projects
 	for index, p := range res.Result.Projects {
@@ -63,10 +61,9 @@ func quickExample2() {
 
 }
 
-
 func main() {
 
-	// load .env file 
+	// load .env file
 	if err := godotenv.Load(); err != nil {
 		panic(err)
 	}
@@ -81,7 +78,7 @@ func main() {
 
 	// set BaseUrl main or sandbox freelancer.con api
 	c.SetBaseUrl(freelancer.BaseAPIMainURL)
-	
+
 	// list active projects
 	service := c.NewListActiveProjectsService()
 
