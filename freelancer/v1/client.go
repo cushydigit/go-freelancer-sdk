@@ -45,11 +45,11 @@ func NewClient(apiToken string) *Client {
 		HTTPClient: &http.Client{},
 		apiToken:   apiToken,
 		baseURL:    BaseAPIMainURL,
-		Debug: 			false,		
+		Debug:      false,
 	}
 }
 
-func (c *Client) debug(format string, v ...interface{}) {
+func (c *Client) debug(format string, v ...any) {
 	if c.Debug {
 		c.logger.Printf(format, v...)
 	}

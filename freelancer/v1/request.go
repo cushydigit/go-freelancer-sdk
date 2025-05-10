@@ -9,7 +9,7 @@ import (
 	"reflect"
 )
 
-type params map[string]interface{}
+//type params map[string]any
 
 type request struct {
 	method   string
@@ -20,7 +20,7 @@ type request struct {
 	fullURL  string
 }
 
-func (r *request) addParam(key string, value interface{}) *request {
+func (r *request) addParam(key string, value any) *request {
 	if r.query == nil {
 		r.query = url.Values{}
 	}
@@ -28,7 +28,7 @@ func (r *request) addParam(key string, value interface{}) *request {
 	return r
 }
 
-func (r *request) setParam(key string, value interface{}) *request {
+func (r *request) setParam(key string, value any) *request {
 	if r.query == nil {
 		r.query = url.Values{}
 	}
@@ -44,14 +44,14 @@ func (r *request) setParam(key string, value interface{}) *request {
 }
 
 func (r *request) validate() error {
+	if r.query == nil {
+		r.query = url.Values{}
+	}
 	if r.method == "" {
 		panic("method cannot be empty")
 	}
 	if r.endpoint == "" {
 		panic("endpoint cannot be empty")
-	}
-	if r.query == nil {
-		r.query = url.Values{}
 	}
 	return nil
 }
