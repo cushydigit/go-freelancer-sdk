@@ -3,6 +3,8 @@ package freelancer
 import (
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
@@ -30,19 +32,24 @@ func (r *RateLimiter) UpdateFromHeader(resp *http.Response) {
 
 	limitHeader := resp.Header.Get("RateLimit-Limit")
 	log.Printf("Rate-Limit: %s", limitHeader)
-	// if limitHeader != "" {
-	// 	parts := strings.Split(limitHeader, ";")
-	// 	if len(parts) > 1 {
-	// 		mainPart := strings.Split(parts[0], ",")[0]
-	// 		if l, err := strconv.Atoi(strings.TrimSpace(mainPart)); err == nil {
-	// 			r.limit = l
-	// 		}
-	// 	}
-	// }
+	if limitHeader != "" {
+		parts := strings.Split(limitHeader, ";")
+		if len(parts) > 1 {
+			mainPart := strings.Split(parts[0], ",")[0]
+			if l, err := strconv.Atoi(strings.TrimSpace(mainPart)); err == nil {
+				r.limit = l
+			}
+		}
+	}
 
-	limitRemainingHeader := resp.Header.Get("RateLimit-Remaining")
+	remainingHeader := resp.Header.Get("RateLimit-Remaining")
+	if remainingHeader != "" {
+		if remaining, err := strconv.Atoi(remainingHeader); err == nil {
+			r.remaining = remaining
+		}
+	}
 
-	log.Printf("RateLimit-Remaining: %s", limitRemainingHeader)
+	r.lastCheck = time.Now()
 }
 
 func (r *RateLimiter) WaitIfNeeded() {
