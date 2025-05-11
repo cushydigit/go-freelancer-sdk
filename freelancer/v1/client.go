@@ -30,22 +30,29 @@ func (c *Client) GetBaseUrl() string {
 func (c *Client) SetBaseUrl(url string) {
 	c.baseURL = url
 }
+func (c *Client) SetUseRateLimit(enabled bool) {
+	c.useRateLimit = enabled
+}
 
 type Client struct {
-	logger     *log.Logger
-	HTTPClient *http.Client
-	apiToken   string
-	baseURL    string
-	Debug      bool
+	logger       *log.Logger
+	HTTPClient   *http.Client
+	rateLimiter  *RateLimiter
+	apiToken     string
+	baseURL      string
+	useRateLimit bool
+	Debug        bool
 }
 
 func NewClient(apiToken string) *Client {
 	return &Client{
-		logger:     log.Default(),
-		HTTPClient: &http.Client{},
-		apiToken:   apiToken,
-		baseURL:    BaseAPIMainURL,
-		Debug:      false,
+		logger:       log.Default(),
+		HTTPClient:   &http.Client{},
+		apiToken:     apiToken,
+		baseURL:      BaseAPIMainURL,
+		Debug:        false,
+		useRateLimit: true,
+		rateLimiter:  NewRateLimiter(),
 	}
 }
 
@@ -92,11 +99,19 @@ func (c *Client) callAPI(ctx context.Context, r *request) (data []byte, err erro
 	req = req.WithContext(ctx)
 	req.Header = r.header
 	c.debug(fmt.Sprintf("http request: %v\n", req))
+
+	if c.useRateLimit {
+		c.rateLimiter.WaitIfNeeded()
+	}
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {
 		c.debug("failed to send http request: %s\n", err)
 		return []byte{}, err
 	}
+	if c.useRateLimit {
+		c.rateLimiter.UpdateFromHeader(res)
+	}
+
 	c.debug("http response: %s\n", res.Status)
 	data, err = io.ReadAll(res.Body)
 	if err != nil {

@@ -17,7 +17,7 @@ func quickExample() {
 	s := c.NewListActiveProjectsService()
 
 	// get results
-	res, err := s.Do(context.Background())
+	_, err := s.Do(context.Background())
 
 	// basic error handler
 	if err != nil {
@@ -25,9 +25,9 @@ func quickExample() {
 	}
 
 	// loop through projects
-	for index, p := range res.Result.Projects {
-		log.Printf("Project-%d\tTitle: ", index, p.Title)
-	}
+	// for index, p := range res.Result.Projects {
+	// 	log.Printf("Project-%d\tTitle: ", index, p.Title)
+	// }
 }
 
 func quickExample2() {
@@ -62,6 +62,10 @@ func quickExample2() {
 }
 
 func main() {
+	quickExample()
+}
+
+func main2() {
 
 	// load .env file
 	if err := godotenv.Load(); err != nil {
@@ -80,7 +84,7 @@ func main() {
 	c.SetBaseUrl(freelancer.BaseAPIMainURL)
 
 	// list active projects
-	service := c.NewListActiveProjectsService()
+	pas := c.NewListActiveProjectsService()
 
 	pas.SetQuery("python json")
 	pas.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectTypeFixed})
