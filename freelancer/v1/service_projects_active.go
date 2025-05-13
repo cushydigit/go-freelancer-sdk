@@ -81,7 +81,7 @@ type ListActiveProjectsService struct {
 func (s *ListActiveProjectsService) Do(ctx context.Context) (*ListProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: "/projects/0.1/projects/active",
+		endpoint: string(PROJECTS_PROJECT_ACTIVE),
 	}
 	if s.query != "" {
 		r.addParam("query", s.query)
