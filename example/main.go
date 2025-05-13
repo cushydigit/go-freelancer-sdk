@@ -155,7 +155,28 @@ func GetSelfInfo() {
 		return
 	}
 	info := resp.Result
-	fmt.Printf("UserID: %d, Diplayname: %s, PublicName: %s, Role: %s", info.ID, info.DisplayName, info.PublicName, info.Role)
+	fmt.Printf("UserID: %d, Diplayname: %s, PublicName: %s, Role: %s\n", info.ID, info.DisplayName, info.PublicName, info.Role)
+
+	s2 := client.NewGetUserService()
+	resp2, err := s2.Do(context.Background(), info.ID)
+	if err != nil {
+		log.Printf("error: %v", err)
+		return
+	}
+	user := resp2.Result
+	fmt.Printf("UserID: %d, Diplayname: %s, PublicName: %s, Role: %s\n", user.ID, user.DisplayName, user.PublicName, user.Role)
+
+	s3 := client.NewListUsersService()
+	s3.SetUsers([]int{info.ID})
+	resp3, err := s3.Do(context.Background())
+	if err != nil {
+		log.Printf("error: %v", err)
+		return
+	}
+	for _, u := range resp3.Result.Users {
+		fmt.Printf("UserID: %d, Diplayname: %s, PublicName: %s, Role: %s\n", u.ID, u.DisplayName, u.PublicName, u.Role)
+
+	}
 }
 
 func main() {

@@ -181,3 +181,7 @@ func (c *Client) NewListSelfDevicesService() *ListSelfDevicesService {
 func (c *Client) NewGetSelfInfoService() *GetSelfInfoService {
 	return &GetSelfInfoService{client: c}
 }
+
+func (c *Client) NewGetUserService() *GetUserService {
+	return &GetUserService{client: c}
+}
