@@ -77,8 +77,19 @@ type ListActiveProjectsService struct {
 	compact                     bool
 }
 
+type ListActiveProjectsResponse struct {
+	Status    string               `json:"status"`
+	RequsetID string               `json:"request_id"`
+	Result    ActiveProjectsResult `json:"result"`
+}
+
+type ActiveProjectsResult struct {
+	Projects   []Project `json:"projects"`
+	TotalCount int       `json:"total_count"`
+}
+
 // Do perform GET request on endpoint "projects/0.1/projects/active/""
-func (s *ListActiveProjectsService) Do(ctx context.Context) (*ListProjectsResponse, error) {
+func (s *ListActiveProjectsService) Do(ctx context.Context) (*ListActiveProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_PROJECT_ACTIVE),
@@ -218,11 +229,20 @@ func (s *ListActiveProjectsService) Do(ctx context.Context) (*ListProjectsRespon
 	if s.limitedAccount {
 		r.addParam("limited_account", s.limitedAccount)
 	}
+	if s.limit > 0 {
+		r.addParam("limit", s.limit)
+	}
+	if s.offset > 0 {
+		r.addParam("offset", s.offset)
+	}
+	if s.compact {
+		r.addParam("compact", s.compact)
+	}
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
 		return nil, err
 	}
-	res := &ListProjectsResponse{}
+	res := &ListActiveProjectsResponse{}
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
