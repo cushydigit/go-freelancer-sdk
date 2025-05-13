@@ -3,8 +3,34 @@ package freelancer
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
+
+type GetUserService struct {
+	client *Client
+}
+
+type GetUserResponse struct {
+	Status string `json:"status"`
+	Result User   `json:"result"`
+}
+
+func (s *GetUserService) Do(ctx context.Context, userID string) (*GetUserResponse, error) {
+	r := &request{
+		method:   http.MethodGet,
+		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), userID),
+	}
+	data, err := s.client.callAPI(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+	res := &GetUserResponse{}
+	if err := json.Unmarshal(data, res); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
 
 type ListUsersService struct {
 	client                        *Client
@@ -46,10 +72,19 @@ type ListUsersService struct {
 	staffDetails                  bool
 }
 
+type ListUsersResponse struct {
+	Status string      `json:"status"`
+	Result UsersResult `json:"result"`
+}
+
+type UsersResult struct {
+	Users map[string]User `json:"users"`
+}
+
 func (s *ListUsersService) Do(ctx context.Context) (*ListUsersResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: "/users/0.1/users",
+		endpoint: string(USERS_USERS),
 	}
 	for _, userID := range s.users {
 		r.addParam("users[]", userID)
@@ -164,8 +199,7 @@ func (s *ListUsersService) Do(ctx context.Context) (*ListUsersResponse, error) {
 		return nil, err
 	}
 	res := &ListUsersResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
+	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 	return res, nil
