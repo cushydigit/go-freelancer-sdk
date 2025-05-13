@@ -11,11 +11,25 @@ import (
 	freelancer "github.com/shahinrahimi/go-freelancer-sdk/freelancer/v1"
 )
 
-// set freelancer api access token from env or set it manulay
-var apiAccessToken = os.Getenv("FREELANCER_ACCESS_TOKEN")
+var (
+	apiAccessToken string
+	client         *freelancer.Client
+)
 
-// create freelancer client with access token
-var client = freelancer.NewClient(apiAccessToken)
+func Init() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("the .env file not found: %v", err)
+	}
+
+	apiAccessToken = os.Getenv("FREELANCER_ACCESS_TOKEN")
+	if apiAccessToken == "" {
+		log.Fatal("environment varaiable not set correctly")
+	}
+
+	//create instance for freelancer client
+	client = freelancer.NewClient(apiAccessToken)
+
+}
 
 func ListActiveProjects() {
 	// create active project service
@@ -97,8 +111,22 @@ func ListTimeZones() {
 	}
 }
 
+func ListSelfDevices() {
+	s := client.NewListSelfDevicesService()
+	resp, err := s.Do(context.Background())
+	if err != nil {
+		log.Printf("error: %v", err)
+	}
+	for i, d := range resp.Result.Devices {
+		lastLogin := time.Unix(d.LastLogin, 0).Format("2006-01-02 15:04:05")
+		fmt.Printf("Device-%02d\tCountry: %s\tCity: %s\tPlatform: %s\tUserAgent: %s\tLastlogin: %s", i, d.Country, d.City, d.Platform, d.UserAgent, lastLogin)
+	}
+}
+
 func main() {
-	ListTimeZones()
+	Init()
+	ListSelfDevices()
+	// ListTimeZones()
 	// ListCurrencies()
 	// ListBudgets()
 	// ListActiveProjects()
