@@ -35,17 +35,6 @@ const (
 	SortFieldsTypeBidAvgUsd   SortFieldsType = "bid_avg_usd"
 )
 
-type ListProjectsResponse struct {
-	Status string         `json:"status"`
-	Result ProjectsResult `json:"result"`
-}
-
-type ProjectsResult struct {
-	Projects   []Project `json:"projects"`
-	TotalCount int       `json:"total_count"`
-}
-
-
 type Country struct {
 	Name         string  `json:"name,omitempty"`          // Optional
 	Code         string  `json:"code,omitempty"`          // Optional
@@ -221,7 +210,6 @@ type User struct {
 	PrimaryLanguage    string             `json:"primary_language,omitempty"`
 	PublicName         string             `json:"public_name,omitempty"`
 }
-
 
 type Project struct {
 	ID             int      `json:"id"`

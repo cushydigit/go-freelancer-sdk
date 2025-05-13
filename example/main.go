@@ -38,13 +38,37 @@ func ListActiveProjects() {
 	resp, err := s.Do(context.Background())
 	// hanlde error
 	if err != nil {
-		fmt.Printf("error: %v", err)
+		log.Printf("error: %v", err)
 	}
 
 	// use easily typed response
 	for index, p := range resp.Result.Projects {
 		timeSubmited := time.Unix(p.TimeSubmitted, 0).Format("2006-01-02 15:04:05")
 		fmt.Printf("Project-%03d\tID-%d\tAt: %s\tTitle: %s\n", index, p.ID, timeSubmited, p.Title)
+	}
+}
+
+func ListActiveLimitProjects() {
+	s := client.NewListActiveProjectsService()
+	s.SetLimit(10)
+	s.SetOffset(10)
+	resp, err := s.Do(context.Background())
+	if err != nil {
+		log.Printf("error: %v", err)
+	}
+	for i, p := range resp.Result.Projects {
+		timeSubmited := time.Unix(p.TimeSubmitted, 0).Format("2006-01-02 15:04:05")
+		fmt.Printf("Project-%03d\tID-%d\tAt: %s\tSeoUrl: %s\n", i, p.ID, timeSubmited, p.SeoURL)
+	}
+	s.SetLimit(10)
+	s.SetOffset(15)
+	resp, err = s.Do(context.Background())
+	if err != nil {
+		log.Printf("erro: %v", err)
+	}
+	for i, p := range resp.Result.Projects {
+		timeSubmited := time.Unix(p.TimeSubmitted, 0).Format("2006-01-02 15:04:05")
+		fmt.Printf("Project-%03d\tID-%d\tAt: %s\tSeoUrl: %s\n", i, p.ID, timeSubmited, p.SeoURL)
 	}
 }
 
@@ -123,9 +147,22 @@ func ListSelfDevices() {
 	}
 }
 
+func GetSelfInfo() {
+	s := client.NewGetSelfInfoService()
+	resp, err := s.Do(context.Background())
+	if err != nil {
+		log.Printf("error: %v", err)
+		return
+	}
+	info := resp.Result
+	fmt.Printf("UserID: %d, Diplayname: %s, PublicName: %s, Role: %s", info.ID, info.DisplayName, info.PublicName, info.Role)
+}
+
 func main() {
 	Init()
-	ListSelfDevices()
+	GetSelfInfo()
+	// ListActiveLimitProjects()
+	// ListSelfDevices()
 	// ListTimeZones()
 	// ListCurrencies()
 	// ListBudgets()
