@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 type GetUserService struct {
@@ -16,10 +17,10 @@ type GetUserResponse struct {
 	Result User   `json:"result"`
 }
 
-func (s *GetUserService) Do(ctx context.Context, userID string) (*GetUserResponse, error) {
+func (s *GetUserService) Do(ctx context.Context, userID int) (*GetUserResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), userID),
+		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), strconv.Itoa(userID)),
 	}
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
@@ -73,8 +74,9 @@ type ListUsersService struct {
 }
 
 type ListUsersResponse struct {
-	Status string      `json:"status"`
-	Result UsersResult `json:"result"`
+	Status    string      `json:"status"`
+	RequestID string      `json:"request_id"`
+	Result    UsersResult `json:"result"`
 }
 
 type UsersResult struct {
