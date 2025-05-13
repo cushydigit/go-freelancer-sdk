@@ -72,8 +72,8 @@ func (c *Client) parseRequest(r *request) (err error) {
 	fullURL := fmt.Sprintf("%s%s", c.baseURL, r.endpoint)
 	queryString := r.query.Encode()
 	header := http.Header{}
-	header.Add("Authorization", fmt.Sprintf("Bearer %s", c.apiToken))
-	header.Add("Content-Type", "application/json")
+	header.Set("freelancer-oauth-v1", c.apiToken)
+	header.Set("Content-Type", "application/json")
 	if queryString != "" {
 		fullURL = fmt.Sprintf("%s?%s", fullURL, queryString)
 	}
@@ -172,4 +172,8 @@ func (c *Client) NewListCountriesService() *ListCountriesService {
 
 func (c *Client) NewListUsersService() *ListUsersService {
 	return &ListUsersService{client: c}
+}
+
+func (c *Client) NewListSelfDevicesService() *ListSelfDevicesService {
+	return &ListSelfDevicesService{client: c}
 }
