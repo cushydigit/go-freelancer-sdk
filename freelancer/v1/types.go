@@ -45,14 +45,6 @@ type ProjectsResult struct {
 	TotalCount int       `json:"total_count"`
 }
 
-type ListUsersResponse struct {
-	Status string      `json:"status"`
-	Result UsersResult `json:"result"`
-}
-
-type UsersResult struct {
-	Users map[string]User `json:"users"`
-}
 
 type Country struct {
 	Name         string  `json:"name,omitempty"`          // Optional
@@ -181,23 +173,25 @@ type EmployerReputation struct {
 }
 
 type Location struct {
-	Country struct {
-		Name              string `json:"name,omitempty"`
-		FlagURL           string `json:"flag_url,omitempty"`
-		Code              string `json:"code,omitempty"`
-		HighresFlagURL    string `json:"highres_flag_url,omitempty"`
-		FlagURLCDN        string `json:"flag_url_cdn,omitempty"`
-		HighresFlagURLCDN string `json:"highres_flag_url_cdn,omitempty"`
-	} `json:"country,omitempty"`
-	City                   string   `json:"city,omitempty"`
-	Latitude               *float64 `json:"latitude,omitempty"`
-	Longitude              *float64 `json:"longitude,omitempty"`
-	Vicinity               *string  `json:"vicinity,omitempty"`
-	AdministrativeArea     *string  `json:"administrative_area,omitempty"`
-	FullAddress            *string  `json:"full_address,omitempty"`
-	AdministrativeAreaCode *string  `json:"administrative_area_code,omitempty"`
-	PostalCode             *string  `json:"postal_code,omitempty"`
-	ID                     *int     `json:"id,omitempty"`
+	Country                CountryLocation `json:"country,omitempty"`
+	City                   string          `json:"city,omitempty"`
+	Latitude               *float64        `json:"latitude,omitempty"`
+	Longitude              *float64        `json:"longitude,omitempty"`
+	Vicinity               *string         `json:"vicinity,omitempty"`
+	AdministrativeArea     *string         `json:"administrative_area,omitempty"`
+	FullAddress            *string         `json:"full_address,omitempty"`
+	AdministrativeAreaCode *string         `json:"administrative_area_code,omitempty"`
+	PostalCode             *string         `json:"postal_code,omitempty"`
+	ID                     *int            `json:"id,omitempty"`
+}
+
+type CountryLocation struct {
+	Name              string `json:"name,omitempty"`
+	FlagURL           string `json:"flag_url,omitempty"`
+	Code              string `json:"code,omitempty"`
+	HighresFlagURL    string `json:"highres_flag_url,omitempty"`
+	FlagURLCDN        string `json:"flag_url_cdn,omitempty"`
+	HighresFlagURLCDN string `json:"highres_flag_url_cdn,omitempty"`
 }
 
 type User struct {
@@ -227,6 +221,8 @@ type User struct {
 	PrimaryLanguage    string             `json:"primary_language,omitempty"`
 	PublicName         string             `json:"public_name,omitempty"`
 }
+
+
 type Project struct {
 	ID             int      `json:"id"`
 	OwnerID        int      `json:"owner_id"`
