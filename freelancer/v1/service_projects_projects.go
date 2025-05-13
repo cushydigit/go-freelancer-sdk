@@ -72,6 +72,16 @@ type ListProjectsService struct {
 	offset                       int
 	compact                      bool
 }
+type ListProjectsResponse struct {
+	Status    string         `json:"status"`
+	RequsetID string         `json:"request_id"`
+	Result    ProjectsResult `json:"result"`
+}
+
+type ProjectsResult struct {
+	Projects   []Project `json:"projects"`
+	TotalCount int       `json:"total_count"`
+}
 
 // Do perform GET request on endpoint "projects/0.1/projects/"
 func (s *ListProjectsService) Do(ctx context.Context) (*ListProjectsResponse, error) {
