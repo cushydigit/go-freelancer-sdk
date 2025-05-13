@@ -16,6 +16,7 @@ type ListCountriesResponse struct {
 	RequestID string          `json:"request_id,omitempty"` // Optional
 	Result    CountriesResult `json:"result"`
 }
+
 type CountriesResult struct {
 	Countries []Country `json:"countries"`
 }
@@ -24,7 +25,7 @@ type CountriesResult struct {
 func (c *ListCountriesService) Do(ctx context.Context) (*ListCountriesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: "/common/0.1/countries",
+		endpoint: string(COMMON_COUNTRIES),
 	}
 	if c.extraDetails {
 		r.setParam("extra_details", c.extraDetails)
@@ -58,17 +59,21 @@ type ListTimezonesResponse struct {
 	Result    TimezonesResult `json:"result"`
 }
 type TimezonesResult struct {
-	ID       int    `json:"id"`                 // "number" represented as float64
-	Country  string `json:"country,omitempty"`  // Optional
-	Timezone string `json:"timezone,omitempty"` // Optional
-	Offset   int    `json:"offset,omitempty"`   // Optional, "Decimal"
+	Timezones []Timezone `json:"timezones"` // Optional, "Decimal"
+}
+
+type Timezone struct {
+	ID       int     `json:"id"`                 // "number" represented as float64
+	Country  string  `json:"country,omitempty"`  // Optional
+	Timezone string  `json:"timezone,omitempty"` // Optional
+	Offset   float32 `json:"offset,omitempty"`
 }
 
 // Do perform GET request on endpoint "common/0.1/timezones/"
 func (c *ListTimezonesService) Do(ctx context.Context) (*ListTimezonesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: "/common/0.1/timezones",
+		endpoint: string(COMMON_TIMEZONES),
 	}
 	if len(c.timezones) > 0 {
 		r.setParam("timezones", c.timezones)
