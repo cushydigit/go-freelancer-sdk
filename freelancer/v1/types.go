@@ -48,14 +48,40 @@ type Country struct {
 	LanguageID   float64 `json:"language_id,omitempty"`   // Optional
 }
 
-type Jobs struct {
-	// Define any properties of "jobs" here if needed.
-	// Leaving it empty as per the schema.
+type GeneralResponse struct {
+	Status    string `json:"status"`
+	RequsetID string `json:"request_id"`
+}
+
+type Job struct {
+	ID                 float64   `json:"id"`
+	Name               *string   `json:"name,omitempty"`
+	Category           *Category `json:"category,omitempty"`
+	ActiveProjectCount float64   `json:"active_project_count"`
+	SeoURL             *string   `json:"seo_url,omitempty"`
+	Local              *bool     `json:"local,omitempty"`
+}
+
+type JobHistory struct {
+	CountOther float64    `json:"count_other"`
+	JobCounts  []JobCount `json:"job_counts"`
+}
+
+type JobCount struct {
+	Count float64 `json:"count"`
+	Job   Job     `json:"job"`
 }
 
 type Category struct {
 	ID   int    `json:"id"`             // "number" is represented as float64 in Go
 	Name string `json:"name,omitempty"` // Optional
+}
+type CategoryRating struct {
+	Communication   float64 `json:"communication"`
+	Expertise       float64 `json:"expertise"`
+	HireAgain       float64 `json:"hire_again"`
+	Quality         float64 `json:"quality"`
+	Professionalism float64 `json:"professionalism"`
 }
 
 type Currency struct {
@@ -98,6 +124,16 @@ type CategoryRatings struct {
 	HireAgain       float64 `json:"hire_again,omitempty"`
 }
 type Reputation struct {
+	EntireHistory *ReputationStats `json:"entire_history,omitempty"`
+	Last3Months   *ReputationStats `json:"last3months,omitempty"`
+	Last12Months  *ReputationStats `json:"last12months,omitempty"`
+	UserID        *float64         `json:"user_id,omitempty"`
+	Role          *string          `json:"role,omitempty"` // "freelancer" or "employer"
+	EarningsScore *float64         `json:"earnings_score,omitempty"`
+	JobHistory    *JobHistory      `json:"job_history,omitempty"`
+}
+
+type ReputationStats struct {
 	Overall                   float64         `json:"overall,omitempty"`
 	OnBudget                  float64         `json:"on_budget,omitempty"`
 	OnTime                    float64         `json:"on_time,omitempty"`
@@ -142,23 +178,13 @@ type PrimaryCurrency struct {
 }
 
 type EmployerReputation struct {
-	Overall                   float64         `json:"overall,omitempty"`
-	OnBudget                  *float64        `json:"on_budget,omitempty"`
-	OnTime                    *float64        `json:"on_time,omitempty"`
-	Positive                  float64         `json:"positive,omitempty"`
-	CategoryRatings           CategoryRatings `json:"category_ratings,omitempty"`
-	All                       int             `json:"all,omitempty"`
-	Reviews                   int             `json:"reviews,omitempty"`
-	IncompleteReviews         *int            `json:"incomplete_reviews,omitempty"`
-	Complete                  int             `json:"complete,omitempty"`
-	Incomplete                int             `json:"incomplete,omitempty"`
-	Earnings                  *float64        `json:"earnings,omitempty"`
-	CompletionRate            float64         `json:"completion_rate,omitempty"`
-	RehireRate                *float64        `json:"rehire_rate,omitempty"`
-	UserID                    int             `json:"user_id,omitempty"`
-	CompletedRelevantJobCount *int            `json:"completed_relevant_job_count,omitempty"`
-	JobRanks                  *int            `json:"job_ranks,omitempty"`
-	RehireRank                *int            `json:"rehire_rank,omitempty"`
+	EntireHistory *ReputationStats `json:"entire_history,omitempty"`
+	Last3Months   *ReputationStats `json:"last3months,omitempty"`
+	Last12Months  *ReputationStats `json:"last12months,omitempty"`
+	UserID        *float64         `json:"user_id,omitempty"`
+	Role          *string          `json:"role,omitempty"` // "freelancer" or "employer"
+	EarningsScore *float64         `json:"earnings_score,omitempty"`
+	JobHistory    *JobHistory      `json:"job_history,omitempty"`
 }
 
 type Location struct {
@@ -193,6 +219,8 @@ type User struct {
 	Avatar             string             `json:"avatar,omitempty"`
 	Email              *string            `json:"email,omitempty"`
 	Reputation         Reputation         `json:"reputation,omitempty"`
+	Jobs               []Job              `json:"jobs,omitempty"`
+	ProfileDescription *string            `json:"profile_description"`
 	HourlyRate         *float64           `json:"hourly_rate,omitempty"`
 	RegistrationDate   int64              `json:"registration_date,omitempty"`
 	LimitedAccount     bool               `json:"limited_account,omitempty"`

@@ -135,6 +135,18 @@ func ListTimeZones() {
 	}
 }
 
+func ListCategories() {
+	s := client.NewListCategoriesService()
+	resp, err := s.Do(context.Background())
+	if err != nil {
+		log.Printf("error: %v", err)
+		return
+	}
+	for i, c := range resp.Result.Categories {
+		fmt.Printf("Category-%02d \tID:%3d\tCategoryName: %s\n", i, c.ID, c.Name)
+	}
+}
+
 func ListSelfDevices() {
 	s := client.NewListSelfDevicesService()
 	resp, err := s.Do(context.Background())
@@ -188,13 +200,24 @@ func ListFreelancerService() {
 		return
 	}
 	for _, u := range resp.Result.Users {
-		fmt.Printf("UserID: %8d\tRole: %s\tReviewCount: %3d\tDisplayName: %s\n", u.ID, u.Role, u.Reputation.Reviews, u.DisplayName)
+		fmt.Printf("UserID: %8d\tRole: %s\tReviewCount: %3d\tDisplayName: %s\n", u.ID, u.Role, u.Reputation.EntireHistory.Reviews, u.DisplayName)
+	}
+}
+
+func TestSelfJobs() {
+	s := client.NewGetSelfInfoService()
+	s.SetJobs(true)
+	_, err := s.Do(context.Background())
+	if err != nil {
+		log.Printf("error: %v", err)
+		return
 	}
 }
 
 func main() {
 	Init()
-	ListFreelancerService()
+	// ListFreelancerService()
+	ListCategories()
 	// GetSelfInfo()
 	// ListActiveLimitProjects()
 	// ListSelfDevices()
