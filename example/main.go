@@ -179,9 +179,23 @@ func GetSelfInfo() {
 	}
 }
 
+func ListFreelancerService() {
+	s := client.NewListFreelancersService()
+	s.SetOnlineOnly(true).SetReviewCountMax(300).SetReputation(true)
+	resp, err := s.Do(context.Background())
+	if err != nil {
+		log.Printf("error: %v", err)
+		return
+	}
+	for _, u := range resp.Result.Users {
+		fmt.Printf("UserID: %8d\tRole: %s\tReviewCount: %3d\tDisplayName: %s\n", u.ID, u.Role, u.Reputation.Reviews, u.DisplayName)
+	}
+}
+
 func main() {
 	Init()
-	GetSelfInfo()
+	ListFreelancerService()
+	// GetSelfInfo()
 	// ListActiveLimitProjects()
 	// ListSelfDevices()
 	// ListTimeZones()

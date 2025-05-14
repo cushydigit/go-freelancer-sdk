@@ -459,7 +459,7 @@ type FreelancerResult struct {
 func (s *ListFreelancersService) Do(ctx context.Context) (*ListFreelancersResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_USERS),
+		endpoint: string(USERS_FREELANCERS),
 	}
 	if s.query != "" {
 		r.addParam("query", s.query)
@@ -643,23 +643,23 @@ func (s *ListFreelancersService) SetCoutries(coutries []string) *ListFreelancers
 	return s
 }
 
-func (s *ListFreelancersService) SetHourlyRateMin(hourlyRateMin *int) *ListFreelancersService {
-	s.hourlyRateMin = hourlyRateMin
+func (s *ListFreelancersService) SetHourlyRateMin(hourlyRateMin int) *ListFreelancersService {
+	s.hourlyRateMin = &hourlyRateMin
 	return s
 }
 
-func (s *ListFreelancersService) SetHourlyRateMax(hourlyRateMax *int) *ListFreelancersService {
-	s.hourlyRateMax = hourlyRateMax
+func (s *ListFreelancersService) SetHourlyRateMax(hourlyRateMax int) *ListFreelancersService {
+	s.hourlyRateMax = &hourlyRateMax
 	return s
 }
 
-func (s *ListFreelancersService) SetReviewCountMin(reviewCountMin *int) *ListFreelancersService {
-	s.reviewCountMin = reviewCountMin
+func (s *ListFreelancersService) SetReviewCountMin(reviewCountMin int) *ListFreelancersService {
+	s.reviewCountMin = &reviewCountMin
 	return s
 }
 
-func (s *ListFreelancersService) SetReviewCountMax(reviewCountMax *int) *ListFreelancersService {
-	s.reviewCountMax = reviewCountMax
+func (s *ListFreelancersService) SetReviewCountMax(reviewCountMax int) *ListFreelancersService {
+	s.reviewCountMax = &reviewCountMax
 	return s
 }
 
@@ -668,13 +668,13 @@ func (s *ListFreelancersService) SetOnlineOnly(onlineOnly bool) *ListFreelancers
 	return s
 }
 
-func (s *ListFreelancersService) SetLocationLatitude(locationLatitude *float64) *ListFreelancersService {
-	s.locationLatitude = locationLatitude
+func (s *ListFreelancersService) SetLocationLatitude(locationLatitude float64) *ListFreelancersService {
+	s.locationLatitude = &locationLatitude
 	return s
 }
 
-func (s *ListFreelancersService) SetLocationLongitude(locationLongitude *float64) *ListFreelancersService {
-	s.locationLongitude = locationLongitude
+func (s *ListFreelancersService) SetLocationLongitude(locationLongitude float64) *ListFreelancersService {
+	s.locationLongitude = &locationLongitude
 	return s
 }
 
