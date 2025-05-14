@@ -22,7 +22,7 @@ type ListCategoriesResponse struct {
 }
 
 type CategoriesResult struct {
-	Jobs       *Jobs      `json:"jobs,omitempty"` // Jobs can be an object or null, represented by a pointer
+	// Jobs       []Job      `json:"jobs,omitempty"`
 	Categories []Category `json:"categories"`
 }
 
@@ -30,7 +30,7 @@ type CategoriesResult struct {
 func (s *ListCategoriesService) Do(ctx context.Context) (*ListCategoriesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: "/projects/0.1/categories",
+		endpoint: string(PROJECTS_CATEGORIES),
 	}
 	if s.categories != nil {
 		r.addParam("categories", s.categories)
