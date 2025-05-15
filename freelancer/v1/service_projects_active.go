@@ -21,7 +21,7 @@ type ListActiveProjectsService struct {
 	maxPrice                    float64
 	minHourlyRate               float64
 	maxHourlyRate               float64
-	jobs                        []int64
+	jobs                        []int32
 	countries                   []string
 	languages                   []string
 	latitude                    float64
@@ -497,7 +497,7 @@ func (s *ListActiveProjectsService) SetMaxHourlyRate(maxHourlyRate float64) *Lis
 	return s
 }
 
-func (s *ListActiveProjectsService) SetJobs(jobs []int64) *ListActiveProjectsService {
+func (s *ListActiveProjectsService) SetJobs(jobs []int32) *ListActiveProjectsService {
 	s.jobs = jobs
 	return s
 }

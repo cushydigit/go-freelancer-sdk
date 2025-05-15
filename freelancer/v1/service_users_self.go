@@ -400,7 +400,7 @@ func (s *GetSelfInfoService) SetCompact(compact bool) *GetSelfInfoService {
 }
 
 type JobsRequestBody struct {
-	Jobs []int `json:"jobs[]"`
+	Jobs []int32 `json:"jobs[]"`
 }
 
 type AddSelfJobsService struct {

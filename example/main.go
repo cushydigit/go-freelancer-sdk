@@ -179,7 +179,7 @@ func GetSelfInfo() {
 	fmt.Printf("UserID: %d, Diplayname: %s, PublicName: %s, Role: %s\n", user.ID, user.DisplayName, user.PublicName, user.Role)
 
 	s3 := client.NewListUsersService()
-	s3.SetUsers([]int{info.ID})
+	s3.SetUsers([]int64{info.ID})
 	resp3, err := s3.Do(context.Background())
 	if err != nil {
 		log.Printf("error: %v", err)
@@ -221,7 +221,7 @@ func ListSelfJobs() {
 func AddSelfJobs() {
 	s := client.NewAddSelfJobsService()
 	reqBody := freelancer.JobsRequestBody{
-		Jobs: []int{1, 2},
+		Jobs: []int32{1, 2},
 	}
 	resp, err := s.Do(context.Background(), reqBody)
 	if err != nil {
@@ -233,10 +233,10 @@ func AddSelfJobs() {
 
 func main() {
 	Init()
-	ListSelfJobs()
+	// ListSelfJobs()
 	// AddSelfJobs()
 	// ListSelfJobs()
-	// / ListFreelancerService()
+	ListFreelancerService()
 	// ListCategories()
 	// GetSelfInfo()
 	// ListActiveLimitProjects()

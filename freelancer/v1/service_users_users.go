@@ -17,10 +17,10 @@ type GetUserResponse struct {
 	Result User   `json:"result"`
 }
 
-func (s *GetUserService) Do(ctx context.Context, userID int) (*GetUserResponse, error) {
+func (s *GetUserService) Do(ctx context.Context, userID int64) (*GetUserResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), strconv.Itoa(userID)),
+		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), strconv.FormatInt(userID, 10)),
 	}
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
@@ -35,7 +35,7 @@ func (s *GetUserService) Do(ctx context.Context, userID int) (*GetUserResponse, 
 
 type ListUsersService struct {
 	client                        *Client
-	users                         []int
+	users                         []int64
 	usernames                     []string
 	avatar                        bool
 	countryDetails                bool
@@ -207,7 +207,7 @@ func (s *ListUsersService) Do(ctx context.Context) (*ListUsersResponse, error) {
 	return res, nil
 }
 
-func (s *ListUsersService) SetUsers(users []int) *ListUsersService {
+func (s *ListUsersService) SetUsers(users []int64) *ListUsersService {
 	s.users = users
 	return s
 }
@@ -391,8 +391,8 @@ type ListFreelancersService struct {
 	client *Client
 	query  string
 	// jobs[]
-	jobsIDs                       []int // I have to rename the field to jobsIDs we have another jobs as bool
-	skills                        []int
+	jobsIDs                       []int32 // I have to rename the field to jobsIDs we have another jobs as bool
+	skills                        []int32
 	coutries                      []string
 	hourlyRateMin                 *int
 	hourlyRateMax                 *int
@@ -401,8 +401,8 @@ type ListFreelancersService struct {
 	onlineOnly                    bool
 	locationLatitude              *float64
 	locationLongitude             *float64
-	insignias                     []int
-	poolIds                       []int
+	insignias                     []int32
+	poolIds                       []int32
 	ratings                       float32
 	sortField                     *int // DirectorySortFieldEnum? could not found in freelancer.com docs
 	reverseSort                   bool
@@ -628,12 +628,12 @@ func (s *ListFreelancersService) SetQuery(query string) *ListFreelancersService 
 	return s
 }
 
-func (s *ListFreelancersService) SetJobsIDs(jobsIDs []int) *ListFreelancersService {
+func (s *ListFreelancersService) SetJobsIDs(jobsIDs []int32) *ListFreelancersService {
 	s.jobsIDs = jobsIDs
 	return s
 }
 
-func (s *ListFreelancersService) SetSkills(skills []int) *ListFreelancersService {
+func (s *ListFreelancersService) SetSkills(skills []int32) *ListFreelancersService {
 	s.skills = skills
 	return s
 }
@@ -678,12 +678,12 @@ func (s *ListFreelancersService) SetLocationLongitude(locationLongitude float64)
 	return s
 }
 
-func (s *ListFreelancersService) SetInsignias(insignias []int) *ListFreelancersService {
+func (s *ListFreelancersService) SetInsignias(insignias []int32) *ListFreelancersService {
 	s.insignias = insignias
 	return s
 }
 
-func (s *ListFreelancersService) SetPoolIds(poolIds []int) *ListFreelancersService {
+func (s *ListFreelancersService) SetPoolIds(poolIds []int32) *ListFreelancersService {
 	s.poolIds = poolIds
 	return s
 }
@@ -693,8 +693,8 @@ func (s *ListFreelancersService) SetRatings(ratings float32) *ListFreelancersSer
 	return s
 }
 
-func (s *ListFreelancersService) SetSortField(sortField *int) *ListFreelancersService {
-	s.sortField = sortField
+func (s *ListFreelancersService) SetSortField(sortField int) *ListFreelancersService {
+	s.sortField = &sortField
 	return s
 }
 
