@@ -30,7 +30,3 @@ jobs:
 
     - name: Run SDK tests
       run: go test -v ./freelancer/...
-
-name: Go CI
-
-
