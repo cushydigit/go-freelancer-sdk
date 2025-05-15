@@ -108,10 +108,14 @@ func example2() {
 ## 📣 Contact
 
 Feel free to reach out if you have question or suggestions:
-- 📧 sh.rahimi.dev@gmail.com
-- [![LinkedIn](https://upload.wikimedia.org/wikipedia/commons/0/01/LinkedIn_Logo_2013.svg)](https://www.linkedin.com/in/shahinrahimi)
-- [![Twitter](https://upload.wikimedia.org/wikipedia/commons/6/60/Twitter_Logo_2021.svg)](https://twitter.com/cushydigit)
-- [![GitHub](https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg)](https://github.com/cushydigit)
+<div style="margin-top: 20px;">
+  <h3>Contact</h3>
+  <p>
+    📧 <a href="mailto:sh.rahimi.dev@gmail.com">sh.rahimi.dev@gmail.com</a><br>
+    💼 <a href="https://www.linkedin.com/in/shahin-rahimi-828447254/" target="_blank" rel="noopener noreferrer">LinkedIn</a><br>
+    🐦 <a href="https://x.com/cushydigit" target="_blank" rel="noopener noreferrer">Twitter</a>
+  </p>
+</div>
 
 
 
