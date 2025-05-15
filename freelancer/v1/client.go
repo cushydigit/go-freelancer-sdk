@@ -98,7 +98,7 @@ func (c *Client) callAPI(ctx context.Context, r *request) (data []byte, err erro
 	}
 	req = req.WithContext(ctx)
 	req.Header = r.header
-	c.debug(fmt.Sprintf("http request: %v\n", req))
+	c.debug("http request: %v\n", req)
 
 	if c.useRateLimit {
 		c.rateLimiter.WaitIfNeeded()
