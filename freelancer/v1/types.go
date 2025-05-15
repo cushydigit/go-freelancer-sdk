@@ -6,6 +6,7 @@ type ProjectType string
 type ProjectUpgradeType string
 type ContestUpgradeType string
 type SortFieldsType string
+type RoleType string
 
 const (
 	ProjectTypeFixed  ProjectType = "fixed"
@@ -33,6 +34,9 @@ const (
 	SortFieldsTypeBidCount    SortFieldsType = "bid_count"
 	SortFieldsTypeBidEndDate  SortFieldsType = "bid_enddate"
 	SortFieldsTypeBidAvgUsd   SortFieldsType = "bid_avg_usd"
+
+	RoleTypeFreelancer RoleType = "freelancer"
+	RoleTypeEmployer   RoleType = "employer"
 )
 
 type Country struct {

@@ -27,8 +27,10 @@ const (
 	// POST: requset a milestone
 	PROJECTS_MILESTONE_REQUESTS = "projects/0.1/milestonte_requests/{id}"
 
-	USERS_USERS        Endpoint = "/users/0.1/users"
-	USERS_FREELANCERS  Endpoint = "/users/0.1/users/directory"
+	USERS_USERS       Endpoint = "/users/0.1/users"
+	USERS_FREELANCERS Endpoint = "/users/0.1/users/directory"
+	USERS_REPUTATIONS Endpoint = "/users/0.1/reputations"
+
 	USERS_SELF         Endpoint = "/users/0.1/self"
 	USERS_SELF_DEVICES Endpoint = "/users/0.1/self/devices"
 	// POST, PUT, DELETE for add, replace or delete jobs
