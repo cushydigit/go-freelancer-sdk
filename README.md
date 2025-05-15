@@ -108,14 +108,10 @@ func example2() {
 ## 📣 Contact
 
 Feel free to reach out if you have question or suggestions:
-<div style="margin-top: 20px;">
-  <h3>Contact</h3>
-  <p>
-    📧 <a href="mailto:sh.rahimi.dev@gmail.com">sh.rahimi.dev@gmail.com</a><br>
-    💼 <a href="https://www.linkedin.com/in/shahin-rahimi-828447254/" target="_blank" rel="noopener noreferrer">LinkedIn</a><br>
-    🐦 <a href="https://x.com/cushydigit" target="_blank" rel="noopener noreferrer">Twitter</a>
-  </p>
-</div>
+- 📧 [sh.rahimi.dev@gmail.com](mailto:sh.rahimi.dev@gmail.com)
+- 💼 [LinkedIn](https://www.linkedin.com/in/shahin-rahimi-828447254/)
+- 🧑‍💻 [Freelancer](https://www.freelancer.com/u/shahinrahimi)
+- 🕊️ [X (formerly Twitter)](https://x.com/cushydigit)
 
 
 
