@@ -1,7 +1,4 @@
-# 📦 Freelancer.com Go SDK
-<h1 align="center">
-    🛠️ Unofficial Freelancer.com SDK (Go) 
-</h1>
+<h1 align="center">🛠️ Unofficial Freelancer.com SDK (Go) </h1>
 <p align="center">
     <a href="https://pkg.go.dev/github.com/cushydigit/go-freelancer-sdk">
         <img src="https://pkg.go.dev/badge/github.com/cushydigit/go-freelancer-sdk.svg" alt="Go Reference">
@@ -15,6 +12,9 @@
     <img src="https://img.shields.io/badge/status-unofficial-orange" alt="Unofficial Status">
   </a>
 </p>
+
+
+# 📦 Freelancer.com Go SDK
 A Go (Golang) SDK for interacting with the [Freelancer.com API](https://developers.freelancer.com/).
 
 This library provides a simple, typed client for accessing Freelancer.com services like projects, bids, users, currencies, and more.
