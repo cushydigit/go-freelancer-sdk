@@ -9,7 +9,6 @@
     <a href="go.mod">
         <img src="https://img.shields.io/github/go-mod/go-version/cushydigit/go-freelancer-sdk" alt="Go Version">
     </a>
-
     <a href="https://github.com/yourusername/freelancer-go-sdk/actions">
         <img src="https://img.shields.io/github/actions/workflow/status/cushydigit/go-freelancer-sdk/test.yml?branch=main" alt="Build Status">
     </a>
