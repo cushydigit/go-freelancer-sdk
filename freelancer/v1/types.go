@@ -54,7 +54,7 @@ type GeneralResponse struct {
 }
 
 type Job struct {
-	ID                 float64   `json:"id"`
+	ID                 int64     `json:"id"`
 	Name               *string   `json:"name,omitempty"`
 	Category           *Category `json:"category,omitempty"`
 	ActiveProjectCount float64   `json:"active_project_count"`
@@ -63,13 +63,13 @@ type Job struct {
 }
 
 type JobHistory struct {
-	CountOther float64    `json:"count_other"`
+	CountOther int64      `json:"count_other"`
 	JobCounts  []JobCount `json:"job_counts"`
 }
 
 type JobCount struct {
-	Count float64 `json:"count"`
-	Job   Job     `json:"job"`
+	Count int `json:"count"`
+	Job   Job `json:"job"`
 }
 
 type Category struct {
