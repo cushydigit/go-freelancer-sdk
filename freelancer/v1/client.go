@@ -189,3 +189,7 @@ func (c *Client) NewGetUserService() *GetUserService {
 func (c *Client) NewListFreelancersService() *ListFreelancersService {
 	return &ListFreelancersService{client: c}
 }
+
+func (c *Client) NewAddSelfJobsService() *AddSelfJobsService {
+	return &AddSelfJobsService{client: c}
+}

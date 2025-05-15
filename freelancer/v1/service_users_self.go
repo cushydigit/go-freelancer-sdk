@@ -1,6 +1,7 @@
 package freelancer
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -396,4 +397,43 @@ func (s *GetSelfInfoService) SetOffset(offset int) *GetSelfInfoService {
 func (s *GetSelfInfoService) SetCompact(compact bool) *GetSelfInfoService {
 	s.compact = compact
 	return s
+}
+
+type JobsRequestBody struct {
+	Jobs []int `json:"jobs[]"`
+}
+
+type AddSelfJobsService struct {
+	client *Client
+}
+
+func (s *AddSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*GeneralResponse, error) {
+	marshaledJson, err := json.Marshal(b)
+	if err != nil {
+		return nil, err
+	}
+
+	r := &request{
+		method:   http.MethodPost,
+		endpoint: string(USERS_SELF_JOBS),
+		body:     bytes.NewBuffer(marshaledJson),
+	}
+
+	data, err := s.client.callAPI(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+	res := &GeneralResponse{}
+	if err := json.Unmarshal(data, res); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+type UpdateSelfJobsService struct {
+	client *Client
+}
+
+type DeleteSelfJobsService struct {
+	client *Client
 }

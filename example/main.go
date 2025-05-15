@@ -204,20 +204,40 @@ func ListFreelancerService() {
 	}
 }
 
-func TestSelfJobs() {
+func ListSelfJobs() {
 	s := client.NewGetSelfInfoService()
 	s.SetJobs(true)
-	_, err := s.Do(context.Background())
+	resp, err := s.Do(context.Background())
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
 	}
+	for _, j := range resp.Result.Jobs {
+		fmt.Printf("ID: %d\tName: %s\tCategoryName: %s\n", j.ID, *j.Name, j.Category.Name)
+	}
+
+}
+
+func AddSelfJobs() {
+	s := client.NewAddSelfJobsService()
+	reqBody := freelancer.JobsRequestBody{
+		Jobs: []int{1, 2},
+	}
+	resp, err := s.Do(context.Background(), reqBody)
+	if err != nil {
+		log.Printf("error %v", err)
+		return
+	}
+	fmt.Printf("ruquested to add a jobs with status %s\n", resp.Status)
 }
 
 func main() {
 	Init()
-	// ListFreelancerService()
-	ListCategories()
+	ListSelfJobs()
+	// AddSelfJobs()
+	// ListSelfJobs()
+	// / ListFreelancerService()
+	// ListCategories()
 	// GetSelfInfo()
 	// ListActiveLimitProjects()
 	// ListSelfDevices()
