@@ -434,6 +434,50 @@ type UpdateSelfJobsService struct {
 	client *Client
 }
 
+func (s *UpdateSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*GeneralResponse, error) {
+	marshaledJson, err := json.Marshal(b)
+	if err != nil {
+		return nil, err
+	}
+	r := &request{
+		method:   http.MethodPut,
+		endpoint: string(USERS_SELF_JOBS),
+		body:     bytes.NewBuffer(marshaledJson),
+	}
+
+	data, err := s.client.callAPI(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+	res := &GeneralResponse{}
+	if err := json.Unmarshal(data, res); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 type DeleteSelfJobsService struct {
 	client *Client
+}
+
+func (s *DeleteSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*GeneralResponse, error) {
+	marshaledJson, err := json.Marshal(b)
+	if err != nil {
+		return nil, err
+	}
+	r := &request{
+		method:   http.MethodDelete,
+		endpoint: string(USERS_SELF_JOBS),
+		body:     bytes.NewBuffer(marshaledJson),
+	}
+
+	data, err := s.client.callAPI(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+	res := &GeneralResponse{}
+	if err := json.Unmarshal(data, res); err != nil {
+		return nil, err
+	}
+	return res, nil
 }
