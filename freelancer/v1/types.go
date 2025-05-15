@@ -134,23 +134,23 @@ type Reputation struct {
 }
 
 type ReputationStats struct {
-	Overall                   float64         `json:"overall,omitempty"`
-	OnBudget                  float64         `json:"on_budget,omitempty"`
-	OnTime                    float64         `json:"on_time,omitempty"`
-	Positive                  float64         `json:"positive,omitempty"`
-	CategoryRatings           CategoryRatings `json:"category_ratings,omitempty"`
-	All                       int             `json:"all,omitempty"`
-	Reviews                   int             `json:"reviews,omitempty"`
-	IncompleteReviews         int             `json:"incomplete_reviews,omitempty"`
-	Complete                  int             `json:"complete,omitempty"`
-	Incomplete                int             `json:"incomplete,omitempty"`
-	Earnings                  *float64        `json:"earnings,omitempty"`
-	CompletionRate            float64         `json:"completion_rate,omitempty"`
-	RehireRate                *float64        `json:"rehire_rate,omitempty"`
-	UserID                    int             `json:"user_id,omitempty"`
-	CompletedRelevantJobCount *int            `json:"completed_relevant_job_count,omitempty"`
-	JobRanks                  *int            `json:"job_ranks,omitempty"`
-	RehireRank                *int            `json:"rehire_rank,omitempty"`
+	Overall                   float64          `json:"overall,omitempty"`
+	OnBudget                  float64          `json:"on_budget,omitempty"`
+	OnTime                    float64          `json:"on_time,omitempty"`
+	Positive                  float64          `json:"positive,omitempty"`
+	CategoryRatings           *CategoryRatings `json:"category_ratings,omitempty"`
+	All                       int              `json:"all,omitempty"`
+	Reviews                   int              `json:"reviews,omitempty"`
+	IncompleteReviews         int              `json:"incomplete_reviews,omitempty"`
+	Complete                  int              `json:"complete,omitempty"`
+	Incomplete                int              `json:"incomplete,omitempty"`
+	Earnings                  *float64         `json:"earnings,omitempty"`
+	CompletionRate            float64          `json:"completion_rate,omitempty"`
+	RehireRate                *float64         `json:"rehire_rate,omitempty"`
+	UserID                    int              `json:"user_id,omitempty"`
+	CompletedRelevantJobCount *int             `json:"completed_relevant_job_count,omitempty"`
+	JobRanks                  *int             `json:"job_ranks,omitempty"`
+	RehireRank                *int             `json:"rehire_rank,omitempty"`
 }
 
 type Status struct {
@@ -188,16 +188,16 @@ type EmployerReputation struct {
 }
 
 type Location struct {
-	Country                CountryLocation `json:"country,omitempty"`
-	City                   string          `json:"city,omitempty"`
-	Latitude               *float64        `json:"latitude,omitempty"`
-	Longitude              *float64        `json:"longitude,omitempty"`
-	Vicinity               *string         `json:"vicinity,omitempty"`
-	AdministrativeArea     *string         `json:"administrative_area,omitempty"`
-	FullAddress            *string         `json:"full_address,omitempty"`
-	AdministrativeAreaCode *string         `json:"administrative_area_code,omitempty"`
-	PostalCode             *string         `json:"postal_code,omitempty"`
-	ID                     *int            `json:"id,omitempty"`
+	Country                *CountryLocation `json:"country,omitempty"`
+	City                   string           `json:"city,omitempty"`
+	Latitude               *float64         `json:"latitude,omitempty"`
+	Longitude              *float64         `json:"longitude,omitempty"`
+	Vicinity               *string          `json:"vicinity,omitempty"`
+	AdministrativeArea     *string          `json:"administrative_area,omitempty"`
+	FullAddress            *string          `json:"full_address,omitempty"`
+	AdministrativeAreaCode *string          `json:"administrative_area_code,omitempty"`
+	PostalCode             *string          `json:"postal_code,omitempty"`
+	ID                     *int             `json:"id,omitempty"`
 }
 
 type CountryLocation struct {
@@ -210,38 +210,38 @@ type CountryLocation struct {
 }
 
 type User struct {
-	ID                 int                `json:"id,omitempty"`
-	Username           string             `json:"username,omitempty"`
-	Suspended          *bool              `json:"suspended,omitempty"`
-	Closed             bool               `json:"closed,omitempty"`
-	IsActive           *bool              `json:"is_active,omitempty"`
-	ForceVerify        *bool              `json:"force_verify,omitempty"`
-	Avatar             string             `json:"avatar,omitempty"`
-	Email              *string            `json:"email,omitempty"`
-	Reputation         Reputation         `json:"reputation,omitempty"`
-	Jobs               []Job              `json:"jobs,omitempty"`
-	ProfileDescription *string            `json:"profile_description"`
-	HourlyRate         *float64           `json:"hourly_rate,omitempty"`
-	RegistrationDate   int64              `json:"registration_date,omitempty"`
-	LimitedAccount     bool               `json:"limited_account,omitempty"`
-	DisplayName        string             `json:"display_name,omitempty"`
-	Tagline            *string            `json:"tagline,omitempty"`
-	Location           Location           `json:"location,omitempty"`
-	AvatarLarge        string             `json:"avatar_large,omitempty"`
-	Role               string             `json:"role,omitempty"`
-	ChosenRole         string             `json:"chosen_role,omitempty"`
-	EmployerReputation EmployerReputation `json:"employer_reputation,omitempty"`
-	Status             Status             `json:"status,omitempty"`
-	AvatarCDN          string             `json:"avatar_cdn,omitempty"`
-	AvatarLargeCDN     string             `json:"avatar_large_cdn,omitempty"`
-	PrimaryCurrency    PrimaryCurrency    `json:"primary_currency,omitempty"`
-	PrimaryLanguage    string             `json:"primary_language,omitempty"`
-	PublicName         string             `json:"public_name,omitempty"`
+	ID                 int64               `json:"id,omitempty"`
+	Username           string              `json:"username,omitempty"`
+	Suspended          *bool               `json:"suspended,omitempty"`
+	Closed             bool                `json:"closed,omitempty"`
+	IsActive           *bool               `json:"is_active,omitempty"`
+	ForceVerify        *bool               `json:"force_verify,omitempty"`
+	Avatar             string              `json:"avatar,omitempty"`
+	Email              *string             `json:"email,omitempty"`
+	Reputation         *Reputation         `json:"reputation,omitempty"`
+	Jobs               []Job               `json:"jobs,omitempty"`
+	ProfileDescription *string             `json:"profile_description"`
+	HourlyRate         *float64            `json:"hourly_rate,omitempty"`
+	RegistrationDate   int64               `json:"registration_date,omitempty"`
+	LimitedAccount     bool                `json:"limited_account,omitempty"`
+	DisplayName        string              `json:"display_name,omitempty"`
+	Tagline            *string             `json:"tagline,omitempty"`
+	Location           *Location           `json:"location,omitempty"`
+	AvatarLarge        string              `json:"avatar_large,omitempty"`
+	Role               string              `json:"role,omitempty"`
+	ChosenRole         string              `json:"chosen_role,omitempty"`
+	EmployerReputation *EmployerReputation `json:"employer_reputation,omitempty"`
+	Status             *Status             `json:"status,omitempty"`
+	AvatarCDN          string              `json:"avatar_cdn,omitempty"`
+	AvatarLargeCDN     string              `json:"avatar_large_cdn,omitempty"`
+	PrimaryCurrency    *PrimaryCurrency    `json:"primary_currency,omitempty"`
+	PrimaryLanguage    string              `json:"primary_language,omitempty"`
+	PublicName         string              `json:"public_name,omitempty"`
 }
 
 type Project struct {
-	ID             int      `json:"id"`
-	OwnerID        int      `json:"owner_id"`
+	ID             int64    `json:"id"`
+	OwnerID        int64    `json:"owner_id"`
 	Title          string   `json:"title"`
 	Status         string   `json:"status"`
 	SeoURL         string   `json:"seo_url"`
