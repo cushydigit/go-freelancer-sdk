@@ -131,7 +131,7 @@ type Reputation struct {
 	EntireHistory *ReputationStats `json:"entire_history,omitempty"`
 	Last3Months   *ReputationStats `json:"last3months,omitempty"`
 	Last12Months  *ReputationStats `json:"last12months,omitempty"`
-	UserID        *float64         `json:"user_id,omitempty"`
+	UserID        *int64           `json:"user_id,omitempty"`
 	Role          *string          `json:"role,omitempty"` // "freelancer" or "employer"
 	EarningsScore *float64         `json:"earnings_score,omitempty"`
 	JobHistory    *JobHistory      `json:"job_history,omitempty"`
@@ -151,7 +151,7 @@ type ReputationStats struct {
 	Earnings                  *float64         `json:"earnings,omitempty"`
 	CompletionRate            float64          `json:"completion_rate,omitempty"`
 	RehireRate                *float64         `json:"rehire_rate,omitempty"`
-	UserID                    int              `json:"user_id,omitempty"`
+	UserID                    int64            `json:"user_id,omitempty"`
 	CompletedRelevantJobCount *int             `json:"completed_relevant_job_count,omitempty"`
 	JobRanks                  *int             `json:"job_ranks,omitempty"`
 	RehireRank                *int             `json:"rehire_rank,omitempty"`

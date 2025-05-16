@@ -17,9 +17,9 @@ type ListUsersReputationsService struct {
 }
 
 type ListUsersReputationsResponse struct {
-	Status    string     `json:"status"`
-	RequsetID string     `json:"requset_id"`
-	Result    Reputation `json:"result"`
+	Status    string                `json:"status"`
+	RequsetID string                `json:"request_id"`
+	Result    map[string]Reputation `json:"result"`
 }
 
 func (s *ListUsersReputationsService) DO(ctx context.Context) (*ListUsersReputationsResponse, error) {

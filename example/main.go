@@ -199,9 +199,26 @@ func ListFreelancerService() {
 		log.Printf("error: %v", err)
 		return
 	}
+	usersIDs := []int64{}
 	for _, u := range resp.Result.Users {
 		fmt.Printf("UserID: %8d\tRole: %s\tReviewCount: %3d\tDisplayName: %s\n", u.ID, u.Role, u.Reputation.EntireHistory.Reviews, u.DisplayName)
+		usersIDs = append(usersIDs, u.ID)
 	}
+
+	// fetch reputation
+	s2 := client.NewListUsersReputationsService()
+	s2.SetUsers(usersIDs)
+	resp2, err := s2.DO(context.Background())
+	if err != nil {
+		log.Printf("error: %v", err)
+		return
+	}
+
+	// fmt.Printf("%s", string(resp2.Result))
+	for id, r := range resp2.Result {
+		fmt.Printf("UserID: %8s\tReviewCount: %d\n", id, r.EntireHistory.Reviews)
+	}
+	// fmt.Printf("Result %v", string(resp2.Result))
 }
 
 func ListSelfJobs() {
