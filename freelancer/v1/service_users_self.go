@@ -407,7 +407,7 @@ type AddSelfJobsService struct {
 	client *Client
 }
 
-func (s *AddSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*GeneralResponse, error) {
+func (s *AddSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*BaseResponse, error) {
 	marshaledJson, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -423,7 +423,7 @@ func (s *AddSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*Genera
 	if err != nil {
 		return nil, err
 	}
-	res := &GeneralResponse{}
+	res := &BaseResponse{}
 	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
@@ -434,7 +434,7 @@ type UpdateSelfJobsService struct {
 	client *Client
 }
 
-func (s *UpdateSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*GeneralResponse, error) {
+func (s *UpdateSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*BaseResponse, error) {
 	marshaledJson, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -449,7 +449,7 @@ func (s *UpdateSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*Gen
 	if err != nil {
 		return nil, err
 	}
-	res := &GeneralResponse{}
+	res := &BaseResponse{}
 	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
@@ -460,7 +460,7 @@ type DeleteSelfJobsService struct {
 	client *Client
 }
 
-func (s *DeleteSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*GeneralResponse, error) {
+func (s *DeleteSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*BaseResponse, error) {
 	marshaledJson, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -475,7 +475,7 @@ func (s *DeleteSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*Gen
 	if err != nil {
 		return nil, err
 	}
-	res := &GeneralResponse{}
+	res := &BaseResponse{}
 	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}

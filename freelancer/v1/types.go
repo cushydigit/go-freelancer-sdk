@@ -1,6 +1,9 @@
 package freelancer
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type ProjectType string
 type ProjectUpgradeType string
@@ -39,6 +42,12 @@ const (
 	RoleTypeEmployer   RoleType = "employer"
 )
 
+type BaseResponse struct {
+	Status    string          `json:"status"`
+	RequsetID string          `json:"request_id"`
+	Result    json.RawMessage `json:"result"`
+}
+
 type Country struct {
 	Name         string  `json:"name,omitempty"`          // Optional
 	Code         string  `json:"code,omitempty"`          // Optional
@@ -50,11 +59,6 @@ type Country struct {
 	Sanction     bool    `json:"sanction,omitempty"`      // Optional, Boolean
 	LanguageCode string  `json:"language_code,omitempty"` // Optional
 	LanguageID   float64 `json:"language_id,omitempty"`   // Optional
-}
-
-type GeneralResponse struct {
-	Status    string `json:"status"`
-	RequsetID string `json:"request_id"`
 }
 
 type Job struct {
