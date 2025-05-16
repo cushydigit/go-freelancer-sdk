@@ -53,7 +53,7 @@ type GetUsersProfilesRequestBody struct {
 	SeoUrl string `json:"seo_url"`
 }
 
-func (s *GetUsersProfilesService) DO(ctx contex.Context, b GetUsersProfilesRequestBody) (*BaseResponse, error) {
+func (s *GetUsersProfilesService) DO(ctx context.Context, b GetUsersProfilesRequestBody) (*BaseResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
