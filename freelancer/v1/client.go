@@ -201,3 +201,15 @@ func (c *Client) NewListUsersReputationsService() *ListUsersReputationsService {
 func (c *Client) NewListUsersPortfoliosService() *ListUsersPortfoliosService {
 	return &ListUsersPortfoliosService{client: c}
 }
+
+func (c *Client) NewGetUsersProfilesService() *GetUsersProfilesService {
+	return &GetUsersProfilesService{client: c}
+}
+
+func (c *Client) NewUpdateUsersProfilesService() *UpdateUsersProfilesService {
+	return &UpdateUsersProfilesService{client: c}
+}
+
+func (c *Client) NewCreateUsersProfilesService() *CreateUsersProfilesService {
+	return &CreateUsersProfilesService{client: c}
+}
