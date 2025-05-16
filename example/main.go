@@ -206,19 +206,28 @@ func ListFreelancerService() {
 	}
 
 	// fetch reputation
-	s2 := client.NewListUsersReputationsService()
-	s2.SetUsers(usersIDs)
-	resp2, err := s2.DO(context.Background())
-	if err != nil {
-		log.Printf("error: %v", err)
-		return
-	}
+	// s2 := client.NewListUsersReputationsService()
+	// s2.SetUsers(usersIDs)
+	// resp2, err := s2.DO(context.Background())
+	// if err != nil {
+	// 	log.Printf("error: %v", err)
+	// 	return
+	// }
 
 	// fmt.Printf("%s", string(resp2.Result))
-	for id, r := range resp2.Result {
-		fmt.Printf("UserID: %8s\tReviewCount: %d\n", id, r.EntireHistory.Reviews)
-	}
+	// for id, r := range resp2.Result {
+	// 	fmt.Printf("UserID: %8s\tReviewCount: %d\n", id, r.EntireHistory.Reviews)
+	// }
 	// fmt.Printf("Result %v", string(resp2.Result))
+	// fetch users portfolios
+	s3 := client.NewListUsersPortfoliosService()
+	s3.SetUsers([]int64{usersIDs[3]})
+	resp3, err := s3.DO(context.Background())
+	if err != nil {
+		log.Printf("error : %v", err)
+		return
+	}
+	fmt.Printf("result: \n%s", string(resp3.Result))
 }
 
 func ListSelfJobs() {

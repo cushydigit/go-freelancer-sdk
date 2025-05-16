@@ -196,5 +196,8 @@ func (c *Client) NewAddSelfJobsService() *AddSelfJobsService {
 
 func (c *Client) NewListUsersReputationsService() *ListUsersReputationsService {
 	return &ListUsersReputationsService{clinet: c}
+}
 
+func (c *Client) NewListUsersPortfoliosService() *ListUsersPortfoliosService {
+	return &ListUsersPortfoliosService{client: c}
 }
