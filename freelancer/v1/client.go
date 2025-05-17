@@ -213,3 +213,7 @@ func (c *Client) NewUpdateUsersProfilesService() *UpdateUsersProfilesService {
 func (c *Client) NewCreateUsersProfilesService() *CreateUsersProfilesService {
 	return &CreateUsersProfilesService{client: c}
 }
+
+func (c *Client) NewUsersEnterprisesService() *ListUsersEnterprisesService {
+	return &ListUsersEnterprisesService{client: c}
+}
