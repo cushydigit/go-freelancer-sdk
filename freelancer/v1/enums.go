@@ -6,6 +6,8 @@ type ContestUpgradeType string
 type SortFieldsType string
 type RoleType string
 type ViolationContextType string
+type ViolationReasonType string
+type ViolationAdditionalReasonType string
 
 const (
 	ProjectTypeFixed  ProjectType = "fixed"
@@ -45,4 +47,29 @@ const (
 	ViolationContextTypeContestEntry          ViolationContextType = "contest_entry"
 	ViolationContextTypeContestComment        ViolationContextType = "contest_comment"
 	ViolationContextTypeCopyrightInfringement ViolationContextType = "copyright_infringement"
+
+	ViolationReasonTypeContact     ViolationReasonType = "contacts"
+	ViolationReasonTypeAdvertising ViolationReasonType = "advertising"
+	ViolationReasonTypeFake        ViolationReasonType = "fake"
+	ViolationReasonTypeHarassment  ViolationReasonType = "harassment"
+	ViolationReasonTypeNonfeatured ViolationReasonType = "nonfeatured"
+	ViolationReasonTypeOther       ViolationReasonType = "other"
+
+	ViolationAdditionalReasonTypeOffsitting                     ViolationAdditionalReasonType = "offsiting_payment"
+	ViolationAdditionalReasonTypeOffsitingCommunication         ViolationAdditionalReasonType = "offsiting_communication"
+	ViolationAdditionalReasonTypePublicDisplay                  ViolationAdditionalReasonType = "public_display_of_communication_details"
+	ViolationAdditionalReasonTypeFakeProfile                    ViolationAdditionalReasonType = "fake_profile"
+	ViolationAdditionalReasonTypeMisleadingAbilities            ViolationAdditionalReasonType = "misleading_about_own_abilities"
+	ViolationAdditionalReasonTypeMisleadingProfileContent       ViolationAdditionalReasonType = "misleading_content_on_profile"
+	ViolationAdditionalReasonTypeOrganizationNotPerson          ViolationAdditionalReasonType = "user_is_an_organization_not_a_person"
+	ViolationAdditionalReasonTypeThreatsOfViolence              ViolationAdditionalReasonType = "sending_threats_of_violence"
+	ViolationAdditionalReasonTypeInappropriateLanguage          ViolationAdditionalReasonType = "inappropriate_language"
+	ViolationAdditionalReasonTypeIssueWithUserProject           ViolationAdditionalReasonType = "issue_on_project_with_user"
+	ViolationAdditionalReasonTypeIssueWithOthersProject         ViolationAdditionalReasonType = "issue_on_project_with_someone_else"
+	ViolationAdditionalReasonTypeCopiedFromUser                 ViolationAdditionalReasonType = "copied_work_from_user"
+	ViolationAdditionalReasonTypeCopiedFromSomeoneElse          ViolationAdditionalReasonType = "copied_work_from_someone_else"
+	ViolationAdditionalReasonTypeExplicitOrInappropriateContent ViolationAdditionalReasonType = "explicit_or_inappropriate_content"
+	ViolationAdditionalReasonTypeLowQualityWork                 ViolationAdditionalReasonType = "low_quality_work"
+	ViolationAdditionalReasonTypeWorkDoesNotMatchRequirements   ViolationAdditionalReasonType = "work_does_not_match_requirements"
+	ViolationAdditionalReasonTypeOther                          ViolationAdditionalReasonType = "other"
 )
