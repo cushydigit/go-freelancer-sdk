@@ -5,43 +5,6 @@ import (
 	"fmt"
 )
 
-type ProjectType string
-type ProjectUpgradeType string
-type ContestUpgradeType string
-type SortFieldsType string
-type RoleType string
-
-const (
-	ProjectTypeFixed  ProjectType = "fixed"
-	ProjectTypeHourly ProjectType = "hourly"
-
-	ProjectUpgradeTypeFeatured   ProjectUpgradeType = "featured"
-	ProjectUpgradeTypeSealed     ProjectUpgradeType = "sealed"
-	ProjectUpgradeTypeNonpublic  ProjectUpgradeType = "nonpublic"
-	ProjectUpgradeTypeFulltime   ProjectUpgradeType = "fulltime"
-	ProjectUpgradeTypeUrgent     ProjectUpgradeType = "urgent"
-	ProjectUpgradeTypeQualified  ProjectUpgradeType = "qualified"
-	ProjectUpgradeTypeNDA        ProjectUpgradeType = "NDA"
-	ProjectUpgradeTypeAssisted   ProjectUpgradeType = "assisted"
-	ProjectUpgradeTypePFOnly     ProjectUpgradeType = "pf_only"
-	ProjectUpgradeTypeIpContract ProjectUpgradeType = "ip_contract"
-	ProjectUpgradeTypeNonCompete ProjectUpgradeType = "non_compete"
-
-	ContestUpgradeTypeFeatured   ContestUpgradeType = "featured"
-	ContestUpgradeTypeSealed     ContestUpgradeType = "sealed"
-	ContestUpgradeTypeNonpublic  ContestUpgradeType = "nonpublic"
-	ContestUpgradeTypeHighlight  ContestUpgradeType = "highlight"
-	ContestUpgradeTypeGuaranteed ContestUpgradeType = "guaranteed"
-
-	SortFieldsTypeTimeUpdated SortFieldsType = "time_updated"
-	SortFieldsTypeBidCount    SortFieldsType = "bid_count"
-	SortFieldsTypeBidEndDate  SortFieldsType = "bid_enddate"
-	SortFieldsTypeBidAvgUsd   SortFieldsType = "bid_avg_usd"
-
-	RoleTypeFreelancer RoleType = "freelancer"
-	RoleTypeEmployer   RoleType = "employer"
-)
-
 type BaseResponse struct {
 	Status    string          `json:"status"`
 	RequsetID string          `json:"request_id"`
