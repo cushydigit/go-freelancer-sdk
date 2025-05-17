@@ -26,6 +26,7 @@ const (
 	USERS_PROFILES    Endpoint = "/users/0.1/profiles"
 	USERS_ENTERPRISES Endpoint = "/users/0.1/enterprises"
 	USERS_VIOLATION   Endpoint = "users/0.1/violation_reports"
+	USERS_POOLS       Endpoint = "users/0.1/pools"
 
 	USERS_SELF         Endpoint = "/users/0.1/self"
 	USERS_SELF_DEVICES Endpoint = "/users/0.1/self/devices"
