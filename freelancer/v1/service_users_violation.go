@@ -15,7 +15,7 @@ type ReportUserViolationRequestBody struct {
 	ContextID        int                           `json:"context_id"`
 	ContextType      ViolationContextType          `json:"context_type"`
 	ViolatorUserID   int64                         `json:"violator_user_id"`
-	Resaon           ViolationReasonType           `json:"reason"`
+	Reason           ViolationReasonType           `json:"reason"`
 	AdditionalReason ViolationAdditionalReasonType `json:"additional_reason"`
 	Comments         string                        `json:"comments"`
 	Url              string                        `json:"url"`
