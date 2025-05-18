@@ -2,6 +2,7 @@ package freelancer
 
 type ProjectType string
 type ProjectUpgradeType string
+type IntervalType string
 type ContestUpgradeType string
 type SortFieldsType string
 type RoleType string
@@ -12,6 +13,9 @@ type ViolationAdditionalReasonType string
 const (
 	ProjectTypeFixed  ProjectType = "fixed"
 	ProjectTypeHourly ProjectType = "hourly"
+
+	IntervalTypeWeek  IntervalType = "WEEK"
+	IntervalTypeMonth IntervalType = "MONTH"
 
 	ProjectUpgradeTypeFeatured   ProjectUpgradeType = "featured"
 	ProjectUpgradeTypeSealed     ProjectUpgradeType = "sealed"
