@@ -148,8 +148,8 @@ func ListCategories() {
 }
 
 func ListSelfDevices() {
-	s := client.NewListSelfDevicesService()
-	resp, err := s.Do(context.Background())
+	s := client.NewListUserLoginDevicesService()
+	resp, err := s.DO(context.Background())
 	if err != nil {
 		log.Printf("error: %v", err)
 	}
@@ -161,7 +161,7 @@ func ListSelfDevices() {
 
 func GetSelfInfo() {
 	s := client.NewGetSelfInfoService()
-	resp, err := s.Do(context.Background())
+	resp, err := s.DO(context.Background())
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -192,7 +192,7 @@ func GetSelfInfo() {
 }
 
 func ListFreelancerService() {
-	s := client.NewListFreelancersService()
+	s := client.NewSearchFreelancersService()
 	s.SetOnlineOnly(true).SetReviewCountMax(300).SetReputation(true)
 	resp, err := s.Do(context.Background())
 	if err != nil {
@@ -233,7 +233,7 @@ func ListFreelancerService() {
 func ListSelfJobs() {
 	s := client.NewGetSelfInfoService()
 	s.SetJobs(true)
-	resp, err := s.Do(context.Background())
+	resp, err := s.DO(context.Background())
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -249,7 +249,7 @@ func AddSelfJobs() {
 	reqBody := freelancer.JobsRequestBody{
 		Jobs: []int32{1, 2},
 	}
-	resp, err := s.Do(context.Background(), reqBody)
+	resp, err := s.DO(context.Background(), reqBody)
 	if err != nil {
 		log.Printf("error %v", err)
 		return
