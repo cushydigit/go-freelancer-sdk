@@ -142,6 +142,49 @@ func (c *Client) callAPI(ctx context.Context, r *request) (data []byte, err erro
 
 	return data, nil
 }
+
+//### USERS ENDPOINT SEVICES ###
+
+// Returns a list of users
+func (c *Client) NewListUsersService() *ListUsersService {
+	return &ListUsersService{client: c}
+}
+
+// Return a list of current user's recent logged in devices
+func (c *Client) NewListUserLoginDevicesService() *ListSelfLoginDevicesService {
+	return &ListSelfLoginDevicesService{client: c}
+}
+
+// Return information about current user
+func (c *Client) NewGetSelfInfoService() *GetSelfInfoService {
+	return &GetSelfInfoService{client: c}
+}
+
+// Returns information about a specific user
+func (c *Client) NewGetUserService() *GetUserService {
+	return &GetUserService{client: c}
+}
+
+// Returns a list of Freelancers
+func (c *Client) NewSearchFreelancersService() *SearchFreelancersService {
+	return &SearchFreelancersService{client: c}
+}
+
+// Add a list of jobs to the job list of current User
+func (c *Client) NewAddSelfJobsService() *AddSelfJobsService {
+	return &AddSelfJobsService{client: c}
+}
+
+// Sets a list of jobs to the job list of the current user
+func (c *Client) NewUpdateSelfJobsService() *UpdateSelfJobsService {
+	return &UpdateSelfJobsService{client: c}
+}
+
+// Removes a list of job list of the current user
+func (c *Client) NewDeleteSelfJobsService() *DeleteSelfJobsService {
+	return &DeleteSelfJobsService{client: c}
+}
+
 func (c *Client) NewListActiveProjectsService() *ListActiveProjectsService {
 	return &ListActiveProjectsService{client: c}
 }
@@ -168,33 +211,6 @@ func (c *Client) NewListTimezonesService() *ListTimezonesService {
 
 func (c *Client) NewListCountriesService() *ListCountriesService {
 	return &ListCountriesService{client: c}
-}
-
-// Returns a list of users
-func (c *Client) NewListUsersService() *ListUsersService {
-	return &ListUsersService{client: c}
-}
-
-func (c *Client) NewListSelfDevicesService() *ListSelfDevicesService {
-	return &ListSelfDevicesService{client: c}
-}
-
-func (c *Client) NewGetSelfInfoService() *GetSelfInfoService {
-	return &GetSelfInfoService{client: c}
-}
-
-// Returns information about a specific user
-func (c *Client) NewGetUserService() *GetUserService {
-	return &GetUserService{client: c}
-}
-
-// Returns a list of Freelancers
-func (c *Client) NewSearchFreelancersService() *SearchFreelancersService {
-	return &SearchFreelancersService{client: c}
-}
-
-func (c *Client) NewAddSelfJobsService() *AddSelfJobsService {
-	return &AddSelfJobsService{client: c}
 }
 
 func (c *Client) NewListUsersReputationsService() *ListUsersReputationsService {
