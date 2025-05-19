@@ -6,7 +6,8 @@ import (
 	"net/http"
 )
 
-type ListUsersEnterprisesService struct {
+// Returns a list of enterprises
+type ListEnterprisesService struct {
 	client        *Client
 	enterprises   []int
 	internalNames []string
@@ -18,7 +19,7 @@ type ListUsersEnterprisesService struct {
 	offset        *int
 }
 
-func (s *ListUsersEnterprisesService) DO(ctx context.Context) (*BaseResponse, error) {
+func (s *ListEnterprisesService) DO(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_ENTERPRISES),
@@ -41,19 +42,19 @@ func (s *ListUsersEnterprisesService) DO(ctx context.Context) (*BaseResponse, er
 	}
 
 	if s.userID != nil {
-		r.addParam("user_id", s.userID)
+		r.addParam("user_id", *s.userID)
 	}
 
 	if s.ignoreTest != nil {
-		r.addParam("ignore_test", s.ignoreTest)
+		r.addParam("ignore_test", *s.ignoreTest)
 	}
 
 	if s.limit != nil {
-		r.addParam("limit", s.limit)
+		r.addParam("limit", *s.limit)
 	}
 
 	if s.offset != nil {
-		r.addParam("offset", s.offset)
+		r.addParam("offset", *s.offset)
 	}
 
 	data, err := s.client.callAPI(ctx, r)
@@ -69,42 +70,42 @@ func (s *ListUsersEnterprisesService) DO(ctx context.Context) (*BaseResponse, er
 	return resp, err
 }
 
-func (s *ListUsersEnterprisesService) SetEnterprises(val []int) *ListUsersEnterprisesService {
+func (s *ListEnterprisesService) SetEnterprises(val []int) *ListEnterprisesService {
 	s.enterprises = val
 	return s
 }
 
-func (s *ListUsersEnterprisesService) SetInternalNames(val []string) *ListUsersEnterprisesService {
+func (s *ListEnterprisesService) SetInternalNames(val []string) *ListEnterprisesService {
 	s.internalNames = val
 	return s
 }
 
-func (s *ListUsersEnterprisesService) SetNames(val []string) *ListUsersEnterprisesService {
+func (s *ListEnterprisesService) SetNames(val []string) *ListEnterprisesService {
 	s.names = val
 	return s
 }
 
-func (s *ListUsersEnterprisesService) SetSeoUrls(val []string) *ListUsersEnterprisesService {
+func (s *ListEnterprisesService) SetSeoUrls(val []string) *ListEnterprisesService {
 	s.seoUrls = val
 	return s
 }
 
-func (s *ListUsersEnterprisesService) SetUserID(val int64) *ListUsersEnterprisesService {
+func (s *ListEnterprisesService) SetUserID(val int64) *ListEnterprisesService {
 	s.userID = &val
 	return s
 }
 
-func (s *ListUsersEnterprisesService) SetIgnoreTest(val bool) *ListUsersEnterprisesService {
+func (s *ListEnterprisesService) SetIgnoreTest(val bool) *ListEnterprisesService {
 	s.ignoreTest = &val
 	return s
 }
 
-func (s *ListUsersEnterprisesService) SetLimit(val int) *ListUsersEnterprisesService {
+func (s *ListEnterprisesService) SetLimit(val int) *ListEnterprisesService {
 	s.limit = &val
 	return s
 }
 
-func (s *ListUsersEnterprisesService) SetOffset(val int) *ListUsersEnterprisesService {
+func (s *ListEnterprisesService) SetOffset(val int) *ListEnterprisesService {
 	s.offset = &val
 	return s
 }

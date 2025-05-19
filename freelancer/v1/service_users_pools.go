@@ -6,7 +6,8 @@ import (
 	"net/http"
 )
 
-type ListUsersPoolsService struct {
+// Returns a list of pools belonging to the current user
+type ListPoolsService struct {
 	client          *Client
 	pools           []int
 	names           []string
@@ -17,7 +18,7 @@ type ListUsersPoolsService struct {
 	offset          *int
 }
 
-func (s *ListUsersPoolsService) DO(ctx context.Context) (*BaseResponse, error) {
+func (s *ListPoolsService) DO(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_ENTERPRISES),
@@ -26,36 +27,28 @@ func (s *ListUsersPoolsService) DO(ctx context.Context) (*BaseResponse, error) {
 	for _, val := range s.pools {
 		r.addParam("pools[]", val)
 	}
-
 	for _, val := range s.names {
 		r.addParam("internal_names[]", val)
 	}
-
 	for _, val := range s.seoUrls {
 		r.addParam("seo_urls[]", val)
 	}
-
 	if s.ignoreTest != nil {
-		r.addParam("ignore_test", s.ignoreTest)
+		r.addParam("ignore_test", *s.ignoreTest)
 	}
-
 	if s.isTalentNetwork != nil {
-		r.addParam("is_talent_network", s.isTalentNetwork)
+		r.addParam("is_talent_network", *s.isTalentNetwork)
 	}
-
 	if s.limit != nil {
-		r.addParam("limit", s.limit)
+		r.addParam("limit", *s.limit)
 	}
-
 	if s.offset != nil {
-		r.addParam("offset", s.offset)
+		r.addParam("offset", *s.offset)
 	}
-
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
 		return nil, err
 	}
-
 	resp := &BaseResponse{}
 	if err := json.Unmarshal(data, resp); err != nil {
 		return nil, err
@@ -64,37 +57,37 @@ func (s *ListUsersPoolsService) DO(ctx context.Context) (*BaseResponse, error) {
 	return resp, err
 }
 
-func (s *ListUsersPoolsService) SetPools(val []int) *ListUsersPoolsService {
+func (s *ListPoolsService) SetPools(val []int) *ListPoolsService {
 	s.pools = val
 	return s
 }
 
-func (s *ListUsersPoolsService) SetNames(val []string) *ListUsersPoolsService {
+func (s *ListPoolsService) SetNames(val []string) *ListPoolsService {
 	s.names = val
 	return s
 }
 
-func (s *ListUsersPoolsService) SetSeoUrls(val []string) *ListUsersPoolsService {
+func (s *ListPoolsService) SetSeoUrls(val []string) *ListPoolsService {
 	s.seoUrls = val
 	return s
 }
 
-func (s *ListUsersPoolsService) SetIgnoreTest(val bool) *ListUsersPoolsService {
+func (s *ListPoolsService) SetIgnoreTest(val bool) *ListPoolsService {
 	s.ignoreTest = &val
 	return s
 }
 
-func (s *ListUsersPoolsService) SetIsTalentNetwork(val bool) *ListUsersPoolsService {
+func (s *ListPoolsService) SetIsTalentNetwork(val bool) *ListPoolsService {
 	s.isTalentNetwork = &val
 	return s
 }
 
-func (s *ListUsersPoolsService) SetLimit(val int) *ListUsersPoolsService {
+func (s *ListPoolsService) SetLimit(val int) *ListPoolsService {
 	s.limit = &val
 	return s
 }
 
-func (s *ListUsersPoolsService) SetOffset(val int) *ListUsersPoolsService {
+func (s *ListPoolsService) SetOffset(val int) *ListPoolsService {
 	s.offset = &val
 	return s
 }

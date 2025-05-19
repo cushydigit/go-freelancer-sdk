@@ -43,7 +43,7 @@ type UpdateSelfJobsService struct {
 	client *Client
 }
 
-func (s *UpdateSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*BaseResponse, error) {
+func (s *UpdateSelfJobsService) DO(ctx context.Context, b JobsRequestBody) (*BaseResponse, error) {
 	marshaledJson, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ type DeleteSelfJobsService struct {
 	client *Client
 }
 
-func (s *DeleteSelfJobsService) Do(ctx context.Context, b JobsRequestBody) (*BaseResponse, error) {
+func (s *DeleteSelfJobsService) DO(ctx context.Context, b JobsRequestBody) (*BaseResponse, error) {
 	marshaledJson, err := json.Marshal(b)
 	if err != nil {
 		return nil, err

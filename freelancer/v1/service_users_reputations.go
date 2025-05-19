@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// Gets the reputations for a list of users
 type ListUsersReputationsService struct {
 	clinet       *Client
 	users        []int64
@@ -37,19 +38,19 @@ func (s *ListUsersReputationsService) DO(ctx context.Context) (*ListUsersReputat
 	}
 
 	if s.role != nil {
-		r.addParam("role", s.role)
+		r.addParam("role", *s.role)
 	}
 
 	if s.jobHistory != nil {
-		r.addParam("job_history", s.jobHistory)
+		r.addParam("job_history", *s.jobHistory)
 	}
 
 	if s.projectStats != nil {
-		r.addParam("project_stats", s.projectStats)
+		r.addParam("project_stats", *s.projectStats)
 	}
 
 	if s.rehireRates != nil {
-		r.addParam("rehire_rates", s.rehireRates)
+		r.addParam("rehire_rates", *s.rehireRates)
 	}
 
 	data, err := s.clinet.callAPI(ctx, r)
@@ -73,22 +74,22 @@ func (s *ListUsersReputationsService) SetJobs(jobs []int32) *ListUsersReputation
 	return s
 }
 
-func (s *ListUsersReputationsService) SetRole(role RoleType) *ListUsersReputationsService {
-	s.role = &role
+func (s *ListUsersReputationsService) SetRole(val RoleType) *ListUsersReputationsService {
+	s.role = &val
 	return s
 }
 
-func (s *ListUsersReputationsService) SetJobHistory(jobHistory bool) *ListUsersReputationsService {
-	s.jobHistory = &jobHistory
+func (s *ListUsersReputationsService) SetJobHistory(val bool) *ListUsersReputationsService {
+	s.jobHistory = &val
 	return s
 }
 
-func (s *ListUsersReputationsService) SetProjectState(projectState bool) *ListUsersReputationsService {
-	s.projectStats = &projectState
+func (s *ListUsersReputationsService) SetProjectState(val bool) *ListUsersReputationsService {
+	s.projectStats = &val
 	return s
 }
 
-func (s *ListUsersReputationsService) SetRehireRates(rehireRate bool) *ListUsersReputationsService {
-	s.rehireRates = &rehireRate
+func (s *ListUsersReputationsService) SetRehireRates(val bool) *ListUsersReputationsService {
+	s.rehireRates = &val
 	return s
 }

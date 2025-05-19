@@ -185,6 +185,46 @@ func (c *Client) NewDeleteSelfJobsService() *DeleteSelfJobsService {
 	return &DeleteSelfJobsService{client: c}
 }
 
+// Gets the reputations for a list of users
+func (c *Client) NewListUsersReputationsService() *ListUsersReputationsService {
+	return &ListUsersReputationsService{clinet: c}
+}
+
+// Returns a list of portfolios of users
+func (c *Client) NewListUsersPortfoliosService() *ListUsersPortfoliosService {
+	return &ListUsersPortfoliosService{client: c}
+}
+
+// Get profile(s)
+func (c *Client) NewGetProfilesService() *GetProfilesService {
+	return &GetProfilesService{client: c}
+}
+
+// Update a profile
+func (c *Client) NewUpdateProfilesService() *UpdateProfilesService {
+	return &UpdateProfilesService{client: c}
+}
+
+// Create a new profile for a user. Returns the created profile
+func (c *Client) NewCreateProfilesService() *CreateProfilesService {
+	return &CreateProfilesService{client: c}
+}
+
+// Returns a list of enterprises
+func (c *Client) NewUsersEnterprisesService() *ListEnterprisesService {
+	return &ListEnterprisesService{client: c}
+}
+
+// Report user violations
+func (c *Client) NewReportUserViolationService() *ReportUserViolationService {
+	return &ReportUserViolationService{client: c}
+}
+
+// Returns a list of poools belognig to the current user
+func (c *Client) NewListPoolsService() *ListPoolsService {
+	return &ListPoolsService{client: c}
+}
+
 func (c *Client) NewListActiveProjectsService() *ListActiveProjectsService {
 	return &ListActiveProjectsService{client: c}
 }
@@ -211,28 +251,4 @@ func (c *Client) NewListTimezonesService() *ListTimezonesService {
 
 func (c *Client) NewListCountriesService() *ListCountriesService {
 	return &ListCountriesService{client: c}
-}
-
-func (c *Client) NewListUsersReputationsService() *ListUsersReputationsService {
-	return &ListUsersReputationsService{clinet: c}
-}
-
-func (c *Client) NewListUsersPortfoliosService() *ListUsersPortfoliosService {
-	return &ListUsersPortfoliosService{client: c}
-}
-
-func (c *Client) NewGetUsersProfilesService() *GetUsersProfilesService {
-	return &GetUsersProfilesService{client: c}
-}
-
-func (c *Client) NewUpdateUsersProfilesService() *UpdateUsersProfilesService {
-	return &UpdateUsersProfilesService{client: c}
-}
-
-func (c *Client) NewCreateUsersProfilesService() *CreateUsersProfilesService {
-	return &CreateUsersProfilesService{client: c}
-}
-
-func (c *Client) NewUsersEnterprisesService() *ListUsersEnterprisesService {
-	return &ListUsersEnterprisesService{client: c}
 }

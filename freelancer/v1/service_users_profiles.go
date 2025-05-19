@@ -8,11 +8,11 @@ import (
 )
 
 // Create a new profile for a user.
-type CreateUsersProfilesService struct {
+type CreateProfilesService struct {
 	client *Client
 }
 
-type CreateUsersProfilesRequestBody struct {
+type CreateProfilesRequestBody struct {
 	Tagline     string `json:"tagline"`
 	HourlyRate  int    `json:"hourly_Rate"`
 	Description string `json:"description"`
@@ -20,7 +20,7 @@ type CreateUsersProfilesRequestBody struct {
 	SkillIDs    []int  `json:"skill_ids"`
 }
 
-func (s *CreateUsersProfilesService) DO(ctx context.Context, b CreateUsersProfilesRequestBody) (*BaseResponse, error) {
+func (s *CreateProfilesService) DO(ctx context.Context, b CreateProfilesRequestBody) (*BaseResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -43,17 +43,17 @@ func (s *CreateUsersProfilesService) DO(ctx context.Context, b CreateUsersProfil
 }
 
 // Get profiles
-type GetUsersProfilesService struct {
+type GetProfilesService struct {
 	client *Client
 }
 
-type GetUsersProfilesRequestBody struct {
+type GetProfilesRequestBody struct {
 	IDs    []int  `json:"ids"`
 	UserID int64  `json:"user_id"`
 	SeoUrl string `json:"seo_url"`
 }
 
-func (s *GetUsersProfilesService) DO(ctx context.Context, b GetUsersProfilesRequestBody) (*BaseResponse, error) {
+func (s *GetProfilesService) DO(ctx context.Context, b GetProfilesRequestBody) (*BaseResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -75,11 +75,11 @@ func (s *GetUsersProfilesService) DO(ctx context.Context, b GetUsersProfilesRequ
 }
 
 // Update a profile
-type UpdateUsersProfilesService struct {
+type UpdateProfilesService struct {
 	client *Client
 }
 
-type UpdateUsersProfilesRequestBody struct {
+type UpdateProfilesRequestBody struct {
 	ProfileID   int    `json:"profile_id"`
 	Tagline     string `json:"tagline"`
 	HourlyRate  int    `json:"hourly_Rate"`
@@ -88,7 +88,7 @@ type UpdateUsersProfilesRequestBody struct {
 	SkillIDs    []int  `json:"skill_ids"`
 }
 
-func (s *UpdateUsersProfilesService) DO(ctx context.Context, b UpdateUsersProfilesRequestBody) (*BaseResponse, error) {
+func (s *UpdateProfilesService) DO(ctx context.Context, b UpdateProfilesRequestBody) (*BaseResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err

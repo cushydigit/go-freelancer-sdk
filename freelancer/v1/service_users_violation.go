@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// Create a user violation report
 type ReportUserViolationService struct {
 	client *Client
 }
@@ -16,9 +17,9 @@ type ReportUserViolationRequestBody struct {
 	ContextType      ViolationContextType          `json:"context_type"`
 	ViolatorUserID   int64                         `json:"violator_user_id"`
 	Reason           ViolationReasonType           `json:"reason"`
-	AdditionalReason ViolationAdditionalReasonType `json:"additional_reason"`
-	Comments         string                        `json:"comments"`
-	Url              string                        `json:"url"`
+	AdditionalReason ViolationAdditionalReasonType `json:"additional_reason,omitempty"`
+	Comments         string                        `json:"comments,omitempty"`
+	Url              string                        `json:"url,omitempty"`
 }
 
 func (s *ReportUserViolationService) DO(ctx context.Context, b ReportUserViolationRequestBody) (*BaseResponse, error) {
