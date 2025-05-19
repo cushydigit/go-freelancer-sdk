@@ -170,6 +170,7 @@ func (c *Client) NewListCountriesService() *ListCountriesService {
 	return &ListCountriesService{client: c}
 }
 
+// Returns a list of users
 func (c *Client) NewListUsersService() *ListUsersService {
 	return &ListUsersService{client: c}
 }
@@ -182,12 +183,14 @@ func (c *Client) NewGetSelfInfoService() *GetSelfInfoService {
 	return &GetSelfInfoService{client: c}
 }
 
+// Returns information about a specific user
 func (c *Client) NewGetUserService() *GetUserService {
 	return &GetUserService{client: c}
 }
 
-func (c *Client) NewListFreelancersService() *ListFreelancersService {
-	return &ListFreelancersService{client: c}
+// Returns a list of Freelancers
+func (c *Client) NewSearchFreelancersService() *SearchFreelancersService {
+	return &SearchFreelancersService{client: c}
 }
 
 func (c *Client) NewAddSelfJobsService() *AddSelfJobsService {
