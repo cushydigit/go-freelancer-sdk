@@ -16,8 +16,8 @@ type CreateProfilesRequestBody struct {
 	Tagline     string `json:"tagline"`
 	HourlyRate  int    `json:"hourly_Rate"`
 	Description string `json:"description"`
-	ProfileName string `json:"profile_name"`
-	SkillIDs    []int  `json:"skill_ids"`
+	ProfileName string `json:"profile_name,omitempty"`
+	SkillIDs    []int  `json:"skill_ids,omitempty"`
 }
 
 func (s *CreateProfilesService) DO(ctx context.Context, b CreateProfilesRequestBody) (*BaseResponse, error) {
@@ -81,11 +81,11 @@ type UpdateProfilesService struct {
 
 type UpdateProfilesRequestBody struct {
 	ProfileID   int    `json:"profile_id"`
-	Tagline     string `json:"tagline"`
-	HourlyRate  int    `json:"hourly_Rate"`
-	Description string `json:"description"`
-	ProfileName string `json:"profile_name"`
-	SkillIDs    []int  `json:"skill_ids"`
+	Tagline     string `json:"tagline,omitempty"`
+	HourlyRate  int    `json:"hourly_Rate,omitempty"`
+	Description string `json:"description,omitempty"`
+	ProfileName string `json:"profile_name,omitempty"`
+	SkillIDs    []int  `json:"skill_ids,omitempty"`
 }
 
 func (s *UpdateProfilesService) DO(ctx context.Context, b UpdateProfilesRequestBody) (*BaseResponse, error) {
