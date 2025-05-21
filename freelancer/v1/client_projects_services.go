@@ -34,3 +34,8 @@ func (c *Client) NewListSelfProjectsService() *ListSelfProjectsService {
 func (c *Client) NewInviteFreelancerService() *InviteFreelancersService {
 	return &InviteFreelancersService{client: c}
 }
+
+// Returns the project fees for a given list of currencies
+func (c *Client) NewListUpgradeFeesService() *ListUpgradeFeesService {
+	return &ListUpgradeFeesService{client: c}
+}
