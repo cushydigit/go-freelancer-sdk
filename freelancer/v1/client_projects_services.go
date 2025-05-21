@@ -29,3 +29,8 @@ func (c *Client) NewSerachActiveProjectsService() *SearchActiveProjectsService {
 func (c *Client) NewListSelfProjectsService() *ListSelfProjectsService {
 	return &ListSelfProjectsService{client: c}
 }
+
+// Invite specific freelancers to bid on a project
+func (c *Client) NewInviteFreelancerService() *InviteFreelancersService {
+	return &InviteFreelancersService{client: c}
+}
