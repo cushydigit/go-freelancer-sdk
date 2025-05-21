@@ -8,6 +8,7 @@ const (
 
 	// POST: create fixed, hourly, local projects
 	PROJECTS_PROJECTS       Endpoint = "/projects/0.1/projects"
+	PROJECTS_SELF           Endpoint = "/projects/0.1/self"
 	PROJECTS_BUDGETS        Endpoint = "/projects/0.1/budgets"
 	PROJECTS_CATEGORIES     Endpoint = "/projects/0.1/categories"
 	PROJECTS_CURRENCIES     Endpoint = "/projects/0.1/currencies"
