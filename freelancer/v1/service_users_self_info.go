@@ -28,7 +28,6 @@ type GetSelfInfoService struct {
 	reputationExtra               *bool
 	employerReputationExtra       *bool
 	coverImage                    *bool
-	pastCoverImage                *bool
 	pastCoverImages               *bool
 	mobileTracking                *bool
 	bidQualityDetails             *bool
@@ -117,8 +116,8 @@ func (s *GetSelfInfoService) DO(ctx context.Context) (*GetSelfInfoResponse, erro
 	if s.coverImage != nil {
 		r.setParam("cover_image", *s.coverImage)
 	}
-	if s.pastCoverImage != nil {
-		r.setParam("past_cover_image", *s.pastCoverImage)
+	if s.pastCoverImages != nil {
+		r.setParam("past_cover_images", *s.pastCoverImages)
 	}
 	if s.mobileTracking != nil {
 		r.setParam("mobile_tracking", *s.mobileTracking)
@@ -270,8 +269,8 @@ func (s *GetSelfInfoService) SetCoverImage(val bool) *GetSelfInfoService {
 	return s
 }
 
-func (s *GetSelfInfoService) SetPastCoverImage(val bool) *GetSelfInfoService {
-	s.pastCoverImage = &val
+func (s *GetSelfInfoService) SetPastCoverImages(val bool) *GetSelfInfoService {
+	s.pastCoverImages = &val
 	return s
 }
 

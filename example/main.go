@@ -33,7 +33,7 @@ func Init() {
 
 func ListActiveProjects() {
 	// create active project service
-	s := client.NewListActiveProjectsService()
+	s := client.NewSearchActiveProjectsService()
 	// fetch result
 	resp, err := s.Do(context.Background())
 	// hanlde error
@@ -49,7 +49,7 @@ func ListActiveProjects() {
 }
 
 func ListActiveLimitProjects() {
-	s := client.NewListActiveProjectsService()
+	s := client.NewSearchActiveProjectsService()
 	s.SetLimit(10)
 	s.SetOffset(10)
 	resp, err := s.Do(context.Background())
@@ -74,7 +74,7 @@ func ListActiveLimitProjects() {
 
 func ListActiveProjectsWithMoreOptions() {
 	// create active project service
-	s := client.NewListActiveProjectsService()
+	s := client.NewSearchActiveProjectsService()
 	// exlude projects base on the query
 	// query with space seprated
 	s.SetQuery("go python")

@@ -78,7 +78,7 @@ type SearchActiveProjectsService struct {
 
 type SearchActiveProjectsResponse struct {
 	Status    string               `json:"status"`
-	RequsetID string               `json:"request_id"`
+	RequestID string               `json:"request_id"`
 	Result    ActiveProjectsResult `json:"result"`
 }
 
@@ -91,7 +91,7 @@ type ActiveProjectsResult struct {
 func (s *SearchActiveProjectsService) Do(ctx context.Context) (*SearchActiveProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_PROJECT_ACTIVE),
+		endpoint: string(PROJECTS_PROJECTS_ACTIVE),
 	}
 	if s.query != nil {
 		r.addParam("query", s.query)

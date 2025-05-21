@@ -21,7 +21,7 @@ func (c *Client) NewDeleteProjectService() *DeleteProjectService {
 }
 
 // Searchesfor active projects matching the desired query
-func (c *Client) NewSerachActiveProjectsService() *SearchActiveProjectsService {
+func (c *Client) NewSearchActiveProjectsService() *SearchActiveProjectsService {
 	return &SearchActiveProjectsService{client: c}
 }
 
