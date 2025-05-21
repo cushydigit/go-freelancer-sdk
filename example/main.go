@@ -23,7 +23,7 @@ func Init() {
 
 	apiAccessToken = os.Getenv("FREELANCER_ACCESS_TOKEN")
 	if apiAccessToken == "" {
-		log.Fatal("environment varaiable not set correctly")
+		log.Fatal("environment variable not set correctly")
 	}
 
 	//create instance for freelancer client
@@ -79,7 +79,7 @@ func ListActiveProjectsWithMoreOptions() {
 	// query with space seprated
 	s.SetQuery("go python")
 	// exclude projects with type
-	s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectTypeFixed})
+	s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectFixed})
 	// include full Description
 	s.SetFullDescription(true)
 	// fetch result

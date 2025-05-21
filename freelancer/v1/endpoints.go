@@ -6,7 +6,6 @@ const (
 	COMMON_COUNTRIES Endpoint = "/common/0.1/countries"
 	COMMON_TIMEZONES Endpoint = "/common/0.1/timezones"
 
-	// POST: create fixed, hourly, local projects
 	PROJECTS_PROJECTS       Endpoint = "/projects/0.1/projects"
 	PROJECTS_SELF           Endpoint = "/projects/0.1/self"
 	PROJECTS_BUDGETS        Endpoint = "/projects/0.1/budgets"
@@ -18,7 +17,7 @@ const (
 	PROJECTS_PROJECT_ACTIVE Endpoint = "/projects/0.1/projects/active"
 	PROJECTS_JOBS_SEARCH    Endpoint = "/projects/0.1/jobs/search"
 
-	PROJECTS_MILESTONE_REQUESTS = "projects/0.1/milestonte_requests/"
+	PROJECTS_MILESTONE_REQUESTS = "/projects/0.1/milestonte_requests/"
 
 	USERS_USERS       Endpoint = "/users/0.1/users"
 	USERS_FREELANCERS Endpoint = "/users/0.1/users/directory"
@@ -26,8 +25,8 @@ const (
 	USERS_PORTFOLIOS  Endpoint = "/users/0.1/portfolios"
 	USERS_PROFILES    Endpoint = "/users/0.1/profiles"
 	USERS_ENTERPRISES Endpoint = "/users/0.1/enterprises"
-	USERS_VIOLATION   Endpoint = "users/0.1/violation_reports"
-	USERS_POOLS       Endpoint = "users/0.1/pools"
+	USERS_VIOLATION   Endpoint = "/users/0.1/violation_reports"
+	USERS_POOLS       Endpoint = "/users/0.1/pools"
 
 	USERS_SELF         Endpoint = "/users/0.1/self"
 	USERS_SELF_DEVICES Endpoint = "/users/0.1/self/devices"
