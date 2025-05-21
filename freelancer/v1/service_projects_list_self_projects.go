@@ -64,3 +64,48 @@ func (s *ListSelfProjectsService) Do(ctx context.Context) (*BaseResponse, error)
 	return resp, nil
 
 }
+
+func (s *ListSelfProjectsService) SetStatus(val ProjectStatusType) *ListSelfProjectsService {
+	s.status = &val
+	return s
+}
+
+func (s *ListSelfProjectsService) SetRole(val RoleType) *ListSelfProjectsService {
+	s.role = &val
+	return s
+}
+
+func (s *ListSelfProjectsService) SetTypes(vals []TypeType) *ListSelfProjectsService {
+	s.types = vals
+	return s
+}
+
+func (s *ListSelfProjectsService) SetQuery(val string) *ListSelfProjectsService {
+	s.query = &val
+	return s
+}
+
+func (s *ListSelfProjectsService) SetSortFeild(val SortFieldsType) *ListSelfProjectsService {
+	s.sortField = &val
+	return s
+}
+
+func (s *ListSelfProjectsService) SetReverseSort(val bool) *ListSelfProjectsService {
+	s.reverseSort = &val
+	return s
+}
+
+func (s *ListSelfProjectsService) SetRecruiter(val bool) *ListSelfProjectsService {
+	s.recruiter = &val
+	return s
+}
+
+func (s *ListSelfProjectsService) SetOffset(val int) *ListSelfProjectsService {
+	s.offset = &val
+	return s
+}
+
+func (s *ListSelfProjectsService) SetLimit(val int) *ListSelfProjectsService {
+	s.limit = &val
+	return s
+}
