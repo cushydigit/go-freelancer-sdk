@@ -11,7 +11,6 @@ import (
 // Returns a list of milestones on a project
 type ListProjectMilestonesService struct {
 	client                      *Client
-	projectID                   *int64
 	statuses                    []MilestoneStatusType
 	userAvatar                  *bool
 	userCountryDetails          *bool
@@ -48,9 +47,6 @@ func (s *ListProjectMilestonesService) Do(ctx context.Context, id int64) (*BaseR
 		endpoint: fmt.Sprintf("%s/%s/milestones", string(PROJECTS_PROJECTS), strconv.FormatInt(id, 10)),
 	}
 
-	if s.projectID != nil {
-		r.addParam("project_id", *s.projectID)
-	}
 	for _, val := range s.statuses {
 		r.addParam("statuses[]", val)
 	}
@@ -148,11 +144,6 @@ func (s *ListProjectMilestonesService) Do(ctx context.Context, id int64) (*BaseR
 
 	return resp, nil
 
-}
-
-func (s *ListProjectMilestonesService) SetProjectID(val int64) *ListProjectMilestonesService {
-	s.projectID = &val
-	return s
 }
 
 func (s *ListProjectMilestonesService) SetStatuses(values []MilestoneStatusType) *ListProjectMilestonesService {

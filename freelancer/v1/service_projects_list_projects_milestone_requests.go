@@ -11,7 +11,6 @@ import (
 // Returns a list of milestone requests by freelancer for a project
 type ListProjectMilestoneRequestsService struct {
 	client                      *Client
-	projectID                   *int64
 	statuses                    []MilestoneStatusType
 	userAvatar                  *bool
 	userCountryDetails          *bool
@@ -48,9 +47,6 @@ func (s *ListProjectMilestoneRequestsService) Do(ctx context.Context, id int64) 
 		endpoint: fmt.Sprintf("%s/%s/milestone_requests", string(PROJECTS_PROJECTS), strconv.FormatInt(id, 10)),
 	}
 
-	if s.projectID != nil {
-		r.addParam("project_id", *s.projectID)
-	}
 	for _, val := range s.statuses {
 		r.addParam("statuses[]", val)
 	}

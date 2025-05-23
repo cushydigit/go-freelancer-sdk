@@ -11,7 +11,6 @@ import (
 // Returns bids for a single project.
 type ListProjectBidsService struct {
 	client                      *Client
-	projectID                   *int64
 	isShortlisted               *bool
 	reputation                  *bool
 	recommendedBid              *bool
@@ -58,9 +57,6 @@ func (s *ListProjectBidsService) Do(ctx context.Context, id int64) (*BaseRespons
 		endpoint: fmt.Sprintf("%s/%s/bids", string(PROJECTS_PROJECTS), strconv.FormatInt(id, 10)),
 	}
 
-	if s.projectID != nil {
-		r.addParam("project_id", *s.projectID)
-	}
 	if s.isShortlisted != nil {
 		r.addParam("is_shortlisted", *s.isShortlisted)
 	}
@@ -188,11 +184,6 @@ func (s *ListProjectBidsService) Do(ctx context.Context, id int64) (*BaseRespons
 
 	return resp, nil
 
-}
-
-func (s *ListProjectBidsService) SetProjectID(val int64) *ListProjectBidsService {
-	s.projectID = &val
-	return s
 }
 
 func (s *ListProjectBidsService) SetIsShortlisted(val bool) *ListProjectBidsService {

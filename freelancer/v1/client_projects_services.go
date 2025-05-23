@@ -64,3 +64,8 @@ func (c *Client) NewListProjectMilestoneRequestsService() *ListProjectMilestoneR
 func (c *Client) NewGetHourlyContractInformationService() *GetHourlyContractInformationService {
 	return &GetHourlyContractInformationService{client: c}
 }
+
+// Fetch the IP contract matching for the project id
+func (c *Client) NewGetProjectIPContractInformationService() *GetProjectIPContractInformationService {
+	return &GetProjectIPContractInformationService{client: c}
+}

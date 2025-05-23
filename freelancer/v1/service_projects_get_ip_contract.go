@@ -10,17 +10,13 @@ import (
 
 // Fetch the IP contract matching for the project id
 type GetProjectIPContractInformationService struct {
-	client    *Client
-	projectID *int64
+	client *Client
 }
 
 func (s *GetProjectIPContractInformationService) Do(ctx context.Context, id int64) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s/ip_contracts", string(PROJECTS_PROJECTS), strconv.FormatInt(id, 10)),
-	}
-	if s.projectID != nil {
-		r.addParam("project_id", *s.projectID)
 	}
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
@@ -31,9 +27,4 @@ func (s *GetProjectIPContractInformationService) Do(ctx context.Context, id int6
 		return nil, err
 	}
 	return resp, nil
-}
-
-func (s *GetProjectIPContractInformationService) SetProjectID(val int64) *GetProjectIPContractInformationService {
-	s.projectID = &val
-	return s
 }
