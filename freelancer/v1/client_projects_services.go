@@ -59,3 +59,8 @@ func (c *Client) NewListProjectMilestonesService() *ListProjectMilestonesService
 func (c *Client) NewListProjectMilestoneRequestsService() *ListProjectMilestoneRequestsService {
 	return &ListProjectMilestoneRequestsService{client: c}
 }
+
+// Fetch the hourly contract matching the desired query
+func (c *Client) NewGetHourlyContractInformationService() *GetHourlyContractInformationService {
+	return &GetHourlyContractInformationService{client: c}
+}
