@@ -39,3 +39,23 @@ func (c *Client) NewInviteFreelancerService() *InviteFreelancersService {
 func (c *Client) NewListUpgradeFeesService() *ListUpgradeFeesService {
 	return &ListUpgradeFeesService{client: c}
 }
+
+// Returns bids for a single project.
+func (c *Client) NewListProjectBidsService() *ListProjectBidsService {
+	return &ListProjectBidsService{client: c}
+}
+
+// Returns information for posting bids on project
+func (c *Client) NewGetProjectBidInformationService() *GetProjectBidInformationService {
+	return &GetProjectBidInformationService{client: c}
+}
+
+// Returns a list of milestones on a project
+func (c *Client) NewListProjectMilestonesService() *ListProjectMilestonesService {
+	return &ListProjectMilestonesService{client: c}
+}
+
+// Returns a list of milestone requests by freelancer for a project
+func (c *Client) NewListProjectMilestoneRequestsService() *ListProjectMilestoneRequestsService {
+	return &ListProjectMilestoneRequestsService{client: c}
+}

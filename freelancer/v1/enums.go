@@ -11,6 +11,7 @@ type RoleType string
 type ViolationContextType string
 type ViolationReasonType string
 type ViolationAdditionalReasonType string
+type MilestoneStatusType string
 
 const (
 	Projects TypeType = "projects"
@@ -87,4 +88,9 @@ const (
 	ViolationAdditionalReasonLowQualityWork                 ViolationAdditionalReasonType = "low_quality_work"
 	ViolationAdditionalReasonWorkDoesNotMatchRequirements   ViolationAdditionalReasonType = "work_does_not_match_requirements"
 	ViolationAdditionalReasonOther                          ViolationAdditionalReasonType = "other"
+
+	MilestoneStatusDeleted  MilestoneStatusType = "deleted"
+	MilestoneStatusRejected MilestoneStatusType = "rejected"
+	MilestoneStatusPending  MilestoneStatusType = "pending"
+	MilestoneStatusCreated  MilestoneStatusType = "created"
 )
