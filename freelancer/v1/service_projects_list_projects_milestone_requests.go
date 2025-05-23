@@ -146,11 +146,6 @@ func (s *ListProjectMilestoneRequestsService) Do(ctx context.Context, id int64) 
 
 }
 
-func (s *ListProjectMilestoneRequestsService) SetProjectID(val int64) *ListProjectMilestoneRequestsService {
-	s.projectID = &val
-	return s
-}
-
 func (s *ListProjectMilestoneRequestsService) SetStatuses(values []MilestoneStatusType) *ListProjectMilestoneRequestsService {
 	s.statuses = values
 	return s

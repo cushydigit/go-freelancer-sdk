@@ -43,7 +43,7 @@ func (s *GetHourlyContractInformationService) Do(ctx context.Context) (*BaseResp
 		r.addParam("invoice_details", *s.invoiceDetails)
 	}
 
-	data, err := s.clinet.callAPI(ctx, r)
+	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
 		return nil, err
 	}
