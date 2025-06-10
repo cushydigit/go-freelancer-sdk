@@ -294,7 +294,7 @@ func (s *GetProjectService) SetSelectedBids(val bool) *GetProjectService {
 	return s
 }
 
-func (s *GetProjectService) SetHireeDetails(val bool) *GetProjectService {
+func (s *GetProjectService) SetHiremeDetails(val bool) *GetProjectService {
 	s.hiremeDetails = &val
 	return s
 }
@@ -425,7 +425,7 @@ func (s *GetProjectService) SetProjectCollaborationDetails(val bool) *GetProject
 }
 
 func (s *GetProjectService) SetTrackDetails(val bool) *GetProjectService {
-	s.trackDetatils = &val
+	s.trackDetails = &val
 	return s
 }
 
