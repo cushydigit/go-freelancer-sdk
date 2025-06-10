@@ -42,7 +42,7 @@ func (c *Client) NewDeleteSelfJobsService() *DeleteSelfJobsService {
 
 // Gets the reputations for a list of users
 func (c *Client) NewListUsersReputationsService() *ListUsersReputationsService {
-	return &ListUsersReputationsService{clinet: c}
+	return &ListUsersReputationsService{client: c}
 }
 
 // Returns a list of portfolios of users

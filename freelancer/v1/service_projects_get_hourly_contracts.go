@@ -12,7 +12,7 @@ type GetHourlyContractInformationService struct {
 	projectIDs        []int64
 	bidderIDs         []int64
 	hourlyContractIDs []int
-	porjectOwnerIDs   []int64
+	projectOwnerIDs   []int64
 	// teamsFilter  / not know what exactly this parameter do or is
 	billingDetails *bool
 	invoiceDetails *bool
@@ -33,7 +33,7 @@ func (s *GetHourlyContractInformationService) Do(ctx context.Context) (*BaseResp
 	for _, val := range s.hourlyContractIDs {
 		r.addParam("hourly_contract_ids[]", val)
 	}
-	for _, val := range s.porjectOwnerIDs {
+	for _, val := range s.projectOwnerIDs {
 		r.addParam("project_owner_ids[]", val)
 	}
 	if s.billingDetails != nil {
@@ -63,6 +63,11 @@ func (s *GetHourlyContractInformationService) SetProjectIDs(vals []int64) *GetHo
 
 func (s *GetHourlyContractInformationService) SetBidderIDs(vals []int64) *GetHourlyContractInformationService {
 	s.bidderIDs = vals
+	return s
+}
+
+func (s *GetHourlyContractInformationService) SetProjectOwnerIDs(vals []int64) *GetHourlyContractInformationService {
+	s.projectOwnerIDs = vals
 	return s
 }
 

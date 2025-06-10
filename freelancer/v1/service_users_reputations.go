@@ -8,7 +8,7 @@ import (
 
 // Gets the reputations for a list of users
 type ListUsersReputationsService struct {
-	clinet       *Client
+	client       *Client
 	users        []int64
 	jobs         []int32
 	role         *RoleType
@@ -19,7 +19,7 @@ type ListUsersReputationsService struct {
 
 type ListUsersReputationsResponse struct {
 	Status    string                `json:"status"`
-	RequsetID string                `json:"request_id"`
+	RequestID string                `json:"request_id"`
 	Result    map[string]Reputation `json:"result"`
 }
 
@@ -53,7 +53,7 @@ func (s *ListUsersReputationsService) DO(ctx context.Context) (*ListUsersReputat
 		r.addParam("rehire_rates", *s.rehireRates)
 	}
 
-	data, err := s.clinet.callAPI(ctx, r)
+	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
 		return nil, err
 	}

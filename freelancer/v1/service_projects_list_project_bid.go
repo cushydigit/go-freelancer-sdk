@@ -216,7 +216,7 @@ func (s *ListProjectBidsService) SetUserDetails(val bool) *ListProjectBidsServic
 	return s
 }
 
-func (s *ListProjectBidsService) SetExpertGuarantess(val bool) *ListProjectBidsService {
+func (s *ListProjectBidsService) SetExpertGuarantees(val bool) *ListProjectBidsService {
 	s.expertGuarantees = &val
 	return s
 }

@@ -9,9 +9,9 @@ import (
 // Return information about multiple projects. Will be ordered by descending submit data (newest-to-oldest)
 type ListProjectsService struct {
 	client                       *Client
-	projects                     []int
-	owners                       []int
-	bidders                      []int
+	projects                     []int64
+	owners                       []int64
+	bidders                      []int64
 	seoUrls                      []string
 	fromTime                     *int64
 	toTime                       *int64
@@ -77,7 +77,7 @@ type ListProjectsService struct {
 }
 type ListProjectsResponse struct {
 	Status    string         `json:"status"`
-	RequsetID string         `json:"request_id"`
+	RequestID string         `json:"request_id"`
 	Result    ProjectsResult `json:"result"`
 }
 
@@ -300,17 +300,17 @@ func (s *ListProjectsService) Do(ctx context.Context) (*ListProjectsResponse, er
 
 	return res, nil
 }
-func (s *ListProjectsService) SetProjects(projects []int) *ListProjectsService {
+func (s *ListProjectsService) SetProjects(projects []int64) *ListProjectsService {
 	s.projects = projects
 	return s
 }
 
-func (s *ListProjectsService) SetOwners(owners []int) *ListProjectsService {
+func (s *ListProjectsService) SetOwners(owners []int64) *ListProjectsService {
 	s.owners = owners
 	return s
 }
 
-func (s *ListProjectsService) SetBidders(bidders []int) *ListProjectsService {
+func (s *ListProjectsService) SetBidders(bidders []int64) *ListProjectsService {
 	s.bidders = bidders
 	return s
 }

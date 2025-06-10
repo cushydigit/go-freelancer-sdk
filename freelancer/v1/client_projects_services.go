@@ -94,3 +94,8 @@ func (c *Client) NewListAllProjectsCollaborationsService() *ListAllProjectsColla
 func (c *Client) NewOrderServiceService() *OrderServiceService {
 	return &OrderServiceService{client: c}
 }
+
+// Returns alist of services
+func (c *Client) NewListProjectsServicesService() *ListProjectsServicesService {
+	return &ListProjectsServicesService{client: c}
+}

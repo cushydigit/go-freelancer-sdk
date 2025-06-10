@@ -13,7 +13,7 @@ type ListSelfLoginDevicesService struct {
 
 type ListSelfLoginDevicesResponse struct {
 	Status    string        `json:"status"`
-	RequestID string        `json:"requset_id"`
+	RequestID string        `json:"request_id"`
 	Result    DevicesResult `json:"result"`
 }
 

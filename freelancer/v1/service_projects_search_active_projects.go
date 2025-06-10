@@ -136,7 +136,7 @@ func (s *SearchActiveProjectsService) Do(ctx context.Context) (*SearchActiveProj
 		r.addParam("jobs[]", job)
 	}
 	for _, country := range s.countries {
-		r.addParam("countirs[]", country)
+		r.addParam("countries[]", country)
 	}
 	for _, language := range s.languages {
 		r.addParam("languages[]", language)

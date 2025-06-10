@@ -14,6 +14,7 @@ type ViolationAdditionalReasonType string
 type MilestoneStatusType string
 type ProjectCollaborationActionType string
 type ServiceType string
+type ServiceStatusType string
 
 const (
 	Projects TypeType = "projects"
@@ -101,4 +102,8 @@ const (
 
 	ServiceRegular ServiceType = "regular"
 	ServiceLocal   ServiceType = "local"
+
+	ServiceStatusPending ServiceStatusType = "pending"
+	ServiceStatusActive  ServiceStatusType = "active"
+	ServiceStatusClosed  ServiceStatusType = "closed"
 )

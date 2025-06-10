@@ -11,7 +11,7 @@ type SearchFreelancersService struct {
 	query                         *string
 	jobsIDs                       []int32 // I have to rename the field (jobs[]) to jobsIDs we have another jobs as bool
 	skills                        []int32
-	coutries                      []string
+	countries                     []string
 	hourlyRateMin                 *int
 	hourlyRateMax                 *int
 	reviewCountMin                *int
@@ -90,7 +90,7 @@ func (s *SearchFreelancersService) Do(ctx context.Context) (*SearchFreelancersRe
 	for _, skill := range s.skills {
 		r.addParam("skills[]", skill)
 	}
-	for _, country := range s.coutries {
+	for _, country := range s.countries {
 		r.addParam("countries[]", country)
 	}
 	if s.hourlyRateMin != nil {
@@ -257,8 +257,8 @@ func (s *SearchFreelancersService) SetSkills(skills []int32) *SearchFreelancersS
 	return s
 }
 
-func (s *SearchFreelancersService) SetCoutries(coutries []string) *SearchFreelancersService {
-	s.coutries = coutries
+func (s *SearchFreelancersService) SetCountries(countries []string) *SearchFreelancersService {
+	s.countries = countries
 	return s
 }
 

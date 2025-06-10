@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-// Delete a project by id, Only pojects that are in pending or rejected state may be deleted.
+// Delete a project by id, Only projects that are in pending or rejected state may be deleted.
 type DeleteProjectService struct {
 	client *Client
 }

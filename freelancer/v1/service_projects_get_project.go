@@ -27,7 +27,7 @@ type GetProjectService struct {
 	locationDetails              *bool
 	ndaSignatureDetails          *bool
 	projectCollaborationDetails  *bool
-	trackDetatils                *bool
+	trackDetails                 *bool
 	proximityDetails             *bool
 	reviewAvailabilityDetails    *bool
 	negotiatedDetails            *bool
@@ -71,7 +71,7 @@ type GetProjectService struct {
 
 type GetProjectResponse struct {
 	Status    string  `json:"status"`
-	RequsetID string  `json:"request_id"`
+	RequestID string  `json:"request_id"`
 	Result    Project `json:"result"`
 }
 
@@ -124,6 +124,9 @@ func (s *GetProjectService) Do(ctx context.Context, id int64) (*GetProjectRespon
 	}
 	if s.projectCollaborationDetails != nil {
 		r.setParam("project_collaboration_details", *s.projectCollaborationDetails)
+	}
+	if s.trackDetails != nil {
+		r.setParam("track_details", *s.trackDetails)
 	}
 	if s.proximityDetails != nil {
 		r.setParam("proximity_details", *s.proximityDetails)
