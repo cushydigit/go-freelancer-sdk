@@ -89,3 +89,8 @@ func (c *Client) NewUpdateProjectCollaborationService() *UpdateProjectCollaborat
 func (c *Client) NewListAllProjectsCollaborationsService() *ListAllProjectsCollaborationsService {
 	return &ListAllProjectsCollaborationsService{client: c}
 }
+
+// Orders one of the available services
+func (c *Client) NewOrderServiceService() *OrderServiceService {
+	return &OrderServiceService{client: c}
+}

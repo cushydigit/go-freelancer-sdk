@@ -21,6 +21,7 @@ const (
 	PROJECTS_BIDS_FEES          Endpoint = "/projects/0.1/bids/fees"
 	PROJECTS_MILESTONE_REQUESTS Endpoint = "/projects/0.1/milestonte_requests/"
 	PROJECTS_COLLABORATIONS     Endpoint = "/projects/0.1/projects/collaborations"
+	PROJECTS_SERVICES           Endpoint = "/projects/0.1/services"
 
 	USERS_USERS       Endpoint = "/users/0.1/users"
 	USERS_FREELANCERS Endpoint = "/users/0.1/users/directory"

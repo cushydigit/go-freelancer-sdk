@@ -13,6 +13,7 @@ type ViolationReasonType string
 type ViolationAdditionalReasonType string
 type MilestoneStatusType string
 type ProjectCollaborationActionType string
+type ServiceType string
 
 const (
 	Projects TypeType = "projects"
@@ -97,4 +98,7 @@ const (
 
 	ProjectCollaborationActionRevoke            ProjectCollaborationActionType = "revoke"
 	ProjectCollaborationActionUpdatePermissions ProjectCollaborationActionType = "update_permissions"
+
+	ServiceRegular ServiceType = "regular"
+	ServiceLocal   ServiceType = "local"
 )
