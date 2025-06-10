@@ -74,3 +74,8 @@ func (c *Client) NewGetProjectIPContractInformationService() *GetProjectIPContra
 func (c *Client) NewListCollaborationsService() *ListCollaborationsService {
 	return &ListCollaborationsService{client: c}
 }
+
+// Creates a new project collaborations
+func (c *Client) NewCreateProjectCollaborationService() *CreateProjectCollaborationService {
+	return &CreateProjectCollaborationService{client: c}
+}
