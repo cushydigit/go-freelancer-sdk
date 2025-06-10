@@ -9,7 +9,6 @@ import (
 	"strconv"
 )
 
-// Returns a list of milestones on a project
 type UpdateProjectCollaborationService struct {
 	client *Client
 }
@@ -19,7 +18,7 @@ type UpdateProjectCollaborationRequestBody struct {
 	// required
 	Permissions struct {
 		Chat     bool `json:"CHAT"`
-		BidAward bool `jsong:"BID_AWARD"`
+		BidAward bool `json:"BID_AWARD"`
 	}
 }
 

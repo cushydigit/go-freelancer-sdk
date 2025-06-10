@@ -8,12 +8,11 @@ import (
 	"strconv"
 )
 
-// Returns a list of milestones on a project
-type ListCollaborationsService struct {
+type ListProjectCollaborationsService struct {
 	client *Client
 }
 
-func (s *ListCollaborationsService) Do(ctx context.Context, id int64) (*BaseResponse, error) {
+func (s *ListProjectCollaborationsService) Do(ctx context.Context, id int64) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s/collaborations/", string(PROJECTS_PROJECTS), strconv.FormatInt(id, 10)),

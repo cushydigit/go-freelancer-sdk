@@ -6,12 +6,11 @@ import (
 	"net/http"
 )
 
-// Returns a list of milestones on a project
-type ListAllCollaborationsService struct {
+type ListAllProjectsCollaborationsService struct {
 	client *Client
 }
 
-func (s *ListAllCollaborationsService) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *ListAllProjectsCollaborationsService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_COLLABORATIONS),

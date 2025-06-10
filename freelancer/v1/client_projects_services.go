@@ -10,17 +10,17 @@ func (c *Client) NewGetProjectService() *GetProjectService {
 	return &GetProjectService{client: c}
 }
 
-// Creats a new project
+// Creates a new project
 func (c *Client) NewCreateProjectService() *CreateProjectService {
 	return &CreateProjectService{client: c}
 }
 
-// Delete a project by id, Only pojects that are in pending or rejected state may be deleted.
+// Delete a project by id, Only projects that are in pending or rejected state may be deleted.
 func (c *Client) NewDeleteProjectService() *DeleteProjectService {
 	return &DeleteProjectService{client: c}
 }
 
-// Searchesfor active projects matching the desired query
+// Searches for active projects matching the desired query
 func (c *Client) NewSearchActiveProjectsService() *SearchActiveProjectsService {
 	return &SearchActiveProjectsService{client: c}
 }
@@ -71,8 +71,8 @@ func (c *Client) NewGetProjectIPContractInformationService() *GetProjectIPContra
 }
 
 // Returns a list of project collaboration data for a project
-func (c *Client) NewListCollaborationsService() *ListCollaborationsService {
-	return &ListCollaborationsService{client: c}
+func (c *Client) NewListProjectCollaborationsService() *ListProjectCollaborationsService {
+	return &ListProjectCollaborationsService{client: c}
 }
 
 // Creates a new project collaborations
@@ -86,6 +86,6 @@ func (c *Client) NewUpdateProjectCollaborationService() *UpdateProjectCollaborat
 }
 
 // Returns a list of all collaboration data for a user
-func (c *Client) NewListAllCollaborationsService() *ListAllCollaborationsService {
-	return &ListAllCollaborationsService{client: c}
+func (c *Client) NewListAllProjectsCollaborationsService() *ListAllProjectsCollaborationsService {
+	return &ListAllProjectsCollaborationsService{client: c}
 }

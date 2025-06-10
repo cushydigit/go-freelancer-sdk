@@ -9,7 +9,6 @@ import (
 	"strconv"
 )
 
-// Returns a list of milestones on a project
 type CreateProjectCollaborationService struct {
 	client *Client
 }
