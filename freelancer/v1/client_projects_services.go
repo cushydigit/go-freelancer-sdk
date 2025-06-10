@@ -69,3 +69,8 @@ func (c *Client) NewGetHourlyContractInformationService() *GetHourlyContractInfo
 func (c *Client) NewGetProjectIPContractInformationService() *GetProjectIPContractInformationService {
 	return &GetProjectIPContractInformationService{client: c}
 }
+
+// Returns a list of project collaboration data for a project
+func (c *Client) NewListCollaborationsService() *ListCollaborationsService {
+	return &ListCollaborationsService{client: c}
+}
