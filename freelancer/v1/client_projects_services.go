@@ -99,3 +99,8 @@ func (c *Client) NewOrderServiceService() *OrderServiceService {
 func (c *Client) NewListProjectsServicesService() *ListProjectsServicesService {
 	return &ListProjectsServicesService{client: c}
 }
+
+// Returns active services
+func (c *Client) NewListProjectsActiveServicesService() *ListProjectsActiveServicesService {
+	return &ListProjectsActiveServicesService{client: c}
+}

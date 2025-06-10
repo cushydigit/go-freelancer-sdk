@@ -15,6 +15,7 @@ type MilestoneStatusType string
 type ProjectCollaborationActionType string
 type ServiceType string
 type ServiceStatusType string
+type SortType string
 
 const (
 	Projects TypeType = "projects"
@@ -54,6 +55,10 @@ const (
 	SortFieldsBidCount    SortFieldsType = "bid_count"
 	SortFieldsBidEndDate  SortFieldsType = "bid_enddate"
 	SortFieldsBidAvgUsd   SortFieldsType = "bid_avg_usd"
+
+	SortNeweset     SortType = "newest"
+	SortQuickest    SortType = "quickest"
+	SortRecommended SortType = "recommended"
 
 	RoleFreelancer RoleType = "freelancer"
 	RoleEmployer   RoleType = "employer"
