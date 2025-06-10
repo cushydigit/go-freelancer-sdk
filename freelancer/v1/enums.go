@@ -12,6 +12,7 @@ type ViolationContextType string
 type ViolationReasonType string
 type ViolationAdditionalReasonType string
 type MilestoneStatusType string
+type ProjectCollaborationActionType string
 
 const (
 	Projects TypeType = "projects"
@@ -93,4 +94,7 @@ const (
 	MilestoneStatusRejected MilestoneStatusType = "rejected"
 	MilestoneStatusPending  MilestoneStatusType = "pending"
 	MilestoneStatusCreated  MilestoneStatusType = "created"
+
+	ProjectCollaborationActionRevoke            ProjectCollaborationActionType = "revoke"
+	ProjectCollaborationActionUpdatePermissions ProjectCollaborationActionType = "update_permissions"
 )

@@ -20,6 +20,7 @@ const (
 	PROJECTS_JOBS_SEARCH        Endpoint = "/projects/0.1/jobs/search"
 	PROJECTS_BIDS_FEES          Endpoint = "/projects/0.1/bids/fees"
 	PROJECTS_MILESTONE_REQUESTS Endpoint = "/projects/0.1/milestonte_requests/"
+	PROJECTS_COLLABORATIONS     Endpoint = "/projects/0.1/projects/collaborations"
 
 	USERS_USERS       Endpoint = "/users/0.1/users"
 	USERS_FREELANCERS Endpoint = "/users/0.1/users/directory"

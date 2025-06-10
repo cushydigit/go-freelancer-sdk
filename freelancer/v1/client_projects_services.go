@@ -84,3 +84,8 @@ func (c *Client) NewCreateProjectCollaborationService() *CreateProjectCollaborat
 func (c *Client) NewUpdateProjectCollaborationService() *UpdateProjectCollaborationService {
 	return &UpdateProjectCollaborationService{client: c}
 }
+
+// Returns a list of all collaboration data for a user
+func (c *Client) NewListAllCollaborationsService() *ListAllCollaborationsService {
+	return &ListAllCollaborationsService{client: c}
+}
