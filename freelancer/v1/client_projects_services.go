@@ -79,3 +79,8 @@ func (c *Client) NewListCollaborationsService() *ListCollaborationsService {
 func (c *Client) NewCreateProjectCollaborationService() *CreateProjectCollaborationService {
 	return &CreateProjectCollaborationService{client: c}
 }
+
+// Performs and action on a collaboration
+func (c *Client) NewUpdateProjectCollaborationService() *UpdateProjectCollaborationService {
+	return &UpdateProjectCollaborationService{client: c}
+}
