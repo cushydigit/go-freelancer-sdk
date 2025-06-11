@@ -225,3 +225,8 @@ func (c *Client) NewListMilestoneRequestsService() *listMilestoneRequestsService
 func (c *Client) NewGetMilestoneRequestService() *getMilestoneRequestService {
 	return &getMilestoneRequestService{client: c}
 }
+
+// Creates a milestone request from a given JSON object.
+func (c *Client) NewCreateMilestoneRequestService() *createMilestoneRequestService {
+	return &createMilestoneRequestService{client: c}
+}
