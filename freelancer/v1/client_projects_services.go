@@ -129,3 +129,13 @@ func (c *Client) NewUpdateBidService() *updateBidService {
 func (c *Client) NewActionBidService() *actionBidService {
 	return &actionBidService{client: c}
 }
+
+// Returns a list of aggregate time tracking data for a bid
+func (c *Client) NewGetTimeTrackingBidService() *getTimeTrackingBidService {
+	return &getTimeTrackingBidService{client: c}
+}
+
+// Creates a time tracking session for a specific bid
+func (c *Client) NewCreateTimeTrackingBidService() *createTimeTrackingBidService {
+	return &createTimeTrackingBidService{client: c}
+}
