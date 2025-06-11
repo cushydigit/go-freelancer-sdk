@@ -184,3 +184,8 @@ func (c *Client) NewListJobsService() *listJobsService {
 func (c *Client) NewSearchJobsService() *searchJobsService {
 	return &searchJobsService{client: c}
 }
+
+// Returns a list of job bundles. Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name.
+func (c *Client) NewListJobBundlesService() *listJobBundlesService {
+	return &listJobBundlesService{client: c}
+}
