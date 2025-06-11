@@ -14,7 +14,7 @@ type UpdateProjectCollaborationService struct {
 }
 type UpdateProjectCollaborationRequestBody struct {
 	// required
-	Action ProjectCollaborationActionType `json:"action"`
+	Action ProjectCollaborationAction `json:"action"`
 	// required
 	Permissions struct {
 		Chat     bool `json:"CHAT"`

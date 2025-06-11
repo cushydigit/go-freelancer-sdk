@@ -27,7 +27,7 @@ type SearchActiveProjectsService struct {
 	longitude                   *float64
 	fromTime                    *int64
 	toTime                      *int64
-	sortField                   *SortFieldsType
+	sortField                   *SortField
 	projectIDs                  []int64
 	topRightLatitude            *float64
 	topRightLongitude           *float64
@@ -534,7 +534,7 @@ func (s *SearchActiveProjectsService) SetToTime(val int64) *SearchActiveProjects
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetSortField(val SortFieldsType) *SearchActiveProjectsService {
+func (s *SearchActiveProjectsService) SetSortField(val SortField) *SearchActiveProjectsService {
 	s.sortField = &val
 	return s
 }

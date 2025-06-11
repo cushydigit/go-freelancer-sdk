@@ -6,13 +6,12 @@ type ProjectUpgradeType string
 type ProjectStatusType string
 type IntervalType string
 type ContestUpgradeType string
-type SortFieldsType string
+type SortField string
 type RoleType string
-type ViolationContextType string
-type ViolationReasonType string
-type ViolationAdditionalReasonType string
-type MilestoneStatusType string
-type ProjectCollaborationActionType string
+type ViolationContext string
+type ViolationReason string
+type ViolationAdditionalReason string
+type ProjectCollaborationAction string
 type ServiceType string
 type ServiceStatusType string
 type SortType string
@@ -23,6 +22,7 @@ type FrontendBidStatusType string
 type ActionBid string
 type BidStatus string
 type ActionBidEditRequest string
+type MilestoneStatus string
 
 const (
 	Projects TypeType = "projects"
@@ -58,10 +58,11 @@ const (
 	ContestUpgradeHighlight  ContestUpgradeType = "highlight"
 	ContestUpgradeGuaranteed ContestUpgradeType = "guaranteed"
 
-	SortFieldsTimeUpdated SortFieldsType = "time_updated"
-	SortFieldsBidCount    SortFieldsType = "bid_count"
-	SortFieldsBidEndDate  SortFieldsType = "bid_enddate"
-	SortFieldsBidAvgUsd   SortFieldsType = "bid_avg_usd"
+	SortFieldsTimeUpdated  SortField = "time_updated"
+	SortFieldsBidCount     SortField = "bid_count"
+	SortFieldsBidEndDate   SortField = "bid_enddate"
+	SortFieldsBidAvgUsd    SortField = "bid_avg_usd"
+	SortFieldsTimeReleased SortField = "time_released"
 
 	SortNeweset     SortType = "newest"
 	SortQuickest    SortType = "quickest"
@@ -70,47 +71,52 @@ const (
 	RoleFreelancer RoleType = "freelancer"
 	RoleEmployer   RoleType = "employer"
 
-	ViolationContextProject               ViolationContextType = "project"
-	ViolationContextBid                   ViolationContextType = "bid"
-	ViolationContextMessage               ViolationContextType = "message"
-	ViolationContextProfile               ViolationContextType = "profile"
-	ViolationContextPrivateMessage        ViolationContextType = "private_message"
-	ViolationContextContestEntry          ViolationContextType = "contest_entry"
-	ViolationContextContestComment        ViolationContextType = "contest_comment"
-	ViolationContextCopyrightInfringement ViolationContextType = "copyright_infringement"
+	ViolationContextProject               ViolationContext = "project"
+	ViolationContextBid                   ViolationContext = "bid"
+	ViolationContextMessage               ViolationContext = "message"
+	ViolationContextProfile               ViolationContext = "profile"
+	ViolationContextPrivateMessage        ViolationContext = "private_message"
+	ViolationContextContestEntry          ViolationContext = "contest_entry"
+	ViolationContextContestComment        ViolationContext = "contest_comment"
+	ViolationContextCopyrightInfringement ViolationContext = "copyright_infringement"
 
-	ViolationReasonContact     ViolationReasonType = "contacts"
-	ViolationReasonAdvertising ViolationReasonType = "advertising"
-	ViolationReasonFake        ViolationReasonType = "fake"
-	ViolationReasonHarassment  ViolationReasonType = "harassment"
-	ViolationReasonNonfeatured ViolationReasonType = "nonfeatured"
-	ViolationReasonOther       ViolationReasonType = "other"
+	ViolationReasonContact     ViolationReason = "contacts"
+	ViolationReasonAdvertising ViolationReason = "advertising"
+	ViolationReasonFake        ViolationReason = "fake"
+	ViolationReasonHarassment  ViolationReason = "harassment"
+	ViolationReasonNonfeatured ViolationReason = "nonfeatured"
+	ViolationReasonOther       ViolationReason = "other"
 
-	ViolationAdditionalReasonOffsitting                     ViolationAdditionalReasonType = "offsiting_payment"
-	ViolationAdditionalReasonOffsitingCommunication         ViolationAdditionalReasonType = "offsiting_communication"
-	ViolationAdditionalReasonPublicDisplay                  ViolationAdditionalReasonType = "public_display_of_communication_details"
-	ViolationAdditionalReasonFakeProfile                    ViolationAdditionalReasonType = "fake_profile"
-	ViolationAdditionalReasonMisleadingAbilities            ViolationAdditionalReasonType = "misleading_about_own_abilities"
-	ViolationAdditionalReasonMisleadingProfileContent       ViolationAdditionalReasonType = "misleading_content_on_profile"
-	ViolationAdditionalReasonOrganizationNotPerson          ViolationAdditionalReasonType = "user_is_an_organization_not_a_person"
-	ViolationAdditionalReasonThreatsOfViolence              ViolationAdditionalReasonType = "sending_threats_of_violence"
-	ViolationAdditionalReasonInappropriateLanguage          ViolationAdditionalReasonType = "inappropriate_language"
-	ViolationAdditionalReasonIssueWithUserProject           ViolationAdditionalReasonType = "issue_on_project_with_user"
-	ViolationAdditionalReasonIssueWithOthersProject         ViolationAdditionalReasonType = "issue_on_project_with_someone_else"
-	ViolationAdditionalReasonCopiedFromUser                 ViolationAdditionalReasonType = "copied_work_from_user"
-	ViolationAdditionalReasonCopiedFromSomeoneElse          ViolationAdditionalReasonType = "copied_work_from_someone_else"
-	ViolationAdditionalReasonExplicitOrInappropriateContent ViolationAdditionalReasonType = "explicit_or_inappropriate_content"
-	ViolationAdditionalReasonLowQualityWork                 ViolationAdditionalReasonType = "low_quality_work"
-	ViolationAdditionalReasonWorkDoesNotMatchRequirements   ViolationAdditionalReasonType = "work_does_not_match_requirements"
-	ViolationAdditionalReasonOther                          ViolationAdditionalReasonType = "other"
+	ViolationAdditionalReasonOffsitting                     ViolationAdditionalReason = "offsiting_payment"
+	ViolationAdditionalReasonOffsitingCommunication         ViolationAdditionalReason = "offsiting_communication"
+	ViolationAdditionalReasonPublicDisplay                  ViolationAdditionalReason = "public_display_of_communication_details"
+	ViolationAdditionalReasonFakeProfile                    ViolationAdditionalReason = "fake_profile"
+	ViolationAdditionalReasonMisleadingAbilities            ViolationAdditionalReason = "misleading_about_own_abilities"
+	ViolationAdditionalReasonMisleadingProfileContent       ViolationAdditionalReason = "misleading_content_on_profile"
+	ViolationAdditionalReasonOrganizationNotPerson          ViolationAdditionalReason = "user_is_an_organization_not_a_person"
+	ViolationAdditionalReasonThreatsOfViolence              ViolationAdditionalReason = "sending_threats_of_violence"
+	ViolationAdditionalReasonInappropriateLanguage          ViolationAdditionalReason = "inappropriate_language"
+	ViolationAdditionalReasonIssueWithUserProject           ViolationAdditionalReason = "issue_on_project_with_user"
+	ViolationAdditionalReasonIssueWithOthersProject         ViolationAdditionalReason = "issue_on_project_with_someone_else"
+	ViolationAdditionalReasonCopiedFromUser                 ViolationAdditionalReason = "copied_work_from_user"
+	ViolationAdditionalReasonCopiedFromSomeoneElse          ViolationAdditionalReason = "copied_work_from_someone_else"
+	ViolationAdditionalReasonExplicitOrInappropriateContent ViolationAdditionalReason = "explicit_or_inappropriate_content"
+	ViolationAdditionalReasonLowQualityWork                 ViolationAdditionalReason = "low_quality_work"
+	ViolationAdditionalReasonWorkDoesNotMatchRequirements   ViolationAdditionalReason = "work_does_not_match_requirements"
+	ViolationAdditionalReasonOther                          ViolationAdditionalReason = "other"
 
-	MilestoneStatusDeleted  MilestoneStatusType = "deleted"
-	MilestoneStatusRejected MilestoneStatusType = "rejected"
-	MilestoneStatusPending  MilestoneStatusType = "pending"
-	MilestoneStatusCreated  MilestoneStatusType = "created"
+	MilestoneStatusDeleted         MilestoneStatus = "deleted"
+	MilestoneStatusRejected        MilestoneStatus = "rejected"
+	MilestoneStatusPending         MilestoneStatus = "pending"
+	MilestoneStatusCreated         MilestoneStatus = "created"
+	MilestoneStatusDisputed        MilestoneStatus = "disputed"
+	MilestoneStatusRquestedRelease MilestoneStatus = "requested_release"
+	MilestoneStatusCleared         MilestoneStatus = "cleared"
+	MilestoneStatusFrozen          MilestoneStatus = "cleared"
+	MilestoneStatusCanceled        MilestoneStatus = "canceled"
 
-	ProjectCollaborationActionRevoke            ProjectCollaborationActionType = "revoke"
-	ProjectCollaborationActionUpdatePermissions ProjectCollaborationActionType = "update_permissions"
+	ProjectCollaborationActionRevoke            ProjectCollaborationAction = "revoke"
+	ProjectCollaborationActionUpdatePermissions ProjectCollaborationAction = "update_permissions"
 
 	ServiceRegular ServiceType = "regular"
 	ServiceLocal   ServiceType = "local"

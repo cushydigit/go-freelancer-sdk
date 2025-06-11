@@ -13,13 +13,13 @@ type ReportUserViolationService struct {
 }
 
 type ReportUserViolationRequestBody struct {
-	ContextID        int                           `json:"context_id"`
-	ContextType      ViolationContextType          `json:"context_type"`
-	ViolatorUserID   int64                         `json:"violator_user_id"`
-	Reason           ViolationReasonType           `json:"reason"`
-	AdditionalReason ViolationAdditionalReasonType `json:"additional_reason,omitempty"`
-	Comments         string                        `json:"comments,omitempty"`
-	Url              string                        `json:"url,omitempty"`
+	ContextID        int                       `json:"context_id"`
+	ContextType      ViolationContext          `json:"context_type"`
+	ViolatorUserID   int64                     `json:"violator_user_id"`
+	Reason           ViolationReason           `json:"reason"`
+	AdditionalReason ViolationAdditionalReason `json:"additional_reason,omitempty"`
+	Comments         string                    `json:"comments,omitempty"`
+	Url              string                    `json:"url,omitempty"`
 }
 
 func (s *ReportUserViolationService) DO(ctx context.Context, b ReportUserViolationRequestBody) (*BaseResponse, error) {

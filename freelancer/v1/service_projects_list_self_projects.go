@@ -12,7 +12,7 @@ type ListSelfProjectsService struct {
 	role        *RoleType
 	types       []TypeType
 	query       *string
-	sortField   *SortFieldsType
+	sortField   *SortField
 	reverseSort *bool
 	recruiter   *bool
 	offset      *int
@@ -85,7 +85,7 @@ func (s *ListSelfProjectsService) SetQuery(val string) *ListSelfProjectsService 
 	return s
 }
 
-func (s *ListSelfProjectsService) SetSortFeild(val SortFieldsType) *ListSelfProjectsService {
+func (s *ListSelfProjectsService) SetSortField(val SortField) *ListSelfProjectsService {
 	s.sortField = &val
 	return s
 }

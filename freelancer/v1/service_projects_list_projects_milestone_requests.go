@@ -11,7 +11,7 @@ import (
 // Returns a list of milestone requests by freelancer for a project
 type ListProjectMilestoneRequestsService struct {
 	client                      *Client
-	statuses                    []MilestoneStatusType
+	statuses                    []MilestoneStatus
 	userAvatar                  *bool
 	userCountryDetails          *bool
 	userProfileDescription      *bool
@@ -146,7 +146,7 @@ func (s *ListProjectMilestoneRequestsService) Do(ctx context.Context, id int64) 
 
 }
 
-func (s *ListProjectMilestoneRequestsService) SetStatuses(values []MilestoneStatusType) *ListProjectMilestoneRequestsService {
+func (s *ListProjectMilestoneRequestsService) SetStatuses(values []MilestoneStatus) *ListProjectMilestoneRequestsService {
 	s.statuses = values
 	return s
 }

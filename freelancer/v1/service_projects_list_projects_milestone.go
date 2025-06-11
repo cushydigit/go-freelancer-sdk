@@ -11,7 +11,7 @@ import (
 // Returns a list of milestones on a project
 type ListProjectMilestonesService struct {
 	client                      *Client
-	statuses                    []MilestoneStatusType
+	statuses                    []MilestoneStatus
 	userAvatar                  *bool
 	userCountryDetails          *bool
 	userProfileDescription      *bool
@@ -146,7 +146,7 @@ func (s *ListProjectMilestonesService) Do(ctx context.Context, id int64) (*BaseR
 
 }
 
-func (s *ListProjectMilestonesService) SetStatuses(values []MilestoneStatusType) *ListProjectMilestonesService {
+func (s *ListProjectMilestonesService) SetStatuses(values []MilestoneStatus) *ListProjectMilestonesService {
 	s.statuses = values
 	return s
 }
