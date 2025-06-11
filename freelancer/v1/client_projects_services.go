@@ -124,3 +124,8 @@ func (c *Client) NewCreateBidService() *createBidService {
 func (c *Client) NewUpdateBidService() *updateBidService {
 	return &updateBidService{client: c}
 }
+
+// Performs an action on a bid
+func (c *Client) NewActionBidService() *actionBidService {
+	return &actionBidService{client: c}
+}

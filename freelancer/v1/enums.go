@@ -20,6 +20,7 @@ type AwardStatusType string
 type PaidStatusType string
 type CompleteStatusType string
 type FrontendBidStatusType string
+type ActionBid string
 
 const (
 	Projects TypeType = "projects"
@@ -129,4 +130,16 @@ const (
 	FrontendBidStatusActive     FrontendBidStatusType = "active"
 	FrontendBidStatusInprogress FrontendBidStatusType = "in_progress"
 	FrontendBidStatusComplete   FrontendBidStatusType = "complete"
+
+	ActionBidAccept                ActionBid = "accept"
+	ActionBidDeny                  ActionBid = "deny"
+	ActionBidRetract               ActionBid = "retract"
+	ActionBidHighlight             ActionBid = "highlight"
+	ActionBidSponser               ActionBid = "sponser"
+	ActionBidAward                 ActionBid = "award"
+	ActionBidRevoke                ActionBid = "revoke"
+	ActionBidShortlist             ActionBid = "shortlist"
+	ActionBidHide                  ActionBid = "hide"
+	ActionBidUnhide                ActionBid = "unhide"
+	ActionBidRquestLocationSharing ActionBid = "request_location_sharing"
 )
