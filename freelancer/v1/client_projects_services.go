@@ -164,3 +164,8 @@ func (c *Client) NewGetBidRatingService() *getBidRatingService {
 func (c *Client) NewListBidRatingService() *listBidRatingService {
 	return &listBidRatingService{client: c}
 }
+
+// Rate abid (create a bid rating)
+func (c *Client) NewCreateBidRatingService() *createBidRatingService {
+	return &createBidRatingService{client: c}
+}
