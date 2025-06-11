@@ -8,7 +8,7 @@ import (
 )
 
 // Returns bids for a single project.
-type getTimeTrackingBidService struct {
+type getBidTimeTrackingService struct {
 	client                *Client
 	fromTime              *int64
 	toTime                *int64
@@ -16,7 +16,7 @@ type getTimeTrackingBidService struct {
 	invoiced              *bool
 }
 
-func (s *getTimeTrackingBidService) Do(ctx context.Context, bidID int) (*BaseResponse, error) {
+func (s *getBidTimeTrackingService) Do(ctx context.Context, bidID int) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%d/time_tracking_sessions", string(PROJECTS_BIDS), bidID),
@@ -49,22 +49,22 @@ func (s *getTimeTrackingBidService) Do(ctx context.Context, bidID int) (*BaseRes
 
 }
 
-func (s *getTimeTrackingBidService) SetFromTime(val int64) *getTimeTrackingBidService {
+func (s *getBidTimeTrackingService) SetFromTime(val int64) *getBidTimeTrackingService {
 	s.fromTime = &val
 	return s
 }
 
-func (s *getTimeTrackingBidService) SetToTime(val int64) *getTimeTrackingBidService {
+func (s *getBidTimeTrackingService) SetToTime(val int64) *getBidTimeTrackingService {
 	s.toTime = &val
 	return s
 }
 
-func (s *getTimeTrackingBidService) SetDailyAggreateDetails(val bool) *getTimeTrackingBidService {
+func (s *getBidTimeTrackingService) SetDailyAggreateDetails(val bool) *getBidTimeTrackingService {
 	s.dailyAggregateDetails = &val
 	return s
 }
 
-func (s *getTimeTrackingBidService) SetInvoiced(val bool) *getTimeTrackingBidService {
+func (s *getBidTimeTrackingService) SetInvoiced(val bool) *getBidTimeTrackingService {
 	s.invoiced = &val
 	return s
 }

@@ -131,8 +131,8 @@ func (c *Client) NewActionBidService() *actionBidService {
 }
 
 // Returns a list of aggregate time tracking data for a bid
-func (c *Client) NewGetTimeTrackingBidService() *getTimeTrackingBidService {
-	return &getTimeTrackingBidService{client: c}
+func (c *Client) NewGetBidTimeTrackingService() *getBidTimeTrackingService {
+	return &getBidTimeTrackingService{client: c}
 }
 
 // Creates a time tracking session for a specific bid
