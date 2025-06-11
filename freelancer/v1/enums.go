@@ -27,6 +27,7 @@ type MilestoneStatus string
 type MilestoneCreateReason string
 type MilestoneAction string
 type MilestoneActionReason string
+type MilestoneActionRequest string
 
 const (
 	Projects TypeType = "projects"
@@ -138,6 +139,10 @@ const (
 	MilestoneActionReasonNoLongerNeeded               MilestoneActionReason = "no_longer_needed"
 	MilestoneActionReasonFreelancerDidNotMeetDeadline MilestoneActionReason = "freelancer_did_not_meet_deadline"
 	MilestoneActionReasonFreelancerDidNotCompleteTask MilestoneActionReason = "freelancer_did_not_complete_task"
+
+	MilestoneActionRequestAccept MilestoneActionRequest = "accept"
+	MilestoneActionRequestReject MilestoneActionRequest = "reject"
+	MilestoneActionRequestDelete MilestoneActionRequest = "delete"
 
 	ProjectCollaborationActionRevoke            ProjectCollaborationAction = "revoke"
 	ProjectCollaborationActionUpdatePermissions ProjectCollaborationAction = "update_permissions"

@@ -230,3 +230,8 @@ func (c *Client) NewGetMilestoneRequestService() *getMilestoneRequestService {
 func (c *Client) NewCreateMilestoneRequestService() *createMilestoneRequestService {
 	return &createMilestoneRequestService{client: c}
 }
+
+// Perform an action on a milestone request
+func (c *Client) NewActionMilestoneRequestService() *actionMilestonRequestService {
+	return &actionMilestonRequestService{client: c}
+}
