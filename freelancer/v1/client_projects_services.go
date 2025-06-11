@@ -175,6 +175,12 @@ func (c *Client) NewUpdateBidRatingService() *updateBidRatingService {
 	return &updateBidRatingService{client: c}
 }
 
+// Returns a list of jobs
 func (c *Client) NewListJobsService() *listJobsService {
 	return &listJobsService{client: c}
+}
+
+// Returns a list of jobs. Note: This performs a sub-string search for all the parameters specified on the jobs
+func (c *Client) NewSearchJobsService() *searchJobsService {
+	return &searchJobsService{client: c}
 }
