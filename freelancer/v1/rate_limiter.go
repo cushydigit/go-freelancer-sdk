@@ -10,12 +10,11 @@ import (
 )
 
 type RateLimiter struct {
-	mu           sync.Mutex
-	limit        int
-	remaining    int
-	window       time.Duration
-	lastCheck    time.Time
-	sleepOnLimit bool
+	mu        sync.Mutex
+	limit     int
+	remaining int
+	window    time.Duration
+	lastCheck time.Time
 }
 
 func NewRateLimiter() *RateLimiter {

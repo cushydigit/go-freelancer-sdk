@@ -13,11 +13,11 @@ type createMilestoneService struct {
 
 // ProjectID, BidderID, Amount are required
 type CreateMilestoneRequestBody struct {
-	ProjectID   int64           `json:"project_id"`
-	BidderID    int64           `json:"bidder_id"`
-	Amount      int             `json:"amount"`
-	Reason      MilestoneReason `json:"reason"`
-	Description string          `json:"description"`
+	ProjectID   int64                 `json:"project_id"`
+	BidderID    int64                 `json:"bidder_id"`
+	Amount      int                   `json:"amount"`
+	Reason      MilestoneCreateReason `json:"reason"`
+	Description string                `json:"description"`
 }
 
 func (s *createMilestoneService) Do(ctx context.Context, b CreateMilestoneRequestBody) (*BaseResponse, error) {
