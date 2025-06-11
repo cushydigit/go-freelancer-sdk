@@ -159,3 +159,8 @@ func (c *Client) NewActionBidEditRequestService() *actionBidEditRequestService {
 func (c *Client) NewGetBidRatingService() *getBidRatingService {
 	return &getBidRatingService{client: c}
 }
+
+// Fetch bid ratings for multiple bids
+func (c *Client) NewListBidRatingService() *listBidRatingService {
+	return &listBidRatingService{client: c}
+}
