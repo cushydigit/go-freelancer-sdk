@@ -169,3 +169,8 @@ func (c *Client) NewListBidRatingService() *listBidRatingService {
 func (c *Client) NewCreateBidRatingService() *createBidRatingService {
 	return &createBidRatingService{client: c}
 }
+
+// Updates an existing bid rating
+func (c *Client) NewUpdatrBidRatingService() *updateBidRatingService {
+	return &updateBidRatingService{client: c}
+}
