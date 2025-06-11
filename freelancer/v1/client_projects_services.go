@@ -194,3 +194,9 @@ func (c *Client) NewListJobBundlesService() *listJobBundlesService {
 func (c *Client) NewListJobBundleCategoriesService() *listJobBundleCategoriesService {
 	return &listJobBundleCategoriesService{client: c}
 }
+
+// Returns a list of milestones. Does not return un-awarded prepaid milestones.
+// Note that for the parameters, you cannot specify both users[]and bidders[]/project_owners[]
+func (c *Client) NewListMilestonesService() *listMilestonesService {
+	return &listMilestonesService{client: c}
+}

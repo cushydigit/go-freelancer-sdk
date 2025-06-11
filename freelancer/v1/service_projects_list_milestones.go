@@ -8,26 +8,16 @@ import (
 
 // Returns bids for a single project.
 type listMilestonesService struct {
-	client        *Client
-	projects      []int64
-	projectOwners []int64
-	bidders       []int64
-	users         []int64
-	bids          []int
-	statuses      []MilestoneStatus
-	sortField     *SortField
-
-	awardStatuses               []AwardStatusType
-	paidStatuses                []PaidStatusType
-	completeStatuses            []CompleteStatusType
-	frontBidStatuses            []FrontendBidStatusType
-	fromTime                    *int64
-	toTime                      *int64
-	reputation                  *bool
-	buyerProjectFee             *bool
-	awardStatusPossibilities    *bool
-	projectDetails              *bool
-	userDetails                 *bool
+	client                      *Client
+	projects                    []int64
+	projectOwners               []int64
+	bidders                     []int64
+	users                       []int64
+	bids                        []int
+	statuses                    []MilestoneStatus
+	sortField                   *SortField
+	sortDirection               *SortDirection
+	excludedMilestones          *bool
 	userAvatar                  *bool
 	userCountryDetails          *bool
 	userProfileDescription      *bool
@@ -55,15 +45,12 @@ type listMilestonesService struct {
 	sanctionDetails             *bool
 	limitedAccount              *bool
 	equipmentGroupDetails       *bool
-	limit                       *int
-	offset                      *int
-	compact                     *bool
 }
 
 func (s *listMilestonesService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_BIDS),
+		endpoint: string(PROJECTS_MILESTONES),
 	}
 
 	for _, val := range s.bids {
@@ -78,38 +65,20 @@ func (s *listMilestonesService) Do(ctx context.Context) (*BaseResponse, error) {
 	for _, val := range s.projectOwners {
 		r.addParam("project_owners[]", val)
 	}
-	for _, val := range s.awardStatuses {
-		r.addParam("award_statuses[]", val)
+	for _, val := range s.users {
+		r.addParam("users[]", val)
 	}
-	for _, val := range s.paidStatuses {
-		r.addParam("paid_statuses[]", val)
+	for _, val := range s.statuses {
+		r.addParam("statuses[]", val)
 	}
-	for _, val := range s.completeStatuses {
-		r.addParam("complete_statuses[]", val)
+	if s.sortField != nil {
+		r.addParam("sort_field", *s.sortField)
 	}
-	for _, val := range s.frontBidStatuses {
-		r.addParam("frontend_bid_statuses[]", val)
+	if s.sortDirection != nil {
+		r.addParam("sort_direction", *s.sortDirection)
 	}
-	if s.fromTime != nil {
-		r.addParam("from_time", *s.fromTime)
-	}
-	if s.toTime != nil {
-		r.addParam("to_time", *s.toTime)
-	}
-	if s.reputation != nil {
-		r.addParam("reputation", *s.reputation)
-	}
-	if s.buyerProjectFee != nil {
-		r.addParam("buyer_project_fee", *s.buyerProjectFee)
-	}
-	if s.awardStatusPossibilities != nil {
-		r.addParam("award_status_possibilities", *s.awardStatusPossibilities)
-	}
-	if s.projectDetails != nil {
-		r.addParam("project_details", *s.projectDetails)
-	}
-	if s.userDetails != nil {
-		r.addParam("user_details", *s.userDetails)
+	if s.excludedMilestones != nil {
+		r.addParam("excluded_milestones", *s.excludedMilestones)
 	}
 	if s.userAvatar != nil {
 		r.addParam("user_avatar", *s.userAvatar)
@@ -192,15 +161,6 @@ func (s *listMilestonesService) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.equipmentGroupDetails != nil {
 		r.setParam("equipment_group_details", *s.equipmentGroupDetails)
 	}
-	if s.limit != nil {
-		r.setParam("limit", *s.limit)
-	}
-	if s.offset != nil {
-		r.setParam("offset", *s.offset)
-	}
-	if s.compact != nil {
-		r.setParam("compact", *s.compact)
-	}
 
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
@@ -235,58 +195,28 @@ func (s *listMilestonesService) SetProjectOwners(vals []int64) *listMilestonesSe
 	return s
 }
 
-func (s *listMilestonesService) SetAwardStatuses(vals []AwardStatusType) *listMilestonesService {
-	s.awardStatuses = vals
+func (s *listMilestonesService) SetUsers(vals []int64) *listMilestonesService {
+	s.users = vals
 	return s
 }
 
-func (s *listMilestonesService) SetPaidStatuses(vals []PaidStatusType) *listMilestonesService {
-	s.paidStatuses = vals
+func (s *listMilestonesService) SetStatuses(vals []MilestoneStatus) *listMilestonesService {
+	s.statuses = vals
 	return s
 }
 
-func (s *listMilestonesService) SetCompleteStatuses(vals []CompleteStatusType) *listMilestonesService {
-	s.completeStatuses = vals
+func (s *listMilestonesService) SetSortField(val SortField) *listMilestonesService {
+	s.sortField = &val
 	return s
 }
 
-func (s *listMilestonesService) SetFrontBidStatuses(vals []FrontendBidStatusType) *listMilestonesService {
-	s.frontBidStatuses = vals
+func (s *listMilestonesService) SetSortDirection(val SortDirection) *listMilestonesService {
+	s.sortDirection = &val
 	return s
 }
 
-func (s *listMilestonesService) SetFromTime(val int64) *listMilestonesService {
-	s.fromTime = &val
-	return s
-}
-
-func (s *listMilestonesService) SetToTime(val int64) *listMilestonesService {
-	s.toTime = &val
-	return s
-}
-
-func (s *listMilestonesService) SetReputation(val bool) *listMilestonesService {
-	s.reputation = &val
-	return s
-}
-
-func (s *listMilestonesService) SetBuyerProjectFee(val bool) *listMilestonesService {
-	s.buyerProjectFee = &val
-	return s
-}
-
-func (s *listMilestonesService) SetAwardStatusPossibilities(val bool) *listMilestonesService {
-	s.awardStatusPossibilities = &val
-	return s
-}
-
-func (s *listMilestonesService) SetProjectDetails(val bool) *listMilestonesService {
-	s.projectDetails = &val
-	return s
-}
-
-func (s *listMilestonesService) SetUserDetails(val bool) *listMilestonesService {
-	s.userDetails = &val
+func (s *listMilestonesService) SetExcludedMilestones(val bool) *listMilestonesService {
+	s.excludedMilestones = &val
 	return s
 }
 
@@ -422,20 +352,5 @@ func (s *listMilestonesService) SetLimitedAccount(val bool) *listMilestonesServi
 
 func (s *listMilestonesService) SetEquipmentGroupDetails(val bool) *listMilestonesService {
 	s.equipmentGroupDetails = &val
-	return s
-}
-
-func (s *listMilestonesService) SetLimit(val int) *listMilestonesService {
-	s.limit = &val
-	return s
-}
-
-func (s *listMilestonesService) SetOffset(val int) *listMilestonesService {
-	s.offset = &val
-	return s
-}
-
-func (s *listMilestonesService) SetCompact(val bool) *listMilestonesService {
-	s.compact = &val
 	return s
 }

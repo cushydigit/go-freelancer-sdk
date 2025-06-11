@@ -15,7 +15,8 @@ const (
 	PROJECTS_BIDS_EDIT_REQUESTS    Endpoint = "/projects/0.1/bids/bid_edit_requests"
 	PROJECTS_BID_RATINGS           Endpoint = "/projects/0.1/bid_ratings"
 	PROJECTS_REVIEWS               Endpoint = "/projects/0.1/reviews"
-	PROJECTS_MILESTONRE            Endpoint = "/projects/0.1/milestonte"
+	PROJECTS_MILESTONES            Endpoint = "/projects/0.1/milestones"
+	PROJECTS_MILESTONE_REQUESTS    Endpoint = "/projects/0.1/milestone_requests/"
 	PROJECTS_HOURLY_CONTRACTS      Endpoint = "/projects/0.1/hourly_contracts"
 	PROJECTS_PROJECTS_ACTIVE       Endpoint = "/projects/0.1/projects/active"
 	PROJECTS_PROJECTS_FEES         Endpoint = "/projects/0.1/projects/fees"
@@ -24,7 +25,6 @@ const (
 	PROJECTS_JOB_BUNDLE_CATEGORIES Endpoint = "/projects/0.1/job_bundle_categories"
 	PROJECTS_JOBS_SEARCH           Endpoint = "/projects/0.1/jobs/search"
 	PROJECTS_BIDS_FEES             Endpoint = "/projects/0.1/bids/fees"
-	PROJECTS_MILESTONE_REQUESTS    Endpoint = "/projects/0.1/milestonte_requests/"
 	PROJECTS_COLLABORATIONS        Endpoint = "/projects/0.1/projects/collaborations"
 	PROJECTS_SERVICES              Endpoint = "/projects/0.1/services"
 

@@ -13,10 +13,10 @@ type ListBidsService struct {
 	projects                    []int64
 	bidders                     []int64
 	projectOwners               []int64
-	awardStatuses               []AwardStatusType
-	paidStatuses                []PaidStatusType
-	completeStatuses            []CompleteStatusType
-	frontBidStatuses            []FrontendBidStatusType
+	awardStatuses               []AwardStatus
+	paidStatuses                []PaidStatus
+	completeStatuses            []CompleteStatus
+	frontBidStatuses            []FrontendBidStatus
 	fromTime                    *int64
 	toTime                      *int64
 	reputation                  *bool
@@ -231,22 +231,22 @@ func (s *ListBidsService) SetProjectOwners(vals []int64) *ListBidsService {
 	return s
 }
 
-func (s *ListBidsService) SetAwardStatuses(vals []AwardStatusType) *ListBidsService {
+func (s *ListBidsService) SetAwardStatuses(vals []AwardStatus) *ListBidsService {
 	s.awardStatuses = vals
 	return s
 }
 
-func (s *ListBidsService) SetPaidStatuses(vals []PaidStatusType) *ListBidsService {
+func (s *ListBidsService) SetPaidStatuses(vals []PaidStatus) *ListBidsService {
 	s.paidStatuses = vals
 	return s
 }
 
-func (s *ListBidsService) SetCompleteStatuses(vals []CompleteStatusType) *ListBidsService {
+func (s *ListBidsService) SetCompleteStatuses(vals []CompleteStatus) *ListBidsService {
 	s.completeStatuses = vals
 	return s
 }
 
-func (s *ListBidsService) SetFrontBidStatuses(vals []FrontendBidStatusType) *ListBidsService {
+func (s *ListBidsService) SetFrontBidStatuses(vals []FrontendBidStatus) *ListBidsService {
 	s.frontBidStatuses = vals
 	return s
 }

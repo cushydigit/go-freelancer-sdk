@@ -7,6 +7,7 @@ type ProjectStatusType string
 type IntervalType string
 type ContestUpgradeType string
 type SortField string
+type SortDirection string
 type RoleType string
 type ViolationContext string
 type ViolationReason string
@@ -15,10 +16,10 @@ type ProjectCollaborationAction string
 type ServiceType string
 type ServiceStatusType string
 type SortType string
-type AwardStatusType string
-type PaidStatusType string
-type CompleteStatusType string
-type FrontendBidStatusType string
+type AwardStatus string
+type PaidStatus string
+type CompleteStatus string
+type FrontendBidStatus string
 type ActionBid string
 type BidStatus string
 type ActionBidEditRequest string
@@ -64,7 +65,10 @@ const (
 	SortFieldsBidAvgUsd    SortField = "bid_avg_usd"
 	SortFieldsTimeReleased SortField = "time_released"
 
-	SortNeweset     SortType = "newest"
+	SortDirectionAsc  SortDirection = "asc"
+	SortDirectionDesc SortDirection = "desc"
+
+	SortNewest      SortType = "newest"
 	SortQuickest    SortType = "quickest"
 	SortRecommended SortType = "recommended"
 
@@ -105,15 +109,15 @@ const (
 	ViolationAdditionalReasonWorkDoesNotMatchRequirements   ViolationAdditionalReason = "work_does_not_match_requirements"
 	ViolationAdditionalReasonOther                          ViolationAdditionalReason = "other"
 
-	MilestoneStatusDeleted         MilestoneStatus = "deleted"
-	MilestoneStatusRejected        MilestoneStatus = "rejected"
-	MilestoneStatusPending         MilestoneStatus = "pending"
-	MilestoneStatusCreated         MilestoneStatus = "created"
-	MilestoneStatusDisputed        MilestoneStatus = "disputed"
-	MilestoneStatusRquestedRelease MilestoneStatus = "requested_release"
-	MilestoneStatusCleared         MilestoneStatus = "cleared"
-	MilestoneStatusFrozen          MilestoneStatus = "cleared"
-	MilestoneStatusCanceled        MilestoneStatus = "canceled"
+	MilestoneStatusDeleted          MilestoneStatus = "deleted"
+	MilestoneStatusRejected         MilestoneStatus = "rejected"
+	MilestoneStatusPending          MilestoneStatus = "pending"
+	MilestoneStatusCreated          MilestoneStatus = "created"
+	MilestoneStatusDisputed         MilestoneStatus = "disputed"
+	MilestoneStatusRequestedRelease MilestoneStatus = "requested_release"
+	MilestoneStatusCleared          MilestoneStatus = "cleared"
+	MilestoneStatusFrozen           MilestoneStatus = "cleared"
+	MilestoneStatusCanceled         MilestoneStatus = "canceled"
 
 	ProjectCollaborationActionRevoke            ProjectCollaborationAction = "revoke"
 	ProjectCollaborationActionUpdatePermissions ProjectCollaborationAction = "update_permissions"
@@ -125,19 +129,19 @@ const (
 	ServiceStatusActive  ServiceStatusType = "active"
 	ServiceStatusClosed  ServiceStatusType = "closed"
 
-	AwardStatusAwarded  AwardStatusType = "awarded"
-	AwardStatusRejected AwardStatusType = "rejected"
-	AwardStatusRevoked  AwardStatusType = "revoked"
-	AwardStatusPending  AwardStatusType = "pending"
-	AwardStatusCanceled AwardStatusType = "canceled"
+	AwardStatusAwarded  AwardStatus = "awarded"
+	AwardStatusRejected AwardStatus = "rejected"
+	AwardStatusRevoked  AwardStatus = "revoked"
+	AwardStatusPending  AwardStatus = "pending"
+	AwardStatusCanceled AwardStatus = "canceled"
 
-	PaidStatusPending    PaidStatusType = "pending"
-	PaidStatusIncomplete PaidStatusType = "incomplete"
-	PaidStatusComplete   PaidStatusType = "complete"
+	PaidStatusPending    PaidStatus = "pending"
+	PaidStatusIncomplete PaidStatus = "incomplete"
+	PaidStatusComplete   PaidStatus = "complete"
 
-	FrontendBidStatusActive     FrontendBidStatusType = "active"
-	FrontendBidStatusInprogress FrontendBidStatusType = "in_progress"
-	FrontendBidStatusComplete   FrontendBidStatusType = "complete"
+	FrontendBidStatusActive     FrontendBidStatus = "active"
+	FrontendBidStatusInprogress FrontendBidStatus = "in_progress"
+	FrontendBidStatusComplete   FrontendBidStatus = "complete"
 
 	ActionBidAccept                ActionBid = "accept"
 	ActionBidDeny                  ActionBid = "deny"
