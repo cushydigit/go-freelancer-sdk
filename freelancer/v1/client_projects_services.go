@@ -114,3 +114,8 @@ func (c *Client) NewListBidsService() *ListBidsService {
 func (c *Client) NewGetBidService() *getBidService {
 	return &getBidService{client: c}
 }
+
+// Creates a bid on a project
+func (c *Client) NewCreateBidService() *createBidService {
+	return &createBidService{client: c}
+}
