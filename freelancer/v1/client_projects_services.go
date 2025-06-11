@@ -200,3 +200,8 @@ func (c *Client) NewListJobBundleCategoriesService() *listJobBundleCategoriesSer
 func (c *Client) NewListMilestonesService() *listMilestonesService {
 	return &listMilestonesService{client: c}
 }
+
+// Returns information about a specific milestone
+func (c *Client) NewGetMilestoneService() *getMilestoneService {
+	return &getMilestoneService{client: c}
+}
