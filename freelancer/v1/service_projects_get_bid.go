@@ -3,22 +3,13 @@ package freelancer
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
 // Returns bids for a single project.
-type ListBidsService struct {
+type getBidService struct {
 	client                      *Client
-	bids                        []int
-	projects                    []int64
-	bidders                     []int64
-	projectOwners               []int64
-	awardStatuses               []AwardStatusType
-	paidStatuses                []PaidStatusType
-	completeStatuses            []CompleteStatusType
-	frontBidStatuses            []FrontendBidStatusType
-	fromTime                    *int64
-	toTime                      *int64
 	reputation                  *bool
 	buyerProjectFee             *bool
 	awardStatusPossibilities    *bool
@@ -54,44 +45,15 @@ type ListBidsService struct {
 	limit                       *int
 	offset                      *int
 	compact                     *bool
+	quotations                  *bool
 }
 
-func (s *ListBidsService) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getBidService) Do(ctx context.Context, bidID int) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_BIDS),
+		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_BIDS), bidID),
 	}
 
-	for _, val := range s.bids {
-		r.addParam("bids[]", val)
-	}
-	for _, val := range s.projects {
-		r.addParam("projects[]", val)
-	}
-	for _, val := range s.bidders {
-		r.addParam("bidders[]", val)
-	}
-	for _, val := range s.projectOwners {
-		r.addParam("project_owners[]", val)
-	}
-	for _, val := range s.awardStatuses {
-		r.addParam("award_statuses[]", val)
-	}
-	for _, val := range s.paidStatuses {
-		r.addParam("paid_statuses[]", val)
-	}
-	for _, val := range s.completeStatuses {
-		r.addParam("complete_statuses[]", val)
-	}
-	for _, val := range s.frontBidStatuses {
-		r.addParam("frontend_bid_statuses[]", val)
-	}
-	if s.fromTime != nil {
-		r.addParam("from_time", *s.fromTime)
-	}
-	if s.toTime != nil {
-		r.addParam("to_time", *s.toTime)
-	}
 	if s.reputation != nil {
 		r.addParam("reputation", *s.reputation)
 	}
@@ -197,6 +159,9 @@ func (s *ListBidsService) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.compact != nil {
 		r.setParam("compact", *s.compact)
 	}
+	if s.quotations != nil {
+		r.setParam("quotations", *s.quotations)
+	}
 
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
@@ -211,227 +176,183 @@ func (s *ListBidsService) Do(ctx context.Context) (*BaseResponse, error) {
 	return resp, nil
 
 }
-func (s *ListBidsService) SetBids(vals []int) *ListBidsService {
-	s.bids = vals
-	return s
-}
 
-func (s *ListBidsService) SetProjects(vals []int64) *ListBidsService {
-	s.projects = vals
-	return s
-}
-
-func (s *ListBidsService) SetBidders(vals []int64) *ListBidsService {
-	s.bidders = vals
-	return s
-}
-
-func (s *ListBidsService) SetProjectOwners(vals []int64) *ListBidsService {
-	s.projectOwners = vals
-	return s
-}
-
-func (s *ListBidsService) SetAwardStatuses(vals []AwardStatusType) *ListBidsService {
-	s.awardStatuses = vals
-	return s
-}
-
-func (s *ListBidsService) SetPaidStatuses(vals []PaidStatusType) *ListBidsService {
-	s.paidStatuses = vals
-	return s
-}
-
-func (s *ListBidsService) SetCompleteStatuses(vals []CompleteStatusType) *ListBidsService {
-	s.completeStatuses = vals
-	return s
-}
-
-func (s *ListBidsService) SetFrontBidStatuses(vals []FrontendBidStatusType) *ListBidsService {
-	s.frontBidStatuses = vals
-	return s
-}
-
-func (s *ListBidsService) SetFromTime(val int64) *ListBidsService {
-	s.fromTime = &val
-	return s
-}
-
-func (s *ListBidsService) SetToTime(val int64) *ListBidsService {
-	s.toTime = &val
-	return s
-}
-
-func (s *ListBidsService) SetReputation(val bool) *ListBidsService {
+func (s *getBidService) SetReputation(val bool) *getBidService {
 	s.reputation = &val
 	return s
 }
 
-func (s *ListBidsService) SetBuyerProjectFee(val bool) *ListBidsService {
+func (s *getBidService) SetBuyerProjectFee(val bool) *getBidService {
 	s.buyerProjectFee = &val
 	return s
 }
 
-func (s *ListBidsService) SetAwardStatusPossibilities(val bool) *ListBidsService {
+func (s *getBidService) SetAwardStatusPossibilities(val bool) *getBidService {
 	s.awardStatusPossibilities = &val
 	return s
 }
 
-func (s *ListBidsService) SetProjectDetails(val bool) *ListBidsService {
+func (s *getBidService) SetProjectDetails(val bool) *getBidService {
 	s.projectDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserDetails(val bool) *getBidService {
 	s.userDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserAvatar(val bool) *ListBidsService {
+func (s *getBidService) SetUserAvatar(val bool) *getBidService {
 	s.userAvatar = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserCountryDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserCountryDetails(val bool) *getBidService {
 	s.userCountryDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserProfileDescription(val bool) *ListBidsService {
+func (s *getBidService) SetUserProfileDescription(val bool) *getBidService {
 	s.userProfileDescription = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserDisplayInfo(val bool) *ListBidsService {
+func (s *getBidService) SetUserDisplayInfo(val bool) *getBidService {
 	s.userDisplayInfo = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserJobs(val bool) *ListBidsService {
+func (s *getBidService) SetUserJobs(val bool) *getBidService {
 	s.userJobs = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserBalanceDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserBalanceDetails(val bool) *getBidService {
 	s.userBalanceDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserQualificationDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserQualificationDetails(val bool) *getBidService {
 	s.userQualificationDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserMembershipDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserMembershipDetails(val bool) *getBidService {
 	s.userMembershipDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserFinancialDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserFinancialDetails(val bool) *getBidService {
 	s.userFinancialDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserLocationDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserLocationDetails(val bool) *getBidService {
 	s.userLocationDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserPortfolioDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserPortfolioDetails(val bool) *getBidService {
 	s.userPortfolioDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserPreferredDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserPreferredDetails(val bool) *getBidService {
 	s.userPreferredDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserBadgeDetails(val bool) *ListBidsService {
+func (s *getBidService) SetUserBadgeDetails(val bool) *getBidService {
 	s.userBadgeDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserStatus(val bool) *ListBidsService {
+func (s *getBidService) SetUserStatus(val bool) *getBidService {
 	s.userStatus = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserReputation(val bool) *ListBidsService {
+func (s *getBidService) SetUserReputation(val bool) *getBidService {
 	s.userReputation = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserEmployerReputation(val bool) *ListBidsService {
+func (s *getBidService) SetUserEmployerReputation(val bool) *getBidService {
 	s.userEmployerReputation = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserReputationExtra(val bool) *ListBidsService {
+func (s *getBidService) SetUserReputationExtra(val bool) *getBidService {
 	s.userReputationExtra = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserEmployerReputationExtra(val bool) *ListBidsService {
+func (s *getBidService) SetUserEmployerReputationExtra(val bool) *getBidService {
 	s.userEmployerReputationExtra = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserCoverImage(val bool) *ListBidsService {
+func (s *getBidService) SetUserCoverImage(val bool) *getBidService {
 	s.userCoverImage = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserPastCoverImage(val bool) *ListBidsService {
+func (s *getBidService) SetUserPastCoverImage(val bool) *getBidService {
 	s.userPastCoverImage = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserRecommendations(val bool) *ListBidsService {
+func (s *getBidService) SetUserRecommendations(val bool) *getBidService {
 	s.userRecommendations = &val
 	return s
 }
 
-func (s *ListBidsService) SetUserResponsiveness(val bool) *ListBidsService {
+func (s *getBidService) SetUserResponsiveness(val bool) *getBidService {
 	s.userResponsiveness = &val
 	return s
 }
 
-func (s *ListBidsService) SetCorporateUsers(val bool) *ListBidsService {
+func (s *getBidService) SetCorporateUsers(val bool) *getBidService {
 	s.corporateUsers = &val
 	return s
 }
 
-func (s *ListBidsService) SetMarketingMobileNumber(val bool) *ListBidsService {
+func (s *getBidService) SetMarketingMobileNumber(val bool) *getBidService {
 	s.marketingMobileNumber = &val
 	return s
 }
 
-func (s *ListBidsService) SetSanctionDetails(val bool) *ListBidsService {
+func (s *getBidService) SetSanctionDetails(val bool) *getBidService {
 	s.sanctionDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetLimitedAccount(val bool) *ListBidsService {
+func (s *getBidService) SetLimitedAccount(val bool) *getBidService {
 	s.limitedAccount = &val
 	return s
 }
 
-func (s *ListBidsService) SetEquipmentGroupDetails(val bool) *ListBidsService {
+func (s *getBidService) SetEquipmentGroupDetails(val bool) *getBidService {
 	s.equipmentGroupDetails = &val
 	return s
 }
 
-func (s *ListBidsService) SetLimit(val int) *ListBidsService {
+func (s *getBidService) SetLimit(val int) *getBidService {
 	s.limit = &val
 	return s
 }
 
-func (s *ListBidsService) SetOffset(val int) *ListBidsService {
+func (s *getBidService) SetOffset(val int) *getBidService {
 	s.offset = &val
 	return s
 }
 
-func (s *ListBidsService) SetCompact(val bool) *ListBidsService {
+func (s *getBidService) SetCompact(val bool) *getBidService {
 	s.compact = &val
+	return s
+}
+
+func (s *getBidService) SetQuotations(val bool) *getBidService {
+	s.quotations = &val
 	return s
 }

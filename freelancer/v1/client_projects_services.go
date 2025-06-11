@@ -109,3 +109,8 @@ func (c *Client) NewListProjectsActiveServicesService() *ListProjectsActiveServi
 func (c *Client) NewListBidsService() *ListBidsService {
 	return &ListBidsService{client: c}
 }
+
+// Returns information about a specific bid
+func (c *Client) NewGetBidService() *getBidService {
+	return &getBidService{client: c}
+}
