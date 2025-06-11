@@ -24,7 +24,9 @@ type ActionBid string
 type BidStatus string
 type ActionBidEditRequest string
 type MilestoneStatus string
-type MilestoneReason string
+type MilestoneCreateReason string
+type MilestoneAction string
+type MilestoneActionReason string
 
 const (
 	Projects TypeType = "projects"
@@ -120,10 +122,22 @@ const (
 	MilestoneStatusFrozen           MilestoneStatus = "cleared"
 	MilestoneStatusCanceled         MilestoneStatus = "canceled"
 
-	MilestoneReasonFullPayment     MilestoneReason = "full_payment"
-	MilestoneReasonPartialPayment  MilestoneReason = "partial_payment"
-	MilestoneReasonTaskDescription MilestoneReason = "task_description"
-	MilestoneReasonOther           MilestoneReason = "other"
+	MilestoneCreateReasonFullPayment     MilestoneCreateReason = "full_payment"
+	MilestoneCreateReasonPartialPayment  MilestoneCreateReason = "partial_payment"
+	MilestoneCreateReasonTaskDescription MilestoneCreateReason = "task_description"
+	MilestoneCreateReasonOther           MilestoneCreateReason = "other"
+
+	MilestoneActionRelease        MilestoneAction = "release"
+	MilestoneActionUpdate         MilestoneAction = "update"
+	MilestoneActionRequestCancel  MilestoneAction = "request_cancel"
+	MilestoneActionRequestRelease MilestoneAction = "request_release"
+	MilestoneActionCancel         MilestoneAction = "cancel"
+	MilestoneActionRejectCancel   MilestoneAction = "reject_cancel"
+
+	MilestoneActionReasonAccidentallyCreated          MilestoneActionReason = "accidentally_created"
+	MilestoneActionReasonNoLongerNeeded               MilestoneActionReason = "no_longer_needed"
+	MilestoneActionReasonFreelancerDidNotMeetDeadline MilestoneActionReason = "freelancer_did_not_meet_deadline"
+	MilestoneActionReasonFreelancerDidNotCompleteTask MilestoneActionReason = "freelancer_did_not_complete_task"
 
 	ProjectCollaborationActionRevoke            ProjectCollaborationAction = "revoke"
 	ProjectCollaborationActionUpdatePermissions ProjectCollaborationAction = "update_permissions"
