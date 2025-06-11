@@ -215,3 +215,8 @@ func (c *Client) NewCreateMilestoneService() *createMilestoneService {
 func (c *Client) NewActionMilestoneService() *actionMilestoneService {
 	return &actionMilestoneService{client: c}
 }
+
+// Returns a list of milestone requests.
+func (c *Client) NewListMilestoneRequestsService() *listMilestoneRequestsService {
+	return &listMilestoneRequestsService{client: c}
+}
