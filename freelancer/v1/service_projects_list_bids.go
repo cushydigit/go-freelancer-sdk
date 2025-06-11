@@ -58,10 +58,10 @@ type ListBidsService struct {
 	compact                     *bool
 }
 
-func (s *ListBidsService) Do(ctx context.Context, id int64) (*BaseResponse, error) {
+func (s *ListBidsService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s/bids", string(PROJECTS_PROJECTS), strconv.FormatInt(id, 10)),
+		endpoint: string(PROJECTS_BIDS),
 	}
 
 	for _, val := range s.bids {
