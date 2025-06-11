@@ -55,7 +55,7 @@ type listMilestoneRequestsService struct {
 func (s *listMilestoneRequestsService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_MILESTONES),
+		endpoint: string(PROJECTS_MILESTONE_REQUESTS),
 	}
 
 	for _, val := range s.milestoneRequests {

@@ -185,17 +185,17 @@ func (c *Client) NewSearchJobsService() *searchJobsService {
 	return &searchJobsService{client: c}
 }
 
-// Returns a list of job bundles. Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name.
+// Returns a list of job bundles. Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name
 func (c *Client) NewListJobBundlesService() *listJobBundlesService {
 	return &listJobBundlesService{client: c}
 }
 
-// Returns a list of job bundle categories.
+// Returns a list of job bundle categories
 func (c *Client) NewListJobBundleCategoriesService() *listJobBundleCategoriesService {
 	return &listJobBundleCategoriesService{client: c}
 }
 
-// Returns a list of milestones. Does not return un-awarded prepaid milestones.
+// Returns a list of milestones. Does not return un-awarded prepaid milestones
 // Note that for the parameters, you cannot specify both users[]and bidders[]/project_owners[]
 func (c *Client) NewListMilestonesService() *listMilestonesService {
 	return &listMilestonesService{client: c}
@@ -206,17 +206,22 @@ func (c *Client) NewGetMilestoneService() *getMilestoneService {
 	return &getMilestoneService{client: c}
 }
 
-// Actions to be performed on a milestone.
+// Actions to be performed on a milestone
 func (c *Client) NewCreateMilestoneService() *createMilestoneService {
 	return &createMilestoneService{client: c}
 }
 
-// Actions to be performed on a milestone.
+// Actions to be performed on a milestone
 func (c *Client) NewActionMilestoneService() *actionMilestoneService {
 	return &actionMilestoneService{client: c}
 }
 
-// Returns a list of milestone requests.
+// Returns a list of milestone requests
 func (c *Client) NewListMilestoneRequestsService() *listMilestoneRequestsService {
 	return &listMilestoneRequestsService{client: c}
+}
+
+// Returns information about a specific milestone request
+func (c *Client) NewGetMilestoneRequestService() *getMilestoneRequestService {
+	return &getMilestoneRequestService{client: c}
 }
