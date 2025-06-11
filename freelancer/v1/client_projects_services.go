@@ -104,3 +104,8 @@ func (c *Client) NewListProjectsServicesService() *ListProjectsServicesService {
 func (c *Client) NewListProjectsActiveServicesService() *ListProjectsActiveServicesService {
 	return &ListProjectsActiveServicesService{client: c}
 }
+
+// Returns a list of bids that match the specified criteria
+func (c *Client) NewListBidsService() *ListBidsService {
+	return &ListBidsService{client: c}
+}

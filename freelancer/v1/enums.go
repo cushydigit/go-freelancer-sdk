@@ -16,6 +16,10 @@ type ProjectCollaborationActionType string
 type ServiceType string
 type ServiceStatusType string
 type SortType string
+type AwardStatusType string
+type PaidStatusType string
+type CompleteStatusType string
+type FrontendBidStatusType string
 
 const (
 	Projects TypeType = "projects"
@@ -111,4 +115,18 @@ const (
 	ServiceStatusPending ServiceStatusType = "pending"
 	ServiceStatusActive  ServiceStatusType = "active"
 	ServiceStatusClosed  ServiceStatusType = "closed"
+
+	AwardStatusAwarded  AwardStatusType = "awarded"
+	AwardStatusRejected AwardStatusType = "rejected"
+	AwardStatusRevoked  AwardStatusType = "revoked"
+	AwardStatusPending  AwardStatusType = "pending"
+	AwardStatusCanceled AwardStatusType = "canceled"
+
+	PaidStatusPending    PaidStatusType = "pending"
+	PaidStatusIncomplete PaidStatusType = "incomplete"
+	PaidStatusComplete   PaidStatusType = "complete"
+
+	FrontendBidStatusActive     FrontendBidStatusType = "active"
+	FrontendBidStatusInprogress FrontendBidStatusType = "in_progress"
+	FrontendBidStatusComplete   FrontendBidStatusType = "complete"
 )
