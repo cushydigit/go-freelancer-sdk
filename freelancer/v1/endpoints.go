@@ -12,6 +12,7 @@ const (
 	PROJECTS_CATEGORIES         Endpoint = "/projects/0.1/categories"
 	PROJECTS_CURRENCIES         Endpoint = "/projects/0.1/currencies"
 	PROJECTS_BIDS               Endpoint = "/projects/0.1/bids"
+	PROJECTS_BIDS_EDIT_REQUESTS Endpoint = "/projects/0.1/bids/bid_edit_requests"
 	PROJECTS_REVIEWS            Endpoint = "/projects/0.1/reviews"
 	PROJECTS_MILESTONRE         Endpoint = "/projects/0.1/milestonte"
 	PROJECTS_HOURLY_CONTRACTS   Endpoint = "/projects/0.1/hourly_contracts"

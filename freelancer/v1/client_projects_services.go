@@ -144,3 +144,8 @@ func (c *Client) NewCreateTimeTrackingBidService() *createTimeTrackingBidService
 func (c *Client) NewGetBidEditRequestService() *getBidEditRequestService {
 	return &getBidEditRequestService{client: c}
 }
+
+// Create a bid edit request on a post accept awarded bid. With no pending bid edit request
+func (c *Client) NewCreateBidEditRequestService() *createBidEditRequestService {
+	return &createBidEditRequestService{client: c}
+}
