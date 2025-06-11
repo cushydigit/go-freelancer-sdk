@@ -149,3 +149,8 @@ func (c *Client) NewGetBidEditRequestService() *getBidEditRequestService {
 func (c *Client) NewCreateBidEditRequestService() *createBidEditRequestService {
 	return &createBidEditRequestService{client: c}
 }
+
+// Employer perform action on a PENDING bid edit reqeust
+func (c *Client) NewActionBidEditRequestService() *actionBidEditRequestService {
+	return &actionBidEditRequestService{client: c}
+}
