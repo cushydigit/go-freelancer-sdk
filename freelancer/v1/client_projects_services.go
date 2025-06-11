@@ -139,3 +139,8 @@ func (c *Client) NewGetTimeTrackingBidService() *getTimeTrackingBidService {
 func (c *Client) NewCreateTimeTrackingBidService() *createTimeTrackingBidService {
 	return &createTimeTrackingBidService{client: c}
 }
+
+// Returns bid requests by bid id
+func (c *Client) NewGetBidEditRequestService() *getBidEditRequestService {
+	return &getBidEditRequestService{client: c}
+}

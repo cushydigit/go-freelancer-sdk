@@ -21,6 +21,7 @@ type PaidStatusType string
 type CompleteStatusType string
 type FrontendBidStatusType string
 type ActionBid string
+type BidStatus string
 
 const (
 	Projects TypeType = "projects"
@@ -142,4 +143,7 @@ const (
 	ActionBidHide                  ActionBid = "hide"
 	ActionBidUnhide                ActionBid = "unhide"
 	ActionBidRquestLocationSharing ActionBid = "request_location_sharing"
+
+	BidStatusPending  BidStatus = "pending"
+	BIdStatusAccepted BidStatus = "accepted"
 )
