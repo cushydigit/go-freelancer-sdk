@@ -25,7 +25,7 @@ func (c *Client) NewSearchActiveProjectsService() *SearchActiveProjectsService {
 	return &SearchActiveProjectsService{client: c}
 }
 
-// Returns the logged in user's projects/contests they either created or participated in (by bidding or submiting an entry)
+// Returns the logged in user's projects/contests they either created or participated in (by bidding or submitting an entry)
 func (c *Client) NewListSelfProjectsService() *ListSelfProjectsService {
 	return &ListSelfProjectsService{client: c}
 }
@@ -150,7 +150,7 @@ func (c *Client) NewCreateBidEditRequestService() *createBidEditRequestService {
 	return &createBidEditRequestService{client: c}
 }
 
-// Employer perform action on a PENDING bid edit reqeust
+// Employer perform action on a PENDING bid edit request
 func (c *Client) NewActionBidEditRequestService() *actionBidEditRequestService {
 	return &actionBidEditRequestService{client: c}
 }
@@ -165,12 +165,16 @@ func (c *Client) NewListBidRatingService() *listBidRatingService {
 	return &listBidRatingService{client: c}
 }
 
-// Rate abid (create a bid rating)
+// Rate a bid (create a bid rating)
 func (c *Client) NewCreateBidRatingService() *createBidRatingService {
 	return &createBidRatingService{client: c}
 }
 
 // Updates an existing bid rating
-func (c *Client) NewUpdatrBidRatingService() *updateBidRatingService {
+func (c *Client) NewUpdateBidRatingService() *updateBidRatingService {
 	return &updateBidRatingService{client: c}
+}
+
+func (c *Client) NewListJobsService() *listJobsService {
+	return &listJobsService{client: c}
 }
