@@ -24,7 +24,7 @@ func (s *updateBidService) Do(ctx context.Context, bidID int, b UpdateBidRequest
 		return nil, err
 	}
 	r := &request{
-		method:   http.MethodPost,
+		method:   http.MethodPut,
 		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_BIDS), bidID),
 		body:     bytes.NewBuffer(m),
 	}
