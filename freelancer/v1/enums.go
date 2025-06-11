@@ -24,6 +24,7 @@ type ActionBid string
 type BidStatus string
 type ActionBidEditRequest string
 type MilestoneStatus string
+type MilestoneReason string
 
 const (
 	Projects TypeType = "projects"
@@ -118,6 +119,11 @@ const (
 	MilestoneStatusCleared          MilestoneStatus = "cleared"
 	MilestoneStatusFrozen           MilestoneStatus = "cleared"
 	MilestoneStatusCanceled         MilestoneStatus = "canceled"
+
+	MilestoneReasonFullPayment     MilestoneReason = "full_payment"
+	MilestoneReasonPartialPayment  MilestoneReason = "partial_payment"
+	MilestoneReasonTaskDescription MilestoneReason = "task_description"
+	MilestoneReasonOther           MilestoneReason = "other"
 
 	ProjectCollaborationActionRevoke            ProjectCollaborationAction = "revoke"
 	ProjectCollaborationActionUpdatePermissions ProjectCollaborationAction = "update_permissions"
