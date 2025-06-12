@@ -250,3 +250,13 @@ func (c *Client) NewListExpertGuaranteesService() *listExpertGuaranteesService {
 func (c *Client) NewActionExpertGuaranteesService() *actionExpertGuaranteesService {
 	return &actionExpertGuaranteesService{client: c}
 }
+
+// Returns a list of budgets with the specified currencies.currency_codes and currency_ids are incompatible with each other.
+func (c *Client) NewBudgetsListService() *budgetsListService {
+	return &budgetsListService{client: c}
+}
+
+// Returns a list of currencies.currency_codes and currency_ids are incompatible with each other.
+func (c *Client) NewCurrenciesListService() *currenciesListService {
+	return &currenciesListService{client: c}
+}

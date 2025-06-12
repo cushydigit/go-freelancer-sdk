@@ -102,3 +102,23 @@ type GetSelfInfoResponse struct {
 	Status string `json:"status"`
 	Result User   `json:"result"`
 }
+
+type ListBudgetsResponse struct {
+	Status    string        `json:"status"`
+	RequestID string        `json:"request_id,omitempty"` // Optional
+	Result    BudgetsResult `json:"result"`
+}
+
+type BudgetsResult struct {
+	Budgets []Budget `json:"budgets"`
+}
+
+type ListCurrenciesResponse struct {
+	Status    string           `json:"status"`
+	RequestID string           `json:"request_id,omitempty"` // Optional
+	Result    CurrenciesResult `json:"result"`
+}
+
+type CurrenciesResult struct {
+	Currencies []Currency `json:"currencies"`
+}

@@ -142,11 +142,3 @@ func (c *Client) callAPI(ctx context.Context, r *request) (data []byte, err erro
 
 	return data, nil
 }
-
-func (c *Client) NewListCurrenciesService() *ListCurrenciesService {
-	return &ListCurrenciesService{client: c}
-}
-
-func (c *Client) NewListBudgetsService() *ListBudgetsService {
-	return &ListBudgetsService{client: c}
-}

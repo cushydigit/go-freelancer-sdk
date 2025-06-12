@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type ListBudgetsService struct {
+type budgetsListService struct {
 	client          *Client
 	currencyCodes   []string
 	currencyIDs     []int
@@ -15,18 +15,7 @@ type ListBudgetsService struct {
 	currencyDetails bool
 }
 
-type ListBudgetsResponse struct {
-	Status    string        `json:"status"`
-	RequestID string        `json:"request_id,omitempty"` // Optional
-	Result    BudgetsResult `json:"result"`
-}
-
-type BudgetsResult struct {
-	Budgets []Budget `json:"budgets"`
-}
-
-// Do perform GET request on endpoint "projects/0.1/budgets/"
-func (s *ListBudgetsService) Do(ctx context.Context) (*ListBudgetsResponse, error) {
+func (s *budgetsListService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: "/projects/0.1/budgets",
@@ -50,7 +39,7 @@ func (s *ListBudgetsService) Do(ctx context.Context) (*ListBudgetsResponse, erro
 	if err != nil {
 		return nil, err
 	}
-	res := &ListBudgetsResponse{}
+	res := &BaseResponse{}
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
@@ -58,27 +47,27 @@ func (s *ListBudgetsService) Do(ctx context.Context) (*ListBudgetsResponse, erro
 	return res, nil
 }
 
-func (s *ListBudgetsService) SetCurrencyCodes(currencyCodes []string) *ListBudgetsService {
+func (s *budgetsListService) SetCurrencyCodes(currencyCodes []string) *budgetsListService {
 	s.currencyCodes = currencyCodes
 	return s
 }
 
-func (s *ListBudgetsService) SetCurrencyIDs(currencyIDs []int) *ListBudgetsService {
+func (s *budgetsListService) SetCurrencyIDs(currencyIDs []int) *budgetsListService {
 	s.currencyIDs = currencyIDs
 	return s
 }
 
-func (s *ListBudgetsService) SetProjectType(projectType ProjectType) *ListBudgetsService {
+func (s *budgetsListService) SetProjectType(projectType ProjectType) *budgetsListService {
 	s.projectType = projectType
 	return s
 }
 
-func (s *ListBudgetsService) SetLang(lang string) *ListBudgetsService {
+func (s *budgetsListService) SetLang(lang string) *budgetsListService {
 	s.lang = lang
 	return s
 }
 
-func (s *ListBudgetsService) SetCurrencyDetails(currencyDetails bool) *ListBudgetsService {
+func (s *budgetsListService) SetCurrencyDetails(currencyDetails bool) *budgetsListService {
 	s.currencyDetails = currencyDetails
 	return s
 }
