@@ -240,3 +240,8 @@ func (c *Client) NewActionMilestoneRequestService() *actionMilestonRequestServic
 func (c *Client) NewListExpertGuaranteesService() *listExpertGuaranteesService {
 	return &listExpertGuaranteesService{client: c}
 }
+
+// Perform an action on a expert guarantee
+func (c *Client) NewActionExpertGuaranteesService() *actionExpertGuaranteesService {
+	return &actionExpertGuaranteesService{client: c}
+}
