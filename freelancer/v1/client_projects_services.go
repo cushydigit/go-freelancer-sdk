@@ -235,3 +235,8 @@ func (c *Client) NewCreateMilestoneRequestService() *createMilestoneRequestServi
 func (c *Client) NewActionMilestoneRequestService() *actionMilestonRequestService {
 	return &actionMilestonRequestService{client: c}
 }
+
+// Returns a list of expert guarantees
+func (c *Client) NewListExpertGuaranteesService() *listExpertGuaranteesService {
+	return &listExpertGuaranteesService{client: c}
+}
