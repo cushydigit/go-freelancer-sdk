@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-// Returns a list of enterprises
-type ListEnterprisesService struct {
+type enterprisesListService struct {
 	client        *Client
 	enterprises   []int
 	internalNames []string
@@ -19,7 +18,7 @@ type ListEnterprisesService struct {
 	offset        *int
 }
 
-func (s *ListEnterprisesService) DO(ctx context.Context) (*BaseResponse, error) {
+func (s *enterprisesListService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_ENTERPRISES),
@@ -70,42 +69,42 @@ func (s *ListEnterprisesService) DO(ctx context.Context) (*BaseResponse, error) 
 	return resp, err
 }
 
-func (s *ListEnterprisesService) SetEnterprises(val []int) *ListEnterprisesService {
-	s.enterprises = val
+func (s *enterprisesListService) SetEnterprises(vals []int) *enterprisesListService {
+	s.enterprises = vals
 	return s
 }
 
-func (s *ListEnterprisesService) SetInternalNames(val []string) *ListEnterprisesService {
-	s.internalNames = val
+func (s *enterprisesListService) SetInternalNames(vals []string) *enterprisesListService {
+	s.internalNames = vals
 	return s
 }
 
-func (s *ListEnterprisesService) SetNames(val []string) *ListEnterprisesService {
-	s.names = val
+func (s *enterprisesListService) SetNames(vals []string) *enterprisesListService {
+	s.names = vals
 	return s
 }
 
-func (s *ListEnterprisesService) SetSeoUrls(val []string) *ListEnterprisesService {
-	s.seoUrls = val
+func (s *enterprisesListService) SetSeoUrls(vals []string) *enterprisesListService {
+	s.seoUrls = vals
 	return s
 }
 
-func (s *ListEnterprisesService) SetUserID(val int64) *ListEnterprisesService {
+func (s *enterprisesListService) SetUserID(val int64) *enterprisesListService {
 	s.userID = &val
 	return s
 }
 
-func (s *ListEnterprisesService) SetIgnoreTest(val bool) *ListEnterprisesService {
+func (s *enterprisesListService) SetIgnoreTest(val bool) *enterprisesListService {
 	s.ignoreTest = &val
 	return s
 }
 
-func (s *ListEnterprisesService) SetLimit(val int) *ListEnterprisesService {
+func (s *enterprisesListService) SetLimit(val int) *enterprisesListService {
 	s.limit = &val
 	return s
 }
 
-func (s *ListEnterprisesService) SetOffset(val int) *ListEnterprisesService {
+func (s *enterprisesListService) SetOffset(val int) *enterprisesListService {
 	s.offset = &val
 	return s
 }

@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-// Returns a list of users
 type usersListService struct {
 	client                        *Client
 	users                         []int64
@@ -174,13 +173,13 @@ func (s *usersListService) Do(ctx context.Context) (*BaseResponse, error) {
 	return res, nil
 }
 
-func (s *usersListService) SetUsers(users []int64) *usersListService {
-	s.users = users
+func (s *usersListService) SetUsers(vals []int64) *usersListService {
+	s.users = vals
 	return s
 }
 
-func (s *usersListService) SetUsernames(usernames []string) *usersListService {
-	s.usernames = usernames
+func (s *usersListService) SetUsernames(vals []string) *usersListService {
+	s.usernames = vals
 	return s
 }
 

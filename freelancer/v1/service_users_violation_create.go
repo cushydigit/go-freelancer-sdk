@@ -8,11 +8,11 @@ import (
 )
 
 // Create a user violation report
-type ReportUserViolationService struct {
+type violationCreateService struct {
 	client *Client
 }
 
-type ReportUserViolationRequestBody struct {
+type CreateViolationBody struct {
 	ContextID        int                       `json:"context_id"`
 	ContextType      ViolationContext          `json:"context_type"`
 	ViolatorUserID   int64                     `json:"violator_user_id"`
@@ -22,7 +22,7 @@ type ReportUserViolationRequestBody struct {
 	Url              string                    `json:"url,omitempty"`
 }
 
-func (s *ReportUserViolationService) DO(ctx context.Context, b ReportUserViolationRequestBody) (*BaseResponse, error) {
+func (s *violationCreateService) Do(ctx context.Context, b CreateViolationBody) (*BaseResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err

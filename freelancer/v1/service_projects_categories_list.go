@@ -15,7 +15,6 @@ type categoriesListService struct {
 	seoDetails                bool
 }
 
-// Do perform GET request on endpoint "projects/0.1/categories/"
 func (s *categoriesListService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,

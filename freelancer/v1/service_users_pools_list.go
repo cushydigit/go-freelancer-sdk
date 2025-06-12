@@ -7,7 +7,7 @@ import (
 )
 
 // Returns a list of pools belonging to the current user
-type ListPoolsService struct {
+type poolsListService struct {
 	client          *Client
 	pools           []int
 	names           []string
@@ -18,10 +18,10 @@ type ListPoolsService struct {
 	offset          *int
 }
 
-func (s *ListPoolsService) DO(ctx context.Context) (*BaseResponse, error) {
+func (s *poolsListService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_ENTERPRISES),
+		endpoint: string(USERS_POOLS),
 	}
 
 	for _, val := range s.pools {
@@ -57,37 +57,37 @@ func (s *ListPoolsService) DO(ctx context.Context) (*BaseResponse, error) {
 	return resp, err
 }
 
-func (s *ListPoolsService) SetPools(val []int) *ListPoolsService {
-	s.pools = val
+func (s *poolsListService) SetPools(vals []int) *poolsListService {
+	s.pools = vals
 	return s
 }
 
-func (s *ListPoolsService) SetNames(val []string) *ListPoolsService {
-	s.names = val
+func (s *poolsListService) SetNames(vals []string) *poolsListService {
+	s.names = vals
 	return s
 }
 
-func (s *ListPoolsService) SetSeoUrls(val []string) *ListPoolsService {
-	s.seoUrls = val
+func (s *poolsListService) SetSeoUrls(vals []string) *poolsListService {
+	s.seoUrls = vals
 	return s
 }
 
-func (s *ListPoolsService) SetIgnoreTest(val bool) *ListPoolsService {
+func (s *poolsListService) SetIgnoreTest(val bool) *poolsListService {
 	s.ignoreTest = &val
 	return s
 }
 
-func (s *ListPoolsService) SetIsTalentNetwork(val bool) *ListPoolsService {
+func (s *poolsListService) SetIsTalentNetwork(val bool) *poolsListService {
 	s.isTalentNetwork = &val
 	return s
 }
 
-func (s *ListPoolsService) SetLimit(val int) *ListPoolsService {
+func (s *poolsListService) SetLimit(val int) *poolsListService {
 	s.limit = &val
 	return s
 }
 
-func (s *ListPoolsService) SetOffset(val int) *ListPoolsService {
+func (s *poolsListService) SetOffset(val int) *poolsListService {
 	s.offset = &val
 	return s
 }

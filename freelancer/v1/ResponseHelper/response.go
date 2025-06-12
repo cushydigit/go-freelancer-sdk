@@ -1,5 +1,7 @@
 package responseHelper
 
+import "encoding/json"
+
 type ListCountriesResponse struct {
 	Status    string          `json:"status"`
 	RequestID string          `json:"request_id,omitempty"` // Optional
@@ -121,4 +123,27 @@ type ListCurrenciesResponse struct {
 
 type CurrenciesResult struct {
 	Currencies []Currency `json:"currencies"`
+}
+type ListUsersPortfoliosResponse struct {
+	Status    string          `json:"status"`
+	RequestID string          `json:"request_id"`
+	Result    json.RawMessage `json:"result"`
+}
+
+type ListSelfLoginDevicesResponse struct {
+	Status    string        `json:"status"`
+	RequestID string        `json:"request_id"`
+	Result    DevicesResult `json:"result"`
+}
+
+type DevicesResult struct {
+	Devices []Device `json:"devices"`
+}
+
+type Device struct {
+	UserAgent string `json:"user_agent"`
+	Platform  string `json:"platform"`
+	City      string `json:"city"`
+	Country   string `json:"country"`
+	LastLogin int64  `json:"last_login"`
 }

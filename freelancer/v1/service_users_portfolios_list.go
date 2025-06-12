@@ -6,20 +6,14 @@ import (
 	"net/http"
 )
 
-type ListUsersPortfoliosService struct {
+type portfoliosListService struct {
 	client *Client
 	users  []int64
 	limit  *int
 	offset *int
 }
 
-type ListUsersPortfoliosResponse struct {
-	Status    string          `json:"status"`
-	RequestID string          `json:"request_id"`
-	Result    json.RawMessage `json:"result"`
-}
-
-func (s *ListUsersPortfoliosService) DO(ctx context.Context) (*ListUsersPortfoliosResponse, error) {
+func (s *portfoliosListService) DO(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_PORTFOLIOS),
@@ -42,7 +36,7 @@ func (s *ListUsersPortfoliosService) DO(ctx context.Context) (*ListUsersPortfoli
 		return nil, err
 	}
 
-	resp := &ListUsersPortfoliosResponse{}
+	resp := &BaseResponse{}
 	if err := json.Unmarshal(data, resp); err != nil {
 		return nil, err
 	}
@@ -51,17 +45,17 @@ func (s *ListUsersPortfoliosService) DO(ctx context.Context) (*ListUsersPortfoli
 
 }
 
-func (s *ListUsersPortfoliosService) SetUsers(users []int64) *ListUsersPortfoliosService {
+func (s *portfoliosListService) SetUsers(users []int64) *portfoliosListService {
 	s.users = users
 	return s
 }
 
-func (s *ListUsersPortfoliosService) SetLimit(limit int) *ListUsersPortfoliosService {
+func (s *portfoliosListService) SetLimit(limit int) *portfoliosListService {
 	s.limit = &limit
 	return s
 }
 
-func (s *ListUsersPortfoliosService) SetOffset(offset int) *ListUsersPortfoliosService {
+func (s *portfoliosListService) SetOffset(offset int) *portfoliosListService {
 	s.offset = &offset
 	return s
 }

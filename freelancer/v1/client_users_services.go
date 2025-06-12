@@ -6,8 +6,8 @@ func (c *Client) NewUsersListService() *usersListService {
 }
 
 // Return a list of current user's recent logged in devices
-func (c *Client) NewListUserLoginDevicesService() *ListSelfLoginDevicesService {
-	return &ListSelfLoginDevicesService{client: c}
+func (c *Client) NewSelfDevicesService() *selfDevicesListService {
+	return &selfDevicesListService{client: c}
 }
 
 // Return information about current user
@@ -26,18 +26,18 @@ func (c *Client) NewFreelancersSearchService() *freelancersSearchService {
 }
 
 // Add a list of jobs to the job list of current User
-func (c *Client) NewAddSelfJobsService() *AddSelfJobsService {
-	return &AddSelfJobsService{client: c}
+func (c *Client) NewSelfJobsAddService() *selfJobsAddService {
+	return &selfJobsAddService{client: c}
 }
 
 // Sets a list of jobs to the job list of the current user
-func (c *Client) NewUpdateSelfJobsService() *UpdateSelfJobsService {
-	return &UpdateSelfJobsService{client: c}
+func (c *Client) NewSelfJobsUpdateService() *selfJobsUpdateService {
+	return &selfJobsUpdateService{client: c}
 }
 
 // Removes a list of job list of the current user
-func (c *Client) NewDeleteSelfJobsService() *DeleteSelfJobsService {
-	return &DeleteSelfJobsService{client: c}
+func (c *Client) NewSelfJobsDeleteService() *selfJobsDeleteService {
+	return &selfJobsDeleteService{client: c}
 }
 
 // Gets the reputations for a list of users
@@ -46,36 +46,36 @@ func (c *Client) NewReputationListService() *reputationListService {
 }
 
 // Returns a list of portfolios of users
-func (c *Client) NewListUsersPortfoliosService() *ListUsersPortfoliosService {
-	return &ListUsersPortfoliosService{client: c}
+func (c *Client) NewPortfoliosListService() *portfoliosListService {
+	return &portfoliosListService{client: c}
 }
 
 // Get profile(s)
-func (c *Client) NewGetProfilesService() *GetProfilesService {
-	return &GetProfilesService{client: c}
+func (c *Client) NewProfilesGetService() *profilesGetService {
+	return &profilesGetService{client: c}
 }
 
 // Update a profile
-func (c *Client) NewUpdateProfilesService() *UpdateProfilesService {
-	return &UpdateProfilesService{client: c}
+func (c *Client) NewProfilesUpdateService() *profilesUpdateService {
+	return &profilesUpdateService{client: c}
 }
 
 // Create a new profile for a user. Returns the created profile
-func (c *Client) NewCreateProfilesService() *CreateProfilesService {
-	return &CreateProfilesService{client: c}
+func (c *Client) NewProfilesCreateService() *profilesCreateService {
+	return &profilesCreateService{client: c}
 }
 
 // Returns a list of enterprises
-func (c *Client) NewUsersEnterprisesService() *ListEnterprisesService {
-	return &ListEnterprisesService{client: c}
+func (c *Client) NewEnterprisesListService() *enterprisesListService {
+	return &enterprisesListService{client: c}
 }
 
 // Report user violations
-func (c *Client) NewReportUserViolationService() *ReportUserViolationService {
-	return &ReportUserViolationService{client: c}
+func (c *Client) NewViolationCreateService() *violationCreateService {
+	return &violationCreateService{client: c}
 }
 
 // Returns a list of pools belonging to the current user
-func (c *Client) NewListPoolsService() *ListPoolsService {
-	return &ListPoolsService{client: c}
+func (c *Client) NewPoolsListService() *poolsListService {
+	return &poolsListService{client: c}
 }

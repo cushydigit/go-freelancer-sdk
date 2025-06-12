@@ -47,7 +47,7 @@ type selfInfoService struct {
 	compact                       *bool
 }
 
-func (s *selfInfoService) DO(ctx context.Context) (*BaseResponse, error) {
+func (s *selfInfoService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_SELF),
