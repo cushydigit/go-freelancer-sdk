@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-// Return information about current user
-type GetSelfInfoService struct {
+type selfInfoService struct {
 	client                        *Client
 	avatar                        *bool
 	countryDetails                *bool
@@ -48,12 +47,7 @@ type GetSelfInfoService struct {
 	compact                       *bool
 }
 
-type GetSelfInfoResponse struct {
-	Status string `json:"status"`
-	Result User   `json:"result"`
-}
-
-func (s *GetSelfInfoService) DO(ctx context.Context) (*GetSelfInfoResponse, error) {
+func (s *selfInfoService) DO(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_SELF),
@@ -166,7 +160,7 @@ func (s *GetSelfInfoService) DO(ctx context.Context) (*GetSelfInfoResponse, erro
 	if err != nil {
 		return nil, err
 	}
-	res := &GetSelfInfoResponse{}
+	res := &BaseResponse{}
 	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
@@ -174,187 +168,187 @@ func (s *GetSelfInfoService) DO(ctx context.Context) (*GetSelfInfoResponse, erro
 
 }
 
-func (s *GetSelfInfoService) SetAvatar(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetAvatar(val bool) *selfInfoService {
 	s.avatar = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetCountryDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetCountryDetails(val bool) *selfInfoService {
 	s.countryDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetProfileDescription(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetProfileDescription(val bool) *selfInfoService {
 	s.profileDescription = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetDisplayInfo(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetDisplayInfo(val bool) *selfInfoService {
 	s.displayInfo = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetJobs(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetJobs(val bool) *selfInfoService {
 	s.jobs = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetBalanceDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetBalanceDetails(val bool) *selfInfoService {
 	s.balanceDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetQualificationDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetQualificationDetails(val bool) *selfInfoService {
 	s.qualificationDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetMembershipDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetMembershipDetails(val bool) *selfInfoService {
 	s.membershipDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetFinancialDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetFinancialDetails(val bool) *selfInfoService {
 	s.financialDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetLocationDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetLocationDetails(val bool) *selfInfoService {
 	s.locationDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetPortfolioDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetPortfolioDetails(val bool) *selfInfoService {
 	s.portfolioDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetPreferredDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetPreferredDetails(val bool) *selfInfoService {
 	s.preferredDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetBadgeDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetBadgeDetails(val bool) *selfInfoService {
 	s.badgeDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetStatus(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetStatus(val bool) *selfInfoService {
 	s.status = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetReputation(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetReputation(val bool) *selfInfoService {
 	s.reputation = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetEmployerReputation(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetEmployerReputation(val bool) *selfInfoService {
 	s.employerReputation = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetReputationExtra(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetReputationExtra(val bool) *selfInfoService {
 	s.reputationExtra = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetEmployerReputationExtra(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetEmployerReputationExtra(val bool) *selfInfoService {
 	s.employerReputationExtra = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetCoverImage(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetCoverImage(val bool) *selfInfoService {
 	s.coverImage = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetPastCoverImages(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetPastCoverImages(val bool) *selfInfoService {
 	s.pastCoverImages = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetMobileTracking(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetMobileTracking(val bool) *selfInfoService {
 	s.mobileTracking = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetBidQualityDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetBidQualityDetails(val bool) *selfInfoService {
 	s.bidQualityDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetDepositMethods(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetDepositMethods(val bool) *selfInfoService {
 	s.depositMethods = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetUserRecommendations(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetUserRecommendations(val bool) *selfInfoService {
 	s.userRecommendations = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetMarketingMobileNumber(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetMarketingMobileNumber(val bool) *selfInfoService {
 	s.marketingMobileNumber = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetSanctionDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetSanctionDetails(val bool) *selfInfoService {
 	s.sanctionDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetLimitedAccount(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetLimitedAccount(val bool) *selfInfoService {
 	s.limitedAccount = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetCompletedUserRelevantJobCount(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetCompletedUserRelevantJobCount(val bool) *selfInfoService {
 	s.completedUserRelevantJobCount = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetEquipmentGroupDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetEquipmentGroupDetails(val bool) *selfInfoService {
 	s.equipmentGroupDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetJobRanks(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetJobRanks(val bool) *selfInfoService {
 	s.jobRanks = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetShareholderDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetShareholderDetails(val bool) *selfInfoService {
 	s.shareholderDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetRisingStar(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetRisingStar(val bool) *selfInfoService {
 	s.risingStar = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetStaffDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetStaffDetails(val bool) *selfInfoService {
 	s.staffDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetJobSeoDetails(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetJobSeoDetails(val bool) *selfInfoService {
 	s.jobSeoDetails = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetLimit(val int) *GetSelfInfoService {
+func (s *selfInfoService) SetLimit(val int) *selfInfoService {
 	s.limit = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetOffset(val int) *GetSelfInfoService {
+func (s *selfInfoService) SetOffset(val int) *selfInfoService {
 	s.offset = &val
 	return s
 }
 
-func (s *GetSelfInfoService) SetCompact(val bool) *GetSelfInfoService {
+func (s *selfInfoService) SetCompact(val bool) *selfInfoService {
 	s.compact = &val
 	return s
 }

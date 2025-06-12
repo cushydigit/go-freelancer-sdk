@@ -1,8 +1,8 @@
 package freelancer
 
 // Returns a list of users
-func (c *Client) NewListUsersService() *ListUsersService {
-	return &ListUsersService{client: c}
+func (c *Client) NewUsersListService() *usersListService {
+	return &usersListService{client: c}
 }
 
 // Return a list of current user's recent logged in devices
@@ -11,18 +11,18 @@ func (c *Client) NewListUserLoginDevicesService() *ListSelfLoginDevicesService {
 }
 
 // Return information about current user
-func (c *Client) NewGetSelfInfoService() *GetSelfInfoService {
-	return &GetSelfInfoService{client: c}
+func (c *Client) NewSelfInfoService() *selfInfoService {
+	return &selfInfoService{client: c}
 }
 
 // Returns information about a specific user
-func (c *Client) NewGetUserService() *GetUserService {
-	return &GetUserService{client: c}
+func (c *Client) NewUsersGetByIDService() *usersGetByIDService {
+	return &usersGetByIDService{client: c}
 }
 
 // Returns a list of Freelancers
-func (c *Client) NewSearchFreelancersService() *SearchFreelancersService {
-	return &SearchFreelancersService{client: c}
+func (c *Client) NewFreelancersSearchService() *freelancersSearchService {
+	return &freelancersSearchService{client: c}
 }
 
 // Add a list of jobs to the job list of current User
@@ -41,8 +41,8 @@ func (c *Client) NewDeleteSelfJobsService() *DeleteSelfJobsService {
 }
 
 // Gets the reputations for a list of users
-func (c *Client) NewListUsersReputationsService() *ListUsersReputationsService {
-	return &ListUsersReputationsService{client: c}
+func (c *Client) NewReputationListService() *reputationListService {
+	return &reputationListService{client: c}
 }
 
 // Returns a list of portfolios of users
@@ -75,7 +75,7 @@ func (c *Client) NewReportUserViolationService() *ReportUserViolationService {
 	return &ReportUserViolationService{client: c}
 }
 
-// Returns a list of poools belognig to the current user
+// Returns a list of pools belonging to the current user
 func (c *Client) NewListPoolsService() *ListPoolsService {
 	return &ListPoolsService{client: c}
 }

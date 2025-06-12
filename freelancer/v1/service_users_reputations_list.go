@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-// Gets the reputations for a list of users
-type ListUsersReputationsService struct {
+type reputationListService struct {
 	client       *Client
 	users        []int64
 	jobs         []int32
@@ -17,13 +16,7 @@ type ListUsersReputationsService struct {
 	rehireRates  *bool
 }
 
-type ListUsersReputationsResponse struct {
-	Status    string                `json:"status"`
-	RequestID string                `json:"request_id"`
-	Result    map[string]Reputation `json:"result"`
-}
-
-func (s *ListUsersReputationsService) DO(ctx context.Context) (*ListUsersReputationsResponse, error) {
+func (s *reputationListService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_REPUTATIONS),
@@ -32,64 +25,59 @@ func (s *ListUsersReputationsService) DO(ctx context.Context) (*ListUsersReputat
 	for _, id := range s.users {
 		r.addParam("users[]", id)
 	}
-
 	for _, id := range s.jobs {
 		r.addParam("jobs[]", id)
 	}
-
 	if s.role != nil {
 		r.addParam("role", *s.role)
 	}
-
 	if s.jobHistory != nil {
 		r.addParam("job_history", *s.jobHistory)
 	}
-
 	if s.projectStats != nil {
 		r.addParam("project_stats", *s.projectStats)
 	}
-
 	if s.rehireRates != nil {
 		r.addParam("rehire_rates", *s.rehireRates)
 	}
-
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
 		return nil, err
 	}
-	resp := &ListUsersReputationsResponse{}
+
+	resp := &BaseResponse{}
 	if err := json.Unmarshal(data, resp); err != nil {
 		return nil, err
 	}
 	return resp, nil
 }
 
-func (s *ListUsersReputationsService) SetUsers(users []int64) *ListUsersReputationsService {
+func (s *reputationListService) SetUsers(users []int64) *reputationListService {
 	s.users = users
 	return s
 }
 
-func (s *ListUsersReputationsService) SetJobs(jobs []int32) *ListUsersReputationsService {
+func (s *reputationListService) SetJobs(jobs []int32) *reputationListService {
 	s.jobs = jobs
 	return s
 }
 
-func (s *ListUsersReputationsService) SetRole(val RoleType) *ListUsersReputationsService {
+func (s *reputationListService) SetRole(val RoleType) *reputationListService {
 	s.role = &val
 	return s
 }
 
-func (s *ListUsersReputationsService) SetJobHistory(val bool) *ListUsersReputationsService {
+func (s *reputationListService) SetJobHistory(val bool) *reputationListService {
 	s.jobHistory = &val
 	return s
 }
 
-func (s *ListUsersReputationsService) SetProjectState(val bool) *ListUsersReputationsService {
+func (s *reputationListService) SetProjectState(val bool) *reputationListService {
 	s.projectStats = &val
 	return s
 }
 
-func (s *ListUsersReputationsService) SetRehireRates(val bool) *ListUsersReputationsService {
+func (s *reputationListService) SetRehireRates(val bool) *reputationListService {
 	s.rehireRates = &val
 	return s
 }

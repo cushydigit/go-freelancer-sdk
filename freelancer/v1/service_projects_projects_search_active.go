@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type SearchActiveProjectsService struct {
+type projectsSearchActiveService struct {
 	client                      *Client
 	query                       *string
 	projectTypes                []ProjectType
@@ -76,19 +76,8 @@ type SearchActiveProjectsService struct {
 	compact                     *bool
 }
 
-type SearchActiveProjectsResponse struct {
-	Status    string               `json:"status"`
-	RequestID string               `json:"request_id"`
-	Result    ActiveProjectsResult `json:"result"`
-}
-
-type ActiveProjectsResult struct {
-	Projects   []Project `json:"projects"`
-	TotalCount int       `json:"total_count"`
-}
-
 // Do perform GET request on endpoint "projects/0.1/projects/active/""
-func (s *SearchActiveProjectsService) Do(ctx context.Context) (*SearchActiveProjectsResponse, error) {
+func (s *projectsSearchActiveService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_PROJECTS_ACTIVE),
@@ -241,7 +230,7 @@ func (s *SearchActiveProjectsService) Do(ctx context.Context) (*SearchActiveProj
 	if err != nil {
 		return nil, err
 	}
-	res := &SearchActiveProjectsResponse{}
+	res := &BaseResponse{}
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
@@ -249,332 +238,332 @@ func (s *SearchActiveProjectsService) Do(ctx context.Context) (*SearchActiveProj
 	return res, nil
 }
 
-func (s *SearchActiveProjectsService) SetUserResponsiveness(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserResponsiveness(val bool) *projectsSearchActiveService {
 	s.userResponsiveness = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetCorporateUsers(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetCorporateUsers(val bool) *projectsSearchActiveService {
 	s.corporateUsers = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetMarketingMobileNumber(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetMarketingMobileNumber(val bool) *projectsSearchActiveService {
 	s.marketingMobileNumber = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetSanctionDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetSanctionDetails(val bool) *projectsSearchActiveService {
 	s.sanctionDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetLimitedAccount(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetLimitedAccount(val bool) *projectsSearchActiveService {
 	s.limitedAccount = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetEquipmentGroupDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetEquipmentGroupDetails(val bool) *projectsSearchActiveService {
 	s.equipmentGroupDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserDetails(val bool) *projectsSearchActiveService {
 	s.userDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetLocationDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetLocationDetails(val bool) *projectsSearchActiveService {
 	s.locationDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetNdaSignatureDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetNdaSignatureDetails(val bool) *projectsSearchActiveService {
 	s.ndaSignatureDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetProjectCollaborationDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetProjectCollaborationDetails(val bool) *projectsSearchActiveService {
 	s.projectCollaborationDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserAvatar(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserAvatar(val bool) *projectsSearchActiveService {
 	s.userAvatar = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserCountryDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserCountryDetails(val bool) *projectsSearchActiveService {
 	s.userCountryDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserProfileDescription(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserProfileDescription(val bool) *projectsSearchActiveService {
 	s.userProfileDescription = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserDisplayInfo(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserDisplayInfo(val bool) *projectsSearchActiveService {
 	s.userDisplayInfo = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserJobs(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserJobs(val bool) *projectsSearchActiveService {
 	s.userJobs = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserBalanceDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserBalanceDetails(val bool) *projectsSearchActiveService {
 	s.userBalanceDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserQualificationDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserQualificationDetails(val bool) *projectsSearchActiveService {
 	s.userQualificationDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserMembershipDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserMembershipDetails(val bool) *projectsSearchActiveService {
 	s.userMembershipDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserFinancialDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserFinancialDetails(val bool) *projectsSearchActiveService {
 	s.userFinancialDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserLocationDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserLocationDetails(val bool) *projectsSearchActiveService {
 	s.userLocationDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserPortfolioDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserPortfolioDetails(val bool) *projectsSearchActiveService {
 	s.userPortfolioDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserPreferredDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserPreferredDetails(val bool) *projectsSearchActiveService {
 	s.userPreferredDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserBadgeDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserBadgeDetails(val bool) *projectsSearchActiveService {
 	s.userBadgeDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserStatus(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserStatus(val bool) *projectsSearchActiveService {
 	s.userStatus = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserReputation(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserReputation(val bool) *projectsSearchActiveService {
 	s.userReputation = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserEmployerReputation(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserEmployerReputation(val bool) *projectsSearchActiveService {
 	s.userEmployerReputation = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserReputationExtra(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserReputationExtra(val bool) *projectsSearchActiveService {
 	s.userReputationExtra = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserEmployerReputationExtra(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserEmployerReputationExtra(val bool) *projectsSearchActiveService {
 	s.userEmployerReputationExtra = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserCoverImage(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserCoverImage(val bool) *projectsSearchActiveService {
 	s.userCoverImage = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserPastCoverImage(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserPastCoverImage(val bool) *projectsSearchActiveService {
 	s.userPastCoverImage = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUserRecommendations(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUserRecommendations(val bool) *projectsSearchActiveService {
 	s.userRecommendations = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetProjectTypes(projectTypes []ProjectType) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetProjectTypes(projectTypes []ProjectType) *projectsSearchActiveService {
 	s.projectTypes = projectTypes
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetProjectUpgrades(projectUpgrades []ProjectUpgradeType) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetProjectUpgrades(projectUpgrades []ProjectUpgradeType) *projectsSearchActiveService {
 	s.projectUpgrades = projectUpgrades
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetContestUpgrades(contestUpgrades []ContestUpgradeType) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetContestUpgrades(contestUpgrades []ContestUpgradeType) *projectsSearchActiveService {
 	s.contestUpgrades = contestUpgrades
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetCompact(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetCompact(val bool) *projectsSearchActiveService {
 	s.compact = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetLimit(val int) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetLimit(val int) *projectsSearchActiveService {
 	s.limit = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetOffset(val int) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetOffset(val int) *projectsSearchActiveService {
 	s.offset = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetReverseSort(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetReverseSort(val bool) *projectsSearchActiveService {
 	s.reverseSort = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetFullDescription(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetFullDescription(val bool) *projectsSearchActiveService {
 	s.fullDescription = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetJobDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetJobDetails(val bool) *projectsSearchActiveService {
 	s.jobDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetUpgradeDetails(val bool) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetUpgradeDetails(val bool) *projectsSearchActiveService {
 	s.upgradeDetails = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetQuery(val string) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetQuery(val string) *projectsSearchActiveService {
 	s.query = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetMinAvgPrice(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetMinAvgPrice(val float64) *projectsSearchActiveService {
 	s.minAvgPrice = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetMaxAvgPrice(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetMaxAvgPrice(val float64) *projectsSearchActiveService {
 	s.maxAvgPrice = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetMinAvgHourlyRate(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetMinAvgHourlyRate(val float64) *projectsSearchActiveService {
 	s.minAvgHourlyRate = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetMaxAvgHourlyRate(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetMaxAvgHourlyRate(val float64) *projectsSearchActiveService {
 	s.maxAvgHourlyRate = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetMinPrice(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetMinPrice(val float64) *projectsSearchActiveService {
 	s.minPrice = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetMaxPrice(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetMaxPrice(val float64) *projectsSearchActiveService {
 	s.maxPrice = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetMinHourlyRate(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetMinHourlyRate(val float64) *projectsSearchActiveService {
 	s.minHourlyRate = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetMaxHourlyRate(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetMaxHourlyRate(val float64) *projectsSearchActiveService {
 	s.maxHourlyRate = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetJobs(jobs []int32) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetJobs(jobs []int32) *projectsSearchActiveService {
 	s.jobs = jobs
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetCountries(countries []string) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetCountries(countries []string) *projectsSearchActiveService {
 	s.countries = countries
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetLanguages(languages []string) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetLanguages(languages []string) *projectsSearchActiveService {
 	s.languages = languages
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetLatitude(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetLatitude(val float64) *projectsSearchActiveService {
 	s.latitude = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetLongitude(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetLongitude(val float64) *projectsSearchActiveService {
 	s.longitude = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetFromTime(val int64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetFromTime(val int64) *projectsSearchActiveService {
 	s.fromTime = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetToTime(val int64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetToTime(val int64) *projectsSearchActiveService {
 	s.toTime = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetSortField(val SortField) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetSortField(val SortField) *projectsSearchActiveService {
 	s.sortField = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetProjectIDs(projectIDs []int64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetProjectIDs(projectIDs []int64) *projectsSearchActiveService {
 	s.projectIDs = projectIDs
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetTopRightLatitude(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetTopRightLatitude(val float64) *projectsSearchActiveService {
 	s.topRightLatitude = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetTopRightLongitude(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetTopRightLongitude(val float64) *projectsSearchActiveService {
 	s.topRightLongitude = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetBottomLeftLatitude(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetBottomLeftLatitude(val float64) *projectsSearchActiveService {
 	s.bottomLeftLatitude = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetBottomLeftLongitude(val float64) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetBottomLeftLongitude(val float64) *projectsSearchActiveService {
 	s.bottomLeftLongitude = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetOrSearchQuery(val string) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetOrSearchQuery(val string) *projectsSearchActiveService {
 	s.orSearchQuery = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetHighlightPreTags(val string) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetHighlightPreTags(val string) *projectsSearchActiveService {
 	s.highlightPreTags = &val
 	return s
 }
 
-func (s *SearchActiveProjectsService) SetHighlightPostTags(val string) *SearchActiveProjectsService {
+func (s *projectsSearchActiveService) SetHighlightPostTags(val string) *projectsSearchActiveService {
 	s.highlightPostTags = &val
 	return s
 }

@@ -7,7 +7,7 @@ import (
 )
 
 // Returns a list of users
-type ListUsersService struct {
+type usersListService struct {
 	client                        *Client
 	users                         []int64
 	usernames                     []string
@@ -47,17 +47,7 @@ type ListUsersService struct {
 	staffDetails                  *bool
 }
 
-type ListUsersResponse struct {
-	Status    string      `json:"status"`
-	RequestID string      `json:"request_id"`
-	Result    UsersResult `json:"result"`
-}
-
-type UsersResult struct {
-	Users map[string]User `json:"users"`
-}
-
-func (s *ListUsersService) Do(ctx context.Context) (*ListUsersResponse, error) {
+func (s *usersListService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_USERS),
@@ -176,7 +166,7 @@ func (s *ListUsersService) Do(ctx context.Context) (*ListUsersResponse, error) {
 		return nil, err
 	}
 
-	res := &ListUsersResponse{}
+	res := &BaseResponse{}
 	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
@@ -184,182 +174,182 @@ func (s *ListUsersService) Do(ctx context.Context) (*ListUsersResponse, error) {
 	return res, nil
 }
 
-func (s *ListUsersService) SetUsers(users []int64) *ListUsersService {
+func (s *usersListService) SetUsers(users []int64) *usersListService {
 	s.users = users
 	return s
 }
 
-func (s *ListUsersService) SetUsernames(usernames []string) *ListUsersService {
+func (s *usersListService) SetUsernames(usernames []string) *usersListService {
 	s.usernames = usernames
 	return s
 }
 
-func (s *ListUsersService) SetAvatar(val bool) *ListUsersService {
+func (s *usersListService) SetAvatar(val bool) *usersListService {
 	s.avatar = &val
 	return s
 }
 
-func (s *ListUsersService) SetCountryDetails(val bool) *ListUsersService {
+func (s *usersListService) SetCountryDetails(val bool) *usersListService {
 	s.countryDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetProfileDescription(val bool) *ListUsersService {
+func (s *usersListService) SetProfileDescription(val bool) *usersListService {
 	s.profileDescription = &val
 	return s
 }
 
-func (s *ListUsersService) SetDisplayInfo(val bool) *ListUsersService {
+func (s *usersListService) SetDisplayInfo(val bool) *usersListService {
 	s.displayInfo = &val
 	return s
 }
 
-func (s *ListUsersService) SetJobs(val bool) *ListUsersService {
+func (s *usersListService) SetJobs(val bool) *usersListService {
 	s.jobs = &val
 	return s
 }
 
-func (s *ListUsersService) SetBalanceDetails(val bool) *ListUsersService {
+func (s *usersListService) SetBalanceDetails(val bool) *usersListService {
 	s.balanceDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetQualificationDetails(val bool) *ListUsersService {
+func (s *usersListService) SetQualificationDetails(val bool) *usersListService {
 	s.qualificationDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetMembershipDetails(val bool) *ListUsersService {
+func (s *usersListService) SetMembershipDetails(val bool) *usersListService {
 	s.membershipDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetFinancialDetails(val bool) *ListUsersService {
+func (s *usersListService) SetFinancialDetails(val bool) *usersListService {
 	s.financialDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetLocationDetails(val bool) *ListUsersService {
+func (s *usersListService) SetLocationDetails(val bool) *usersListService {
 	s.locationDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetPortfolioDetails(val bool) *ListUsersService {
+func (s *usersListService) SetPortfolioDetails(val bool) *usersListService {
 	s.portfolioDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetPreferredDetails(val bool) *ListUsersService {
+func (s *usersListService) SetPreferredDetails(val bool) *usersListService {
 	s.preferredDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetBadgeDetails(val bool) *ListUsersService {
+func (s *usersListService) SetBadgeDetails(val bool) *usersListService {
 	s.badgeDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetStatus(val bool) *ListUsersService {
+func (s *usersListService) SetStatus(val bool) *usersListService {
 	s.status = &val
 	return s
 }
 
-func (s *ListUsersService) SetReputation(val bool) *ListUsersService {
+func (s *usersListService) SetReputation(val bool) *usersListService {
 	s.reputation = &val
 	return s
 }
 
-func (s *ListUsersService) SetEmployerReputation(val bool) *ListUsersService {
+func (s *usersListService) SetEmployerReputation(val bool) *usersListService {
 	s.employerReputation = &val
 	return s
 }
 
-func (s *ListUsersService) SetReputationExtra(val bool) *ListUsersService {
+func (s *usersListService) SetReputationExtra(val bool) *usersListService {
 	s.reputationExtra = &val
 	return s
 }
 
-func (s *ListUsersService) SetEmployerReputationExtra(val bool) *ListUsersService {
+func (s *usersListService) SetEmployerReputationExtra(val bool) *usersListService {
 	s.employerReputationExtra = &val
 	return s
 }
 
-func (s *ListUsersService) SetCoverImage(val bool) *ListUsersService {
+func (s *usersListService) SetCoverImage(val bool) *usersListService {
 	s.coverImage = &val
 	return s
 }
 
-func (s *ListUsersService) SetPastCoverImage(val bool) *ListUsersService {
+func (s *usersListService) SetPastCoverImage(val bool) *usersListService {
 	s.pastCoverImage = &val
 	return s
 }
 
-func (s *ListUsersService) SetMobileTracking(val bool) *ListUsersService {
+func (s *usersListService) SetMobileTracking(val bool) *usersListService {
 	s.mobileTracking = &val
 	return s
 }
 
-func (s *ListUsersService) SetBidQualityDetails(val bool) *ListUsersService {
+func (s *usersListService) SetBidQualityDetails(val bool) *usersListService {
 	s.bidQualityDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetDepositMethods(val bool) *ListUsersService {
+func (s *usersListService) SetDepositMethods(val bool) *usersListService {
 	s.depositMethods = &val
 	return s
 }
 
-func (s *ListUsersService) SetUserRecommendations(val bool) *ListUsersService {
+func (s *usersListService) SetUserRecommendations(val bool) *usersListService {
 	s.userRecommendations = &val
 	return s
 }
 
-func (s *ListUsersService) SetMarketingMobileNumber(val bool) *ListUsersService {
+func (s *usersListService) SetMarketingMobileNumber(val bool) *usersListService {
 	s.marketingMobileNumber = &val
 	return s
 }
 
-func (s *ListUsersService) SetSanctionDetails(val bool) *ListUsersService {
+func (s *usersListService) SetSanctionDetails(val bool) *usersListService {
 	s.sanctionDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetLimitedAccount(val bool) *ListUsersService {
+func (s *usersListService) SetLimitedAccount(val bool) *usersListService {
 	s.limitedAccount = &val
 	return s
 }
 
-func (s *ListUsersService) SetCompletedUserRelevantJobCount(val bool) *ListUsersService {
+func (s *usersListService) SetCompletedUserRelevantJobCount(val bool) *usersListService {
 	s.completedUserRelevantJobCount = &val
 	return s
 }
 
-func (s *ListUsersService) SetEquipmentGroupDetails(val bool) *ListUsersService {
+func (s *usersListService) SetEquipmentGroupDetails(val bool) *usersListService {
 	s.equipmentGroupDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetJobRanks(val bool) *ListUsersService {
+func (s *usersListService) SetJobRanks(val bool) *usersListService {
 	s.jobRanks = &val
 	return s
 }
 
-func (s *ListUsersService) SetShareholderDetails(val bool) *ListUsersService {
+func (s *usersListService) SetShareholderDetails(val bool) *usersListService {
 	s.shareholderDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetRisingStar(val bool) *ListUsersService {
+func (s *usersListService) SetRisingStar(val bool) *usersListService {
 	s.risingStar = &val
 	return s
 }
 
-func (s *ListUsersService) SetStaffDetails(val bool) *ListUsersService {
+func (s *usersListService) SetStaffDetails(val bool) *usersListService {
 	s.staffDetails = &val
 	return s
 }
 
-func (s *ListUsersService) SetJobSeoDetails(val bool) *ListUsersService {
+func (s *usersListService) SetJobSeoDetails(val bool) *usersListService {
 	s.jobSeoDetails = &val
 	return s
 }

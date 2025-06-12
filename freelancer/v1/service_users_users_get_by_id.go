@@ -8,17 +8,11 @@ import (
 	"strconv"
 )
 
-// Returns information about a specific user
-type GetUserService struct {
+type usersGetByIDService struct {
 	client *Client
 }
 
-type GetUserResponse struct {
-	Status string `json:"status"`
-	Result User   `json:"result"`
-}
-
-func (s *GetUserService) Do(ctx context.Context, userID int64) (*GetUserResponse, error) {
+func (s *usersGetByIDService) Do(ctx context.Context, userID int64) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), strconv.FormatInt(userID, 10)),
@@ -29,7 +23,7 @@ func (s *GetUserService) Do(ctx context.Context, userID int64) (*GetUserResponse
 		return nil, err
 	}
 
-	res := &GetUserResponse{}
+	res := &BaseResponse{}
 	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}

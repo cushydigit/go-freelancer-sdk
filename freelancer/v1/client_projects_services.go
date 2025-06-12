@@ -1,18 +1,23 @@
 package freelancer
 
 // Return information about multiple projects. Will be ordered by descending submit data (newest-to-oldest)
-func (c *Client) NewListProjectsService() *ListProjectsService {
-	return &ListProjectsService{client: c}
+func (c *Client) NewProjectsListService() *projectsListService {
+	return &projectsListService{client: c}
 }
 
 // Get information about a specific project.
-func (c *Client) NewGetProjectService() *GetProjectService {
-	return &GetProjectService{client: c}
+func (c *Client) NewProjectsGetByIDService() *projectsGetByIDService {
+	return &projectsGetByIDService{client: c}
 }
 
 // Creates a new project
-func (c *Client) NewCreateProjectService() *CreateProjectService {
-	return &CreateProjectService{client: c}
+func (c *Client) NewProjectsCreateService() *projectsCreateService {
+	return &projectsCreateService{client: c}
+}
+
+// Returns a list of categories. If job_details is set, a map of category IDs to jobs in those categories.
+func (c *Client) NewCategoriesListService() *categoriesListService {
+	return &categoriesListService{client: c}
 }
 
 // Delete a project by id, Only projects that are in pending or rejected state may be deleted.
@@ -21,8 +26,8 @@ func (c *Client) NewDeleteProjectService() *DeleteProjectService {
 }
 
 // Searches for active projects matching the desired query
-func (c *Client) NewSearchActiveProjectsService() *SearchActiveProjectsService {
-	return &SearchActiveProjectsService{client: c}
+func (c *Client) NewProjectsSearchActiveService() *projectsSearchActiveService {
+	return &projectsSearchActiveService{client: c}
 }
 
 // Returns the logged in user's projects/contests they either created or participated in (by bidding or submitting an entry)

@@ -143,22 +143,10 @@ func (c *Client) callAPI(ctx context.Context, r *request) (data []byte, err erro
 	return data, nil
 }
 
-func (c *Client) NewListCategoriesService() *ListCategoriesService {
-	return &ListCategoriesService{client: c}
-}
-
 func (c *Client) NewListCurrenciesService() *ListCurrenciesService {
 	return &ListCurrenciesService{client: c}
 }
 
 func (c *Client) NewListBudgetsService() *ListBudgetsService {
 	return &ListBudgetsService{client: c}
-}
-
-func (c *Client) NewListTimezonesService() *ListTimezonesService {
-	return &ListTimezonesService{client: c}
-}
-
-func (c *Client) NewListCountriesService() *ListCountriesService {
-	return &ListCountriesService{client: c}
 }

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type SearchFreelancersService struct {
+type freelancersSearchService struct {
 	client                        *Client
 	query                         *string
 	jobsIDs                       []int32 // I have to rename the field (jobs[]) to jobsIDs we have another jobs as bool
@@ -64,18 +64,7 @@ type SearchFreelancersService struct {
 	compact                       *bool
 }
 
-type SearchFreelancersResponse struct {
-	Status    string           `json:"status"`
-	RequestID string           `json:"request_id"`
-	Result    FreelancerResult `json:"result"`
-}
-
-type FreelancerResult struct {
-	Users      []User `json:"users"`
-	TotalCount int    `json:"total_count"`
-}
-
-func (s *SearchFreelancersService) Do(ctx context.Context) (*SearchFreelancersResponse, error) {
+func (s *freelancersSearchService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_FREELANCERS),
@@ -235,279 +224,279 @@ func (s *SearchFreelancersService) Do(ctx context.Context) (*SearchFreelancersRe
 	if err != nil {
 		return nil, err
 	}
-	res := &SearchFreelancersResponse{}
+	res := &BaseResponse{}
 	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
 	return res, nil
 }
 
-func (s *SearchFreelancersService) SetQuery(val string) *SearchFreelancersService {
+func (s *freelancersSearchService) SetQuery(val string) *freelancersSearchService {
 	s.query = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetJobsIDs(jobsIDs []int32) *SearchFreelancersService {
+func (s *freelancersSearchService) SetJobsIDs(jobsIDs []int32) *freelancersSearchService {
 	s.jobsIDs = jobsIDs
 	return s
 }
 
-func (s *SearchFreelancersService) SetSkills(skills []int32) *SearchFreelancersService {
+func (s *freelancersSearchService) SetSkills(skills []int32) *freelancersSearchService {
 	s.skills = skills
 	return s
 }
 
-func (s *SearchFreelancersService) SetCountries(countries []string) *SearchFreelancersService {
+func (s *freelancersSearchService) SetCountries(countries []string) *freelancersSearchService {
 	s.countries = countries
 	return s
 }
 
-func (s *SearchFreelancersService) SetHourlyRateMin(val int) *SearchFreelancersService {
+func (s *freelancersSearchService) SetHourlyRateMin(val int) *freelancersSearchService {
 	s.hourlyRateMin = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetHourlyRateMax(val int) *SearchFreelancersService {
+func (s *freelancersSearchService) SetHourlyRateMax(val int) *freelancersSearchService {
 	s.hourlyRateMax = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetReviewCountMin(val int) *SearchFreelancersService {
+func (s *freelancersSearchService) SetReviewCountMin(val int) *freelancersSearchService {
 	s.reviewCountMin = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetReviewCountMax(val int) *SearchFreelancersService {
+func (s *freelancersSearchService) SetReviewCountMax(val int) *freelancersSearchService {
 	s.reviewCountMax = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetOnlineOnly(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetOnlineOnly(val bool) *freelancersSearchService {
 	s.onlineOnly = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetLocationLatitude(locationLatitude float64) *SearchFreelancersService {
+func (s *freelancersSearchService) SetLocationLatitude(locationLatitude float64) *freelancersSearchService {
 	s.locationLatitude = &locationLatitude
 	return s
 }
 
-func (s *SearchFreelancersService) SetLocationLongitude(locationLongitude float64) *SearchFreelancersService {
+func (s *freelancersSearchService) SetLocationLongitude(locationLongitude float64) *freelancersSearchService {
 	s.locationLongitude = &locationLongitude
 	return s
 }
 
-func (s *SearchFreelancersService) SetInsignias(insignias []int32) *SearchFreelancersService {
+func (s *freelancersSearchService) SetInsignias(insignias []int32) *freelancersSearchService {
 	s.insignias = insignias
 	return s
 }
 
-func (s *SearchFreelancersService) SetPoolIds(poolIds []int32) *SearchFreelancersService {
+func (s *freelancersSearchService) SetPoolIds(poolIds []int32) *freelancersSearchService {
 	s.poolIds = poolIds
 	return s
 }
 
-func (s *SearchFreelancersService) SetRatings(val float32) *SearchFreelancersService {
+func (s *freelancersSearchService) SetRatings(val float32) *freelancersSearchService {
 	s.ratings = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetSortField(val int) *SearchFreelancersService {
+func (s *freelancersSearchService) SetSortField(val int) *freelancersSearchService {
 	s.sortField = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetReverseSort(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetReverseSort(val bool) *freelancersSearchService {
 	s.reverseSort = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetAvatar(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetAvatar(val bool) *freelancersSearchService {
 	s.avatar = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetCountryDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetCountryDetails(val bool) *freelancersSearchService {
 	s.countryDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetProfileDescription(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetProfileDescription(val bool) *freelancersSearchService {
 	s.profileDescription = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetDisplayInfo(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetDisplayInfo(val bool) *freelancersSearchService {
 	s.displayInfo = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetJobs(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetJobs(val bool) *freelancersSearchService {
 	s.jobs = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetBalanceDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetBalanceDetails(val bool) *freelancersSearchService {
 	s.balanceDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetQualificationDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetQualificationDetails(val bool) *freelancersSearchService {
 	s.qualificationDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetMembershipDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetMembershipDetails(val bool) *freelancersSearchService {
 	s.membershipDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetFinancialDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetFinancialDetails(val bool) *freelancersSearchService {
 	s.financialDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetLocationDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetLocationDetails(val bool) *freelancersSearchService {
 	s.locationDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetPortfolioDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetPortfolioDetails(val bool) *freelancersSearchService {
 	s.portfolioDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetPreferredDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetPreferredDetails(val bool) *freelancersSearchService {
 	s.preferredDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetBadgeDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetBadgeDetails(val bool) *freelancersSearchService {
 	s.badgeDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetStatus(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetStatus(val bool) *freelancersSearchService {
 	s.status = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetReputation(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetReputation(val bool) *freelancersSearchService {
 	s.reputation = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetEmployerReputation(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetEmployerReputation(val bool) *freelancersSearchService {
 	s.employerReputation = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetReputationExtra(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetReputationExtra(val bool) *freelancersSearchService {
 	s.reputationExtra = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetEmployerReputationExtra(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetEmployerReputationExtra(val bool) *freelancersSearchService {
 	s.employerReputationExtra = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetCoverImage(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetCoverImage(val bool) *freelancersSearchService {
 	s.coverImage = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetPastCoverImage(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetPastCoverImage(val bool) *freelancersSearchService {
 	s.pastCoverImage = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetMobileTracking(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetMobileTracking(val bool) *freelancersSearchService {
 	s.mobileTracking = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetBidQualityDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetBidQualityDetails(val bool) *freelancersSearchService {
 	s.bidQualityDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetDepositMethods(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetDepositMethods(val bool) *freelancersSearchService {
 	s.depositMethods = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetUserRecommendations(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetUserRecommendations(val bool) *freelancersSearchService {
 	s.userRecommendations = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetMarketingMobileNumber(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetMarketingMobileNumber(val bool) *freelancersSearchService {
 	s.marketingMobileNumber = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetSanctionDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetSanctionDetails(val bool) *freelancersSearchService {
 	s.sanctionDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetLimitedAccount(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetLimitedAccount(val bool) *freelancersSearchService {
 	s.limitedAccount = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetCompletedUserRelevantJobCount(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetCompletedUserRelevantJobCount(val bool) *freelancersSearchService {
 	s.completedUserRelevantJobCount = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetEquipmentGroupDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetEquipmentGroupDetails(val bool) *freelancersSearchService {
 	s.equipmentGroupDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetJobRanks(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetJobRanks(val bool) *freelancersSearchService {
 	s.jobRanks = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetJobSeoDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetJobSeoDetails(val bool) *freelancersSearchService {
 	s.jobSeoDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetRisingStar(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetRisingStar(val bool) *freelancersSearchService {
 	s.risingStar = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetShareholderDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetShareholderDetails(val bool) *freelancersSearchService {
 	s.shareholderDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetStaffDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetStaffDetails(val bool) *freelancersSearchService {
 	s.staffDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetPoolDetails(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetPoolDetails(val bool) *freelancersSearchService {
 	s.poolDetails = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetLimit(val int) *SearchFreelancersService {
+func (s *freelancersSearchService) SetLimit(val int) *freelancersSearchService {
 	s.limit = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetOffset(val int) *SearchFreelancersService {
+func (s *freelancersSearchService) SetOffset(val int) *freelancersSearchService {
 	s.offset = &val
 	return s
 }
 
-func (s *SearchFreelancersService) SetCompact(val bool) *SearchFreelancersService {
+func (s *freelancersSearchService) SetCompact(val bool) *freelancersSearchService {
 	s.compact = &val
 	return s
 }

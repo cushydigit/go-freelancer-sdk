@@ -9,7 +9,7 @@ import (
 )
 
 // Get information about a specific project.
-type GetProjectService struct {
+type projectsGetByIDService struct {
 	client                       *Client
 	fullDescription              *bool
 	jobDetails                   *bool
@@ -69,13 +69,7 @@ type GetProjectService struct {
 	compact                      *bool
 }
 
-type GetProjectResponse struct {
-	Status    string  `json:"status"`
-	RequestID string  `json:"request_id"`
-	Result    Project `json:"result"`
-}
-
-func (s *GetProjectService) Do(ctx context.Context, id int64) (*GetProjectResponse, error) {
+func (s *projectsGetByIDService) Do(ctx context.Context, id int64) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_PROJECTS), strconv.FormatInt(id, 10)),
@@ -250,7 +244,7 @@ func (s *GetProjectService) Do(ctx context.Context, id int64) (*GetProjectRespon
 	if err != nil {
 		return nil, err
 	}
-	res := &GetProjectResponse{}
+	res := &BaseResponse{}
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
@@ -259,282 +253,282 @@ func (s *GetProjectService) Do(ctx context.Context, id int64) (*GetProjectRespon
 	return res, nil
 }
 
-func (s *GetProjectService) SetFullDescription(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetFullDescription(val bool) *projectsGetByIDService {
 	s.fullDescription = &val
 	return s
 }
 
-func (s *GetProjectService) SetJobDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetJobDetails(val bool) *projectsGetByIDService {
 	s.jobDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUpgradeDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUpgradeDetails(val bool) *projectsGetByIDService {
 	s.upgradeDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetAttachmentDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetAttachmentDetails(val bool) *projectsGetByIDService {
 	s.attachmentDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetFileDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetFileDetails(val bool) *projectsGetByIDService {
 	s.fileDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetQualificationDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetQualificationDetails(val bool) *projectsGetByIDService {
 	s.qualificationDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetSelectedBids(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetSelectedBids(val bool) *projectsGetByIDService {
 	s.selectedBids = &val
 	return s
 }
 
-func (s *GetProjectService) SetHiremeDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetHiremeDetails(val bool) *projectsGetByIDService {
 	s.hiremeDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserDetails(val bool) *projectsGetByIDService {
 	s.userDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetInvitedFreelancerDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetInvitedFreelancerDetails(val bool) *projectsGetByIDService {
 	s.invitedFreelancerDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetRecommendedFreelancerDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetRecommendedFreelancerDetails(val bool) *projectsGetByIDService {
 	s.recommendedFreelancerDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetHourlyDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetHourlyDetails(val bool) *projectsGetByIDService {
 	s.hourlyDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetSupportSessionDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetSupportSessionDetails(val bool) *projectsGetByIDService {
 	s.supportSessionDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetLocationDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetLocationDetails(val bool) *projectsGetByIDService {
 	s.locationDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetNdaSignatureDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetNdaSignatureDetails(val bool) *projectsGetByIDService {
 	s.ndaSignatureDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetDriveFileDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetDriveFileDetails(val bool) *projectsGetByIDService {
 	s.driveFileDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetNdaDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetNdaDetails(val bool) *projectsGetByIDService {
 	s.ndaDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetLocalDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetLocalDetails(val bool) *projectsGetByIDService {
 	s.localDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetEquipmentDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetEquipmentDetails(val bool) *projectsGetByIDService {
 	s.equipmentDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetClientEngagementDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetClientEngagementDetails(val bool) *projectsGetByIDService {
 	s.clientEngagementDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserResponsiveness(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserResponsiveness(val bool) *projectsGetByIDService {
 	s.userResponsiveness = &val
 	return s
 }
 
-func (s *GetProjectService) SetServiceOfferingDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetServiceOfferingDetails(val bool) *projectsGetByIDService {
 	s.serviceOfferingDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetCorporateUsers(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetCorporateUsers(val bool) *projectsGetByIDService {
 	s.corporateUsers = &val
 	return s
 }
 
-func (s *GetProjectService) SetCompact(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetCompact(val bool) *projectsGetByIDService {
 	s.compact = &val
 	return s
 }
 
-func (s *GetProjectService) SetLimit(val int) *GetProjectService {
+func (s *projectsGetByIDService) SetLimit(val int) *projectsGetByIDService {
 	s.limit = &val
 	return s
 }
 
-func (s *GetProjectService) SetOffset(val int) *GetProjectService {
+func (s *projectsGetByIDService) SetOffset(val int) *projectsGetByIDService {
 	s.offset = &val
 	return s
 }
 
-func (s *GetProjectService) SetProximityDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetProximityDetails(val bool) *projectsGetByIDService {
 	s.proximityDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetReviewAvailabilityDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetReviewAvailabilityDetails(val bool) *projectsGetByIDService {
 	s.reviewAvailabilityDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetNegotiatedDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetNegotiatedDetails(val bool) *projectsGetByIDService {
 	s.negotiatedDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserAvatar(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserAvatar(val bool) *projectsGetByIDService {
 	s.userAvatar = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserCountryDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserCountryDetails(val bool) *projectsGetByIDService {
 	s.userCountryDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserProfileDescription(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserProfileDescription(val bool) *projectsGetByIDService {
 	s.userProfileDescription = &val
 	return s
 }
 
-func (s *GetProjectService) SetProjectCollaborationDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetProjectCollaborationDetails(val bool) *projectsGetByIDService {
 	s.projectCollaborationDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetTrackDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetTrackDetails(val bool) *projectsGetByIDService {
 	s.trackDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserDisplayInfo(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserDisplayInfo(val bool) *projectsGetByIDService {
 	s.userDisplayInfo = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserJobs(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserJobs(val bool) *projectsGetByIDService {
 	s.userJobs = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserBalanceDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserBalanceDetails(val bool) *projectsGetByIDService {
 	s.userBalanceDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserQualificationDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserQualificationDetails(val bool) *projectsGetByIDService {
 	s.userQualificationDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserMembershipDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserMembershipDetails(val bool) *projectsGetByIDService {
 	s.userMembershipDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserFinancialDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserFinancialDetails(val bool) *projectsGetByIDService {
 	s.userFinancialDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserLocationDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserLocationDetails(val bool) *projectsGetByIDService {
 	s.userLocationDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserPortfolioDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserPortfolioDetails(val bool) *projectsGetByIDService {
 	s.userPortfolioDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserPreferredDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserPreferredDetails(val bool) *projectsGetByIDService {
 	s.userPreferredDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserBadgeDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserBadgeDetails(val bool) *projectsGetByIDService {
 	s.userBadgeDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserStatus(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserStatus(val bool) *projectsGetByIDService {
 	s.userStatus = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserReputation(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserReputation(val bool) *projectsGetByIDService {
 	s.userReputation = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserEmployerReputation(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserEmployerReputation(val bool) *projectsGetByIDService {
 	s.userEmployerReputation = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserReputationExtra(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserReputationExtra(val bool) *projectsGetByIDService {
 	s.userReputationExtra = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserEmployerReputationExtra(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserEmployerReputationExtra(val bool) *projectsGetByIDService {
 	s.userEmployerReputationExtra = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserCoverImage(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserCoverImage(val bool) *projectsGetByIDService {
 	s.userCoverImage = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserPastCoverImage(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserPastCoverImage(val bool) *projectsGetByIDService {
 	s.userPastCoverImage = &val
 	return s
 }
 
-func (s *GetProjectService) SetUserRecommendations(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetUserRecommendations(val bool) *projectsGetByIDService {
 	s.userRecommendations = &val
 	return s
 }
 
-func (s *GetProjectService) SetMarketingMobileNumber(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetMarketingMobileNumber(val bool) *projectsGetByIDService {
 	s.marketingMobileNumber = &val
 	return s
 }
 
-func (s *GetProjectService) SetSanctionDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetSanctionDetails(val bool) *projectsGetByIDService {
 	s.sanctionDetails = &val
 	return s
 }
 
-func (s *GetProjectService) SetLimitedAccount(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetLimitedAccount(val bool) *projectsGetByIDService {
 	s.limitedAccount = &val
 	return s
 }
 
-func (s *GetProjectService) SetEquipmentGroupDetails(val bool) *GetProjectService {
+func (s *projectsGetByIDService) SetEquipmentGroupDetails(val bool) *projectsGetByIDService {
 	s.equipmentGroupDetails = &val
 	return s
 }
