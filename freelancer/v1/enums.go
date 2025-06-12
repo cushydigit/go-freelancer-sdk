@@ -28,6 +28,8 @@ type MilestoneCreateReason string
 type MilestoneAction string
 type MilestoneActionReason string
 type MilestoneActionRequest string
+type ExpertGuaranteesStatus string
+type ExpertGuaranteesAction string
 
 const (
 	Projects TypeType = "projects"
@@ -185,4 +187,13 @@ const (
 
 	ActionBidEditRequestAccept  ActionBidEditRequest = "accept"
 	ActionBidEditRequestDecline ActionBidEditRequest = "decline"
+
+	ExpertGuaranteesStatusDisputed         ExpertGuaranteesStatus = "disputed"
+	ExpertGuaranteesStatusRequestedRelease ExpertGuaranteesStatus = "requested_release"
+	ExpertGuaranteesStatusLocked           ExpertGuaranteesStatus = "locked"
+	ExpertGuaranteesStatusReleased         ExpertGuaranteesStatus = "released"
+	ExpertGuaranteesStatusLiquidated       ExpertGuaranteesStatus = "liquidated"
+	ExpertGuaranteesStatusAdminRefunded    ExpertGuaranteesStatus = "refunded"
+	ExpertGuaranteesActionRelease          ExpertGuaranteesAction = "release"
+	ExpertGuaranteesActionRequestRelease   ExpertGuaranteesAction = "request_release"
 )

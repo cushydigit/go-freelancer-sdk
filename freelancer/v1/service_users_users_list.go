@@ -6,8 +6,10 @@ import (
 	"net/http"
 )
 
-type selfInfoService struct {
+type usersListService struct {
 	client                        *Client
+	users                         []int64
+	usernames                     []string
 	avatar                        *bool
 	countryDetails                *bool
 	profileDescription            *bool
@@ -27,7 +29,7 @@ type selfInfoService struct {
 	reputationExtra               *bool
 	employerReputationExtra       *bool
 	coverImage                    *bool
-	pastCoverImages               *bool
+	pastCoverImage                *bool
 	mobileTracking                *bool
 	bidQualityDetails             *bool
 	depositMethods                *bool
@@ -42,17 +44,19 @@ type selfInfoService struct {
 	risingStar                    *bool
 	shareholderDetails            *bool
 	staffDetails                  *bool
-	limit                         *int
-	offset                        *int
-	compact                       *bool
 }
 
-func (s *selfInfoService) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *usersListService) Do(ctx context.Context) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_SELF),
+		endpoint: string(USERS_USERS),
 	}
-
+	for _, userID := range s.users {
+		r.addParam("users[]", userID)
+	}
+	for _, username := range s.usernames {
+		r.addParam("usernames[]", username)
+	}
 	if s.avatar != nil {
 		r.setParam("avatar", *s.avatar)
 	}
@@ -110,8 +114,8 @@ func (s *selfInfoService) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.coverImage != nil {
 		r.setParam("cover_image", *s.coverImage)
 	}
-	if s.pastCoverImages != nil {
-		r.setParam("past_cover_images", *s.pastCoverImages)
+	if s.pastCoverImage != nil {
+		r.setParam("past_cover_image", *s.pastCoverImage)
 	}
 	if s.mobileTracking != nil {
 		r.setParam("mobile_tracking", *s.mobileTracking)
@@ -160,195 +164,191 @@ func (s *selfInfoService) Do(ctx context.Context) (*BaseResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	res := &BaseResponse{}
 	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
-	return res, nil
 
+	return res, nil
 }
 
-func (s *selfInfoService) SetAvatar(val bool) *selfInfoService {
+func (s *usersListService) SetUsers(vals []int64) *usersListService {
+	s.users = vals
+	return s
+}
+
+func (s *usersListService) SetUsernames(vals []string) *usersListService {
+	s.usernames = vals
+	return s
+}
+
+func (s *usersListService) SetAvatar(val bool) *usersListService {
 	s.avatar = &val
 	return s
 }
 
-func (s *selfInfoService) SetCountryDetails(val bool) *selfInfoService {
+func (s *usersListService) SetCountryDetails(val bool) *usersListService {
 	s.countryDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetProfileDescription(val bool) *selfInfoService {
+func (s *usersListService) SetProfileDescription(val bool) *usersListService {
 	s.profileDescription = &val
 	return s
 }
 
-func (s *selfInfoService) SetDisplayInfo(val bool) *selfInfoService {
+func (s *usersListService) SetDisplayInfo(val bool) *usersListService {
 	s.displayInfo = &val
 	return s
 }
 
-func (s *selfInfoService) SetJobs(val bool) *selfInfoService {
+func (s *usersListService) SetJobs(val bool) *usersListService {
 	s.jobs = &val
 	return s
 }
 
-func (s *selfInfoService) SetBalanceDetails(val bool) *selfInfoService {
+func (s *usersListService) SetBalanceDetails(val bool) *usersListService {
 	s.balanceDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetQualificationDetails(val bool) *selfInfoService {
+func (s *usersListService) SetQualificationDetails(val bool) *usersListService {
 	s.qualificationDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetMembershipDetails(val bool) *selfInfoService {
+func (s *usersListService) SetMembershipDetails(val bool) *usersListService {
 	s.membershipDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetFinancialDetails(val bool) *selfInfoService {
+func (s *usersListService) SetFinancialDetails(val bool) *usersListService {
 	s.financialDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetLocationDetails(val bool) *selfInfoService {
+func (s *usersListService) SetLocationDetails(val bool) *usersListService {
 	s.locationDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetPortfolioDetails(val bool) *selfInfoService {
+func (s *usersListService) SetPortfolioDetails(val bool) *usersListService {
 	s.portfolioDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetPreferredDetails(val bool) *selfInfoService {
+func (s *usersListService) SetPreferredDetails(val bool) *usersListService {
 	s.preferredDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetBadgeDetails(val bool) *selfInfoService {
+func (s *usersListService) SetBadgeDetails(val bool) *usersListService {
 	s.badgeDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetStatus(val bool) *selfInfoService {
+func (s *usersListService) SetStatus(val bool) *usersListService {
 	s.status = &val
 	return s
 }
 
-func (s *selfInfoService) SetReputation(val bool) *selfInfoService {
+func (s *usersListService) SetReputation(val bool) *usersListService {
 	s.reputation = &val
 	return s
 }
 
-func (s *selfInfoService) SetEmployerReputation(val bool) *selfInfoService {
+func (s *usersListService) SetEmployerReputation(val bool) *usersListService {
 	s.employerReputation = &val
 	return s
 }
 
-func (s *selfInfoService) SetReputationExtra(val bool) *selfInfoService {
+func (s *usersListService) SetReputationExtra(val bool) *usersListService {
 	s.reputationExtra = &val
 	return s
 }
 
-func (s *selfInfoService) SetEmployerReputationExtra(val bool) *selfInfoService {
+func (s *usersListService) SetEmployerReputationExtra(val bool) *usersListService {
 	s.employerReputationExtra = &val
 	return s
 }
 
-func (s *selfInfoService) SetCoverImage(val bool) *selfInfoService {
+func (s *usersListService) SetCoverImage(val bool) *usersListService {
 	s.coverImage = &val
 	return s
 }
 
-func (s *selfInfoService) SetPastCoverImages(val bool) *selfInfoService {
-	s.pastCoverImages = &val
+func (s *usersListService) SetPastCoverImage(val bool) *usersListService {
+	s.pastCoverImage = &val
 	return s
 }
 
-func (s *selfInfoService) SetMobileTracking(val bool) *selfInfoService {
+func (s *usersListService) SetMobileTracking(val bool) *usersListService {
 	s.mobileTracking = &val
 	return s
 }
 
-func (s *selfInfoService) SetBidQualityDetails(val bool) *selfInfoService {
+func (s *usersListService) SetBidQualityDetails(val bool) *usersListService {
 	s.bidQualityDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetDepositMethods(val bool) *selfInfoService {
+func (s *usersListService) SetDepositMethods(val bool) *usersListService {
 	s.depositMethods = &val
 	return s
 }
 
-func (s *selfInfoService) SetUserRecommendations(val bool) *selfInfoService {
+func (s *usersListService) SetUserRecommendations(val bool) *usersListService {
 	s.userRecommendations = &val
 	return s
 }
 
-func (s *selfInfoService) SetMarketingMobileNumber(val bool) *selfInfoService {
+func (s *usersListService) SetMarketingMobileNumber(val bool) *usersListService {
 	s.marketingMobileNumber = &val
 	return s
 }
 
-func (s *selfInfoService) SetSanctionDetails(val bool) *selfInfoService {
+func (s *usersListService) SetSanctionDetails(val bool) *usersListService {
 	s.sanctionDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetLimitedAccount(val bool) *selfInfoService {
+func (s *usersListService) SetLimitedAccount(val bool) *usersListService {
 	s.limitedAccount = &val
 	return s
 }
 
-func (s *selfInfoService) SetCompletedUserRelevantJobCount(val bool) *selfInfoService {
+func (s *usersListService) SetCompletedUserRelevantJobCount(val bool) *usersListService {
 	s.completedUserRelevantJobCount = &val
 	return s
 }
 
-func (s *selfInfoService) SetEquipmentGroupDetails(val bool) *selfInfoService {
+func (s *usersListService) SetEquipmentGroupDetails(val bool) *usersListService {
 	s.equipmentGroupDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetJobRanks(val bool) *selfInfoService {
+func (s *usersListService) SetJobRanks(val bool) *usersListService {
 	s.jobRanks = &val
 	return s
 }
 
-func (s *selfInfoService) SetShareholderDetails(val bool) *selfInfoService {
+func (s *usersListService) SetShareholderDetails(val bool) *usersListService {
 	s.shareholderDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetRisingStar(val bool) *selfInfoService {
+func (s *usersListService) SetRisingStar(val bool) *usersListService {
 	s.risingStar = &val
 	return s
 }
 
-func (s *selfInfoService) SetStaffDetails(val bool) *selfInfoService {
+func (s *usersListService) SetStaffDetails(val bool) *usersListService {
 	s.staffDetails = &val
 	return s
 }
 
-func (s *selfInfoService) SetJobSeoDetails(val bool) *selfInfoService {
+func (s *usersListService) SetJobSeoDetails(val bool) *usersListService {
 	s.jobSeoDetails = &val
-	return s
-}
-
-func (s *selfInfoService) SetLimit(val int) *selfInfoService {
-	s.limit = &val
-	return s
-}
-
-func (s *selfInfoService) SetOffset(val int) *selfInfoService {
-	s.offset = &val
-	return s
-}
-
-func (s *selfInfoService) SetCompact(val bool) *selfInfoService {
-	s.compact = &val
 	return s
 }

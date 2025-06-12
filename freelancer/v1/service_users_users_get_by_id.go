@@ -3,26 +3,30 @@ package freelancer
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
 )
 
-type selfDevicesListService struct {
+type usersGetByIDService struct {
 	client *Client
 }
 
-func (s *selfDevicesListService) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *usersGetByIDService) Do(ctx context.Context, userID int64) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_SELF_DEVICES),
+		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), strconv.FormatInt(userID, 10)),
 	}
 
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
 		return nil, err
 	}
+
 	res := &BaseResponse{}
 	if err := json.Unmarshal(data, res); err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
