@@ -30,6 +30,9 @@ type MilestoneActionReason string
 type MilestoneActionRequest string
 type ExpertGuaranteesStatus string
 type ExpertGuaranteesAction string
+type ReviewType string
+type CompletionStatus string
+type ReviewAction string
 
 const (
 	Projects TypeType = "projects"
@@ -196,4 +199,13 @@ const (
 	ExpertGuaranteesStatusAdminRefunded    ExpertGuaranteesStatus = "refunded"
 	ExpertGuaranteesActionRelease          ExpertGuaranteesAction = "release"
 	ExpertGuaranteesActionRequestRelease   ExpertGuaranteesAction = "request_release"
+
+	ReviewTypeProject ReviewType = "project"
+	ReviewTypeContest ReviewType = "contest"
+
+	CompletionStatusComplete  CompletionStatus = "complete"
+	CompletionStatusIncomplet CompletionStatus = "incomplete"
+
+	ReviewActionFeature   ReviewAction = "feature"
+	ReviewActionUnfeature ReviewAction = "unfeature"
 )
