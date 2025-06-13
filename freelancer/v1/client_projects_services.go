@@ -51,7 +51,7 @@ func (c *Client) NewProjectBidsListService() *projectBidsListService {
 }
 
 // Returns information for posting bids on project
-func (c *Client) NewprojectBidInfoGetService() *projectBidInfoGetService {
+func (c *Client) NewProjectBidInfoGetService() *projectBidInfoGetService {
 	return &projectBidInfoGetService{client: c}
 }
 
@@ -263,4 +263,19 @@ func (c *Client) NewCurrenciesListService() *currenciesListService {
 
 func (c *Client) NewBidUpgradeFeesListService() *bidUpgradeFeesListService {
 	return &bidUpgradeFeesListService{client: c}
+}
+
+// Returns a list of project reviews.
+func (c *Client) NewReviewsListService() *reviewsListService {
+	return &reviewsListService{client: c}
+}
+
+// Post a review of a user.
+func (c *Client) NewReviewsCreateService() *reviewsCreateService {
+	return &reviewsCreateService{client: c}
+}
+
+// Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
+func (c *Client) NewReviewsActionsService() *reviewActionService {
+	return &reviewActionService{client: c}
 }
