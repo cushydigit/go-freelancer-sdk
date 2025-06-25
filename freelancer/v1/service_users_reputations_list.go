@@ -52,31 +52,37 @@ func (s *reputationListService) Do(ctx context.Context) (*BaseResponse, error) {
 	return resp, nil
 }
 
+// SetUsers sets the filter user IDs for the reputation list service.
 func (s *reputationListService) SetUsers(users []int64) *reputationListService {
 	s.users = users
 	return s
 }
 
+// SetJobs limits users to a set of job IDs as a filter.
 func (s *reputationListService) SetJobs(jobs []int32) *reputationListService {
 	s.jobs = jobs
 	return s
 }
 
+// SetRole sets the type of reputation filter (e.g., freelancer or employer).
 func (s *reputationListService) SetRole(val RoleType) *reputationListService {
 	s.role = &val
 	return s
 }
 
+// SetJobHistory sets whether to return job history projection for each user.
 func (s *reputationListService) SetJobHistory(val bool) *reputationListService {
 	s.jobHistory = &val
 	return s
 }
 
+// SetProjectState sets whether to return project stats projection for each user.
 func (s *reputationListService) SetProjectState(val bool) *reputationListService {
 	s.projectStats = &val
 	return s
 }
 
+// SetRehireRates sets whether to return rehire rates projection for a single freelancer.
 func (s *reputationListService) SetRehireRates(val bool) *reputationListService {
 	s.rehireRates = &val
 	return s
