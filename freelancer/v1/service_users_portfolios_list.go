@@ -45,16 +45,19 @@ func (s *portfoliosListService) DO(ctx context.Context) (*BaseResponse, error) {
 
 }
 
+// Returns portfolios of specified user ids
 func (s *portfoliosListService) SetUsers(users []int64) *portfoliosListService {
 	s.users = users
 	return s
 }
 
+// Number of portfolios required for all users.
 func (s *portfoliosListService) SetLimit(limit int) *portfoliosListService {
 	s.limit = &limit
 	return s
 }
 
+// starting offset of portfolios for each user
 func (s *portfoliosListService) SetOffset(offset int) *portfoliosListService {
 	s.offset = &offset
 	return s
