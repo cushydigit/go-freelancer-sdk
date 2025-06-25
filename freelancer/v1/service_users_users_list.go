@@ -173,181 +173,217 @@ func (s *usersListService) Do(ctx context.Context) (*BaseResponse, error) {
 	return res, nil
 }
 
+// SetUsers sets the list of user IDs to search.
 func (s *usersListService) SetUsers(vals []int64) *usersListService {
 	s.users = vals
 	return s
 }
 
+// SetUsernames sets the list of usernames to search.
 func (s *usersListService) SetUsernames(vals []string) *usersListService {
 	s.usernames = vals
 	return s
 }
 
+// SetAvatar enables returning the avatar of the selected user/users.
 func (s *usersListService) SetAvatar(val bool) *usersListService {
 	s.avatar = &val
 	return s
 }
 
+// SetCountryDetails enables returning the country flag/code of the selected user/users.
 func (s *usersListService) SetCountryDetails(val bool) *usersListService {
 	s.countryDetails = &val
 	return s
 }
 
+// SetProfileDescription enables returning the profile blurb of the selected user/users.
 func (s *usersListService) SetProfileDescription(val bool) *usersListService {
 	s.profileDescription = &val
 	return s
 }
 
+// SetDisplayInfo enables returning the display name of the selected user/users.
 func (s *usersListService) SetDisplayInfo(val bool) *usersListService {
 	s.displayInfo = &val
 	return s
 }
 
+// SetJobs enables returning the jobs of the selected user/users.
 func (s *usersListService) SetJobs(val bool) *usersListService {
 	s.jobs = &val
 	return s
 }
 
+// SetBalanceDetails enables returning the currency balance of the selected user/users.
 func (s *usersListService) SetBalanceDetails(val bool) *usersListService {
 	s.balanceDetails = &val
 	return s
 }
 
+// SetQualificationDetails enables returning qualification exams completed by the user/users.
 func (s *usersListService) SetQualificationDetails(val bool) *usersListService {
 	s.qualificationDetails = &val
 	return s
 }
 
+// SetMembershipDetails enables returning the membership information of the user/users.
 func (s *usersListService) SetMembershipDetails(val bool) *usersListService {
 	s.membershipDetails = &val
 	return s
 }
 
+// SetFinancialDetails enables returning the financial information of the user/users.
 func (s *usersListService) SetFinancialDetails(val bool) *usersListService {
 	s.financialDetails = &val
 	return s
 }
 
+// SetLocationDetails enables returning the location information of the user/users.
 func (s *usersListService) SetLocationDetails(val bool) *usersListService {
 	s.locationDetails = &val
 	return s
 }
 
+// SetPortfolioDetails enables returning the portfolio information of the user/users.
 func (s *usersListService) SetPortfolioDetails(val bool) *usersListService {
 	s.portfolioDetails = &val
 	return s
 }
 
+// SetPreferredDetails enables returning the preferred information of the user/users.
 func (s *usersListService) SetPreferredDetails(val bool) *usersListService {
 	s.preferredDetails = &val
 	return s
 }
 
+// SetBadgeDetails enables returning the badges earned by the user/users.
 func (s *usersListService) SetBadgeDetails(val bool) *usersListService {
 	s.badgeDetails = &val
 	return s
 }
 
+// SetStatus enables returning additional status information about the user/users.
 func (s *usersListService) SetStatus(val bool) *usersListService {
 	s.status = &val
 	return s
 }
 
+// SetReputation enables returning the freelancer reputation of the selected user/users.
 func (s *usersListService) SetReputation(val bool) *usersListService {
 	s.reputation = &val
 	return s
 }
 
+// SetEmployerReputation enables returning the employer reputation of the selected user/users.
 func (s *usersListService) SetEmployerReputation(val bool) *usersListService {
 	s.employerReputation = &val
 	return s
 }
 
+// SetReputationExtra enables returning the full freelancer reputation of the selected user/users.
 func (s *usersListService) SetReputationExtra(val bool) *usersListService {
 	s.reputationExtra = &val
 	return s
 }
 
+// SetEmployerReputationExtra enables returning the full employer reputation of the selected user/users.
 func (s *usersListService) SetEmployerReputationExtra(val bool) *usersListService {
 	s.employerReputationExtra = &val
 	return s
 }
 
+// SetCoverImage enables returning the profile picture of the user.
 func (s *usersListService) SetCoverImage(val bool) *usersListService {
 	s.coverImage = &val
 	return s
 }
 
+// SetPastCoverImage enables returning previous profile pictures of the user.
 func (s *usersListService) SetPastCoverImage(val bool) *usersListService {
 	s.pastCoverImage = &val
 	return s
 }
 
+// SetMobileTracking enables returning the mobile platforms used by the selected user/users.
 func (s *usersListService) SetMobileTracking(val bool) *usersListService {
 	s.mobileTracking = &val
 	return s
 }
 
+// SetBidQualityDetails enables returning the user's bid quality details, including bid quality score.
 func (s *usersListService) SetBidQualityDetails(val bool) *usersListService {
 	s.bidQualityDetails = &val
 	return s
 }
 
+// SetDepositMethods enables returning the list of deposit methods and associated fees.
 func (s *usersListService) SetDepositMethods(val bool) *usersListService {
 	s.depositMethods = &val
 	return s
 }
 
+// SetUserRecommendations enables returning recommendations count of selected user/users.
 func (s *usersListService) SetUserRecommendations(val bool) *usersListService {
 	s.userRecommendations = &val
 	return s
 }
 
+// SetMarketingMobileNumber enables returning the mobile number used by recruiters to contact the user.
 func (s *usersListService) SetMarketingMobileNumber(val bool) *usersListService {
 	s.marketingMobileNumber = &val
 	return s
 }
 
+// SetSanctionDetails enables returning the end timestamp of any sanction given to the user.
 func (s *usersListService) SetSanctionDetails(val bool) *usersListService {
 	s.sanctionDetails = &val
 	return s
 }
 
+// SetLimitedAccount enables returning the limited account status of the user.
 func (s *usersListService) SetLimitedAccount(val bool) *usersListService {
 	s.limitedAccount = &val
 	return s
 }
 
+// SetCompletedUserRelevantJobCount enables returning the number of completed relevant jobs.
 func (s *usersListService) SetCompletedUserRelevantJobCount(val bool) *usersListService {
 	s.completedUserRelevantJobCount = &val
 	return s
 }
 
+// SetEquipmentGroupDetails enables returning the user's equipment groups and items.
 func (s *usersListService) SetEquipmentGroupDetails(val bool) *usersListService {
 	s.equipmentGroupDetails = &val
 	return s
 }
 
+// SetJobRanks enables returning the user's job ranks (requires reputation and jobs projections).
 func (s *usersListService) SetJobRanks(val bool) *usersListService {
 	s.jobRanks = &val
 	return s
 }
 
+// SetShareholderDetails enables returning whether the user is part of the Shareholder Program.
 func (s *usersListService) SetShareholderDetails(val bool) *usersListService {
 	s.shareholderDetails = &val
 	return s
 }
 
+// SetRisingStar enables returning the user's Rising Star program status.
 func (s *usersListService) SetRisingStar(val bool) *usersListService {
 	s.risingStar = &val
 	return s
 }
 
+// SetStaffDetails enables returning whether the user is a Freelancer staff member.
 func (s *usersListService) SetStaffDetails(val bool) *usersListService {
 	s.staffDetails = &val
 	return s
 }
 
+// SetJobSeoDetails enables returning SEO details of the user’s jobs (requires jobs projection).
 func (s *usersListService) SetJobSeoDetails(val bool) *usersListService {
 	s.jobSeoDetails = &val
 	return s
