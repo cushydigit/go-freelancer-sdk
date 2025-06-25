@@ -231,272 +231,275 @@ func (s *freelancersSearchService) Do(ctx context.Context) (*BaseResponse, error
 	return res, nil
 }
 
+// query	string (optional) Example: janedoe design logo
+// filterReturns freelancers with the query appearing in the username, public name, profile description, or skill name
 func (s *freelancersSearchService) SetQuery(val string) *freelancersSearchService {
 	s.query = &val
 	return s
 }
 
+// jobs[]	array[number] (optional) Example: 1, 2
+// filterReturns freelancers with the specified jobs
 func (s *freelancersSearchService) SetJobsIDs(jobsIDs []int32) *freelancersSearchService {
 	s.jobsIDs = jobsIDs
 	return s
 }
 
+// skills[]	array[number] (optional) Example: 3, 4
+// filterReturns freelancers with the specified skills. Note that while jobs[] is still used, this filter is preferred to avoid any potential errors that may arise in the webapp since jobs[] shares the same name as the jobs projection.
 func (s *freelancersSearchService) SetSkills(skills []int32) *freelancersSearchService {
 	s.skills = skills
 	return s
 }
 
+// countries[]	array[string] (optional) Example: Philippines, Australia
+// filterReturns freelancers with the specified countries
 func (s *freelancersSearchService) SetCountries(countries []string) *freelancersSearchService {
 	s.countries = countries
 	return s
 }
 
+// hourly_rate_min	number (optional) Example: 10
+// filterReturns freelancers with the specified minimum hourly rate
 func (s *freelancersSearchService) SetHourlyRateMin(val int) *freelancersSearchService {
 	s.hourlyRateMin = &val
 	return s
 }
 
+// hourly_rate_max	number (optional) Example: 100
+// filterReturns freelancers with the specified maximum hourly rate
 func (s *freelancersSearchService) SetHourlyRateMax(val int) *freelancersSearchService {
 	s.hourlyRateMax = &val
 	return s
 }
 
+// review_count_min	number (optional) Example: 1
+// filterReturns freelancers with the specified minimum review count
 func (s *freelancersSearchService) SetReviewCountMin(val int) *freelancersSearchService {
 	s.reviewCountMin = &val
 	return s
 }
 
+// review_count_max	number (optional) Example: 100
+// filterReturns freelancers with the specified maximum review count
 func (s *freelancersSearchService) SetReviewCountMax(val int) *freelancersSearchService {
 	s.reviewCountMax = &val
 	return s
 }
 
+// online_only	boolean (optional)
+// filterReturns only freelancers that are online
 func (s *freelancersSearchService) SetOnlineOnly(val bool) *freelancersSearchService {
 	s.onlineOnly = &val
 	return s
 }
 
+// location_latitude	decimal (optional) Example: 12.31
+// filterReturns freelancers that are close to the specified latitude
 func (s *freelancersSearchService) SetLocationLatitude(locationLatitude float64) *freelancersSearchService {
 	s.locationLatitude = &locationLatitude
 	return s
 }
 
+// location_longitude	decimal (optional) Example: 12.31
+// filterReturns freelancers that are close to the specified longitude
 func (s *freelancersSearchService) SetLocationLongitude(locationLongitude float64) *freelancersSearchService {
 	s.locationLongitude = &locationLongitude
 	return s
 }
 
+// insignias[]	array[number] (optional) Example: 1, 2
+// filterReturns freelancers with the specified examination IDs complete
 func (s *freelancersSearchService) SetInsignias(insignias []int32) *freelancersSearchService {
 	s.insignias = insignias
 	return s
 }
 
+// pool_ids[]	array[string] (optional) Example: 1, 2
+// filterReturns freelancers with the specified pool ids
 func (s *freelancersSearchService) SetPoolIds(poolIds []int32) *freelancersSearchService {
 	s.poolIds = poolIds
 	return s
 }
 
+// ratings	decimal (optional) Example: 4.5
+// filterReturns freelancers with a minimum rating
 func (s *freelancersSearchService) SetRatings(val float32) *freelancersSearchService {
 	s.ratings = &val
 	return s
 }
 
+// sort_field	DirectorySortFieldEnum (optional)
+// filterSorting field, by default searches by relevance
 func (s *freelancersSearchService) SetSortField(val int) *freelancersSearchService {
 	s.sortField = &val
 	return s
 }
 
+// reverse_sort	boolean (optional)
+// filterIf true, results appear in ascending order instead of descending order
 func (s *freelancersSearchService) SetReverseSort(val bool) *freelancersSearchService {
 	s.reverseSort = &val
 	return s
 }
 
+// avatar	boolean (optional)
+// projectionReturns the avatar of the selected user/users.
 func (s *freelancersSearchService) SetAvatar(val bool) *freelancersSearchService {
 	s.avatar = &val
 	return s
 }
 
+// country_details	boolean (optional)
+// projectionReturns the country flag/code of selected user/users.
 func (s *freelancersSearchService) SetCountryDetails(val bool) *freelancersSearchService {
 	s.countryDetails = &val
 	return s
 }
 
+// profile_description	boolean (optional)
+// projectionReturns the profile blurb of selected user/users.
 func (s *freelancersSearchService) SetProfileDescription(val bool) *freelancersSearchService {
 	s.profileDescription = &val
 	return s
 }
 
+// display_info	boolean (optional)
+// projectionReturns the display name of the selected user/users.
 func (s *freelancersSearchService) SetDisplayInfo(val bool) *freelancersSearchService {
 	s.displayInfo = &val
 	return s
 }
 
+// jobs	boolean (optional)
+// projectionReturns the jobs of the selected user/users.
 func (s *freelancersSearchService) SetJobs(val bool) *freelancersSearchService {
 	s.jobs = &val
 	return s
 }
 
+// balance_details	boolean (optional)
+// projectionReturns the currency balance of selected user/users.
 func (s *freelancersSearchService) SetBalanceDetails(val bool) *freelancersSearchService {
 	s.balanceDetails = &val
 	return s
 }
 
+// qualification_details	boolean (optional)
+// projectionReturns qualification exams completed by the user/users.
 func (s *freelancersSearchService) SetQualificationDetails(val bool) *freelancersSearchService {
 	s.qualificationDetails = &val
 	return s
 }
 
+// membership_details	boolean (optional)
+// projectionReturns the membership information of the user/users.
 func (s *freelancersSearchService) SetMembershipDetails(val bool) *freelancersSearchService {
 	s.membershipDetails = &val
 	return s
 }
 
+// financial_details	boolean (optional)
+// projectionReturns the financial information of the user/users.
 func (s *freelancersSearchService) SetFinancialDetails(val bool) *freelancersSearchService {
 	s.financialDetails = &val
 	return s
 }
 
+// location_details	boolean (optional)
+// projectionReturns the location information of the user/users.
 func (s *freelancersSearchService) SetLocationDetails(val bool) *freelancersSearchService {
 	s.locationDetails = &val
 	return s
 }
 
+// portfolio_details	boolean (optional)
+// projectionReturns the portfolio information of the user/users.
 func (s *freelancersSearchService) SetPortfolioDetails(val bool) *freelancersSearchService {
 	s.portfolioDetails = &val
 	return s
 }
 
+// preferred_details	boolean (optional)
+// projectionReturns the preferred information of the user/users.
 func (s *freelancersSearchService) SetPreferredDetails(val bool) *freelancersSearchService {
 	s.preferredDetails = &val
 	return s
 }
 
+// badge_details	boolean (optional)
+// projectionReturns the badges earned by the user/users.
 func (s *freelancersSearchService) SetBadgeDetails(val bool) *freelancersSearchService {
 	s.badgeDetails = &val
 	return s
 }
 
+// status	boolean (optional)
+// projectionReturns additional status information about the user/users.
 func (s *freelancersSearchService) SetStatus(val bool) *freelancersSearchService {
 	s.status = &val
 	return s
 }
 
+// reputation	boolean (optional)
+// projectionReturns the freelancer reputation of the selected user/users.
 func (s *freelancersSearchService) SetReputation(val bool) *freelancersSearchService {
 	s.reputation = &val
 	return s
 }
 
+// employer_reputation	boolean (optional)
+// projectionReturns the employer reputation of the selected user/users.
 func (s *freelancersSearchService) SetEmployerReputation(val bool) *freelancersSearchService {
 	s.employerReputation = &val
 	return s
 }
 
+// reputation_extra	boolean (optional)
+// projectionReturns the full freelancer reputation of the selected user/users.
 func (s *freelancersSearchService) SetReputationExtra(val bool) *freelancersSearchService {
 	s.reputationExtra = &val
 	return s
 }
 
+// employer_reputation_extra	boolean (optional)
+// projectionReturns the full employer reputation of the selected user/users.
 func (s *freelancersSearchService) SetEmployerReputationExtra(val bool) *freelancersSearchService {
 	s.employerReputationExtra = &val
 	return s
 }
 
+// cover_image	boolean (optional)
+// projectionReturns the profile picture of the user.
 func (s *freelancersSearchService) SetCoverImage(val bool) *freelancersSearchService {
 	s.coverImage = &val
 	return s
 }
 
+// past_cover_images	boolean (optional)
+// projectionReturns previous profile pictures of the user.
 func (s *freelancersSearchService) SetPastCoverImage(val bool) *freelancersSearchService {
 	s.pastCoverImage = &val
 	return s
 }
 
+// mobile_tracking	boolean (optional)
+// projectionReturns the mobile platforms used by the selected user/users.
 func (s *freelancersSearchService) SetMobileTracking(val bool) *freelancersSearchService {
 	s.mobileTracking = &val
 	return s
 }
 
+// bid_quality_details	boolean (optional)
+// projectionReturns the user’s bid quality details, includes bid quality score.
 func (s *freelancersSearchService) SetBidQualityDetails(val bool) *freelancersSearchService {
 	s.bidQualityDetails = &val
 	return s
 }
 
+// deposit_methods	boolean (optional)
+// projectionReturns the deposit methods accepted by the user.
 func (s *freelancersSearchService) SetDepositMethods(val bool) *freelancersSearchService {
 	s.depositMethods = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetUserRecommendations(val bool) *freelancersSearchService {
-	s.userRecommendations = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetMarketingMobileNumber(val bool) *freelancersSearchService {
-	s.marketingMobileNumber = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetSanctionDetails(val bool) *freelancersSearchService {
-	s.sanctionDetails = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetLimitedAccount(val bool) *freelancersSearchService {
-	s.limitedAccount = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetCompletedUserRelevantJobCount(val bool) *freelancersSearchService {
-	s.completedUserRelevantJobCount = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetEquipmentGroupDetails(val bool) *freelancersSearchService {
-	s.equipmentGroupDetails = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetJobRanks(val bool) *freelancersSearchService {
-	s.jobRanks = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetJobSeoDetails(val bool) *freelancersSearchService {
-	s.jobSeoDetails = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetRisingStar(val bool) *freelancersSearchService {
-	s.risingStar = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetShareholderDetails(val bool) *freelancersSearchService {
-	s.shareholderDetails = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetStaffDetails(val bool) *freelancersSearchService {
-	s.staffDetails = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetPoolDetails(val bool) *freelancersSearchService {
-	s.poolDetails = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetLimit(val int) *freelancersSearchService {
-	s.limit = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetOffset(val int) *freelancersSearchService {
-	s.offset = &val
-	return s
-}
-
-func (s *freelancersSearchService) SetCompact(val bool) *freelancersSearchService {
-	s.compact = &val
 	return s
 }
