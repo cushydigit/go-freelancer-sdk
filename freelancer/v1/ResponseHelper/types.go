@@ -1,4 +1,4 @@
-package responseHelper
+package helper
 
 type Country struct {
 	Name         string  `json:"name,omitempty"`          // Optional

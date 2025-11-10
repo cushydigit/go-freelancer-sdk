@@ -1,4 +1,4 @@
-package responseHelper
+package helper
 
 import "encoding/json"
 
