@@ -12,10 +12,10 @@ type usersGetByIDService struct {
 	client *Client
 }
 
-func (s *usersGetByIDService) Do(ctx context.Context, userID int64) (*BaseResponse, error) {
+func (s *usersGetByIDService) Do(ctx context.Context, id int64) (*BaseResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), strconv.FormatInt(userID, 10)),
+		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), strconv.FormatInt(id, 10)),
 	}
 
 	data, err := s.client.callAPI(ctx, r)

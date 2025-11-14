@@ -288,326 +288,392 @@ func (s *projectsListService) Do(ctx context.Context) (*BaseResponse, error) {
 
 	return res, nil
 }
+
+// SetProjects sets the list of project IDs to filter.
 func (s *projectsListService) SetProjects(projects []int64) *projectsListService {
 	s.projects = projects
 	return s
 }
 
+// SetOwners sets the list of owner user IDs to filter.
 func (s *projectsListService) SetOwners(owners []int64) *projectsListService {
 	s.owners = owners
 	return s
 }
 
+// SetBidders sets the list of bidder user IDs to filter.
 func (s *projectsListService) SetBidders(bidders []int64) *projectsListService {
 	s.bidders = bidders
 	return s
 }
 
+// SetSeoUrls sets the list of SEO URLs to filter.
 func (s *projectsListService) SetSeoUrls(seoUrls []string) *projectsListService {
 	s.seoUrls = seoUrls
 	return s
 }
 
+// SetFrontendProjectStatuses sets the frontend project status filters.
 func (s *projectsListService) SetFrontendProjectStatuses(val []string) *projectsListService {
 	s.frontendProjectStatuses = val
 	return s
 }
 
+// SetFromTime sets the start time filter (Unix timestamp).
 func (s *projectsListService) SetFromTime(val int64) *projectsListService {
 	s.fromTime = &val
 	return s
 }
 
+// SetToTime sets the end time filter (Unix timestamp).
 func (s *projectsListService) SetToTime(val int64) *projectsListService {
 	s.toTime = &val
 	return s
 }
 
+// SetFullDescription enables or disables full project description.
 func (s *projectsListService) SetFullDescription(val bool) *projectsListService {
 	s.fullDescription = &val
 	return s
 }
 
+// SetJobDetails enables or disables inclusion of job details.
 func (s *projectsListService) SetJobDetails(val bool) *projectsListService {
 	s.jobDetails = &val
 	return s
 }
 
+// SetUpgradeDetails enables or disables upgrade details.
 func (s *projectsListService) SetUpgradeDetails(val bool) *projectsListService {
 	s.upgradeDetails = &val
 	return s
 }
 
+// SetAttachmentDetails enables or disables attachment details.
 func (s *projectsListService) SetAttachmentDetails(val bool) *projectsListService {
 	s.attachmentDetails = &val
 	return s
 }
 
+// SetFileDetails enables or disables file details.
 func (s *projectsListService) SetFileDetails(val bool) *projectsListService {
 	s.fileDetails = &val
 	return s
 }
 
+// SetQualificationDetails enables or disables qualification details.
 func (s *projectsListService) SetQualificationDetails(val bool) *projectsListService {
 	s.qualificationDetails = &val
 	return s
 }
 
+// SetSelectedBids enables or disables retrieval of selected bids.
 func (s *projectsListService) SetSelectedBids(val bool) *projectsListService {
 	s.selectedBids = &val
 	return s
 }
 
+// SetHireeDetails enables or disables hiree details.
 func (s *projectsListService) SetHireeDetails(val bool) *projectsListService {
 	s.hiremeDetails = &val
 	return s
 }
 
+// SetUserDetails enables or disables user details.
 func (s *projectsListService) SetUserDetails(val bool) *projectsListService {
 	s.userDetails = &val
 	return s
 }
 
+// SetInvitedFreelancerDetails enables or disables invited freelancer details.
 func (s *projectsListService) SetInvitedFreelancerDetails(val bool) *projectsListService {
 	s.invitedFreelancerDetails = &val
 	return s
 }
 
+// SetRecommendedFreelancerDetails enables or disables recommended freelancer details.
 func (s *projectsListService) SetRecommendedFreelancerDetails(val bool) *projectsListService {
 	s.recommendedFreelancerDetails = &val
 	return s
 }
 
+// SetSupportSessionDetails enables or disables support session details.
 func (s *projectsListService) SetSupportSessionDetails(val bool) *projectsListService {
 	s.supportSessionDetails = &val
 	return s
 }
 
+// SetLocationDetails enables or disables location details.
 func (s *projectsListService) SetLocationDetails(val bool) *projectsListService {
 	s.locationDetails = &val
 	return s
 }
 
+// SetNdaSignatureDetails enables or disables NDA signature details.
 func (s *projectsListService) SetNdaSignatureDetails(val bool) *projectsListService {
 	s.ndaSignatureDetails = &val
 	return s
 }
 
+// SetDriveFileDetails enables or disables drive file details.
 func (s *projectsListService) SetDriveFileDetails(val bool) *projectsListService {
 	s.driveFileDetails = &val
 	return s
 }
 
+// SetNdaDetails enables or disables NDA details.
 func (s *projectsListService) SetNdaDetails(val bool) *projectsListService {
 	s.ndaDetails = &val
 	return s
 }
 
+// SetLocalDetails enables or disables local details.
 func (s *projectsListService) SetLocalDetails(val bool) *projectsListService {
 	s.localDetails = &val
 	return s
 }
 
+// SetEquipmentDetails enables or disables equipment details.
 func (s *projectsListService) SetEquipmentDetails(val bool) *projectsListService {
 	s.equipmentDetails = &val
 	return s
 }
 
+// SetClientEngagementDetails enables or disables client engagement details.
 func (s *projectsListService) SetClientEngagementDetails(val bool) *projectsListService {
 	s.clientEngagementDetails = &val
 	return s
 }
 
+// SetUserResponsiveness enables or disables user responsiveness details.
 func (s *projectsListService) SetUserResponsiveness(val bool) *projectsListService {
 	s.userResponsiveness = &val
 	return s
 }
 
+// SetServiceOfferingDetails enables or disables service offering details.
 func (s *projectsListService) SetServiceOfferingDetails(val bool) *projectsListService {
 	s.serviceOfferingDetails = &val
 	return s
 }
 
+// SetCorporateUsers enables or disables corporate user filter.
 func (s *projectsListService) SetCorporateUsers(val bool) *projectsListService {
 	s.corporateUsers = &val
 	return s
 }
 
+// SetIsNonHireMe sets whether to exclude HireMe projects.
 func (s *projectsListService) SetIsNonHireMe(val bool) *projectsListService {
 	s.isNonHireMe = &val
 	return s
 }
 
+// SetHasMilestone enables or disables filtering projects with milestones.
 func (s *projectsListService) SetHasMilestone(val bool) *projectsListService {
 	s.hasMilestone = &val
 	return s
 }
 
+// SetCount enables or disables counting results.
 func (s *projectsListService) SetCount(val bool) *projectsListService {
 	s.count = &val
 	return s
 }
 
+// SetTeam enables or disables team details.
 func (s *projectsListService) SetTeam(val bool) *projectsListService {
 	s.team = &val
 	return s
 }
 
+// SetCompact enables or disables compact result format.
 func (s *projectsListService) SetCompact(val bool) *projectsListService {
 	s.compact = &val
 	return s
 }
 
+// SetLimit sets the maximum number of results to return.
 func (s *projectsListService) SetLimit(val int) *projectsListService {
 	s.limit = &val
 	return s
 }
 
+// SetOffset sets the offset for pagination.
 func (s *projectsListService) SetOffset(val int) *projectsListService {
 	s.offset = &val
 	return s
 }
 
+// SetProximityDetails enables or disables proximity details.
 func (s *projectsListService) SetProximityDetails(val bool) *projectsListService {
 	s.proximityDetails = &val
 	return s
 }
 
+// SetReviewAvailabilityDetails enables or disables review availability details.
 func (s *projectsListService) SetReviewAvailabilityDetails(val bool) *projectsListService {
 	s.reviewAvailabilityDetails = &val
 	return s
 }
 
+// SetNegotiatedDetails enables or disables negotiated details.
 func (s *projectsListService) SetNegotiatedDetails(val bool) *projectsListService {
 	s.negotiatedDetails = &val
 	return s
 }
 
+// SetUserAvatar enables or disables user avatar inclusion.
 func (s *projectsListService) SetUserAvatar(val bool) *projectsListService {
 	s.userAvatar = &val
 	return s
 }
 
+// SetUserCountryDetails enables or disables user country details.
 func (s *projectsListService) SetUserCountryDetails(val bool) *projectsListService {
 	s.userCountryDetails = &val
 	return s
 }
 
+// SetUserProfileDescription enables or disables user profile description.
 func (s *projectsListService) SetUserProfileDescription(val bool) *projectsListService {
 	s.userProfileDescription = &val
 	return s
 }
 
+// SetProjectCollaborationDetails enables or disables project collaboration details.
 func (s *projectsListService) SetProjectCollaborationDetails(val bool) *projectsListService {
 	s.projectCollaborationDetails = &val
 	return s
 }
 
+// SetUserDisplayInfo enables or disables user display information.
 func (s *projectsListService) SetUserDisplayInfo(val bool) *projectsListService {
 	s.userDisplayInfo = &val
 	return s
 }
 
+// SetUserJobs enables or disables user jobs details.
 func (s *projectsListService) SetUserJobs(val bool) *projectsListService {
 	s.userJobs = &val
 	return s
 }
 
+// SetUserBalanceDetails enables or disables user balance details.
 func (s *projectsListService) SetUserBalanceDetails(val bool) *projectsListService {
 	s.userBalanceDetails = &val
 	return s
 }
 
+// SetUserQualificationDetails enables or disables user qualification details.
 func (s *projectsListService) SetUserQualificationDetails(val bool) *projectsListService {
 	s.userQualificationDetails = &val
 	return s
 }
 
+// SetUserMembershipDetails enables or disables user membership details.
 func (s *projectsListService) SetUserMembershipDetails(val bool) *projectsListService {
 	s.userMembershipDetails = &val
 	return s
 }
 
+// SetUserFinancialDetails enables or disables user financial details.
 func (s *projectsListService) SetUserFinancialDetails(val bool) *projectsListService {
 	s.userFinancialDetails = &val
 	return s
 }
 
+// SetUserLocationDetails enables or disables user location details.
 func (s *projectsListService) SetUserLocationDetails(val bool) *projectsListService {
 	s.userLocationDetails = &val
 	return s
 }
 
+// SetUserPortfolioDetails enables or disables user portfolio details.
 func (s *projectsListService) SetUserPortfolioDetails(val bool) *projectsListService {
 	s.userPortfolioDetails = &val
 	return s
 }
 
+// SetUserPreferredDetails enables or disables user preferred details.
 func (s *projectsListService) SetUserPreferredDetails(val bool) *projectsListService {
 	s.userPreferredDetails = &val
 	return s
 }
 
+// SetUserBadgeDetails enables or disables user badge details.
 func (s *projectsListService) SetUserBadgeDetails(val bool) *projectsListService {
 	s.userBadgeDetails = &val
 	return s
 }
 
+// SetUserStatus enables or disables user status details.
 func (s *projectsListService) SetUserStatus(val bool) *projectsListService {
 	s.userStatus = &val
 	return s
 }
 
+// SetUserReputation enables or disables user reputation details.
 func (s *projectsListService) SetUserReputation(val bool) *projectsListService {
 	s.userReputation = &val
 	return s
 }
 
+// SetUserEmployerReputation enables or disables user employer reputation details.
 func (s *projectsListService) SetUserEmployerReputation(val bool) *projectsListService {
 	s.userEmployerReputation = &val
 	return s
 }
 
+// SetUserReputationExtra enables or disables extra user reputation details.
 func (s *projectsListService) SetUserReputationExtra(val bool) *projectsListService {
 	s.userReputationExtra = &val
 	return s
 }
 
+// SetUserEmployerReputationExtra enables or disables extra user employer reputation details.
 func (s *projectsListService) SetUserEmployerReputationExtra(val bool) *projectsListService {
 	s.userEmployerReputationExtra = &val
 	return s
 }
 
+// SetUserCoverImage enables or disables user cover image.
 func (s *projectsListService) SetUserCoverImage(val bool) *projectsListService {
 	s.userCoverImage = &val
 	return s
 }
 
+// SetUserPastCoverImage enables or disables past user cover image.
 func (s *projectsListService) SetUserPastCoverImage(val bool) *projectsListService {
 	s.userPastCoverImage = &val
 	return s
 }
 
+// SetUserRecommendations enables or disables user recommendations.
 func (s *projectsListService) SetUserRecommendations(val bool) *projectsListService {
 	s.userRecommendations = &val
 	return s
 }
 
+// SetMarketingMobileNumber enables or disables marketing mobile number.
 func (s *projectsListService) SetMarketingMobileNumber(val bool) *projectsListService {
 	s.marketingMobileNumber = &val
 	return s
 }
 
+// SetSanctionDetails enables or disables sanction details.
 func (s *projectsListService) SetSanctionDetails(val bool) *projectsListService {
 	s.sanctionDetails = &val
 	return s
 }
 
+// SetLimitedAccount enables or disables limited account details.
 func (s *projectsListService) SetLimitedAccount(val bool) *projectsListService {
 	s.limitedAccount = &val
 	return s
 }
 
+// SetEquipmentGroupDetails enables or disables equipment group details.
 func (s *projectsListService) SetEquipmentGroupDetails(val bool) *projectsListService {
 	s.equipmentGroupDetails = &val
 	return s

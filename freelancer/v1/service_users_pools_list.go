@@ -57,36 +57,43 @@ func (s *poolsListService) Do(ctx context.Context) (*BaseResponse, error) {
 	return resp, err
 }
 
+// SetPools sets the list of pool IDs to filter results by.
 func (s *poolsListService) SetPools(vals []int) *poolsListService {
 	s.pools = vals
 	return s
 }
 
+// SetNames sets the list of pool names to filter results by.
 func (s *poolsListService) SetNames(vals []string) *poolsListService {
 	s.names = vals
 	return s
 }
 
+// SetSeoUrls sets the list of SEO URLs to filter results by.
 func (s *poolsListService) SetSeoUrls(vals []string) *poolsListService {
 	s.seoUrls = vals
 	return s
 }
 
+// SetIgnoreTest sets whether to ignore test pools.
 func (s *poolsListService) SetIgnoreTest(val bool) *poolsListService {
 	s.ignoreTest = &val
 	return s
 }
 
+// SetIsTalentNetwork sets whether to filter pools based on the talent network flag.
 func (s *poolsListService) SetIsTalentNetwork(val bool) *poolsListService {
 	s.isTalentNetwork = &val
 	return s
 }
 
+// SetLimit sets the maximum number of results to return. Default is 100.
 func (s *poolsListService) SetLimit(val int) *poolsListService {
 	s.limit = &val
 	return s
 }
 
+// SetOffset sets the number of results to skip for pagination. Default is 0.
 func (s *poolsListService) SetOffset(val int) *poolsListService {
 	s.offset = &val
 	return s
