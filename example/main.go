@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	feelancer "github.com/cushydigit/go-freelancer-sdk/freelancer/v1"
+	freelancer "github.com/cushydigit/go-freelancer-sdk/freelancer/v1"
 	helper "github.com/cushydigit/go-freelancer-sdk/freelancer/v1/ResponseHelper"
 	"github.com/joho/godotenv"
 )
@@ -35,7 +35,7 @@ func Init() {
 
 func main() {
 	Init()
-	ListProjects()
+	// ListProjects() // not workings => ?
 	ListProjectsSearchActive()
 	// ListSelfJobs()
 	// AddSelfJobs()
@@ -66,7 +66,11 @@ func ListProjects() {
 	}
 
 	var res helper.ListProjectsResponse
+
 	b, _ := json.Marshal(resp)
+
+	fmt.Printf("\n%+v\n", resp)
+
 	_ = json.Unmarshal(b, &res)
 
 	for index, p := range res.Result.Projects {
@@ -77,6 +81,7 @@ func ListProjects() {
 
 func ListProjectsSearchActive() {
 	s := client.NewProjectsSearchActiveService()
+
 	s.SetFullDescription(true)
 	s.SetLimit(10)
 	s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectFixed})
@@ -85,8 +90,13 @@ func ListProjectsSearchActive() {
 	if err != nil {
 		log.Printf("error: %v", err)
 	}
+
 	var res helper.SearchActiveProjectsResponse
 	b, _ := json.Marshal(resp)
+
+	fmt.Printf("\n%+v\n%v\n", resp, b)
+
+	fmt.Println("Raw JSON:", string(b))
 	_ = json.Unmarshal(b, &res)
 	for index, p := range res.Result.Projects {
 		timeSubmitted := time.Unix(p.TimeSubmitted, 0).Format("2006-01-02 15:04:05")
