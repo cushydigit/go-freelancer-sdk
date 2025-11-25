@@ -41,7 +41,57 @@ go get github.com/cushydigit/freelancer-go-sdk
 ```
 
 ## 🚀 Quick Example
+fetch for search project
 
+```Go
+func QuickExample() {
+
+	// use environment variable or set accessToken manually
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("the .env file not found: %v", err)
+	}
+	apiAccessToken = os.Getenv("FREELANCER_ACCESS_TOKEN")
+	if apiAccessToken == "" {
+		log.Fatal("environment variable not set correctly")
+	}
+
+	client = freelancer.NewClient(apiAccessToken)
+	// create service for fetching active projects
+	s := client.NewProjectsSearchActiveService()
+	// set parameters
+	s.SetFullDescription(true) // fetch full description
+	s.SetLimit(10)i // limit the number or results
+	s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectFixed}) // filter by project type
+	// make request
+	resp, err := s.Do(context.Background())
+	if err != nil {
+		log.Printf("error: %v", err)
+	}
+	// use helper function for parsing response
+	var res helper.SearchActiveProjectsResponse
+	b, _ := json.Marshal(resp)
+	_ = json.Unmarshal(b, &res)
+	// print results
+	for index, p := range res.Result.Projects {
+		timeSubmitted := time.Unix(p.TimeSubmitted, 0).Format("2006-01-02 15:04:05")
+		fmt.Printf("Project-%03d\tID-%d\tAt: %s\tTitle: %s\n", index, p.ID, timeSubmitted, p.Title)
+	}
+}
+```
+output:
+```bash
+
+Project-000     ID-40011543     At: 2025-11-25 16:24:37 Title: Figma-to-HTML Responsive Designer For Website Update -- 3
+Project-001     ID-40011529     At: 2025-11-25 16:20:21 Title: Gothic Irish Novel Cover Design
+Project-002     ID-40011493     At: 2025-11-25 16:19:57 Title: Vibrant website Visual redesign based on our mock up version. 
+Project-003     ID-40011526     At: 2025-11-25 16:19:23 Title: Comprehensive Digital Marketing 
+Project-004     ID-40011480     At: 2025-11-25 16:18:44 Title: Photographer's Portfolio Website Development
+Project-005     ID-40011364     At: 2025-11-25 16:18:04 Title: DC-DC Boost Converter with MCU
+Project-006     ID-40011525     At: 2025-11-25 16:17:56 Title: Application Security Pen-Test Needed
+Project-007     ID-40011523     At: 2025-11-25 16:17:00 Title: Digital Marketer Needed for SSH Launch
+Project-008     ID-40010912     At: 2025-11-25 16:16:26 Title: English-Arabic Document Translation
+Project-009     ID-40011520     At: 2025-11-25 16:15:15 Title: Wedding Family Video Edit
+```
 ```
 func example() {
 	// create freelancer clinet

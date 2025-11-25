@@ -45,7 +45,7 @@ func (s *bidEditRequestsGetService) SetStatuses(vals []BidStatus) *bidEditReques
 	return s
 }
 
-func (s *bidEditRequestsGetService) setBidEditRequestIDs(vals []int) *bidEditRequestsGetService {
+func (s *bidEditRequestsGetService) SetBidEditRequestIDs(vals []int) *bidEditRequestsGetService {
 	s.bidEditRequestIDs = vals
 	return s
 }

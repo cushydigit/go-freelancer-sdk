@@ -2,6 +2,7 @@ package freelancer
 
 type TypeType string
 type ProjectType string
+type ContextType string
 type ProjectUpgradeType string
 type ProjectStatusType string
 type IntervalType string
@@ -208,4 +209,8 @@ const (
 
 	ReviewActionFeature   ReviewAction = "feature"
 	ReviewActionUnfeature ReviewAction = "unfeature"
+
+	ContextTypeProject ContextType = "project"
+	ContextTypeContest ContextType = "contest"
+	ContextTypeGeneral ContextType = "general"
 )
