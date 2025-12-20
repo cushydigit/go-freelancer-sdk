@@ -57,53 +57,25 @@ You will need an OAuth2 access token from Freelancer.com. You can generate one i
 fetch active projects
 
 ```Go
+import (
+ "fmt"
+ "github.com/cushydigit/go-freelancer-sdk/freelancer"
+)
 func QuickExample() {
-
- // use environment variable or set accessToken manually
- client = freelancer.NewClient(apiAccessToken)
- // create service for fetching active projects
- s := client.Services.Projects.SearchActive()
+ client = freelancer.NewClient(apiAccessToken) // create client with access token
+ s := client.Services.Projects.SearchActive()  // service for fetching active projects
  // set parameters
- // fetch full description
- s.SetFullDescription(true)
- // limit the number of results
- s.SetLimit(10)
- // filter by project type
- s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectFixed})
- // execute request
- resp, err := s.Do(context.Background())
+ s.SetFullDescription(true)                                           // fetch full description
+ s.SetLimit(10)                                                       // limit the number of results
+ s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectFixed}) // filter by project type
+ res, err := s.Do(context.Background())
  if err != nil {
-  log.Printf("error: %v", err)
+  fmt.Printf("error: %v", err)
  }
- // use helper function for parsing response
- var res freelancer.SearchActiveProjectsResponse
- b, _ := json.Marshal(resp)
- _ = json.Unmarshal(b, &res)
- // print results
  for index, p := range res.Result.Projects {
-  timeSubmitted := time.Unix(p.TimeSubmitted, 0).Format("2006-01-02 15:04:05")
-  if len(p.Title) > 10 {
-   p.Title = p.Title[0:10] + " *****"
-  }
-  fmt.Printf("Project-%03d\tID-%d\tAt: %s\tTitle: %s\n", index, p.ID, timeSubmitted, p.Title)
+  fmt.Printf("Project-%03d\tID-%d\tAt: %d", index, p.ID, p.TimeSubmitted)
  }
-
-
-```
-
-output:
-
-```bash
-Project-000     ID-40011579     At: 2025-11-25 16:40:39 Title: Drive Foot *****
-Project-001     ID-40011578     At: 2025-11-25 16:40:23 Title: Mumbai Ins *****
-Project-002     ID-40011577     At: 2025-11-25 16:40:04 Title: Modern Wix *****
-Project-003     ID-40011576     At: 2025-11-25 16:39:58 Title: Classic Br *****
-Project-004     ID-40011565     At: 2025-11-25 16:39:44 Title: Social Med *****
-Project-005     ID-40011572     At: 2025-11-25 16:39:01 Title: Health Clu *****
-Project-006     ID-40011570     At: 2025-11-25 16:38:59 Title: Cross-Plat *****
-Project-007     ID-40011571     At: 2025-11-25 16:38:01 Title: TDS Reconc *****
-Project-008     ID-40011567     At: 2025-11-25 16:35:48 Title: Responsive *****
-Project-009     ID-40011566     At: 2025-11-25 16:35:39 Title: JOB POSTIN *****
+}
 ```
 
 fetch timezones
@@ -111,13 +83,10 @@ fetch timezones
 ```GO
 func ListTimezones() {
  s := client.Services.Common.ListTimezones()
- resp, err := s.Do(context.Background())
+ res, err := s.Do(context.Background())
  if err != nil {
   log.Printf("error: %v", err)
  }
- res := freelancer.ListTimezonesResponse{}
- b, _ := json.Marshal(resp)
- _ = json.Unmarshal(b, &res)
  for index, t := range res.Result.Timezones {
   fmt.Printf("Timezone-%03d\tID-%d\tCountry: %s\tTimezones: %s\n", index, t.ID, t.Country, t.Timezone)
  }
@@ -147,13 +116,10 @@ fetch budgets
 ```Go
 func ListBudgets() {
  s := client.Services.Projects.Extras.Budgets.List()
- resp, err := s.Do(context.Background())
+ res, err := s.Do(context.Background())
  if err != nil {
   log.Printf("error: %v", err)
  }
- res := helper.ListBudgetsResponse{}
- b, _ := json.Marshal(resp)
- _ = json.Unmarshal(b, &res)
  for index, b := range res.Result.Budgets {
   fmt.Printf("Budget-%03d\tName-%s\tMin: %f\tMax: %f\tCurrencyID: %d\n", index, b.Name, b.Minimum, b.Maximum, b.CurrencyID)
  }
@@ -164,14 +130,11 @@ fetch categories
 
 ```Go
 func ListCategories() {
- s := client.NewCategoriesListService()
- resp, err := s.Do(context.Background())
+ s := client.Services.Projects.Extras.Categories.List()
+ res, err := s.Do(context.Background())
  if err != nil {
   log.Printf("error: %v", err)
  }
- res := freelancer.ListCategoriesResponse{}
- b, _ := json.Marshal(resp)
- _ = json.Unmarshal(b, &res)
  for index, c := range res.Result.Categories {
   fmt.Printf("Category-%03d\tID-%d\tName: %s\n", index, c.ID, c.Name)
  }
