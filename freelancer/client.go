@@ -92,15 +92,12 @@ func (c *Client) parseRequest(r *request) (err error) {
 
 func (c *Client) callAPI(ctx context.Context, r *request) (data []byte, err error) {
 	c.debug("calling api endpoint: %s\n", r.fullURL)
-	err = c.parseRequest(r)
-	if err != nil {
-		c.debug("failed to parse request: %s\n", err)
-		return []byte{}, err
+	if err = c.parseRequest(r); err != nil {
+		return nil, fmt.Errorf("failed to parse request: %w", err)
 	}
 	req, err := http.NewRequest(r.method, r.fullURL, r.body)
 	if err != nil {
-		c.debug("failed to create http request: %s\n", err)
-		return []byte{}, err
+		return nil, fmt.Errorf("failed to create http request: %w", err)
 	}
 	req = req.WithContext(ctx)
 	req.Header = r.header
@@ -111,37 +108,39 @@ func (c *Client) callAPI(ctx context.Context, r *request) (data []byte, err erro
 	}
 	res, err := c.httpClient.Do(req)
 	if err != nil {
-		c.debug("failed to send http request: %s\n", err)
-		return []byte{}, err
+		return nil, fmt.Errorf("failed to send http request %w", err)
 	}
+
+	defer func() {
+		err2 := res.Body.Close()
+		if err == nil {
+			err = err2
+		}
+	}()
+
 	if c.useRateLimit {
 		c.rateLimiter.UpdateFromHeader(res)
 	}
 
+	// Read data
 	c.debug("http response: %s\n", res.Status)
 	data, err = io.ReadAll(res.Body)
 	if err != nil {
 		c.debug("failed to read http response body: %s\n", err)
-		return []byte{}, err
+		return nil, err
 	}
-	defer func() {
-		cerr := res.Body.Close()
-		// Only overwrite the returned error if the original error was nil and an
-		// error occurred while closing the body.
-		if err == nil && cerr != nil {
-			err = cerr
-		}
-	}()
 
+	// Handle error status codes >= 400
 	if res.StatusCode >= http.StatusBadRequest {
 		c.debug("received bad status code: %s\n", res.Status)
-		apiErr := new(APIError2)
-		e := json.Unmarshal(data, apiErr)
-		if e != nil {
-			c.debug("failed to unmarshal json: %s\n", e)
+
+		apiErr := &APIError2{
+			Status:   res.Status,
+			Response: data,
 		}
-		if !apiErr.IsValid() {
-			apiErr.Response = data
+		// Try to parse structure error
+		if json.Valid(data) {
+			_ = json.Unmarshal(data, apiErr)
 		}
 		return nil, apiErr
 	}

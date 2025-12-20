@@ -27,7 +27,7 @@ func newServices(c *Client) *Services {
 	s.Projects.Extras.Currencies = &CurrenciesService{client: c}
 	s.Projects.Extras.ExpertGuarantees = &ExpertGuaranteesService{client: c}
 
-	// init user services
+	// init users services
 	s.Users = &UsersService{client: c}
 	s.Users.Self = &SelfService{client: c}
 	s.Users.SelfJob = &SelfJobsService{client: c}
@@ -51,12 +51,8 @@ type ProjectsService struct {
 	Extras         *ProjectsExtrasService
 }
 
-type CollaborationsService struct {
-	client *Client
-}
-type ServicesService struct {
-	client *Client
-}
+type CollaborationsService struct{ client *Client }
+type ServicesService struct{ client *Client }
 
 type BidsService struct {
 	client       *Client
@@ -64,30 +60,20 @@ type BidsService struct {
 	Ratings      *BidRatingsService
 }
 
-type BidEditRequestService struct {
-	client *Client
-}
+type BidEditRequestService struct{ client *Client }
 
-type BidRatingsService struct {
-	client *Client
-}
+type BidRatingsService struct{ client *Client }
 
-type JobsService struct {
-	client *Client
-}
+type JobsService struct{ client *Client }
 
 type MilestonesService struct {
 	client   *Client
 	Requests *MilestoneRequestsService
 }
 
-type ReviewsService struct {
-	client *Client
-}
+type ReviewsService struct{ client *Client }
 
-type MilestoneRequestsService struct {
-	client *Client
-}
+type MilestoneRequestsService struct{ client *Client }
 
 type ProjectsExtrasService struct {
 	client           *Client
@@ -97,21 +83,13 @@ type ProjectsExtrasService struct {
 	Categories       *CategoriesService
 }
 
-type ExpertGuaranteesService struct {
-	client *Client
-}
+type ExpertGuaranteesService struct{ client *Client }
 
-type BudgetsService struct {
-	client *Client
-}
+type BudgetsService struct{ client *Client }
 
-type CurrenciesService struct {
-	client *Client
-}
+type CurrenciesService struct{ client *Client }
 
-type CategoriesService struct {
-	client *Client
-}
+type CategoriesService struct{ client *Client }
 
 type UsersService struct {
 	client   *Client
@@ -121,25 +99,15 @@ type UsersService struct {
 	Extras   *UsersExtrasService
 }
 
-type SelfService struct {
-	client *Client
-}
+type SelfService struct{ client *Client }
 
-type SelfJobsService struct {
-	client *Client
-}
+type SelfJobsService struct{ client *Client }
 
-type ProfilesService struct {
-	client *Client
-}
+type ProfilesService struct{ client *Client }
 
-type UsersExtrasService struct {
-	client *Client
-}
+type UsersExtrasService struct{ client *Client }
 
-type CommonService struct {
-	client *Client
-}
+type CommonService struct{ client *Client }
 
 // -------------------------------------------------------------------------------
 // Projects - Projects
@@ -165,17 +133,13 @@ func (s *ProjectsService) Action(projectID int64) *actionProject {
 // `/projects/0.1/projects`. The request is executed when Do is called.
 //
 // The service retrieve information about multiple projects. Will be ordered by descending submit date (newest-to-oldest).
-func (s *ProjectsService) List() *listProjects {
-	return &listProjects{client: s.client}
-}
+func (s *ProjectsService) List() *listProjects { return &listProjects{client: s.client} }
 
 // The returned service prepares a `GET` request to the Projects endpoint
 // `/projects/0.1/self`. The request is executed when Do is called.
 //
 // The service retrieve the logged in user's projects/contest they either created or participated in (by bidding or submitting an entry)
-func (s *ProjectsService) ListSelf() *listSelfProjects {
-	return &listSelfProjects{client: s.client}
-}
+func (s *ProjectsService) ListSelf() *listSelfProjects { return &listSelfProjects{client: s.client} }
 
 // The returned service prepares a `GET` request to the Projects endpoint
 // `/projects/0.1/projects/{project_id}`. The request is executed when Do is called.
