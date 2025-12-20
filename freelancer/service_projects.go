@@ -169,7 +169,7 @@ type listProjects struct {
 }
 
 // Return information about multiple projects. Will be ordered by descending submit data (newest-to-oldest)
-func (s *listProjects) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listProjects) Do(ctx context.Context) (*ListProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_PROJECTS),
@@ -370,17 +370,7 @@ func (s *listProjects) Do(ctx context.Context) (*BaseResponse, error) {
 		r.setParam("compact", *s.compact)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	return execute[*ListProjectsResponse](ctx, s.client, r)
 }
 
 // SetProjects sets the list of project IDs to filter.
@@ -1549,7 +1539,7 @@ type searchActiveProjects struct {
 }
 
 // Searches for active projects matching the desired query
-func (s *searchActiveProjects) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *searchActiveProjects) Do(ctx context.Context) (*ListProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_PROJECTS_ACTIVE),
@@ -1698,16 +1688,9 @@ func (s *searchActiveProjects) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.compact != nil {
 		r.addParam("compact", *s.compact)
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+
+	return execute[*ListProjectsResponse](ctx, s.client, r)
+
 }
 
 // SetUserResponsiveness sets whether to return the responsiveness score(s) of the selected user/users.

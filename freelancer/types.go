@@ -1,15 +1,8 @@
 package freelancer
 
 import (
-	"encoding/json"
 	"fmt"
 )
-
-type BaseResponse struct {
-	Status    string          `json:"status"`
-	RequestID string          `json:"request_id"`
-	Result    json.RawMessage `json:"result"`
-}
 
 type APIError struct {
 	Code     int64  `json:"code"`

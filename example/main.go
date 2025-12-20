@@ -55,14 +55,10 @@ func QuickExample() {
 	// filter by project type
 	s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectFixed})
 	// execute request
-	resp, err := s.Do(context.Background())
+	res, err := s.Do(context.Background())
 	if err != nil {
 		log.Printf("error: %v", err)
 	}
-	// use helper function for parsing response
-	var res freelancer.SearchActiveProjectsResponse
-	b, _ := json.Marshal(resp)
-	_ = json.Unmarshal(b, &res)
 	// print results
 	for index, p := range res.Result.Projects {
 		timeSubmitted := time.Unix(p.TimeSubmitted, 0).Format("2006-01-02 15:04:05")

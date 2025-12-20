@@ -147,3 +147,17 @@ func (c *Client) callAPI(ctx context.Context, r *request) (data []byte, err erro
 
 	return data, nil
 }
+
+func execute[T any](ctx context.Context, c *Client, r *request) (T, error) {
+	var result T
+	data, err := c.callAPI(ctx, r)
+	if err != nil {
+		return result, fmt.Errorf("api error (%s %s): %w", r.method, r.fullURL, err)
+	}
+
+	if err := json.Unmarshal(data, &result); err != nil {
+		return result, fmt.Errorf("decode error: %w", err)
+	}
+
+	return result, nil
+}
