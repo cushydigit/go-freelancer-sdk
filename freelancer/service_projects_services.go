@@ -2,7 +2,6 @@ package freelancer
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -13,24 +12,12 @@ type orderService struct {
 	serviceType ServiceType
 }
 
-func (s *orderService) Do(ctx context.Context, serviceID int, serviceType ServiceType) (*BaseResponse, error) {
+func (s *orderService) Do(ctx context.Context, serviceID int, serviceType ServiceType) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodPut,
 		endpoint: fmt.Sprintf("%s/%s/%d/order", string(PROJECTS_SERVICES), string(serviceType), serviceID),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type listServices struct {
@@ -78,7 +65,8 @@ type listServices struct {
 	compact                     *bool
 }
 
-func (s *listServices) Do(ctx context.Context) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *listServices) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_SERVICES),
@@ -207,19 +195,7 @@ func (s *listServices) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.compact != nil {
 		r.addParam("compact", *s.compact)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetServices sets the list of service IDs to filter the response.
@@ -481,7 +457,8 @@ type searchActiveServices struct {
 	compact      *bool
 }
 
-func (s *searchActiveServices) Do(ctx context.Context) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *searchActiveServices) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_SERVICES),
@@ -514,19 +491,7 @@ func (s *searchActiveServices) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.compact != nil {
 		r.addParam("compact", *s.compact)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetQuery sets an optional search query to filter active services by title or description.

@@ -17,7 +17,7 @@ type listReputations struct {
 	rehireRates  *bool
 }
 
-func (s *listReputations) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listReputations) Do(ctx context.Context) (*ListUsersReputationsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_REPUTATIONS),
@@ -41,16 +41,8 @@ func (s *listReputations) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.rehireRates != nil {
 		r.addParam("rehire_rates", *s.rehireRates)
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
+	return execute[*ListUsersReputationsResponse](ctx, s.client, r)
 
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-	return resp, nil
 }
 
 // SetUsers sets the filter user IDs for the reputation list service.
@@ -101,7 +93,8 @@ type listEnterprises struct {
 	offset        *int
 }
 
-func (s *listEnterprises) Do(ctx context.Context) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *listEnterprises) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_ENTERPRISES),
@@ -138,18 +131,7 @@ func (s *listEnterprises) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.offset != nil {
 		r.addParam("offset", *s.offset)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, err
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetEnterprises sets the filter to return enterprises with the specified enterprise IDs.
@@ -207,7 +189,7 @@ type listPortfolios struct {
 	offset *int
 }
 
-func (s *listPortfolios) DO(ctx context.Context) (*BaseResponse, error) {
+func (s *listPortfolios) DO(ctx context.Context) (*ListUsersPortfoliosResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_PORTFOLIOS),
@@ -224,19 +206,7 @@ func (s *listPortfolios) DO(ctx context.Context) (*BaseResponse, error) {
 	if s.offset != nil {
 		r.addParam("offset", s.offset)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*ListUsersPortfoliosResponse](ctx, s.client, r)
 }
 
 // Returns portfolios of specified user ids
@@ -271,7 +241,7 @@ type CreateViolationBody struct {
 	Url              string                    `json:"url,omitempty"`
 }
 
-func (s *createViolation) Do(ctx context.Context, b CreateViolationBody) (*BaseResponse, error) {
+func (s *createViolation) Do(ctx context.Context, b CreateViolationBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -282,17 +252,7 @@ func (s *createViolation) Do(ctx context.Context, b CreateViolationBody) (*BaseR
 		endpoint: string(USERS_VIOLATION),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type listPools struct {
@@ -306,7 +266,8 @@ type listPools struct {
 	offset          *int
 }
 
-func (s *listPools) Do(ctx context.Context) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *listPools) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_POOLS),
@@ -333,16 +294,7 @@ func (s *listPools) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.offset != nil {
 		r.addParam("offset", *s.offset)
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, err
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetPools sets the list of pool IDs to filter results by.

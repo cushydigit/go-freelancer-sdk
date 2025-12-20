@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// Returns bids for a single project.
+// TODO: refine with typed response
 type listBids struct {
 	client                      *Client
 	bids                        []int
@@ -58,7 +58,7 @@ type listBids struct {
 	compact                     *bool
 }
 
-func (s *listBids) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listBids) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_BIDS),
@@ -200,18 +200,7 @@ func (s *listBids) Do(ctx context.Context) (*BaseResponse, error) {
 		r.setParam("compact", *s.compact)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetBids filters results by specific bid IDs.
@@ -484,6 +473,7 @@ func (s *listBids) SetCompact(val bool) *listBids {
 	return s
 }
 
+// TODO: refine with typed response
 type getBidByID struct {
 	client                      *Client
 	bidID                       int
@@ -525,7 +515,7 @@ type getBidByID struct {
 	quotations                  *bool
 }
 
-func (s *getBidByID) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getBidByID) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_BIDS), s.bidID),
@@ -640,18 +630,7 @@ func (s *getBidByID) Do(ctx context.Context) (*BaseResponse, error) {
 		r.setParam("quotations", *s.quotations)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetReputation enables or disables returning reputation information relevant to the bid.
@@ -919,7 +898,7 @@ type CreateBidBody struct {
 	ProfileID           int    `json:"profile_id"`
 }
 
-func (s *createBid) Do(ctx context.Context, b CreateBidBody) (*BaseResponse, error) {
+func (s *createBid) Do(ctx context.Context, b CreateBidBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -929,18 +908,7 @@ func (s *createBid) Do(ctx context.Context, b CreateBidBody) (*BaseResponse, err
 		endpoint: string(PROJECTS_BIDS),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 
 }
 
@@ -953,7 +921,7 @@ type ActionBidBody struct {
 	Action BidAction `json:"action"`
 }
 
-func (s *actionBid) Do(ctx context.Context, b ActionBidBody) (*BaseResponse, error) {
+func (s *actionBid) Do(ctx context.Context, b ActionBidBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -963,19 +931,7 @@ func (s *actionBid) Do(ctx context.Context, b ActionBidBody) (*BaseResponse, err
 		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_BIDS), s.bidID),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type updateBid struct {
@@ -989,7 +945,7 @@ type UpdateBidBody struct {
 	Description         string `json:"description"`
 }
 
-func (s *updateBid) Do(ctx context.Context, b UpdateBidBody) (*BaseResponse, error) {
+func (s *updateBid) Do(ctx context.Context, b UpdateBidBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -999,21 +955,10 @@ func (s *updateBid) Do(ctx context.Context, b UpdateBidBody) (*BaseResponse, err
 		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_BIDS), s.bidID),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
+// TODO: refine with typed response
 type getTimeTracking struct {
 	client                *Client
 	bidID                 int
@@ -1023,7 +968,7 @@ type getTimeTracking struct {
 	invoiced              *bool
 }
 
-func (s *getTimeTracking) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getTimeTracking) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%d/time_tracking_sessions", string(PROJECTS_BIDS), s.bidID),
@@ -1041,19 +986,7 @@ func (s *getTimeTracking) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.invoiced != nil {
 		r.addParam("invoiced", *s.invoiced)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetFromTime sets the starting Unix timestamp to filter time tracking sessions for a bid.
@@ -1096,7 +1029,7 @@ type CreateTimeTrackingBidBody struct {
 	Note      string `json:"note"`
 }
 
-func (s *createTimeTracking) Do(ctx context.Context, b CreateTimeTrackingBidBody) (*BaseResponse, error) {
+func (s *createTimeTracking) Do(ctx context.Context, b CreateTimeTrackingBidBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -1107,26 +1040,16 @@ func (s *createTimeTracking) Do(ctx context.Context, b CreateTimeTrackingBidBody
 		body:     bytes.NewBuffer(m),
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
+// TODO: refine with typed response
 type getBidRatingsByListOfBids struct {
 	client *Client
 	bids   []int
 }
 
-func (s *getBidRatingsByListOfBids) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getBidRatingsByListOfBids) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_BID_RATINGS),
@@ -1135,19 +1058,7 @@ func (s *getBidRatingsByListOfBids) Do(ctx context.Context) (*BaseResponse, erro
 	for _, val := range s.bids {
 		r.addParam("bids[]", val)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetBids filters results by specific bid IDs.
@@ -1156,29 +1067,18 @@ func (s *getBidRatingsByListOfBids) SetBids(vals []int) *getBidRatingsByListOfBi
 	return s
 }
 
+// TODO: refine with typed response
 type getBidRatings struct {
 	client *Client
 	bidID  int
 }
 
-func (s *getBidRatings) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getBidRatings) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%d/bid_ratings", string(PROJECTS_BIDS), s.bidID),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type createBidRating struct {
@@ -1192,7 +1092,7 @@ type CreateBidRatingsBody struct {
 	Comment string `json:"comment"`
 }
 
-func (s *createBidRating) Do(ctx context.Context, b CreateBidRatingsBody) (*BaseResponse, error) {
+func (s *createBidRating) Do(ctx context.Context, b CreateBidRatingsBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -1202,19 +1102,7 @@ func (s *createBidRating) Do(ctx context.Context, b CreateBidRatingsBody) (*Base
 		endpoint: fmt.Sprintf("%s/%d/bid_ratings", string(PROJECTS_BIDS), s.bidID),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type updateBidRating struct {
@@ -1228,7 +1116,7 @@ type UpdateBidRatingBody struct {
 	Comment string `json:"comment"`
 }
 
-func (s *updateBidRating) Do(ctx context.Context, b UpdateBidRatingBody) (*BaseResponse, error) {
+func (s *updateBidRating) Do(ctx context.Context, b UpdateBidRatingBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -1238,21 +1126,10 @@ func (s *updateBidRating) Do(ctx context.Context, b UpdateBidRatingBody) (*BaseR
 		endpoint: fmt.Sprintf("%s/%d/bid_ratings/%d", string(PROJECTS_BIDS), s.bidID, s.bidRatingID),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
+// TODO: refine with typed response
 type getBidEditRequest struct {
 	client            *Client
 	bidID             int
@@ -1260,7 +1137,7 @@ type getBidEditRequest struct {
 	bidEditRequestIDs []int
 }
 
-func (s *getBidEditRequest) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getBidEditRequest) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%d/bid_edit_requests", string(PROJECTS_BIDS), s.bidID),
@@ -1272,19 +1149,7 @@ func (s *getBidEditRequest) Do(ctx context.Context) (*BaseResponse, error) {
 	for _, val := range s.bidEditRequestIDs {
 		r.addParam("bid_edit_request_ids[]", val)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetStatuses sets the filter for bid edit request statuses.
@@ -1314,7 +1179,7 @@ type CreateBidEditRequestsBody struct {
 	Comment   int `json:"comment"`
 }
 
-func (s *createBidEditRequest) Do(ctx context.Context, b CreateBidEditRequestsBody) (*BaseResponse, error) {
+func (s *createBidEditRequest) Do(ctx context.Context, b CreateBidEditRequestsBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -1324,19 +1189,7 @@ func (s *createBidEditRequest) Do(ctx context.Context, b CreateBidEditRequestsBo
 		endpoint: string(PROJECTS_BIDS_EDIT_REQUESTS),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type actionBidEditRequest struct {
@@ -1349,7 +1202,7 @@ type BidEditRequestsActionBody struct {
 	Action BidEditRequestAction `json:"action"`
 }
 
-func (s *actionBidEditRequest) Do(ctx context.Context, b BidEditRequestsActionBody) (*BaseResponse, error) {
+func (s *actionBidEditRequest) Do(ctx context.Context, b BidEditRequestsActionBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -1359,17 +1212,5 @@ func (s *actionBidEditRequest) Do(ctx context.Context, b BidEditRequestsActionBo
 		endpoint: fmt.Sprintf("%s/%d/bid_edit_requests/%d", string(PROJECTS_BIDS), s.bidID, s.bidEditRequestID),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }

@@ -2,10 +2,10 @@ package freelancer
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 )
 
+// TODO: refine with typed response
 type listJobs struct {
 	client                    *Client
 	jobs                      []int
@@ -19,7 +19,7 @@ type listJobs struct {
 	lang                      *string
 }
 
-func (s *listJobs) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listJobs) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_JOBS),
@@ -52,19 +52,7 @@ func (s *listJobs) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.lang != nil {
 		r.addParam("lang", *s.lang)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetJobs sets the IDs of the jobs to filter the results.
@@ -125,6 +113,7 @@ func (s *listJobs) SetLang(val string) *listJobs {
 	return s
 }
 
+// TODO: refine with typed response
 type searchJobs struct {
 	client                    *Client
 	jobs                      []int
@@ -139,7 +128,7 @@ type searchJobs struct {
 	lang                      *string
 }
 
-func (s *searchJobs) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *searchJobs) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_JOBS),
@@ -175,19 +164,7 @@ func (s *searchJobs) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.lang != nil {
 		r.addParam("lang", *s.lang)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetJobs sets the list of job IDs to filter the search results.
@@ -256,6 +233,7 @@ func (s *searchJobs) SetLang(val string) *searchJobs {
 	return s
 }
 
+// TODO: refine with typed response
 type listJobBundles struct {
 	client     *Client
 	jobBundles []int
@@ -263,7 +241,7 @@ type listJobBundles struct {
 	lang       *string
 }
 
-func (s *listJobBundles) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listJobBundles) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_JOB_BUNDLES),
@@ -278,19 +256,7 @@ func (s *listJobBundles) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.lang != nil {
 		r.addParam("lang", *s.lang)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetJobBundles sets a list of job bundle IDs to filter the results.
@@ -319,6 +285,7 @@ func (s *listJobBundles) SetLang(val string) *listJobBundles {
 	return s
 }
 
+// TODO: refine with typed response
 type listJobBundleCategories struct {
 	client     *Client
 	jobBundles []int
@@ -326,7 +293,7 @@ type listJobBundleCategories struct {
 	lang       *string
 }
 
-func (s *listJobBundleCategories) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listJobBundleCategories) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_JOB_BUNDLE_CATEGORIES),
@@ -341,19 +308,7 @@ func (s *listJobBundleCategories) Do(ctx context.Context) (*BaseResponse, error)
 	if s.lang != nil {
 		r.addParam("lang", *s.lang)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetJobBundles sets a list of job bundle IDs to filter the results.

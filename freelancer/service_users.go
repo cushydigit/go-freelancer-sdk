@@ -2,7 +2,6 @@ package freelancer
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -48,7 +47,7 @@ type listUsers struct {
 	staffDetails                  *bool
 }
 
-func (s *listUsers) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listUsers) Do(ctx context.Context) (*ListUsersResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_USERS),
@@ -161,18 +160,7 @@ func (s *listUsers) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.staffDetails != nil {
 		r.setParam("staff_details", *s.staffDetails)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	res := &BaseResponse{}
-	if err := json.Unmarshal(data, res); err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	return execute[*ListUsersResponse](ctx, s.client, r)
 }
 
 // SetUsers sets the list of user IDs to search.
@@ -396,23 +384,12 @@ type getUserByID struct {
 	userID int64
 }
 
-func (s *getUserByID) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getUserByID) Do(ctx context.Context) (*GetUserResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), strconv.FormatInt(s.userID, 10)),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	res := &BaseResponse{}
-	if err := json.Unmarshal(data, res); err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	return execute[*GetUserResponse](ctx, s.client, r)
 }
 
 type searchFreelancers struct {
@@ -473,7 +450,7 @@ type searchFreelancers struct {
 	compact                       *bool
 }
 
-func (s *searchFreelancers) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *searchFreelancers) Do(ctx context.Context) (*SearchFreelancersResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_FREELANCERS),
@@ -629,15 +606,7 @@ func (s *searchFreelancers) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.compact != nil {
 		r.setParam("compact", *s.compact)
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	if err := json.Unmarshal(data, res); err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*SearchFreelancersResponse](ctx, s.client, r)
 }
 
 // query	string (optional) Example: janedoe design logo

@@ -1,7 +1,5 @@
 package freelancer
 
-import "encoding/json"
-
 type Country struct {
 	Name         string  `json:"name,omitempty"`          // Optional
 	Code         string  `json:"code,omitempty"`          // Optional
@@ -235,71 +233,6 @@ type Timezone struct {
 	Timezone string  `json:"timezone,omitempty"` // Optional
 	Offset   float32 `json:"offset,omitempty"`
 }
-
-type GetUserResponse struct {
-	Status string `json:"status"`
-	Result User   `json:"result"`
-}
-
-// Gets the reputations for a list of users
-
-type ListUsersReputationsResponse struct {
-	Status    string                `json:"status"`
-	RequestID string                `json:"request_id"`
-	Result    map[string]Reputation `json:"result"`
-}
-
-type SearchFreelancersResponse struct {
-	Status    string           `json:"status"`
-	RequestID string           `json:"request_id"`
-	Result    FreelancerResult `json:"result"`
-}
-
-type FreelancerResult struct {
-	Users      []User `json:"users"`
-	TotalCount int    `json:"total_count"`
-}
-
-type GetSelfInfoResponse struct {
-	Status string `json:"status"`
-	Result User   `json:"result"`
-}
-
-type ListBudgetsResponse struct {
-	Status    string        `json:"status"`
-	RequestID string        `json:"request_id,omitempty"` // Optional
-	Result    BudgetsResult `json:"result"`
-}
-
-type BudgetsResult struct {
-	Budgets []Budget `json:"budgets"`
-}
-
-type ListCurrenciesResponse struct {
-	Status    string           `json:"status"`
-	RequestID string           `json:"request_id,omitempty"` // Optional
-	Result    CurrenciesResult `json:"result"`
-}
-
-type CurrenciesResult struct {
-	Currencies []Currency `json:"currencies"`
-}
-type ListUsersPortfoliosResponse struct {
-	Status    string          `json:"status"`
-	RequestID string          `json:"request_id"`
-	Result    json.RawMessage `json:"result"`
-}
-
-type ListSelfLoginDevicesResponse struct {
-	Status    string        `json:"status"`
-	RequestID string        `json:"request_id"`
-	Result    DevicesResult `json:"result"`
-}
-
-type DevicesResult struct {
-	Devices []Device `json:"devices"`
-}
-
 type Device struct {
 	UserAgent string `json:"user_agent"`
 	Platform  string `json:"platform"`

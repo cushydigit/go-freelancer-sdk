@@ -19,7 +19,7 @@ type CreateProfileBody struct {
 	SkillIDs    []int  `json:"skill_ids,omitempty"`
 }
 
-func (s *createProfile) Do(ctx context.Context, b CreateProfileBody) (*BaseResponse, error) {
+func (s *createProfile) Do(ctx context.Context, b CreateProfileBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -29,16 +29,7 @@ func (s *createProfile) Do(ctx context.Context, b CreateProfileBody) (*BaseRespo
 		endpoint: string(USERS_PROFILES),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	resp := BaseResponse{}
-	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type getProfile struct {
@@ -53,20 +44,13 @@ type getProfile struct {
 // 	SeoUrl string `json:"seo_url"`
 // }
 
-func (s *getProfile) Do(ctx context.Context) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *getProfile) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_PROFILES),
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	resp := BaseResponse{}
-	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type updateProfile struct {
@@ -82,7 +66,8 @@ type UpdateProfileBody struct {
 	SkillIDs    []int  `json:"skill_ids,omitempty"`
 }
 
-func (s *updateProfile) Do(ctx context.Context, b UpdateProfileBody) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *updateProfile) Do(ctx context.Context, b UpdateProfileBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -92,13 +77,5 @@ func (s *updateProfile) Do(ctx context.Context, b UpdateProfileBody) (*BaseRespo
 		endpoint: string(USERS_PROFILES),
 		body:     bytes.NewBuffer(m),
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	resp := BaseResponse{}
-	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }

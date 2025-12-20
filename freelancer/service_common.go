@@ -2,7 +2,6 @@ package freelancer
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 )
 
@@ -11,7 +10,7 @@ type listCountries struct {
 	extraDetails *bool
 }
 
-func (s *listCountries) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listCountries) Do(ctx context.Context) (*ListCountriesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(COMMON_COUNTRIES),
@@ -19,16 +18,7 @@ func (s *listCountries) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.extraDetails != nil {
 		r.setParam("extra_details", *s.extraDetails)
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*ListCountriesResponse](ctx, s.client, r)
 }
 
 // SetExtraDetails enables or disables the `extra_details` query parameter.
@@ -46,27 +36,18 @@ type listTimezones struct {
 	timezoneNames []string
 }
 
-func (c *listTimezones) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listTimezones) Do(ctx context.Context) (*ListTimezonesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(COMMON_TIMEZONES),
 	}
-	if len(c.timezones) > 0 {
-		r.setParam("timezones", c.timezones)
+	if len(s.timezones) > 0 {
+		r.setParam("timezones", s.timezones)
 	}
-	if len(c.timezoneNames) > 0 {
-		r.setParam("timezone_names", c.timezoneNames)
+	if len(s.timezoneNames) > 0 {
+		r.setParam("timezone_names", s.timezoneNames)
 	}
-	data, err := c.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*ListTimezonesResponse](ctx, s.client, r)
 }
 
 // SetTimezones sets an optional filter to return only timezones

@@ -67,7 +67,8 @@ type listReviews struct {
 	compact                     *bool
 }
 
-func (s *listReviews) Do(ctx context.Context) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *listReviews) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_REVIEWS),
@@ -235,19 +236,7 @@ func (s *listReviews) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.compact != nil {
 		r.setParam("compact", *s.compact)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetProjects sets the list of project IDs to filter reviews on.
@@ -627,7 +616,7 @@ type CreateReviewBody struct {
 	Role       RoleType   `json:"role"`
 }
 
-func (s *createReview) Do(ctx context.Context, b CreateReviewBody) (*BaseResponse, error) {
+func (s *createReview) Do(ctx context.Context, b CreateReviewBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -637,19 +626,7 @@ func (s *createReview) Do(ctx context.Context, b CreateReviewBody) (*BaseRespons
 		endpoint: string(PROJECTS_REVIEWS),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type actionReview struct {
@@ -662,7 +639,7 @@ type ReviewActionBody struct {
 	ReviewType ReviewType   `json:"review_type"`
 }
 
-func (s *actionReview) Do(ctx context.Context, b ReviewActionBody) (*BaseResponse, error) {
+func (s *actionReview) Do(ctx context.Context, b ReviewActionBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -672,17 +649,5 @@ func (s *actionReview) Do(ctx context.Context, b ReviewActionBody) (*BaseRespons
 		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_REVIEWS), strconv.FormatInt(s.reviewID, 10)),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }

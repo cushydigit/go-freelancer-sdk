@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// TODO: refine with typed response
 type listMilestones struct {
 	client                      *Client
 	projects                    []int64
@@ -48,7 +49,7 @@ type listMilestones struct {
 	equipmentGroupDetails       *bool
 }
 
-func (s *listMilestones) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listMilestones) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_MILESTONES),
@@ -162,19 +163,7 @@ func (s *listMilestones) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.equipmentGroupDetails != nil {
 		r.setParam("equipment_group_details", *s.equipmentGroupDetails)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetBids sets the IDs of the bids to filter milestones by.
@@ -428,7 +417,8 @@ type getMilestoneByID struct {
 	equipmentGroupDetails       *bool
 }
 
-func (s *getMilestoneByID) Do(ctx context.Context) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *getMilestoneByID) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_MILESTONES), s.milestoneID),
@@ -515,19 +505,7 @@ func (s *getMilestoneByID) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.equipmentGroupDetails != nil {
 		r.setParam("equipment_group_details", *s.equipmentGroupDetails)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetUserAvatar enables returning the avatar of the selected user(s) in the milestone response.
@@ -704,7 +682,7 @@ type CreateMilestoneBody struct {
 	Description string                `json:"description"`
 }
 
-func (s *createMilestone) Do(ctx context.Context, b CreateMilestoneBody) (*BaseResponse, error) {
+func (s *createMilestone) Do(ctx context.Context, b CreateMilestoneBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -714,19 +692,7 @@ func (s *createMilestone) Do(ctx context.Context, b CreateMilestoneBody) (*BaseR
 		endpoint: string(PROJECTS_MILESTONES),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type actionMilestone struct {
@@ -742,7 +708,7 @@ type ActionMilestoneBody struct {
 	OtherReason string                `json:"other_reason"`
 }
 
-func (s *actionMilestone) Do(ctx context.Context, b ActionMilestoneBody) (*BaseResponse, error) {
+func (s *actionMilestone) Do(ctx context.Context, b ActionMilestoneBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -752,19 +718,7 @@ func (s *actionMilestone) Do(ctx context.Context, b ActionMilestoneBody) (*BaseR
 		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_MILESTONES), s.milestoneID),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type listMilestoneRequests struct {
@@ -812,7 +766,8 @@ type listMilestoneRequests struct {
 	offset                      *int
 }
 
-func (s *listMilestoneRequests) Do(ctx context.Context) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *listMilestoneRequests) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_MILESTONE_REQUESTS),
@@ -941,19 +896,7 @@ func (s *listMilestoneRequests) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.offset != nil {
 		r.addParam("offset", *s.offset)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetMilestoneRequests sets the milestone request IDs to filter the results.
@@ -1234,7 +1177,8 @@ type getMilestoneRequestByID struct {
 	equipmentGroupDetails       *bool
 }
 
-func (s *getMilestoneRequestByID) Do(ctx context.Context) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *getMilestoneRequestByID) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_MILESTONE_REQUESTS), s.milestoneRequestID),
@@ -1321,19 +1265,7 @@ func (s *getMilestoneRequestByID) Do(ctx context.Context) (*BaseResponse, error)
 	if s.equipmentGroupDetails != nil {
 		r.setParam("equipment_group_details", *s.equipmentGroupDetails)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetUserAvatar sets whether the response should include the avatar of the selected user.
@@ -1510,7 +1442,7 @@ type CreateMilestoneRequestBody struct {
 	Description string `json:"description"`
 }
 
-func (s *createMilestoneRequest) Do(ctx context.Context, b CreateMilestoneBody) (*BaseResponse, error) {
+func (s *createMilestoneRequest) Do(ctx context.Context, b CreateMilestoneBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -1520,19 +1452,7 @@ func (s *createMilestoneRequest) Do(ctx context.Context, b CreateMilestoneBody) 
 		endpoint: string(PROJECTS_MILESTONE_REQUESTS),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type actionMilestoneRequest struct {
@@ -1544,7 +1464,7 @@ type ActionMilestoneRequestBody struct {
 	Action MilestoneActionRequest `json:"action"`
 }
 
-func (s *actionMilestoneRequest) Do(ctx context.Context, b ActionMilestoneRequestBody) (*BaseResponse, error) {
+func (s *actionMilestoneRequest) Do(ctx context.Context, b ActionMilestoneRequestBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -1554,17 +1474,5 @@ func (s *actionMilestoneRequest) Do(ctx context.Context, b ActionMilestoneReques
 		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_MILESTONES), s.milestoneRequestID),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }

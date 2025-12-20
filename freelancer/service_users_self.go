@@ -2,7 +2,6 @@ package freelancer
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 )
 
@@ -47,7 +46,7 @@ type getInfo struct {
 	compact                       *bool
 }
 
-func (s *getInfo) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getInfo) Do(ctx context.Context) (*GetSelfInfoResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_SELF),
@@ -155,17 +154,7 @@ func (s *getInfo) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.staffDetails != nil {
 		r.setParam("staff_details", *s.staffDetails)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	if err := json.Unmarshal(data, res); err != nil {
-		return nil, err
-	}
-	return res, nil
-
+	return execute[*GetSelfInfoResponse](ctx, s.client, r)
 }
 
 // SetAvatar sets whether to return the avatar of the selected user/users.
@@ -394,19 +383,10 @@ type listDevices struct {
 	client *Client
 }
 
-func (s *listDevices) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listDevices) Do(ctx context.Context) (*ListSelfLoginDevicesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(USERS_SELF_DEVICES),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	if err := json.Unmarshal(data, res); err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*ListSelfLoginDevicesResponse](ctx, s.client, r)
 }

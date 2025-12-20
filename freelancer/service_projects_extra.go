@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// TODO: refine with typed response
 type listExpertGuarantees struct {
 	client           *Client
 	expertGuarantees []int64
@@ -23,7 +24,7 @@ type listExpertGuarantees struct {
 	limit            *int
 }
 
-func (s *listExpertGuarantees) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listExpertGuarantees) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_EXPERT_GUARANTEES),
@@ -59,19 +60,7 @@ func (s *listExpertGuarantees) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.offset != nil {
 		r.addParam("offset", *s.offset)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetExpertGuarantees sets a list of expert guarantee IDs to filter the results.
@@ -145,7 +134,7 @@ type ExpertGuaranteesActionRequestBody struct {
 	Action ExpertGuaranteesAction `json:"action"`
 }
 
-func (s *actionExpertGuarantee) Do(ctx context.Context, b ExpertGuaranteesActionRequestBody) (*BaseResponse, error) {
+func (s *actionExpertGuarantee) Do(ctx context.Context, b ExpertGuaranteesActionRequestBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -155,19 +144,7 @@ func (s *actionExpertGuarantee) Do(ctx context.Context, b ExpertGuaranteesAction
 		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_EXPERT_GUARANTEES), strconv.FormatInt(s.expertGuaranteesID, 10)),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type listCurrencies struct {
@@ -177,7 +154,7 @@ type listCurrencies struct {
 	includeExternalCurrencies *bool
 }
 
-func (s *listCurrencies) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listCurrencies) Do(ctx context.Context) (*ListCurrenciesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: "/projects/0.1/currencies",
@@ -191,16 +168,7 @@ func (s *listCurrencies) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.includeExternalCurrencies != nil {
 		r.addParam("include_external_currencies", s.includeExternalCurrencies)
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*ListCurrenciesResponse](ctx, s.client, r)
 }
 
 // SetCurrencyCodes sets the filter to return only currencies with the specified currency codes.
@@ -233,7 +201,7 @@ type listCategories struct {
 	seoDetails                bool
 }
 
-func (s *listCategories) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listCategories) Do(ctx context.Context) (*ListCategoriesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_CATEGORIES),
@@ -253,16 +221,7 @@ func (s *listCategories) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.seoDetails {
 		r.addParam("seo_details", s.seoDetails)
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*ListCategoriesResponse](ctx, s.client, r)
 }
 
 // SetCategories sets the category IDs to filter the list of categories.
@@ -311,7 +270,7 @@ type listBudgets struct {
 	currencyDetails bool
 }
 
-func (s *listBudgets) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listBudgets) Do(ctx context.Context) (*ListBudgetsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: "/projects/0.1/budgets",
@@ -331,16 +290,7 @@ func (s *listBudgets) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.currencyDetails {
 		r.addParam("currency_details", s.currencyDetails)
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*ListBudgetsResponse](ctx, s.client, r)
 }
 
 // SetCurrencyCodes sets a list of currency codes to filter the budgets.

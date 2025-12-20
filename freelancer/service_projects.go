@@ -38,7 +38,7 @@ type CreateProjectBody struct {
 	} `json:"hireme_initial_bid,omitempty"`
 }
 
-func (s *createProject) Do(ctx context.Context, b CreateProjectBody) (*BaseResponse, error) {
+func (s *createProject) Do(ctx context.Context, b CreateProjectBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -50,16 +50,7 @@ func (s *createProject) Do(ctx context.Context, b CreateProjectBody) (*BaseRespo
 		body:     bytes.NewBuffer(m),
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-	return resp, err
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type actionProject struct {
@@ -75,7 +66,7 @@ type ProjectActionBody struct {
 	Action    ProjectAction `json:"action"`
 }
 
-func (s *actionProject) Do(ctx context.Context, b ProjectActionBody) (*BaseResponse, error) {
+func (s *actionProject) Do(ctx context.Context, b ProjectActionBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -87,16 +78,7 @@ func (s *actionProject) Do(ctx context.Context, b ProjectActionBody) (*BaseRespo
 		body:     bytes.NewBuffer(m),
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-	return resp, err
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type listProjects struct {
@@ -776,7 +758,7 @@ type listSelfProjects struct {
 	limit       *int
 }
 
-func (s *listSelfProjects) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listSelfProjects) Do(ctx context.Context) (*ListProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_SELF),
@@ -809,16 +791,7 @@ func (s *listSelfProjects) Do(ctx context.Context) (*BaseResponse, error) {
 		r.addParam("limit", *s.limit)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
+	return execute[*ListProjectsResponse](ctx, s.client, r)
 
 }
 
@@ -946,9 +919,7 @@ type getProjectByID struct {
 	compact                      *bool
 }
 
-// Get information about a specific project.
-// The full range of users projection options can be specified as part of this request by first setting the user_details parameter to true.
-func (s *getProjectByID) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getProjectByID) Do(ctx context.Context) (*GetProjectResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
@@ -1119,17 +1090,8 @@ func (s *getProjectByID) Do(ctx context.Context) (*BaseResponse, error) {
 		r.setParam("compact", *s.compact)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
+	return execute[*GetProjectResponse](ctx, s.client, r)
 
-	return res, nil
 }
 
 // SetFullDescription sets whether to return the full project description.
@@ -2162,7 +2124,7 @@ type searchAllProjects struct {
 	compact                     *bool
 }
 
-func (s *searchAllProjects) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *searchAllProjects) Do(ctx context.Context) (*ListProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_PROJECTS_ACTIVE),
@@ -2320,16 +2282,9 @@ func (s *searchAllProjects) Do(ctx context.Context) (*BaseResponse, error) {
 	if s.compact != nil {
 		r.addParam("compact", *s.compact)
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+
+	return execute[*ListProjectsResponse](ctx, s.client, r)
+
 }
 
 // SetUserResponsiveness sets whether to return the responsiveness score(s) of the selected user/users.
@@ -2755,7 +2710,7 @@ type InviteFreelancersRequestBody struct {
 	FreelancerID int64 `json:"freelancer_id"`
 }
 
-func (s *inviteFreelancer) Do(ctx context.Context, b InviteFreelancersRequestBody) (*BaseResponse, error) {
+func (s *inviteFreelancer) Do(ctx context.Context, b InviteFreelancersRequestBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -2766,18 +2721,10 @@ func (s *inviteFreelancer) Do(ctx context.Context, b InviteFreelancersRequestBod
 		body:     bytes.NewBuffer(m),
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
+// TODO: Refine the typed response with
 type listUpgradeFees struct {
 	client             *Client
 	currencies         []int
@@ -2786,7 +2733,7 @@ type listUpgradeFees struct {
 	taxIncluded        *bool
 }
 
-func (s *listUpgradeFees) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listUpgradeFees) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_PROJECTS_FEES),
@@ -2805,17 +2752,7 @@ func (s *listUpgradeFees) Do(ctx context.Context) (*BaseResponse, error) {
 		r.addParam("tax_included", *s.taxIncluded)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetCurrencies sets the list of currency IDs to filter the upgrade fees for.
@@ -2848,13 +2785,14 @@ func (s *listUpgradeFees) SetTaxIncluded(val bool) *listUpgradeFees {
 	return s
 }
 
+// TODO: Refine the typed response with
 type listBidUpgradeFees struct {
 	client      *Client
 	currencies  []int
 	taxIncluded *bool
 }
 
-func (s *listBidUpgradeFees) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listBidUpgradeFees) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_BIDS_FEES),
@@ -2867,17 +2805,7 @@ func (s *listBidUpgradeFees) Do(ctx context.Context) (*BaseResponse, error) {
 		r.addParam("tax_included", *s.taxIncluded)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetCurrencies sets the list of currency IDs for which bid upgrade fees
@@ -2894,6 +2822,7 @@ func (s *listBidUpgradeFees) SetTaxIncluded(val bool) *listBidUpgradeFees {
 	return s
 }
 
+// TODO: Refine the typed response with
 type listProjectBids struct {
 	client                      *Client
 	projectID                   int64
@@ -2937,7 +2866,7 @@ type listProjectBids struct {
 	quotations                  *bool
 }
 
-func (s *listProjectBids) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listProjectBids) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s/bids", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
@@ -3058,18 +2987,7 @@ func (s *listProjectBids) Do(ctx context.Context) (*BaseResponse, error) {
 		r.setParam("quotations", *s.quotations)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetIsShortlisted sets whether to restrict results to shortlisted bids (project owner only).
@@ -3300,27 +3218,21 @@ func (s *listProjectBids) SetQuotations(val bool) *listProjectBids {
 	return s
 }
 
+// TODO: refine with typed response
 type getProjectBidInfo struct {
 	client    *Client
 	projectID int64
 }
 
-func (s *getProjectBidInfo) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getProjectBidInfo) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s/bidinfo", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
 	}
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
+// TODO: refine with typed response
 type listProjectMilestones struct {
 	client                      *Client
 	projectID                   int64
@@ -3354,7 +3266,7 @@ type listProjectMilestones struct {
 	equipmentGroupDetails       *bool
 }
 
-func (s *listProjectMilestones) Do(ctx context.Context, projectID int64) (*BaseResponse, error) {
+func (s *listProjectMilestones) Do(ctx context.Context, projectID int64) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s/milestones", string(PROJECTS_PROJECTS), strconv.FormatInt(projectID, 10)),
@@ -3445,18 +3357,7 @@ func (s *listProjectMilestones) Do(ctx context.Context, projectID int64) (*BaseR
 		r.setParam("equipment_group_details", *s.equipmentGroupDetails)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetStatuses filters the returned project milestones by their status.
@@ -3654,6 +3555,7 @@ func (s *listProjectMilestones) SetEquipmentGroupDetails(val bool) *listProjectM
 	return s
 }
 
+// TODO: refine with typed response
 type listProjectMilestoneRequests struct {
 	client                      *Client
 	projectID                   int64
@@ -3687,7 +3589,7 @@ type listProjectMilestoneRequests struct {
 	equipmentGroupDetails       *bool
 }
 
-func (s *listProjectMilestoneRequests) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listProjectMilestoneRequests) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s/milestone_requests", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
@@ -3777,19 +3679,7 @@ func (s *listProjectMilestoneRequests) Do(ctx context.Context) (*BaseResponse, e
 	if s.equipmentGroupDetails != nil {
 		r.setParam("equipment_group_details", *s.equipmentGroupDetails)
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 // SetStatuses filters the milestone requests by their status.
@@ -3990,6 +3880,7 @@ func (s *listProjectMilestoneRequests) SetEquipmentGroupDetails(val bool) *listP
 	return s
 }
 
+// TODO: refine with typed response
 type getHourlyContractInfo struct {
 	client            *Client
 	projectIDs        []int64
@@ -4001,7 +3892,7 @@ type getHourlyContractInfo struct {
 	invoiceDetails *bool
 }
 
-func (s *getHourlyContractInfo) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getHourlyContractInfo) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_HOURLY_CONTRACTS),
@@ -4026,17 +3917,8 @@ func (s *getHourlyContractInfo) Do(ctx context.Context) (*BaseResponse, error) {
 		r.addParam("invoice_details", *s.invoiceDetails)
 	}
 
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
+	return execute[*RawResponse](ctx, s.client, r)
 
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
 }
 
 // SetBidderIDs filters hourly contracts by the specified bidder (freelancer) IDs.
@@ -4074,12 +3956,13 @@ func (s *getHourlyContractInfo) SetInvoiceDetails(val bool) *getHourlyContractIn
 	return s
 }
 
+// TODO: refine with typed response
 type getIPContractInfo struct {
 	client    *Client
 	projectID int64
 }
 
-func (s *getIPContractInfo) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *getIPContractInfo) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s/ip_contracts", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
@@ -4088,7 +3971,7 @@ func (s *getIPContractInfo) Do(ctx context.Context) (*BaseResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp := &BaseResponse{}
+	resp := &RawResponse{}
 	if err := json.Unmarshal(data, resp); err != nil {
 		return nil, err
 	}
@@ -4100,21 +3983,10 @@ type deleteProject struct {
 	projectID int64
 }
 
-func (s *deleteProject) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *deleteProject) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodDelete,
 		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }

@@ -9,29 +9,18 @@ import (
 	"strconv"
 )
 
+// TODO: refine with typed response
 type listCollaborations struct {
 	client    *Client
 	projectID int64
 }
 
-func (s *listCollaborations) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listCollaborations) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: fmt.Sprintf("%s/%s/collaborations/", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type createCollaboration struct {
@@ -49,7 +38,7 @@ type CreateProjectCollaborationsBody struct {
 	}
 }
 
-func (s *createCollaboration) Do(ctx context.Context, b CreateProjectCollaborationsBody) (*BaseResponse, error) {
+func (s *createCollaboration) Do(ctx context.Context, b CreateProjectCollaborationsBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -59,19 +48,7 @@ func (s *createCollaboration) Do(ctx context.Context, b CreateProjectCollaborati
 		endpoint: fmt.Sprintf("%s/%s/collaborations/", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type actionCollaboration struct {
@@ -89,7 +66,7 @@ type ActionProjectCollaborationsBody struct {
 	}
 }
 
-func (s *actionCollaboration) Do(ctx context.Context, b ActionProjectCollaborationsBody) (*BaseResponse, error) {
+func (s *actionCollaboration) Do(ctx context.Context, b ActionProjectCollaborationsBody) (*RawResponse, error) {
 	m, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -99,41 +76,18 @@ func (s *actionCollaboration) Do(ctx context.Context, b ActionProjectCollaborati
 		endpoint: fmt.Sprintf("%s/%s/collaborations/%d", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10), s.collaborationID),
 		body:     bytes.NewBuffer(m),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
+// TODO: refine with typed response
 type listAllCollaborations struct {
 	client *Client
 }
 
-func (s *listAllCollaborations) Do(ctx context.Context) (*BaseResponse, error) {
+func (s *listAllCollaborations) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: string(PROJECTS_COLLABORATIONS),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &BaseResponse{}
-	if err := json.Unmarshal(data, resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-
+	return execute[*RawResponse](ctx, s.client, r)
 }

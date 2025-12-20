@@ -15,7 +15,8 @@ type addJobs struct {
 	client *Client
 }
 
-func (s *addJobs) DO(ctx context.Context, b JobsBody) (*BaseResponse, error) {
+// TODO: refine with typed response
+func (s *addJobs) Do(ctx context.Context, b JobsBody) (*RawResponse, error) {
 	marshaledJson, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -26,23 +27,14 @@ func (s *addJobs) DO(ctx context.Context, b JobsBody) (*BaseResponse, error) {
 		endpoint: string(USERS_SELF_JOBS),
 		body:     bytes.NewBuffer(marshaledJson),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	if err := json.Unmarshal(data, res); err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type updateJobs struct {
 	client *Client
 }
 
-func (s *updateJobs) Do(ctx context.Context, b JobsBody) (*BaseResponse, error) {
+func (s *updateJobs) Do(ctx context.Context, b JobsBody) (*RawResponse, error) {
 	marshaledJson, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -52,23 +44,14 @@ func (s *updateJobs) Do(ctx context.Context, b JobsBody) (*BaseResponse, error) 
 		endpoint: string(USERS_SELF_JOBS),
 		body:     bytes.NewBuffer(marshaledJson),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	if err := json.Unmarshal(data, res); err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
 
 type deleteJobs struct {
 	client *Client
 }
 
-func (s *deleteJobs) DO(ctx context.Context, b JobsBody) (*BaseResponse, error) {
+func (s *deleteJobs) DO(ctx context.Context, b JobsBody) (*RawResponse, error) {
 	marshaledJson, err := json.Marshal(b)
 	if err != nil {
 		return nil, err
@@ -78,14 +61,5 @@ func (s *deleteJobs) DO(ctx context.Context, b JobsBody) (*BaseResponse, error) 
 		endpoint: string(USERS_SELF_JOBS),
 		body:     bytes.NewBuffer(marshaledJson),
 	}
-
-	data, err := s.client.callAPI(ctx, r)
-	if err != nil {
-		return nil, err
-	}
-	res := &BaseResponse{}
-	if err := json.Unmarshal(data, res); err != nil {
-		return nil, err
-	}
-	return res, nil
+	return execute[*RawResponse](ctx, s.client, r)
 }
