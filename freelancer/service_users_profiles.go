@@ -26,7 +26,7 @@ func (s *createProfile) Do(ctx context.Context, b CreateProfileBody) (*RawRespon
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: string(USERS_PROFILES),
+		endpoint: string(UsersProfiles),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -48,7 +48,7 @@ type getProfile struct {
 func (s *getProfile) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_PROFILES),
+		endpoint: string(UsersProfiles),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
 }
@@ -74,7 +74,7 @@ func (s *updateProfile) Do(ctx context.Context, b UpdateProfileBody) (*RawRespon
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: string(USERS_PROFILES),
+		endpoint: string(UsersProfiles),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)

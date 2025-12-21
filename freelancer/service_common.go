@@ -13,7 +13,7 @@ type listCountries struct {
 func (s *listCountries) Do(ctx context.Context) (*ListCountriesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(COMMON_COUNTRIES),
+		endpoint: string(CommonCountries),
 	}
 	if s.extraDetails != nil {
 		r.setParam("extra_details", *s.extraDetails)
@@ -25,9 +25,9 @@ func (s *listCountries) Do(ctx context.Context) (*ListCountriesResponse, error) 
 //
 // When set to true, the API response will include additional country metadata
 // such as phone codes, SEO URLs, and language information.
-func (c *listCountries) SetExtraDetails(val bool) *listCountries {
-	c.extraDetails = &val
-	return c
+func (s *listCountries) SetExtraDetails(val bool) *listCountries {
+	s.extraDetails = &val
+	return s
 }
 
 type listTimezones struct {
@@ -39,7 +39,7 @@ type listTimezones struct {
 func (s *listTimezones) Do(ctx context.Context) (*ListTimezonesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(COMMON_TIMEZONES),
+		endpoint: string(CommonTimezones),
 	}
 	if len(s.timezones) > 0 {
 		r.setParam("timezones", s.timezones)

@@ -50,7 +50,7 @@ type listUsers struct {
 func (s *listUsers) Do(ctx context.Context) (*ListUsersResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_USERS),
+		endpoint: string(UsersUsers),
 	}
 	for _, userID := range s.users {
 		r.addParam("users[]", userID)
@@ -387,7 +387,7 @@ type getUserByID struct {
 func (s *getUserByID) Do(ctx context.Context) (*GetUserResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s", string(USERS_USERS), strconv.FormatInt(s.userID, 10)),
+		endpoint: fmt.Sprintf("%s/%s", string(UsersUsers), strconv.FormatInt(s.userID, 10)),
 	}
 	return execute[*GetUserResponse](ctx, s.client, r)
 }
@@ -453,7 +453,7 @@ type searchFreelancers struct {
 func (s *searchFreelancers) Do(ctx context.Context) (*SearchFreelancersResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_FREELANCERS),
+		endpoint: string(UsersFreelancers),
 	}
 
 	if s.query != nil {

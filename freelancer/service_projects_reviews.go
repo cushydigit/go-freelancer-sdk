@@ -71,7 +71,7 @@ type listReviews struct {
 func (s *listReviews) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_REVIEWS),
+		endpoint: string(ProjectsReviews),
 	}
 
 	for _, val := range s.projects {
@@ -623,7 +623,7 @@ func (s *createReview) Do(ctx context.Context, b CreateReviewBody) (*RawResponse
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: string(PROJECTS_REVIEWS),
+		endpoint: string(ProjectsReviews),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -646,7 +646,7 @@ func (s *actionReview) Do(ctx context.Context, b ReviewActionBody) (*RawResponse
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_REVIEWS), strconv.FormatInt(s.reviewID, 10)),
+		endpoint: fmt.Sprintf("%s/%s", string(ProjectsReviews), strconv.FormatInt(s.reviewID, 10)),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)

@@ -27,7 +27,7 @@ type listExpertGuarantees struct {
 func (s *listExpertGuarantees) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_EXPERT_GUARANTEES),
+		endpoint: string(ProjectsExpertGuarantees),
 	}
 
 	for _, val := range s.bids {
@@ -141,7 +141,7 @@ func (s *actionExpertGuarantee) Do(ctx context.Context, b ExpertGuaranteesAction
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_EXPERT_GUARANTEES), strconv.FormatInt(s.expertGuaranteesID, 10)),
+		endpoint: fmt.Sprintf("%s/%s", string(ProjectsExpertGuarantees), strconv.FormatInt(s.expertGuaranteesID, 10)),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -204,7 +204,7 @@ type listCategories struct {
 func (s *listCategories) Do(ctx context.Context) (*ListCategoriesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_CATEGORIES),
+		endpoint: string(ProjectsCategories),
 	}
 	if s.categories != nil {
 		r.addParam("categories", s.categories)

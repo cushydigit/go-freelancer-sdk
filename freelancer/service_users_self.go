@@ -49,7 +49,7 @@ type getInfo struct {
 func (s *getInfo) Do(ctx context.Context) (*GetSelfInfoResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_SELF),
+		endpoint: string(UsersSelf),
 	}
 
 	if s.avatar != nil {
@@ -386,7 +386,7 @@ type listDevices struct {
 func (s *listDevices) Do(ctx context.Context) (*ListSelfLoginDevicesResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_SELF_DEVICES),
+		endpoint: string(UsersSelfDevices),
 	}
 	return execute[*ListSelfLoginDevicesResponse](ctx, s.client, r)
 }

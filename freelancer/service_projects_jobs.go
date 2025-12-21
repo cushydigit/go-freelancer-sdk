@@ -22,7 +22,7 @@ type listJobs struct {
 func (s *listJobs) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_JOBS),
+		endpoint: string(ProjectsJobs),
 	}
 
 	for _, val := range s.jobs {
@@ -131,7 +131,7 @@ type searchJobs struct {
 func (s *searchJobs) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_JOBS),
+		endpoint: string(ProjectsJobs),
 	}
 
 	for _, val := range s.jobs {
@@ -244,7 +244,7 @@ type listJobBundles struct {
 func (s *listJobBundles) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_JOB_BUNDLES),
+		endpoint: string(ProjectsJobBundles),
 	}
 
 	for _, val := range s.jobBundles {
@@ -296,7 +296,7 @@ type listJobBundleCategories struct {
 func (s *listJobBundleCategories) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_JOB_BUNDLE_CATEGORIES),
+		endpoint: string(ProjectsJobBundleCategories),
 	}
 
 	for _, val := range s.jobBundles {

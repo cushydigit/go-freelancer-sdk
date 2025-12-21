@@ -18,7 +18,7 @@ type listCollaborations struct {
 func (s *listCollaborations) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s/collaborations/", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s/collaborations/", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
 }
@@ -45,7 +45,7 @@ func (s *createCollaboration) Do(ctx context.Context, b CreateProjectCollaborati
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("%s/%s/collaborations/", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s/collaborations/", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -73,7 +73,7 @@ func (s *actionCollaboration) Do(ctx context.Context, b ActionProjectCollaborati
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%s/collaborations/%d", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10), s.collaborationID),
+		endpoint: fmt.Sprintf("%s/%s/collaborations/%d", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10), s.collaborationID),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -87,7 +87,7 @@ type listAllCollaborations struct {
 func (s *listAllCollaborations) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_COLLABORATIONS),
+		endpoint: string(ProjectsCollaboration),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
 }

@@ -52,7 +52,7 @@ type listMilestones struct {
 func (s *listMilestones) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_MILESTONES),
+		endpoint: string(ProjectsMilestones),
 	}
 
 	for _, val := range s.bids {
@@ -421,7 +421,7 @@ type getMilestoneByID struct {
 func (s *getMilestoneByID) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_MILESTONES), s.milestoneID),
+		endpoint: fmt.Sprintf("%s/%d", string(ProjectsMilestones), s.milestoneID),
 	}
 
 	if s.userAvatar != nil {
@@ -689,7 +689,7 @@ func (s *createMilestone) Do(ctx context.Context, b CreateMilestoneBody) (*RawRe
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: string(PROJECTS_MILESTONES),
+		endpoint: string(ProjectsMilestones),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -715,7 +715,7 @@ func (s *actionMilestone) Do(ctx context.Context, b ActionMilestoneBody) (*RawRe
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_MILESTONES), s.milestoneID),
+		endpoint: fmt.Sprintf("%s/%d", string(ProjectsMilestones), s.milestoneID),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)

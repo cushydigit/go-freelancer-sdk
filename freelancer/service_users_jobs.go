@@ -24,7 +24,7 @@ func (s *addJobs) Do(ctx context.Context, b JobsBody) (*RawResponse, error) {
 
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: string(USERS_SELF_JOBS),
+		endpoint: string(UsersSelfJobs),
 		body:     bytes.NewBuffer(marshaledJson),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -41,7 +41,7 @@ func (s *updateJobs) Do(ctx context.Context, b JobsBody) (*RawResponse, error) {
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: string(USERS_SELF_JOBS),
+		endpoint: string(UsersSelfJobs),
 		body:     bytes.NewBuffer(marshaledJson),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -58,7 +58,7 @@ func (s *deleteJobs) DO(ctx context.Context, b JobsBody) (*RawResponse, error) {
 	}
 	r := &request{
 		method:   http.MethodDelete,
-		endpoint: string(USERS_SELF_JOBS),
+		endpoint: string(UsersSelfJobs),
 		body:     bytes.NewBuffer(marshaledJson),
 	}
 	return execute[*RawResponse](ctx, s.client, r)

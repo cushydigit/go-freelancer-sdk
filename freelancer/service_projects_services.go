@@ -15,7 +15,7 @@ type orderService struct {
 func (s *orderService) Do(ctx context.Context, serviceID int, serviceType ServiceType) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%s/%d/order", string(PROJECTS_SERVICES), string(serviceType), serviceID),
+		endpoint: fmt.Sprintf("%s/%s/%d/order", string(ProjectsServices), string(serviceType), serviceID),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
 }
@@ -69,7 +69,7 @@ type listServices struct {
 func (s *listServices) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_SERVICES),
+		endpoint: string(ProjectsServices),
 	}
 
 	for _, val := range s.services {
@@ -461,7 +461,7 @@ type searchActiveServices struct {
 func (s *searchActiveServices) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_SERVICES),
+		endpoint: string(ProjectsServices),
 	}
 
 	if s.query != nil {

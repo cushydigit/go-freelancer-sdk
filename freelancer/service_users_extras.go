@@ -20,7 +20,7 @@ type listReputations struct {
 func (s *listReputations) Do(ctx context.Context) (*ListUsersReputationsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_REPUTATIONS),
+		endpoint: string(UsersReputations),
 	}
 
 	for _, id := range s.users {
@@ -97,7 +97,7 @@ type listEnterprises struct {
 func (s *listEnterprises) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_ENTERPRISES),
+		endpoint: string(UsersEnterprises),
 	}
 
 	for _, val := range s.enterprises {
@@ -192,7 +192,7 @@ type listPortfolios struct {
 func (s *listPortfolios) DO(ctx context.Context) (*ListUsersPortfoliosResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_PORTFOLIOS),
+		endpoint: string(UsersPortfolios),
 	}
 
 	for id := range s.users {
@@ -249,7 +249,7 @@ func (s *createViolation) Do(ctx context.Context, b CreateViolationBody) (*RawRe
 
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: string(USERS_VIOLATION),
+		endpoint: string(UsersViolationReports),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -270,7 +270,7 @@ type listPools struct {
 func (s *listPools) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(USERS_POOLS),
+		endpoint: string(UsersPools),
 	}
 
 	for _, val := range s.pools {

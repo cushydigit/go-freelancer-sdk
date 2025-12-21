@@ -61,7 +61,7 @@ type listBids struct {
 func (s *listBids) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_BIDS),
+		endpoint: string(ProjectsBids),
 	}
 
 	for _, val := range s.bids {
@@ -518,7 +518,7 @@ type getBidByID struct {
 func (s *getBidByID) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_BIDS), s.bidID),
+		endpoint: fmt.Sprintf("%s/%d", string(ProjectsBids), s.bidID),
 	}
 
 	if s.reputation != nil {
@@ -905,7 +905,7 @@ func (s *createBid) Do(ctx context.Context, b CreateBidBody) (*RawResponse, erro
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: string(PROJECTS_BIDS),
+		endpoint: string(ProjectsBids),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -928,7 +928,7 @@ func (s *actionBid) Do(ctx context.Context, b ActionBidBody) (*RawResponse, erro
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_BIDS), s.bidID),
+		endpoint: fmt.Sprintf("%s/%d", string(ProjectsBids), s.bidID),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -952,7 +952,7 @@ func (s *updateBid) Do(ctx context.Context, b UpdateBidBody) (*RawResponse, erro
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%d", string(PROJECTS_BIDS), s.bidID),
+		endpoint: fmt.Sprintf("%s/%d", string(ProjectsBids), s.bidID),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -1036,7 +1036,7 @@ func (s *createTimeTracking) Do(ctx context.Context, b CreateTimeTrackingBidBody
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("%s/%d/time_tracking_sessions", string(PROJECTS_BIDS), s.bidID),
+		endpoint: fmt.Sprintf("%s/%d/time_tracking_sessions", string(ProjectsBids), s.bidID),
 		body:     bytes.NewBuffer(m),
 	}
 
@@ -1052,7 +1052,7 @@ type getBidRatingsByListOfBids struct {
 func (s *getBidRatingsByListOfBids) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_BID_RATINGS),
+		endpoint: string(ProjectsBidRatings),
 	}
 
 	for _, val := range s.bids {
@@ -1076,7 +1076,7 @@ type getBidRatings struct {
 func (s *getBidRatings) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%d/bid_ratings", string(PROJECTS_BIDS), s.bidID),
+		endpoint: fmt.Sprintf("%s/%d/bid_ratings", string(ProjectsBids), s.bidID),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
 }
@@ -1099,7 +1099,7 @@ func (s *createBidRating) Do(ctx context.Context, b CreateBidRatingsBody) (*RawR
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("%s/%d/bid_ratings", string(PROJECTS_BIDS), s.bidID),
+		endpoint: fmt.Sprintf("%s/%d/bid_ratings", string(ProjectsBids), s.bidID),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -1123,7 +1123,7 @@ func (s *updateBidRating) Do(ctx context.Context, b UpdateBidRatingBody) (*RawRe
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%d/bid_ratings/%d", string(PROJECTS_BIDS), s.bidID, s.bidRatingID),
+		endpoint: fmt.Sprintf("%s/%d/bid_ratings/%d", string(ProjectsBids), s.bidID, s.bidRatingID),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -1140,7 +1140,7 @@ type getBidEditRequest struct {
 func (s *getBidEditRequest) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%d/bid_edit_requests", string(PROJECTS_BIDS), s.bidID),
+		endpoint: fmt.Sprintf("%s/%d/bid_edit_requests", string(ProjectsBids), s.bidID),
 	}
 
 	for _, val := range s.statuses {
@@ -1186,7 +1186,7 @@ func (s *createBidEditRequest) Do(ctx context.Context, b CreateBidEditRequestsBo
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: string(PROJECTS_BIDS_EDIT_REQUESTS),
+		endpoint: string(ProjectsBidsBidEditRequests),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
@@ -1209,7 +1209,7 @@ func (s *actionBidEditRequest) Do(ctx context.Context, b BidEditRequestsActionBo
 	}
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%d/bid_edit_requests/%d", string(PROJECTS_BIDS), s.bidID, s.bidEditRequestID),
+		endpoint: fmt.Sprintf("%s/%d/bid_edit_requests/%d", string(ProjectsBids), s.bidID, s.bidEditRequestID),
 		body:     bytes.NewBuffer(m),
 	}
 	return execute[*RawResponse](ctx, s.client, r)

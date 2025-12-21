@@ -46,7 +46,7 @@ func (s *createProject) Do(ctx context.Context, b CreateProjectBody) (*RawRespon
 
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: string(PROJECTS_PROJECTS),
+		endpoint: string(ProjectsProjects),
 		body:     bytes.NewBuffer(m),
 	}
 
@@ -74,7 +74,7 @@ func (s *actionProject) Do(ctx context.Context, b ProjectActionBody) (*RawRespon
 
 	r := &request{
 		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
 		body:     bytes.NewBuffer(m),
 	}
 
@@ -154,7 +154,7 @@ type listProjects struct {
 func (s *listProjects) Do(ctx context.Context) (*ListProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_PROJECTS),
+		endpoint: string(ProjectsProjects),
 	}
 	for _, project := range s.projects {
 		r.addParam("projects[]", project)
@@ -761,7 +761,7 @@ type listSelfProjects struct {
 func (s *listSelfProjects) Do(ctx context.Context) (*ListProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_SELF),
+		endpoint: string(ProjectsSelf),
 	}
 	if s.status != nil {
 		r.addParam("status", *s.status)
@@ -922,7 +922,7 @@ type getProjectByID struct {
 func (s *getProjectByID) Do(ctx context.Context) (*GetProjectResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
 	}
 	if s.fullDescription != nil {
 		r.setParam("full_description", *s.fullDescription)
@@ -1504,7 +1504,7 @@ type searchActiveProjects struct {
 func (s *searchActiveProjects) Do(ctx context.Context) (*ListProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_PROJECTS_ACTIVE),
+		endpoint: string(ProjectsProjectsActive),
 	}
 	if s.query != nil {
 		r.addParam("query", s.query)
@@ -2127,7 +2127,7 @@ type searchAllProjects struct {
 func (s *searchAllProjects) Do(ctx context.Context) (*ListProjectsResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_PROJECTS_ACTIVE),
+		endpoint: string(ProjectsProjectsActive),
 	}
 	if s.query != nil {
 		r.addParam("query", s.query)
@@ -2717,7 +2717,7 @@ func (s *inviteFreelancer) Do(ctx context.Context, b InviteFreelancersRequestBod
 	}
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("%s/%s/invite", PROJECTS_PROJECTS, strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s/invite", ProjectsProjects, strconv.FormatInt(s.projectID, 10)),
 		body:     bytes.NewBuffer(m),
 	}
 
@@ -2736,7 +2736,7 @@ type listUpgradeFees struct {
 func (s *listUpgradeFees) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_PROJECTS_FEES),
+		endpoint: string(ProjectsProjectsFees),
 	}
 
 	for _, currency := range s.currencies {
@@ -2795,7 +2795,7 @@ type listBidUpgradeFees struct {
 func (s *listBidUpgradeFees) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_BIDS_FEES),
+		endpoint: string(ProjectsBidsFees),
 	}
 
 	for _, currency := range s.currencies {
@@ -2869,7 +2869,7 @@ type listProjectBids struct {
 func (s *listProjectBids) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s/bids", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s/bids", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
 	}
 
 	if s.isShortlisted != nil {
@@ -3227,7 +3227,7 @@ type getProjectBidInfo struct {
 func (s *getProjectBidInfo) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s/bidinfo", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s/bidinfo", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
 }
@@ -3269,7 +3269,7 @@ type listProjectMilestones struct {
 func (s *listProjectMilestones) Do(ctx context.Context, projectID int64) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s/milestones", string(PROJECTS_PROJECTS), strconv.FormatInt(projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s/milestones", string(ProjectsProjects), strconv.FormatInt(projectID, 10)),
 	}
 
 	for _, val := range s.statuses {
@@ -3592,7 +3592,7 @@ type listProjectMilestoneRequests struct {
 func (s *listProjectMilestoneRequests) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s/milestone_requests", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s/milestone_requests", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
 	}
 
 	for _, val := range s.statuses {
@@ -3895,7 +3895,7 @@ type getHourlyContractInfo struct {
 func (s *getHourlyContractInfo) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(PROJECTS_HOURLY_CONTRACTS),
+		endpoint: string(ProjectsHourlyContract),
 	}
 
 	for _, val := range s.projectIDs {
@@ -3965,7 +3965,7 @@ type getIPContractInfo struct {
 func (s *getIPContractInfo) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s/ip_contracts", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s/ip_contracts", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
 	}
 	data, err := s.client.callAPI(ctx, r)
 	if err != nil {
@@ -3986,7 +3986,7 @@ type deleteProject struct {
 func (s *deleteProject) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodDelete,
-		endpoint: fmt.Sprintf("%s/%s", string(PROJECTS_PROJECTS), strconv.FormatInt(s.projectID, 10)),
+		endpoint: fmt.Sprintf("%s/%s", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
 }

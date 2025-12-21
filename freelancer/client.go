@@ -1,3 +1,4 @@
+// Package freelancer provides a Go SDK for interacting with the Freelancer API.
 package freelancer
 
 import (

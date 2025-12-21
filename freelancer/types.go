@@ -22,7 +22,7 @@ type APIError2 struct {
 type error2 struct {
 	Code     string `json:"code"`
 	Detail   string `json:"detail"`
-	HttpCode int    `json:"http_code"`
+	HTTPCode int    `json:"http_code"`
 	Source   string `json:"source"`
 }
 
