@@ -1,20 +1,22 @@
-<h1 align="center">🛠️ Unofficial Freelancer.com SDK (Go) </h1>
+<!-- markdownlint-disable MD033 -->
+<h1 align="center">️ 🛠 Unofficial Freelancer.com SDK (Go)</h1>
+
 <p align="center">
-    <a href="https://pkg.go.dev/github.com/cushydigit/go-freelancer-sdk">
-        <img src="https://pkg.go.dev/badge/github.com/cushydigit/go-freelancer-sdk.svg" alt="Go Reference">
-    </a>
-    <a href="https://github.com/cushydigit/go-freealncer-sdk/LICENSE">
-        <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT">
-    </a>
-    <a href="go.mod">
-        <img src="https://img.shields.io/github/go-mod/go-version/cushydigit/go-freelancer-sdk" alt="Go Version">
-    </a>
-    <a href="https://github.com/yourusername/freelancer-go-sdk/actions">
-        <img src="https://img.shields.io/github/actions/workflow/status/cushydigit/go-freelancer-sdk/test.yml?branch=main" alt="Build Status">
-    </a>
-    <img src="https://img.shields.io/badge/status-unofficial-orange" alt="Unofficial Status">
+  <a href="https://pkg.go.dev/github.com/cushydigit/go-freelancer-sdk">
+    <img src="https://pkg.go.dev/badge/github.com/cushydigit/go-freelancer-sdk.svg" alt="Go Reference">
   </a>
+  <a href="https://github.com/cushydigit/go-freelancer-sdk/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT">
+  </a>
+  <a href="go.mod">
+    <img src="https://img.shields.io/github/go-mod/go-version/cushydigit/go-freelancer-sdk" alt="Go Version">
+  </a>
+  <a href="https://github.com/cushydigit/go-freelancer-sdk/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/cushydigit/go-freelancer-sdk/test.yml?branch=main" alt="Build Status">
+  </a>
+  <img src="https://img.shields.io/badge/status-unofficial-orange" alt="Unofficial Status">
 </p>
+<!-- markdownlint-enable MD033 -->
 
 # 🚀 Freelancer.com Go SDK
 
