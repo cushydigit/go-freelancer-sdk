@@ -87,7 +87,7 @@ type listAllCollaborations struct {
 func (s *listAllCollaborations) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: string(ProjectsCollaboration),
+		endpoint: string(ProjectsCollaborations),
 	}
 	return execute[*RawResponse](ctx, s.client, r)
 }

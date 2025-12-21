@@ -971,7 +971,7 @@ type getTimeTracking struct {
 func (s *getTimeTracking) Do(ctx context.Context) (*RawResponse, error) {
 	r := &request{
 		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%d/time_tracking_sessions", string(PROJECTS_BIDS), s.bidID),
+		endpoint: fmt.Sprintf("%s/%d/time_tracking_sessions", string(ProjectsBids), s.bidID),
 	}
 
 	if s.fromTime != nil {
