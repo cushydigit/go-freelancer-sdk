@@ -117,38 +117,6 @@ type CommonService struct{ client *Client }
 // Projects - Collaborations
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/projects/{project_id}/collaborations`. The request is executed when Do is called.
-//
-// The service returns a list of project collaboration data for a project
-func (s *CollaborationsService) List(projectID int64) *listCollaborations {
-	return &listCollaborations{client: s.client, projectID: projectID}
-}
-
-// The returned service prepare a `POST` request to the Projects endpoint
-// `/projects/0.1/projects/{project_id}/collaborations`. The request is executed when Do is called.
-//
-// The service creates a new project collaboration
-func (s *CollaborationsService) Create(projectID int64) *createCollaboration {
-	return &createCollaboration{client: s.client, projectID: projectID}
-}
-
-// The returned service prepare a `POST` request to the Projects endpoint
-// `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions`. The request is executed when Do is called.
-//
-// The service performs an action on a collaboration
-func (s *CollaborationsService) Action(projectID int64, collaborationID int) *actionCollaboration {
-	return &actionCollaboration{client: s.client, projectID: projectID}
-}
-
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/collaborations`. The request is executed when Do is called.
-//
-// The service retrieves a list of all collaboration data for a user
-func (s *CollaborationsService) ListAll() *listAllCollaborations {
-	return &listAllCollaborations{client: s.client}
-}
-
 // -------------------------------------------------------------------------------
 // Projects - Services
 // -------------------------------------------------------------------------------

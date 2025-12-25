@@ -1,32 +1,21 @@
 package freelancer
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 )
 
 // TODO: refine with typed response
-type listCollaborations struct {
-	client    *Client
-	projectID int64
+
+// Returns a list of project collaboration data for a project.
+// it maps to the `GET` `/projects/0.1/projects/{project_id}/collaborations` endpoint
+func (s *CollaborationsService) List(ctx context.Context, projectID int64) (*RawResponse, error) {
+	path := fmt.Sprintf("%s/%s/collaborations", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
-func (s *listCollaborations) Do(ctx context.Context) (*RawResponse, error) {
-	r := &request{
-		method:   http.MethodGet,
-		endpoint: fmt.Sprintf("%s/%s/collaborations/", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
-	}
-	return execute[*RawResponse](ctx, s.client, r)
-}
-
-type createCollaboration struct {
-	client    *Client
-	projectID int64
-}
 type CreateProjectCollaborationsBody struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
@@ -38,24 +27,13 @@ type CreateProjectCollaborationsBody struct {
 	}
 }
 
-func (s *createCollaboration) Do(ctx context.Context, b CreateProjectCollaborationsBody) (*RawResponse, error) {
-	m, err := json.Marshal(b)
-	if err != nil {
-		return nil, err
-	}
-	r := &request{
-		method:   http.MethodPost,
-		endpoint: fmt.Sprintf("%s/%s/collaborations/", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10)),
-		body:     bytes.NewBuffer(m),
-	}
-	return execute[*RawResponse](ctx, s.client, r)
+// Creates a new project collaboration.
+// It maps to the `POST` `/projects/0.1/projects/{project_id}/collaborations` endpoint
+func (s *CollaborationsService) Create(ctx context.Context, projectID int64, b CreateProjectCollaborationsBody) (*RawResponse, error) {
+	path := fmt.Sprintf("%s/%s/collaborations", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, nil)
 }
 
-type actionCollaboration struct {
-	client          *Client
-	projectID       int64
-	collaborationID int
-}
 type ActionProjectCollaborationsBody struct {
 	// required
 	Action ProjectCollaborationAction `json:"action"`
@@ -66,28 +44,17 @@ type ActionProjectCollaborationsBody struct {
 	}
 }
 
-func (s *actionCollaboration) Do(ctx context.Context, b ActionProjectCollaborationsBody) (*RawResponse, error) {
-	m, err := json.Marshal(b)
-	if err != nil {
-		return nil, err
-	}
-	r := &request{
-		method:   http.MethodPut,
-		endpoint: fmt.Sprintf("%s/%s/collaborations/%d", string(ProjectsProjects), strconv.FormatInt(s.projectID, 10), s.collaborationID),
-		body:     bytes.NewBuffer(m),
-	}
-	return execute[*RawResponse](ctx, s.client, r)
+// Performs an action on a collaboration.
+// it maps to the `POST` `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` endpoint
+func (s *CollaborationsService) Action(ctx context.Context, projectID int64, collaborationID int, b ActionProjectCollaborationsBody) (*RawResponse, error) {
+	path := fmt.Sprintf("%s/%s/collaborations/%d/actions", ProjectsProjects, strconv.FormatInt(projectID, 10), collaborationID)
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 // TODO: refine with typed response
-type listAllCollaborations struct {
-	client *Client
-}
 
-func (s *listAllCollaborations) Do(ctx context.Context) (*RawResponse, error) {
-	r := &request{
-		method:   http.MethodGet,
-		endpoint: string(ProjectsCollaborations),
-	}
-	return execute[*RawResponse](ctx, s.client, r)
+// Returns a list of all collaboration data for a user.
+// It maps toi the `GET` `/projects/0.1/collaborations` endpoint
+func (s *CollaborationsService) ListAll(ctx context.Context) (*RawResponse, error) {
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsCollaborations), nil, nil) // TODO: add the query paramete
 }

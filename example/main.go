@@ -45,14 +45,16 @@ func Init() {
 }
 func QuickExample() {
 	client = freelancer.NewClient(apiAccessToken) // create client with access token
-	s := client.Services.Projects.SearchActive()  // service for fetching active projects
+	opts := freelancer.SearchActiveProjectsOptions{
+		FullDescription: freelancer.Bool(true),
+		Limit:           freelancer.Int(10),
+		Offset:          freelancer.Int(5),
+	}
+	res, err := client.Services.Projects.SearchActive(context.Background(), &opts)
 	// set parameters
-	s.SetFullDescription(true)                                           // fetch full description
-	s.SetLimit(10)                                                       // limit the number of results
-	s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectFixed}) // filter by project type
-	res, err := s.Do(context.Background())
 	if err != nil {
 		log.Printf("error: %v", err)
+		return
 	}
 	for index, p := range res.Result.Projects {
 		fmt.Printf("Project-%03d\tID-%d\tAt: %d", index, p.ID, p.TimeSubmitted)
