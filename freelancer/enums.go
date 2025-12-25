@@ -6,6 +6,7 @@ type ContextType string
 type ProjectUpgradeType string
 type ProjectStatusType string
 type ProjectAction string
+type ProjectFrontendStatus string
 type IntervalType string
 type ContestUpgradeType string
 type SortField string
@@ -51,6 +52,12 @@ const (
 	ProjectStatusAwarded ProjectStatusType = "awarded"
 	ProjectStatusOpen    ProjectStatusType = "open"
 	ProjectStatusPast    ProjectStatusType = "close"
+
+	ProjectFrontendStatusOpen           ProjectFrontendStatus = "open"
+	ProjectFrontendStatusComplete       ProjectFrontendStatus = "complete"
+	ProjectFrontendStatusPending        ProjectFrontendStatus = "pending"
+	ProjectFrontendStatusDraft          ProjectFrontendStatus = "draft"
+	ProjectFrontendStatusWorkInProgress ProjectFrontendStatus = "work_in_progress"
 
 	ProjectUpgradeFeatured   ProjectUpgradeType = "featured"
 	ProjectUpgradeSealed     ProjectUpgradeType = "sealed"
