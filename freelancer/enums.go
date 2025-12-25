@@ -53,6 +53,14 @@ const (
 	ProjectStatusOpen    ProjectStatusType = "open"
 	ProjectStatusPast    ProjectStatusType = "close"
 
+	ProjectActionSignNDA       ProjectAction = "sign_nda"
+	ProjectActionUpgrade       ProjectAction = "upgrade"
+	ProjectActionUpdate        ProjectAction = "update"
+	ProjectActionSetLocation   ProjectAction = "set_location"
+	ProjectActionClose         ProjectAction = "close"
+	ProjectActionAddAttachment ProjectAction = "add_attachment"
+	ProjectActionEnd           ProjectAction = "end"
+
 	ProjectFrontendStatusOpen           ProjectFrontendStatus = "open"
 	ProjectFrontendStatusComplete       ProjectFrontendStatus = "complete"
 	ProjectFrontendStatusPending        ProjectFrontendStatus = "pending"
