@@ -121,30 +121,6 @@ type CommonService struct{ client *Client }
 // Projects - Services
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `POST` request to the Projects endpoint
-// `/projects/0.1/services/{service_type}/{service_id}/order`. The request is executed when Do is called.
-//
-// The service orders one of the available services
-func (s *ServicesService) Order(serviceID int, serviceType ServiceType) *orderService {
-	return &orderService{client: s.client, serviceID: serviceID, serviceType: serviceType}
-}
-
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/services`. The request is executed when Do is called.
-//
-// The service retrieves a list of services
-func (s *ServicesService) List() *listServices {
-	return &listServices{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/services/active`. The request is executed when Do is called.
-//
-// The service retrieves active services
-func (s *ServicesService) SearchActive() *searchActiveServices {
-	return &searchActiveServices{client: s.client}
-}
-
 // -------------------------------------------------------------------------------
 // Projects - Bids
 // -------------------------------------------------------------------------------
