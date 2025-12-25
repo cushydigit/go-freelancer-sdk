@@ -18,10 +18,12 @@ var (
 func main() {
 	Init()
 	// QuickExample()
-	ListBudgets()
-	ListCurrencies()
-	ListCategories()
-	ListTimezones()
+	// ListBudgets()
+	// ListCurrencies()
+	// ListCategories()
+	log.Println(apiAccessToken)
+	ListCountries()
+	//ListTimezones()
 
 }
 
@@ -36,8 +38,10 @@ func Init() {
 	}
 
 	//create instance for freelancer client
-	client = freelancer.NewClient(apiAccessToken)
-	client.Debug = true
+	client = freelancer.NewClient(
+		apiAccessToken,
+		freelancer.WithDebug(true),
+	)
 }
 func QuickExample() {
 	client = freelancer.NewClient(apiAccessToken) // create client with access token
@@ -56,13 +60,24 @@ func QuickExample() {
 }
 
 func ListTimezones() {
-	s := client.Services.Common.ListTimezones()
-	res, err := s.Do(context.Background())
+	res, err := client.Services.Common.ListTimezones(context.Background(), nil)
 	if err != nil {
 		log.Printf("error: %v", err)
+		return
 	}
 	for index, t := range res.Result.Timezones {
-		fmt.Printf("Timezone-%03d\tID-%d\tCountry: %s\tTimezones: %s\n", index, t.ID, t.Country, t.Timezone)
+		log.Println(index, t)
+	}
+}
+
+func ListCountries() {
+	res, err := client.Services.Common.ListCountries(context.Background(), nil)
+	if err != nil {
+		log.Printf("error: %v", err)
+		return
+	}
+	for index, c := range res.Result.Countries {
+		fmt.Println(index, c)
 	}
 }
 

@@ -611,22 +611,6 @@ func (s *CategoriesService) List() *listCategories {
 // Common
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `GET` request to the Common Countries endpoint
-// `/common/0.1/countries`. The request is executed when Do is called.
-//
-// The service returns a list of countries
-func (s *CommonService) ListCountries() *listCountries {
-	return &listCountries{client: s.client}
-}
-
-// The returned service prepares a `GET` request to the Common Timezones endpoint
-// `/common/0.1/timezones`. The request is executed when Do is called.
-//
-// The service returns a list of timezones
-func (s *CommonService) ListTimezones() *listTimezones {
-	return &listTimezones{client: s.client}
-}
-
 // -------------------------------------------------------------------------------
 // Users - Users
 // -------------------------------------------------------------------------------
