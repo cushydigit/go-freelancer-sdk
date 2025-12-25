@@ -129,40 +129,6 @@ type CommonService struct{ client *Client }
 // Projects - Jobs
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/jobs`. The request is executed when Do is called.
-//
-// The service returns a list of jobs
-func (s *JobsService) List() *listJobs {
-	return &listJobs{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/jobs/search`. The request is executed when Do is called.
-//
-// The service returns a list of jobs
-// Note: This performs a sub-string search for all the parameters specified on the jobs
-func (s *JobsService) Search() *searchJobs {
-	return &searchJobs{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/job_bundles`. The request is executed when Do is called.
-//
-// The service returns a list of job bundles
-// Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name.
-func (s *JobsService) ListJobBundles() *listJobBundles {
-	return &listJobBundles{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/job_bundle_categories`. The request is executed when Do is called.
-//
-// The service returns a list of job bundle categories
-func (s *JobsService) ListJobBundleCategories() *listJobBundleCategories {
-	return &listJobBundleCategories{client: s.client}
-}
-
 // -------------------------------------------------------------------------------
 // Projects - Milestones
 // -------------------------------------------------------------------------------
