@@ -149,30 +149,6 @@ type CommonService struct{ client *Client }
 // Users - Users
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `GET` request to the Users endpoint
-// `/users/0.1/users`. The request is executed when Do is called.
-//
-// The service returns a list of users
-func (s *UsersService) List() *listUsers {
-	return &listUsers{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Users endpoint
-// `/users/0.1/users/{user_id}`. The request is executed when Do is called.
-//
-// The service returns information about a specific user
-func (s *UsersService) GetByID(userID int64) *getUserByID {
-	return &getUserByID{client: s.client, userID: userID}
-}
-
-// The returned service prepare a `GET` request to the Users endpoint
-// `/users/0.1/users/directory`. The request is executed when Do is called.
-//
-// The service returns a list of freelancers.
-func (s *UsersService) SearchFreelancer() *searchFreelancers {
-	return &searchFreelancers{client: s.client}
-}
-
 // -------------------------------------------------------------------------------
 // Users - Authenticated (self)
 // -------------------------------------------------------------------------------
