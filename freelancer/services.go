@@ -141,46 +141,6 @@ type CommonService struct{ client *Client }
 // Projects - Extras
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/expert_guarantees`. The request is executed when Do is called.
-//
-// The service returns a list of expert guarantees
-func (s *ExpertGuaranteesService) List() *listExpertGuarantees {
-	return &listExpertGuarantees{client: s.client}
-}
-
-// The returned service prepare a `PUT` request to the Projects endpoint
-// `/projects/0.1/expert_guarantees/{expert_guarantee_id}`. The request is executed when Do is called.
-//
-// The service performs an action on a expert guarantee
-func (s *ExpertGuaranteesService) Action() *actionExpertGuarantee {
-	return &actionExpertGuarantee{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/budgets`. The request is executed when Do is called.
-//
-// The service returns a list of budgets with the specified currencies. currency_codes and currency_ids are incompatible with each other
-func (s *BudgetsService) List() *listBudgets {
-	return &listBudgets{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/currencies`. The request is executed when Do is called.
-//
-// The service returns a list of currencies, `currency_codes` and `currency_ids` are incompatible with each other
-func (s *CurrenciesService) List() *listCurrencies {
-	return &listCurrencies{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/categories`. The request is executed when Do is called.
-//
-// The service returns a list of categories. If job_details is set, a map of category IDs to jobs in those categories.
-func (s *CategoriesService) List() *listCategories {
-	return &listCategories{client: s.client}
-}
-
 // -------------------------------------------------------------------------------
 // Common
 // -------------------------------------------------------------------------------
