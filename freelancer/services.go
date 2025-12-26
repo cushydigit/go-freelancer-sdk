@@ -153,22 +153,6 @@ type CommonService struct{ client *Client }
 // Users - Authenticated (self)
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `GET` request to the Users endpoint
-// `/users/0.1/self`. The request is executed when Do is called.
-//
-// The service returns information about current user
-func (s *SelfService) Get() *getInfo {
-	return &getInfo{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Users endpoint
-// `/users/0.1/self/devices`. The request is executed when Do is called.
-//
-// The service returns a list of current user's recent logged in devices
-func (s *SelfService) ListDevices() *listDevices {
-	return &listDevices{client: s.client}
-}
-
 // -------------------------------------------------------------------------------
 // Users - Authenticated Jobs (self)
 // -------------------------------------------------------------------------------
