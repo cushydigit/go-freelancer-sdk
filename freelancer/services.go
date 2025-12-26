@@ -202,31 +202,6 @@ func (s *MilestoneRequestsService) Action(milestoneRequestID int) *actionMilesto
 // Projects - Reviews
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/reviews`. The request is executed when Do is called.
-//
-// The service returns a list of project reviews.
-func (s *ReviewsService) List() *listReviews {
-	return &listReviews{client: s.client}
-}
-
-// The returned service prepare a `POST` request to the Projects endpoint
-// `/projects/0.1/reviews`. The request is executed when Do is called.
-//
-// The service creates a new review of a user
-func (s *ReviewsService) Create() *createReview {
-	return &createReview{client: s.client}
-}
-
-// The returned service prepare a `PUT` request to the Projects endpoint
-// `/projects/0.1/reviews/{review_id}`. The request is executed when Do is called.
-//
-// The service performs an action on a review
-// Note that Reviews are uniquely identified by a combination of review id and review type.
-func (s *ReviewsService) Action(reviewID int64) *actionReview {
-	return &actionReview{client: s.client, reviewID: reviewID}
-}
-
 // -------------------------------------------------------------------------------
 // Projects - Extras
 // -------------------------------------------------------------------------------

@@ -58,12 +58,6 @@ type ListBidsOptions struct {
 
 // TODO: refine with typed response
 
-//
-// The returned service prepare a `GET` request to the Projects endpoint
-// `/projects/0.1/bids/{bid_id}`. The request is executed when Do is called.
-//
-// The service retrieve information about a specific bid
-
 // Returns a list of bids that match the specified criteria.
 // It maps to the `GET` `/projects/0.1/bids` endpoint
 func (s *BidsService) List(ctx context.Context, opts *ListBidsOptions) (*RawResponse, error) {
