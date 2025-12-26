@@ -50,7 +50,7 @@ type ProjectActionBody struct {
 // Perform an action on a project
 // It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
 func (s *ProjectsService) Action(ctx context.Context, projectID int64, action ProjectActionBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	path := fmt.Sprintf("%s/%d", ProjectsProjects, projectID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, projectID)
 }
 

@@ -5,32 +5,46 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestClient_CallAPI_ErrorHandling(t *testing.T) {
-	// setup a mock server that returns 404 error
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(`{"code": "not_found", "message": "Project not found"}`))
+func TestNewClientOptions(t *testing.T) {
+	c := NewClient("token", WithSandBox(), WithDebug(true))
+
+	assert.Equal(t, c.baseURL, BaseAPISandBoxURL)
+	assert.Equal(t, c.debugMode, true)
+}
+
+func TestClientDoSuccess(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message": "success"}`))
 	}))
-	defer server.Close()
+	defer ts.Close()
 
-	client := NewClient("fake_token")
-	client.SetBaseUrl(server.URL)
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
 
-	req := &request{
-		method:   http.MethodGet,
-		endpoint: "/test",
-	}
+	data, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
+	assert.NoError(t, err)
+	assert.Contains(t, string(data), `{"message": "success"}`)
+}
 
-	_, err := client.callAPI(context.Background(), req)
+func TestClientDoError(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"message": "error"}`))
+	}))
+	defer ts.Close()
 
-	if err == nil {
-		t.Fatal("expected an error for 404 status code, got nil")
-	}
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
 
-	if _, ok := err.(*APIError); !ok {
-		t.Fatalf("expected an APIError, got %T", err)
-	}
-
+	_, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
+	assert.Error(t, err)
+	apiErr, ok := err.(*APIError)
+	assert.True(t, ok)
+	assert.Equal(t, apiErr.StatusCode, 400)
+	assert.Equal(t, "error", apiErr.Message)
 }

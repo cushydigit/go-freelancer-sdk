@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
 	"time"
 )
 
@@ -78,12 +77,6 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 
 }
 
-func (c *Client) debug(format string, v ...any) {
-	if c.debugMode {
-		c.logger.Printf(format, v...)
-	}
-}
-
 func (c *Client) do(ctx context.Context, method, path string, query url.Values, body io.Reader) ([]byte, error) {
 
 	// Parse Path
@@ -131,7 +124,7 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 
 	// Handle response
 	if c.debugMode {
-		c.logger.Printf("<-- %s %s (%d) ", resp.Status, endpoint.String())
+		c.logger.Printf("<-- %s %s ", resp.Status, endpoint.String())
 	}
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -185,48 +178,4 @@ func execute[T any](ctx context.Context, c *Client, method, path string, query u
 	}
 
 	return result, nil
-}
-
-func addBool(q url.Values, key string, b *bool) {
-	if b != nil {
-		q.Set(key, strconv.FormatBool(*b))
-	}
-}
-
-func addInt(q url.Values, key string, i *int) {
-	if i != nil {
-		q.Set(key, strconv.Itoa(*i))
-	}
-}
-
-func addFloat(q url.Values, key string, f *float64) {
-	if f != nil {
-		// 'f' = no exponent
-		// -1 = smallest necessary precision
-		// 64 = float64
-		q.Set(key, strconv.FormatFloat(*f, 'f', -1, 64))
-	}
-}
-
-func addString(q url.Values, key string, s *string) {
-	if s != nil {
-		q.Set(key, *s)
-	}
-}
-
-func addInt64(q url.Values, key string, i *int64) {
-	if i != nil {
-		q.Set(key, strconv.FormatInt(*i, 10))
-	}
-}
-
-// StringTyped is a constraint for any type that is an underlying string
-type StringTyped interface {
-	~string
-}
-
-func addEnum[T StringTyped](q url.Values, key string, v *T) {
-	if v != nil {
-		q.Set(key, string(*v))
-	}
 }

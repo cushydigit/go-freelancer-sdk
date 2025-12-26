@@ -348,7 +348,7 @@ func (s *BidEditRequestService) Action(ctx context.Context, bidID, bidEditReques
 // Fetch bid rating for a bid
 // It maps to the `GET` `/projects/0.1/bids/{bid_id}/bid_ratings` endpoint
 func (s *BidRatingsService) Get(ctx context.Context, bidID int64) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d/bid_ratings", ProjectsBids, strconv.FormatInt(bidID, 10))
+	path := fmt.Sprintf("%s/%d/bid_ratings", ProjectsBids, bidID)
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
