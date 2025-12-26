@@ -157,30 +157,6 @@ type CommonService struct{ client *Client }
 // Users - Authenticated Jobs (self)
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `POST` request to the Users endpoint
-// `/users/0.1/self/jobs`. The request is executed when Do is called.
-//
-// The service adds a list of jobs to the job list of current User
-func (s *SelfJobsService) Add() *addJobs {
-	return &addJobs{client: s.client}
-}
-
-// The returned service prepare a `PUT` request to the Users endpoint
-// `/users/0.1/self/jobs`. The request is executed when Do is called.
-//
-// The service sets a list of jobs to the job list of current User
-func (s *SelfJobsService) Update() *updateJobs {
-	return &updateJobs{client: s.client}
-}
-
-// The returned service prepare a `DELETE` request to the Users endpoint
-// `/users/0.1/self/jobs`. The request is executed when Do is called.
-//
-// The service removes a list of jobs from the job list of current User
-func (s *SelfJobsService) Delete() *deleteJobs {
-	return &deleteJobs{client: s.client}
-}
-
 // -------------------------------------------------------------------------------
 // Users - Profiles
 // -------------------------------------------------------------------------------

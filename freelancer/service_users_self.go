@@ -97,3 +97,25 @@ func (s *SelfService) GetInfo(ctx context.Context, opts *GetSelfInfoOptions) (*G
 func (s *SelfService) ListDevices(ctx context.Context) (*ListSelfLoginDevicesResponse, error) {
 	return execute[*ListSelfLoginDevicesResponse](ctx, s.client, http.MethodGet, string(UsersSelfDevices), nil, nil)
 }
+
+type JobsBody struct {
+	Jobs []int64 `json:"jobs[]"`
+}
+
+// Add a list of jobs to the job list of a current user.
+// It maps to the `POST` `/users/0.1/self/jobs` endpoint.
+func (s *SelfJobsService) Add(ctx context.Context, b JobsBody) (*RawResponse, error) {
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(UsersSelfJobs), nil, b)
+}
+
+// Sets a list of jobs to the job list of the current user.
+// It maps to the `PUT` `/users/0.1/self/jobs` endpoint.
+func (s *SelfJobsService) Set(ctx context.Context, b JobsBody) (*RawResponse, error) {
+	return execute[*RawResponse](ctx, s.client, http.MethodPut, string(UsersSelfJobs), nil, b)
+}
+
+// Removes a list of jobs from the job list of the current user.
+// It maps to the `DELETE` `/users/0.1/self/jobs` endpoint.
+func (s *SelfJobsService) Delete(ctx context.Context, b JobsBody) (*RawResponse, error) {
+	return execute[*RawResponse](ctx, s.client, http.MethodDelete, string(UsersSelfJobs), nil, b)
+}
