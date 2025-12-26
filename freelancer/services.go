@@ -161,30 +161,6 @@ type CommonService struct{ client *Client }
 // Users - Profiles
 // -------------------------------------------------------------------------------
 
-// The returned service prepare a `POST` request to the Users endpoint
-// `/users/0.1/profiles`. The request is executed when Do is called.
-//
-// The service creates a new profile for a user
-func (s *ProfilesService) Create() *createProfile {
-	return &createProfile{client: s.client}
-}
-
-// The returned service prepare a `GET` request to the Users endpoint
-// `/users/0.1/profiles`. The request is executed when Do is called.
-//
-// The service gets the profiles for a list of users
-func (s *ProfilesService) Get() *getProfile {
-	return &getProfile{client: s.client}
-}
-
-// The returned service prepare a `PUT` request to the Users endpoint
-// `/users/0.1/profiles`. The request is executed when Do is called.
-//
-// The service updates a profile
-func (s *ProfilesService) Update() *updateProfile {
-	return &updateProfile{client: s.client}
-}
-
 // -------------------------------------------------------------------------------
 // Users - Extras
 // -------------------------------------------------------------------------------

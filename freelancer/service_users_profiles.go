@@ -1,15 +1,9 @@
 package freelancer
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"net/http"
 )
-
-type createProfile struct {
-	client *Client
-}
 
 type CreateProfileBody struct {
 	Tagline     string `json:"tagline"`
@@ -19,42 +13,18 @@ type CreateProfileBody struct {
 	SkillIDs    []int  `json:"skill_ids,omitempty"`
 }
 
-func (s *createProfile) Do(ctx context.Context, b CreateProfileBody) (*RawResponse, error) {
-	m, err := json.Marshal(b)
-	if err != nil {
-		return nil, err
-	}
-	r := &request{
-		method:   http.MethodPost,
-		endpoint: string(UsersProfiles),
-		body:     bytes.NewBuffer(m),
-	}
-	return execute[*RawResponse](ctx, s.client, r)
-}
-
-type getProfile struct {
-	client *Client
+// Create a new profile for a user. Returns the created profile
+// It maps to the `POST` `/users/0.1/profiles` endpoint.
+func (s *ProfilesService) Create(ctx context.Context, b CreateProfileBody) (*RawResponse, error) {
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(UsersProfiles), nil, b)
 }
 
 // TODO: the api does not have solid on this endpoint (the get should not have body)
-// it should tested
-// type GetProfilesRequestBody struct {
-// 	IDs    []int  `json:"ids"`
-// 	UserID int64  `json:"user_id"`
-// 	SeoUrl string `json:"seo_url"`
-// }
-
-// TODO: refine with typed response
-func (s *getProfile) Do(ctx context.Context) (*RawResponse, error) {
-	r := &request{
-		method:   http.MethodGet,
-		endpoint: string(UsersProfiles),
-	}
-	return execute[*RawResponse](ctx, s.client, r)
-}
-
-type updateProfile struct {
-	client *Client
+// TODO: refined with typed response
+// Get profile(s)
+// It maps to the `GET` `/users/0.1/profiles` endpoint.
+func (s *ProfilesService) Get(ctx context.Context) (*RawResponse, error) {
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(UsersProfiles), nil, nil)
 }
 
 type UpdateProfileBody struct {
@@ -67,15 +37,9 @@ type UpdateProfileBody struct {
 }
 
 // TODO: refine with typed response
-func (s *updateProfile) Do(ctx context.Context, b UpdateProfileBody) (*RawResponse, error) {
-	m, err := json.Marshal(b)
-	if err != nil {
-		return nil, err
-	}
-	r := &request{
-		method:   http.MethodPut,
-		endpoint: string(UsersProfiles),
-		body:     bytes.NewBuffer(m),
-	}
-	return execute[*RawResponse](ctx, s.client, r)
+
+// Update a profile
+// It maps to the `PUT` `/users/0.1/profiles` endpoint.
+func (s *ProfilesService) Update(ctx context.Context, b UpdateProfileBody) (*RawResponse, error) {
+	return execute[*RawResponse](ctx, s.client, http.MethodPut, string(UsersProfiles), nil, b)
 }
