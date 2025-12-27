@@ -2,7 +2,6 @@
 package freelancer
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -62,6 +61,7 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
+		apiToken:     apiToken,
 		baseURL:      BaseAPIMainURL,
 		debugMode:    false,
 		useRateLimit: true,
@@ -80,7 +80,7 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 func (c *Client) do(ctx context.Context, method, path string, query url.Values, body io.Reader) ([]byte, error) {
 
 	// Parse Path
-	endpoint, err := url.Parse(fmt.Sprintf("%s/%s", c.baseURL, path))
+	endpoint, err := url.Parse(fmt.Sprintf("%s%s", c.baseURL, path))
 	if err != nil {
 		return nil, fmt.Errorf("invalid path: %w", err)
 	}
@@ -155,27 +155,4 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 	}
 
 	return data, nil
-}
-
-func execute[T any](ctx context.Context, c *Client, method, path string, query url.Values, body any) (T, error) {
-	var result T
-
-	var bodyReader io.Reader
-	if body != nil {
-		b, err := json.Marshal(body)
-		if err != nil {
-			return result, err
-		}
-		bodyReader = bytes.NewReader(b)
-	}
-	data, err := c.do(ctx, method, path, query, bodyReader)
-	if err != nil {
-		return result, err
-	}
-
-	if err := json.Unmarshal(data, &result); err != nil {
-		return result, fmt.Errorf("decode error: %w", err)
-	}
-
-	return result, nil
 }

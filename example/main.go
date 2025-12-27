@@ -21,7 +21,6 @@ func main() {
 	// ListBudgets()
 	// ListCurrencies()
 	// ListCategories()
-	log.Println(apiAccessToken)
 	ListCountries()
 	//ListTimezones()
 

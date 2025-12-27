@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD033 -->
-<h1 align="center">️ 🛠 Unofficial Freelancer.com SDK (Go)</h1>
+<h1 align="center">️Unofficial Freelancer.com SDK (Go)</h1>
 
 <p align="center">
   <a href="https://pkg.go.dev/github.com/cushydigit/go-freelancer-sdk">
@@ -18,7 +18,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-# 🚀 Freelancer.com Go SDK
+# Freelancer.com Go SDK
 
 A Go (Golang) SDK for interacting with the [Freelancer.com API](https://developers.freelancer.com/).
 
@@ -26,13 +26,13 @@ This library provides a simple, typed client for accessing Freelancer.com servic
 
 ---
 
-## 💡 Why I built this SDK?
+## Why I built this SDK?
 
 As a freelancer, I spend a lot of time on the platform. I wanted to build automated tools (like bidding bots and project monitors) to streamline my workflow, but I realized there was no comprehensive Go client available.
 
 I spent a significant amount of time hand-coding these service wrappers to handle the platform's API nuances. This project is built out of necessity to give Go developers the same power that Python developers have on the platform.
 
-## ✨ Features
+## Features
 
 - **Authentication:** Easy authentication using API Key
 - **Endpoints:** Covers major Freelancer.com endpoints (Users, Projects, Common)
@@ -42,13 +42,13 @@ I spent a significant amount of time hand-coding these service wrappers to handl
 
 ---
 
-## 📦 Installation
+## Installation
 
 ```bash
 go get github.com/cushydigit/freelancer-go-sdk
 ```
 
-## 🛠️ Usage
+## Usage
 
 ### Authentication
 
@@ -60,71 +60,76 @@ fetch active projects
 
 ```Go
 import (
- "fmt"
+ "log"
  "github.com/cushydigit/go-freelancer-sdk/freelancer"
 )
 func QuickExample() {
- client = freelancer.NewClient(apiAccessToken) // create client with access token
- s := client.Services.Projects.SearchActive()  // service for fetching active projects
+// create client with access token
+ client = freelancer.NewClient(apiAccessToken)
+ opts := freelancer.SearchActiveProjectsOptions{
+  FullDescription: freelancer.Bool(true),
+  Limit:           freelancer.Int(10),
+  Offset:          freelancer.Int(5),
+  Query:           freelancer.String("golang"),
+ }
+
+ res, err := client.Services.Projects.SearchActive(context.Background(), &opts)
  // set parameters
- s.SetFullDescription(true)                                           // fetch full description
- s.SetLimit(10)                                                       // limit the number of results
- s.SetProjectTypes([]freelancer.ProjectType{freelancer.ProjectFixed}) // filter by project type
- res, err := s.Do(context.Background())
  if err != nil {
-  fmt.Printf("error: %v", err)
+  log.Printf("error: %v", err)
+  return
  }
  for index, p := range res.Result.Projects {
-  fmt.Printf("Project-%03d\tID-%d\tAt: %d", index, p.ID, p.TimeSubmitted)
+  log.Println(index, p)
  }
-}
 ```
 
 fetch timezones
 
 ```GO
 func ListTimezones() {
- s := client.Services.Common.ListTimezones()
- res, err := s.Do(context.Background())
+res, err := client.Services.Common.ListTimezones(context.Background(), nil)
  if err != nil {
   log.Printf("error: %v", err)
+  return
  }
  for index, t := range res.Result.Timezones {
-  fmt.Printf("Timezone-%03d\tID-%d\tCountry: %s\tTimezones: %s\n", index, t.ID, t.Country, t.Timezone)
+  log.Println(index, t)
  }
 }
 ```
 
-fetch currencies
+fetch countries
 
 ```GO
-func ListCurrencies() {
- s := client.Services.Projects.Extras.Currencies.List()
- resp, err := s.Do(context.Background())
+func ListCountries() {
+ res, err := client.Services.Common.ListCountries(context.Background(), nil)
  if err != nil {
   log.Printf("error: %v", err)
+  return
  }
- res := freelancer.ListCurrenciesResponse{}
- b, _ := json.Marshal(resp)
- _ = json.Unmarshal(b, &res)
- for index, c := range res.Result.Currencies {
-  fmt.Printf("Currency-%03d\tID-%d\tName: %s\tCode: %s\tCountry:%s\tSign:%s\n", index, c.ID, c.Name, c.Code, c.Country, c.Sign)
+ for index, c := range res.Result.Countries {
+  fmt.Println(index, c)
  }
 }
+
 ```
 
 fetch budgets
 
 ```Go
+
 func ListBudgets() {
- s := client.Services.Projects.Extras.Budgets.List()
- res, err := s.Do(context.Background())
+ res, err := client.Services.Projects.Extras.Budgets.List(context.Background(), nil)
  if err != nil {
   log.Printf("error: %v", err)
+  return
  }
  for index, b := range res.Result.Budgets {
-  fmt.Printf("Budget-%03d\tName-%s\tMin: %f\tMax: %f\tCurrencyID: %d\n", index, b.Name, b.Minimum, b.Maximum, b.CurrencyID)
+  fmt.Println(index, b)
  }
+
+ 
 }
 ```
 
@@ -132,36 +137,65 @@ fetch categories
 
 ```Go
 func ListCategories() {
- s := client.Services.Projects.Extras.Categories.List()
- res, err := s.Do(context.Background())
+ res, err := client.Services.Projects.Extras.Categories.List(context.Background(), nil)
  if err != nil {
   log.Printf("error: %v", err)
+  return
  }
  for index, c := range res.Result.Categories {
-  fmt.Printf("Category-%03d\tID-%d\tName: %s\n", index, c.ID, c.Name)
+  fmt.Println(index, c)
  }
 }
 ```
 
-## 📂 Project Structure
+## Project Structure
 
 This SDK follows a modular service design. All core logic is located in `freelancer`.
 
-- **`client.go`**: The main entry point and configuration.
-- **`models.go` / `enums.go`**: Shared data structures and constants.
-- **`service_*.go`**: Individual files for each API endpoint action.
+```bash
+  ├── client.go                           
+  ├── endpoints.go
+  ├── enums.go
+  ├── errors.go
+  ├── ratelimiter.go
+  ├── responses.go
+  ├── service_common.go
+  ├── service_projects_bids.go
+  ├── service_projects_collaborations.go
+  ├── service_projects_extra.go
+  ├── service_projects_jobs.go
+  ├── service_projects_milestones.go
+  ├── service_projects_reviews.go
+  ├── service_projects_services.go
+  ├── service_projects.go
+  ├── service_users_extras.go
+  ├── service_users_profiles.go
+  ├── service_users_self.go
+  ├── service_users.go
+  ├── services.go
+  ├── types.go
+  └── utils.go
+```
 
-## 📚 Documentation
+- **`client.go`**: It holds the Client struct, the NewClient constructor, and the base configuration (BaseURL, HTTPClient, Auth)..
+- **`endpoints.go`**: Contains all your constants for URLs
+- **`types.go`**: Shared data structures
+- **`responses`**: The wrappers for API replies:w
+- **`enums.go`**: Custom types and constants for statuses, roles, and types
+- **`services.go`**: The entry point for all services. It initializes all services when the client is created
+- **`service_*.go`**: Resource-oriented service implementations. Each file encapsulates logic for a specific API domain
+
+## Documentation
 
 Full documentation is available at [pkg.go.dev](https://pkg.go.dev/github.com/cushydigit/go-freelancer-sdk).
 
 For details on the underlying API endpoints and parameters, refer to the official [Freelancer.com API Documentation](https://developers.freelancer.com/).
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -172,7 +206,6 @@ We use a `Makefile` to automate common tasks:
 ```bash
 make test    # Run all unit tests
 make build   # Compile the project
-make fmt     # Format code
 ```
 
 ## 🗺️ Roadmap
@@ -190,12 +223,12 @@ Current version covers **Projects**, **Users**, and **Common** services.
 - [ ] **Messaging:** Threads and direct message handling.
 - [ ] **Contests:** Browsing and participating in contests.
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This is an unofficial library and is not affiliated with, endorsed by, or associated with Freelancer.com.
 Please ensure you comply with the [Freelancer API Terms](https://www.freelancer.com/about/terms) and Conditions when using this software.
 
-## 📣 Contact
+## Contact
 
 Feel free to reach out if you have question or suggestions:
 
