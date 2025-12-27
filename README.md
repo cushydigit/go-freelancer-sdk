@@ -17,12 +17,6 @@
   <img src="https://img.shields.io/badge/status-unofficial-orange" alt="Unofficial Status">
 </p>
 <!-- markdownlint-enable MD033 -->
-| <p align="center">[![Go Reference](https://pkg.go.dev/badge/github.com/cushydigit/go-freelancer-sdk.svg)](https://pkg.go.dev/github.com/cushydigit/go-freelancer-sdk) [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/cushydigit/go-freelancer-sdk/LICENSE) [![Go Version](https://img.shields.io/github/go-mod/go-version/cushydigit/go-freelancer-sdk)](go.mod) [![Build Status](https://img.shields.io/github/actions/workflow/status/cushydigit/go-freelancer-sdk/test.yml?branch=main)](https://github.com/cushydigit/go-freelancer-sdk/actions) ![Unofficial Status](https://img.shields.io/badge/status-unofficial-orange) </p> |
-| :---: |
-	| Syntax | Description |
-| ----------- | ----------- |
-| Header | Title |
-| Paragraph | Text |
 
 # Freelancer.com Go SDK
 
@@ -188,8 +182,8 @@ This SDK follows a modular service design. All core logic is located in `freelan
 - **`types.go`**: Shared data structures
 - **`responses`**: The wrappers for API replies
 - **`enums.go`**: Custom types and constants for statuses, roles, and types
-- **`services.go`**: The entry point for all services. It initializes all services when the client is created
-- **`service_*.go`**: Resource-oriented service implementations. Each file encapsulates logic for a specific API domain
+- **`services.go`**: The entry point for all services.
+- **`service_*.go`**: Each file encapsulates logic for a specific API domain
 
 ## Documentation
 
