@@ -17,7 +17,8 @@
   <img src="https://img.shields.io/badge/status-unofficial-orange" alt="Unofficial Status">
 </p>
 <!-- markdownlint-enable MD033 -->
-
+| <p align="center">[![Go Reference](https://pkg.go.dev/badge/github.com/cushydigit/go-freelancer-sdk.svg)](https://pkg.go.dev/github.com/cushydigit/go-freelancer-sdk) [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/cushydigit/go-freelancer-sdk/LICENSE) [![Go Version](https://img.shields.io/github/go-mod/go-version/cushydigit/go-freelancer-sdk)](go.mod) [![Build Status](https://img.shields.io/github/actions/workflow/status/cushydigit/go-freelancer-sdk/test.yml?branch=main)](https://github.com/cushydigit/go-freelancer-sdk/actions) ![Unofficial Status](https://img.shields.io/badge/status-unofficial-orange) </p> |
+| :---: |
 	| Syntax | Description |
 | ----------- | ----------- |
 | Header | Title |
