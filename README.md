@@ -214,8 +214,8 @@ Current version covers **Projects**, **Users**, and **Common** services.
 
 ### Stability & Quality
 
-- [*] **Static Analysis:**
-- [-] **Unit Testing:** (7% coverage)
+- [x] **Static Analysis:**
+- [x] **Unit Testing:** (7% coverage)
 - [ ] **Use Case:**
 
 ### Upcoming Features
