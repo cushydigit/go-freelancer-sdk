@@ -18,6 +18,11 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
+	| Syntax | Description |
+| ----------- | ----------- |
+| Header | Title |
+| Paragraph | Text |
+
 # Freelancer.com Go SDK
 
 A Go (Golang) SDK for interacting with the [Freelancer.com API](https://developers.freelancer.com/).
