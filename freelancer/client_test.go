@@ -9,13 +9,14 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewClientOptions(t *testing.T) {
 	c := NewClient("token", WithSandBox(), WithDebug(true))
 
-	assert.Equal(t, c.baseURL, BaseAPISandBoxURL)
+	assert.Equal(t, c.baseURL, endpoints.BaseAPISandBoxURL)
 	assert.Equal(t, c.debugMode, true)
 }
 

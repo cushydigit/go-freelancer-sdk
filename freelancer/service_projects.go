@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 // Title, Description, Budget, Jobs are required
@@ -36,7 +38,8 @@ type CreateProjectBody struct {
 // Create a new project
 // It maps to the `POST` `/projects/0.1/projects` endpoint.
 func (s *ProjectsService) Create(ctx context.Context, b CreateProjectBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(ProjectsProjects), nil, b)
+	path := endpoints.Projects
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 // TODO: check this service functionality so the projectActionBody should have better fields
@@ -50,7 +53,7 @@ type ProjectActionBody struct {
 // Perform an action on a project
 // It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
 func (s *ProjectsService) Action(ctx context.Context, projectID int64, action ProjectActionBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", ProjectsProjects, projectID)
+	path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, projectID)
 }
 
@@ -125,6 +128,7 @@ type ListProjectsOptions struct {
 // Returns information about multiple projects. Will be ordered by descending submit date (newest-to-oldest).
 // it maps to the `GET` `/projects/0.1/projects` endpoint
 func (s *ProjectsService) List(ctx context.Context, opts *ListProjectsOptions) (*ListProjectsResponse, error) {
+	path := endpoints.Projects
 	query := url.Values{}
 	if opts != nil {
 		for _, id := range opts.projects {
@@ -203,7 +207,7 @@ func (s *ProjectsService) List(ctx context.Context, opts *ListProjectsOptions) (
 		addInt(query, "offset", opts.offset)
 	}
 
-	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, string(ProjectsProjects), query, nil)
+	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ListSelfProjectsOptions struct {
@@ -221,6 +225,7 @@ type ListSelfProjectsOptions struct {
 // Returns the logged in user’s projects/contests they either created or participated in (by bidding or submitting an entry).
 // it maps to the `GET` `/projects/0.1/self` endpoint
 func (s *ProjectsService) ListSelf(ctx context.Context, opts *ListSelfProjectsOptions) (*ListProjectsResponse, error) {
+	path := endpoints.ProjectsSelf
 	query := url.Values{}
 	if opts != nil {
 		addEnum(query, "status", opts.Status)
@@ -235,7 +240,7 @@ func (s *ProjectsService) ListSelf(ctx context.Context, opts *ListSelfProjectsOp
 		addInt(query, "offset", opts.Offset)
 		addInt(query, "limit", opts.Limit)
 	}
-	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, string(ProjectsSelf), query, nil)
+	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type GetProjectOptions struct {
@@ -300,6 +305,7 @@ type GetProjectOptions struct {
 // Get information about a specific project. The full range of users projection options can be specified as part of this request by first setting theuser_detailsparameter to true.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}` endpoint
 func (s *ProjectsService) Get(ctx context.Context, projectID int64, opts *GetProjectOptions) (*GetProjectResponse, error) {
+	path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
 	query := url.Values{}
 	if opts != nil {
 		addBool(query, "full_description", opts.FullDescription)
@@ -356,7 +362,6 @@ func (s *ProjectsService) Get(ctx context.Context, projectID int64, opts *GetPro
 		addBool(query, "compact", opts.Compact)
 	}
 
-	path := fmt.Sprintf("%s/%s", string(ProjectsProjects), strconv.FormatInt(projectID, 10))
 	return execute[*GetProjectResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -432,6 +437,7 @@ type SearchActiveProjectsOptions struct {
 // Searches for active projects matching the desired query.
 // It maps to the `GET` `/projects/0.1/projects/active` endpoint
 func (s *ProjectsService) SearchActive(ctx context.Context, opts *SearchActiveProjectsOptions) (*ListProjectsResponse, error) {
+	path := endpoints.ProjectsActive
 	query := url.Values{}
 	if opts != nil {
 		addString(query, "query", opts.Query)
@@ -506,7 +512,7 @@ func (s *ProjectsService) SearchActive(ctx context.Context, opts *SearchActivePr
 
 	}
 
-	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, string(ProjectsProjectsActive), query, nil)
+	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type SearchAllProjectsOptions struct {
@@ -584,8 +590,8 @@ type SearchAllProjectsOptions struct {
 // Searches for all projects matching the desired query.
 // It maps to the `GET` `/projects/0.1/projects/all` endpoint
 func (s *ProjectsService) SearchAll(ctx context.Context, opts *SearchAllProjectsOptions) (*ListProjectsResponse, error) {
+	path := endpoints.ProjectsAll
 	query := url.Values{}
-
 	if opts != nil {
 		addString(query, "query", opts.Query)
 		for _, projectType := range opts.ProjectTypes {
@@ -679,7 +685,7 @@ func (s *ProjectsService) SearchAll(ctx context.Context, opts *SearchAllProjects
 
 	}
 
-	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, string(ProjectsProjectsAll), query, nil)
+	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type InviteFreelancersBody struct {
@@ -689,7 +695,7 @@ type InviteFreelancersBody struct {
 // Invites specific freelancers to bid on a project.
 // It maps to the `POST` `/projects/0.1/projects/{project_id}/invite` endpoint
 func (s *ProjectsService) InviteFreelancer(ctx context.Context, projectID int64, b InviteFreelancersBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/invite", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	path := fmt.Sprintf("%s/%d/invite", endpoints.Projects, projectID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
@@ -705,6 +711,7 @@ type ListUpgradesFeesOptions struct {
 // Returns the project upgrade fees for a given list of currencies. Also checks if the current user is eligible for free upgrades if requested.
 // It maps to the `GET` `/projects/0.1/projects/fees` endpoint
 func (s *ProjectsService) ListUpgradesFees(ctx context.Context, opts *ListUpgradesFeesOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsFees
 	query := url.Values{}
 	if opts != nil {
 		if opts.Currencies != nil {
@@ -717,7 +724,7 @@ func (s *ProjectsService) ListUpgradesFees(ctx context.Context, opts *ListUpgrad
 		addBool(query, "tax_included", opts.TaxIncluded)
 	}
 
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsProjectsFees), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ListProjectBidsOptions struct {
@@ -767,6 +774,8 @@ type ListProjectBidsOptions struct {
 // Returns bids for a single project. Employers will see bids in a sorted order, which begins with sponsored bids, then by bid ranking. Freelancers will receive the bid list ordered by date. Note: This method is expensive to compute so it is recommended that reputation and user projection options are not set.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/bids` endpoint
 func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *ListProjectBidsOptions) (*RawResponse, error) {
+
+	path := fmt.Sprintf("%s/%s/bids", endpoints.Projects, strconv.FormatInt(projectID, 10))
 	query := url.Values{}
 	if opts != nil {
 		addBool(query, "is_shortlisted", opts.IsShortlisted)
@@ -809,7 +818,6 @@ func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *L
 		addBool(query, "quotations", opts.Quotations)
 	}
 
-	path := fmt.Sprintf("%s/%s/bids", ProjectsProjects, strconv.FormatInt(projectID, 10))
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -818,7 +826,7 @@ func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *L
 // Returns information for posting bids on a project.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/bids_info` endpoint
 func (s *ProjectsService) GetBidInfo(ctx context.Context, projectID int64) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/bids_info", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	path := fmt.Sprintf("%s/%d/bids_info", endpoints.Projects, projectID)
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
@@ -856,7 +864,7 @@ type ListProjectMilestonesOptions struct {
 // Returns a list of milestones on a project. Does not return un-awarded prepaid milestones.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/milestones` endpoint
 func (s *ProjectsService) ListMilestones(ctx context.Context, projectID int64, opts *ListProjectMilestonesOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/milestones", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	path := fmt.Sprintf("%s/%d/milestones", endpoints.Projects, projectID)
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Statuses {
@@ -929,7 +937,7 @@ type ListProjectsMilestoneRequestsOptions struct {
 // Returns a list of milestone requests by freelancers for a project.
 // it maps to the `GET` `/projects/0.1/projects/{project_id}/milestone_requests` endpoint
 func (s *ProjectsService) ListMilestoneRequests(ctx context.Context, projectID int64, opts *ListProjectsMilestoneRequestsOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/milestone_requests", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	path := fmt.Sprintf("%s/%d/milestone_requests", endpoints.Projects, projectID)
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Statuses {
@@ -981,6 +989,7 @@ type GetHourlyContractInfoOptions struct {
 // Fetch the hourly contract matching the desired query.
 // It maps to the `GET` `/projects/0.1/hourly_contract_info` endpoint
 func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *GetHourlyContractInfoOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsHourlyContract
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.ProjectIDs {
@@ -999,7 +1008,8 @@ func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *GetHo
 		addBool(query, "billing_details", opts.billingDetails)
 		addBool(query, "invoice_details", opts.invoiceDetails)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsHourlyContract), query, nil)
+
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 // TODO: refine with typed response
@@ -1007,13 +1017,13 @@ func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *GetHo
 // Fetch the IP contract matching for the project id. If you are an employer it will return all of the contracts, ELSE we will return contract details specific to the logged-in user.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/ip_contract_info` endpoint
 func (s *ProjectsService) GetIPContractInfo(ctx context.Context, projectID int64) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/ip_contract_info", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	path := fmt.Sprintf("%s/%d/ip_contract_info", endpoints.Projects, projectID)
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
 // Delete a project by id. Only projects that are in pending or rejected states may be deleted. This will close the project and remove its visibility.
 // it maps to the `DELETE` `/projects/0.1/projects/{project_id}` endpoint
 func (s *ProjectsService) Delete(ctx context.Context, projectID int64) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s", string(ProjectsProjects), strconv.FormatInt(projectID, 10))
+	path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
 	return execute[*RawResponse](ctx, s.client, http.MethodDelete, path, nil, nil)
 }

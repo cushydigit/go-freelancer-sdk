@@ -3,6 +3,8 @@ package freelancer
 import (
 	"context"
 	"net/http"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 type CreateProfileBody struct {
@@ -16,7 +18,8 @@ type CreateProfileBody struct {
 // Create a new profile for a user. Returns the created profile
 // It maps to the `POST` `/users/0.1/profiles` endpoint.
 func (s *ProfilesService) Create(ctx context.Context, b CreateProfileBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(UsersProfiles), nil, b)
+	path := endpoints.UsersProfiles
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 // TODO: the api does not have solid on this endpoint (the get should not have body)
@@ -24,7 +27,8 @@ func (s *ProfilesService) Create(ctx context.Context, b CreateProfileBody) (*Raw
 // Get profile(s)
 // It maps to the `GET` `/users/0.1/profiles` endpoint.
 func (s *ProfilesService) Get(ctx context.Context) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(UsersProfiles), nil, nil)
+	path := endpoints.UsersProfiles
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
 type UpdateProfileBody struct {
@@ -41,5 +45,6 @@ type UpdateProfileBody struct {
 // Update a profile
 // It maps to the `PUT` `/users/0.1/profiles` endpoint.
 func (s *ProfilesService) Update(ctx context.Context, b UpdateProfileBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPut, string(UsersProfiles), nil, b)
+	path := endpoints.UsersProfiles
+	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }

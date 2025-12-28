@@ -240,3 +240,16 @@ type Device struct {
 	Country   string `json:"country"`
 	LastLogin int64  `json:"last_login"`
 }
+
+type BidEditRequest struct {
+	ID            int     `json:"id"`
+	BidID         int     `json:"bid_id"`
+	Status        string  `json:"status"` // "pending", "accepted", "declined"
+	Comment       string  `json:"comment,omitempty"`
+	NewAmount     float64 `json:"new_amount"`
+	NewPeriod     int     `json:"new_period"`
+	OldAmount     float64 `json:"old_amount"`
+	OldPeriod     int     `json:"old_period"`
+	TimeRequested int64   `json:"time_requested"`           // Unix timestamp
+	TimeResponded *int64  `json:"time_responded,omitempty"` // optional, Unix timestamp
+}

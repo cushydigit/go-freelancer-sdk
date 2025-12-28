@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 type ListUsersOptions struct {
@@ -49,6 +51,7 @@ type ListUsersOptions struct {
 // Returns a list of users.
 // It maps to the `GET` `/users/0.1/users` endpoint.
 func (s *UsersService) List(ctx context.Context, opts *ListUsersOptions) (*ListUsersResponse, error) {
+	path := endpoints.Users
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Users {
@@ -92,13 +95,13 @@ func (s *UsersService) List(ctx context.Context, opts *ListUsersOptions) (*ListU
 		addBool(query, "shareholder_details", opts.ShareholderDetails)
 		addBool(query, "staff_details", opts.StaffDetails)
 	}
-	return execute[*ListUsersResponse](ctx, s.client, http.MethodGet, string(UsersUsers), query, nil)
+	return execute[*ListUsersResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 // Returns information about a specific user.
 // It maps to the `GET` `/users/0.1/users/{user_id}` endpoint.
 func (s *UsersService) Get(ctx context.Context, userID int64) (*GetUserResponse, error) {
-	path := fmt.Sprintf("%s/%d", string(UsersUsers), userID)
+	path := fmt.Sprintf("%s/%d", endpoints.Users, userID)
 	return execute[*GetUserResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
@@ -162,6 +165,7 @@ type SearchFreelancerOptions struct {
 // Returns a list of Freelancers. The total_count field is the total number of eligible Freelancers, but these users can be limited by the offset and limit parameters.
 // It maps to the `GET` `/users/0.1/users/directory` endpoint.
 func (s *UsersService) SearchFreelancer(ctx context.Context, opts *SearchFreelancerOptions) (*SearchFreelancersResponse, error) {
+	path := endpoints.UsersFreelancers
 	query := url.Values{}
 	if opts != nil {
 		addString(query, "query", opts.Query)
@@ -230,5 +234,5 @@ func (s *UsersService) SearchFreelancer(ctx context.Context, opts *SearchFreelan
 		addBool(query, "compact", opts.Compact)
 
 	}
-	return execute[*SearchFreelancersResponse](ctx, s.client, http.MethodGet, string(UsersFreelancers), query, nil)
+	return execute[*SearchFreelancersResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }

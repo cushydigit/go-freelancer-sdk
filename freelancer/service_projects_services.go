@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 // Orders one of the available services.
 // It maps to the `POST` `/projects/0.1/services/{service_type}/{service_id}/order` endpoint
 func (s *ServicesService) Order(ctx context.Context, serviceID int, serviceType ServiceType) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/%d/order", ProjectsServices, serviceType, serviceID)
+	path := fmt.Sprintf("%s/%s/%d/order", endpoints.ProjectsServices, serviceType, serviceID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, nil)
 }
 
@@ -63,6 +65,7 @@ type ListServicesOptions struct {
 // Returns a list of services.
 // it maps to the `GET` `/projects/0.1/services` endpoint
 func (s *ServicesService) List(ctx context.Context, opts *ListServicesOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsServices
 	query := url.Values{}
 	if opts != nil {
 		for _, id := range opts.Services {
@@ -104,7 +107,7 @@ func (s *ServicesService) List(ctx context.Context, opts *ListServicesOptions) (
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsServices), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type SearchActiveServicesOptions struct {
@@ -124,6 +127,7 @@ type SearchActiveServicesOptions struct {
 // Returns active services.
 // it maps to the `GET` `/projects/0.1/services/active` endpoint
 func (s *ServicesService) SearchActive(ctx context.Context, opts *SearchActiveServicesOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsServicesActive
 	query := url.Values{}
 	if opts != nil {
 		addString(query, "query", opts.Query)
@@ -136,5 +140,5 @@ func (s *ServicesService) SearchActive(ctx context.Context, opts *SearchActiveSe
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsServicesActive), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }

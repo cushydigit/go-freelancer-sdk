@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 type ListReputationsOptions struct {
@@ -18,6 +20,7 @@ type ListReputationsOptions struct {
 // Gets the reputations for a list of users.
 // It maps to the `GET` `/users/0.1/reputations` endpoint.
 func (s *UsersExtrasService) ListReputations(ctx context.Context, opts *ListReputationsOptions) (*ListUsersReputationsResponse, error) {
+	path := endpoints.UsersReputations
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Users {
@@ -31,7 +34,7 @@ func (s *UsersExtrasService) ListReputations(ctx context.Context, opts *ListRepu
 		addBool(query, "project_stats", opts.ProjectStats)
 		addBool(query, "rehire_rates", opts.RehireRates)
 	}
-	return execute[*ListUsersReputationsResponse](ctx, s.client, http.MethodGet, string(UsersReputations), query, nil)
+	return execute[*ListUsersReputationsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ListEnterprisesOptions struct {
@@ -50,6 +53,7 @@ type ListEnterprisesOptions struct {
 // Returns a list of enterprises.
 // It maps to the `GET` `/users/0.1/enterprises` endpoint.
 func (s *UsersExtrasService) ListEnterprises(ctx context.Context, opts *ListEnterprisesOptions) (*RawResponse, error) {
+	path := endpoints.UsersEnterprises
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Enterprises {
@@ -69,7 +73,7 @@ func (s *UsersExtrasService) ListEnterprises(ctx context.Context, opts *ListEnte
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(UsersEnterprises), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ListPortfoliosOptions struct {
@@ -81,6 +85,7 @@ type ListPortfoliosOptions struct {
 // The service gets the portfolios for a list of users
 // Returns a list of portfolios of users. Number of portfolios of all users can be limited by the offset and limit parameters.
 func (s *UsersExtrasService) ListPortfolios(ctx context.Context, opts *ListPortfoliosOptions) (*ListUsersPortfoliosResponse, error) {
+	path := endpoints.UsersPortfolios
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Users {
@@ -89,7 +94,7 @@ func (s *UsersExtrasService) ListPortfolios(ctx context.Context, opts *ListPortf
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 	}
-	return execute[*ListUsersPortfoliosResponse](ctx, s.client, http.MethodGet, string(UsersPortfolios), query, nil)
+	return execute[*ListUsersPortfoliosResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type CreateViolationBody struct {
@@ -105,7 +110,8 @@ type CreateViolationBody struct {
 // Creates a user violation report.
 // It maps to the `POST` `/users/0.1/violation_reports` endpoint.
 func (s *UsersExtrasService) CreateViolation(ctx context.Context, b CreateViolationBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(UsersViolationReports), nil, b)
+	path := endpoints.UsersViolationReports
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 type ListPoolsOptions struct {
@@ -123,6 +129,7 @@ type ListPoolsOptions struct {
 // Returns a list of pools belonging to the current user.
 // It maps to the `GET` `/users/0.1/pools` endpoint.
 func (s *UsersExtrasService) ListPools(ctx context.Context, opts *ListPoolsOptions) (*RawResponse, error) {
+	path := endpoints.UsersPools
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Pools {
@@ -139,5 +146,5 @@ func (s *UsersExtrasService) ListPools(ctx context.Context, opts *ListPoolsOptio
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(UsersPools), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }

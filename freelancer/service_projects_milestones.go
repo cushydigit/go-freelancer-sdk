@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 type ListMilestonesOptions struct {
@@ -51,6 +53,7 @@ type ListMilestonesOptions struct {
 // Returns a list of milestones. Does not return un-awarded prepaid milestones.
 // It maps to the `GET` `/projects/0.1/milestones` endpoint
 func (s *MilestonesService) List(ctx context.Context, opts *ListMilestonesOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsMilestones
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Projects {
@@ -102,7 +105,7 @@ func (s *MilestonesService) List(ctx context.Context, opts *ListMilestonesOption
 		addBool(query, "limited_account", opts.LimitedAccount)
 		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsMilestones), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type GetMilestoneOptions struct {
@@ -141,7 +144,7 @@ type GetMilestoneOptions struct {
 // Returns information about a specific milestone.
 // It maps to the `GET` `/projects/0.1/milestones/{milestone_id}` endpoint
 func (s *MilestonesService) GetByID(ctx context.Context, milestoneID int, opts *GetMilestoneOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", ProjectsMilestones, milestoneID)
+	path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
 	query := url.Values{}
 	if opts != nil {
 		addBool(query, "user_avatar", opts.UserAvatar)
@@ -187,7 +190,8 @@ type CreateMilestoneBody struct {
 // Post a review of a user.
 // It maps to the `POST` `/projects/0.1/milestones` endpoint
 func (s *MilestonesService) Create(ctx context.Context, b CreateMilestoneBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(ProjectsMilestones), nil, b)
+	path := endpoints.ProjectsMilestones
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 type ActionMilestoneBody struct {
@@ -201,7 +205,7 @@ type ActionMilestoneBody struct {
 // Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
 // It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
 func (s *MilestonesService) Action(ctx context.Context, milestoneID int, b ActionMilestoneBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", ProjectsMilestones, milestoneID)
+	path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }
 
@@ -254,6 +258,7 @@ type ListMilestonesRequestsOptions struct {
 // Returns a list of milestone requests.
 // It maps to the `GET` `/projects/0.1/milestone_requests` endpoint
 func (s *MilestoneRequestsService) List(ctx context.Context, opts *ListMilestonesRequestsOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsMilestoneRequests
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.MilestoneRequests {
@@ -314,7 +319,7 @@ func (s *MilestoneRequestsService) List(ctx context.Context, opts *ListMilestone
 		addInt(query, "offset", opts.Offset)
 
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsMilestoneRequests), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type GetMilestoneRequestOptions struct {
@@ -353,7 +358,7 @@ type GetMilestoneRequestOptions struct {
 // Returns information about a specific milestone request.
 // It maps to the `GET` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
 func (s *MilestoneRequestsService) Get(ctx context.Context, milestoneRequestID int, opts *GetMilestoneRequestOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", ProjectsMilestoneRequests, milestoneRequestID)
+	path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
 	query := url.Values{}
 	if opts != nil {
 		addBool(query, "user_avatar", opts.UserAvatar)
@@ -399,7 +404,8 @@ type CreateMilestoneRequestBody struct {
 // Creates a milestone request from a given JSON object.
 // It maps to the `POST` `/projects/0.1/milestone_requests` endpoint
 func (s *MilestoneRequestsService) Create(ctx context.Context, b CreateMilestoneRequestBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(ProjectsMilestoneRequests), nil, b)
+	path := endpoints.ProjectsMilestoneRequests
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 type ActionMilestoneRequestBody struct {
@@ -409,6 +415,6 @@ type ActionMilestoneRequestBody struct {
 // Perform an action on a milestone request.
 // It maps to the `PUT` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
 func (s *MilestoneRequestsService) Action(ctx context.Context, milestoneRequestID int, b ActionMilestoneRequestBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", ProjectsMilestoneRequests, milestoneRequestID)
+	path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 // TODO: refine with typed response
@@ -12,7 +14,7 @@ import (
 // Returns a list of project collaboration data for a project.
 // it maps to the `GET` `/projects/0.1/projects/{project_id}/collaborations` endpoint
 func (s *CollaborationsService) List(ctx context.Context, projectID int64) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/collaborations", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	path := fmt.Sprintf("%s/%s/collaborations", endpoints.Projects, strconv.FormatInt(projectID, 10))
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
@@ -30,7 +32,7 @@ type CreateProjectCollaborationsBody struct {
 // Creates a new project collaboration.
 // It maps to the `POST` `/projects/0.1/projects/{project_id}/collaborations` endpoint
 func (s *CollaborationsService) Create(ctx context.Context, projectID int64, b CreateProjectCollaborationsBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/collaborations", ProjectsProjects, strconv.FormatInt(projectID, 10))
+	path := fmt.Sprintf("%s/%s/collaborations", endpoints.Projects, strconv.FormatInt(projectID, 10))
 	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, nil)
 }
 
@@ -47,7 +49,7 @@ type ActionProjectCollaborationsBody struct {
 // Performs an action on a collaboration.
 // it maps to the `POST` `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` endpoint
 func (s *CollaborationsService) Action(ctx context.Context, projectID int64, collaborationID int, b ActionProjectCollaborationsBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/collaborations/%d/actions", ProjectsProjects, strconv.FormatInt(projectID, 10), collaborationID)
+	path := fmt.Sprintf("%s/%s/collaborations/%d/actions", endpoints.Projects, strconv.FormatInt(projectID, 10), collaborationID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
@@ -56,5 +58,6 @@ func (s *CollaborationsService) Action(ctx context.Context, projectID int64, col
 // Returns a list of all collaboration data for a user.
 // It maps toi the `GET` `/projects/0.1/collaborations` endpoint
 func (s *CollaborationsService) ListAll(ctx context.Context) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsCollaborations), nil, nil) // TODO: add the query paramete
+	path := endpoints.ProjectsCollaborations
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil) // TODO: add the query paramete
 }
