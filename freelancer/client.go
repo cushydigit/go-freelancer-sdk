@@ -10,11 +10,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-)
 
-const (
-	BaseAPIMainURL    = "https://www.freelancer.com/api"
-	BaseAPISandBoxURL = "https://api-sandbox.freelancer.com"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 func (c *Client) GetBaseUrl() string {
@@ -43,7 +40,7 @@ type Client struct {
 type ClientOption func(*Client)
 
 func WithSandBox() ClientOption {
-	return func(c *Client) { c.baseURL = BaseAPISandBoxURL }
+	return func(c *Client) { c.baseURL = endpoints.BaseAPISandBoxURL }
 }
 
 func WithHttpClient(hc *http.Client) ClientOption {
@@ -62,7 +59,7 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 			Timeout: 30 * time.Second,
 		},
 		apiToken:     apiToken,
-		baseURL:      BaseAPIMainURL,
+		baseURL:      endpoints.BaseAPIMainURL,
 		debugMode:    false,
 		useRateLimit: true,
 		rateLimiter:  newRateLimiter(),

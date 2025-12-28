@@ -41,26 +41,6 @@ func (r *RateLimiter) updateFromHeader(header http.Header) {
 		}
 	}
 
-	// limitHeader := header.Get("RateLimit-Limit")
-	// log.Printf("Rate-Limit: %s", limitHeader)
-	// if limitHeader != "" {
-	// 	parts := strings.Split(limitHeader, ";")
-	// 	if len(parts) > 1 {
-	// 		mainPart := strings.Split(parts[0], ",")[0]
-	// 		if l, err := strconv.Atoi(strings.TrimSpace(mainPart)); err == nil {
-	// 			r.limit = l
-	// 		}
-	// 	}
-	// }
-
-	// remainingHeader := header.Get("RateLimit-Remaining")
-	// if remainingHeader != "" {
-	// 	if remaining, err := strconv.Atoi(remainingHeader); err == nil {
-	// 		r.remaining = remaining
-	// 	}
-	// }
-
-	// r.lastCheck = time.Now()
 }
 
 func (r *RateLimiter) wait(ctx context.Context) error {

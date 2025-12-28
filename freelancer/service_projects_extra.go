@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 type listExpertGuaranteesOptions struct {
@@ -25,6 +27,7 @@ type listExpertGuaranteesOptions struct {
 // Returns a list of expert guarantees.
 // It maps to the `GET` `/projects/0.1/expert_guarantees` endpoint
 func (s *ExpertGuaranteesService) List(ctx context.Context, opts *listExpertGuaranteesOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsExpertGuarantees
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.ExpertGuarantees {
@@ -50,7 +53,7 @@ func (s *ExpertGuaranteesService) List(ctx context.Context, opts *listExpertGuar
 		addInt(query, "offset", opts.Offset)
 		addInt(query, "limit", opts.Limit)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsExpertGuarantees), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ExpertGuaranteesActionRequestBody struct {
@@ -60,7 +63,7 @@ type ExpertGuaranteesActionRequestBody struct {
 // Perform an action on a expert guarantee.
 // It maps to the `PUT` `/projects/0.1/expert_guarantees/{expert_guarantee_id}` endpoint
 func (s *ExpertGuaranteesService) Action(ctx context.Context, expertGuaranteesID int64, b ExpertGuaranteesActionRequestBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", ProjectsExpertGuarantees, expertGuaranteesID)
+	path := fmt.Sprintf("%s/%d", endpoints.ProjectsExpertGuarantees, expertGuaranteesID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }
 
@@ -73,6 +76,7 @@ type ListCurrenciesOptions struct {
 // Returns a list of currencies.currency_codes and currency_ids are incompatible with each other.
 // It maps to the `GET` `/projects/0.1/currencies` endpoint
 func (s *CurrenciesService) List(ctx context.Context, opts *ListCurrenciesOptions) (*ListCurrenciesResponse, error) {
+	path := endpoints.ProjectsCurrencies
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.CurrencyCodes {
@@ -83,7 +87,7 @@ func (s *CurrenciesService) List(ctx context.Context, opts *ListCurrenciesOption
 		}
 		addBool(query, "include_external_currencies", opts.IncludeExternalCurrencies)
 	}
-	return execute[*ListCurrenciesResponse](ctx, s.client, http.MethodGet, string(ProjectsCurrencies), query, nil)
+	return execute[*ListCurrenciesResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ListCategoriesOptions struct {
@@ -97,6 +101,7 @@ type ListCategoriesOptions struct {
 // Returns a list of categories. If job_details is set, a map of category IDs to jobs in those categories.
 // it maps to the `GET` `/projects/0.1/categories` endpoint
 func (s *CategoriesService) List(ctx context.Context, opts *ListCategoriesOptions) (*ListCategoriesResponse, error) {
+	path := endpoints.ProjectsCategories
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Categories {
@@ -107,7 +112,7 @@ func (s *CategoriesService) List(ctx context.Context, opts *ListCategoriesOption
 		addBool(query, "active_project_count_details", opts.ActiveProjectCountDetails)
 		addBool(query, "seo_details", opts.SeoDetails)
 	}
-	return execute[*ListCategoriesResponse](ctx, s.client, http.MethodGet, string(ProjectsCategories), query, nil)
+	return execute[*ListCategoriesResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ListBudgetsOptions struct {
@@ -121,6 +126,7 @@ type ListBudgetsOptions struct {
 // Returns a list of budgets with the specified currencies.currency_codesandcurrency_idsare incompatible with each other.
 // It maps to the `GET` `/projects/0.1/budgets` endpoint
 func (s *BudgetsService) List(ctx context.Context, opts *ListBudgetsOptions) (*ListBudgetsResponse, error) {
+	path := endpoints.ProjectsBudgets
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.CurrencyCodes {
@@ -134,5 +140,5 @@ func (s *BudgetsService) List(ctx context.Context, opts *ListBudgetsOptions) (*L
 		addBool(query, "currency_details", opts.CurrencyDetails)
 	}
 
-	return execute[*ListBudgetsResponse](ctx, s.client, http.MethodGet, string(ProjectsBudgets), nil, opts)
+	return execute[*ListBudgetsResponse](ctx, s.client, http.MethodGet, path, nil, opts)
 }

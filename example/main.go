@@ -27,13 +27,14 @@ func main() {
 }
 
 func Init() {
+
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("the .env file not found: %v", err)
+		log.Fatalf("failed to load .env: %v", err)
 	}
 
 	apiAccessToken = os.Getenv("FREELANCER_ACCESS_TOKEN")
 	if apiAccessToken == "" {
-		log.Fatal("environment variable not set correctly")
+		log.Fatal("'FREELANCER_ACCESS_TOKEN' environment  variable is not set or emtpy")
 	}
 
 	//create instance for freelancer client

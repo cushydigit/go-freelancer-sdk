@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 type ListBidsOptions struct {
@@ -61,6 +63,7 @@ type ListBidsOptions struct {
 // Returns a list of bids that match the specified criteria.
 // It maps to the `GET` `/projects/0.1/bids` endpoint
 func (s *BidsService) List(ctx context.Context, opts *ListBidsOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsBids
 	query := url.Values{}
 	if opts != nil {
 		for _, id := range opts.Bids {
@@ -126,8 +129,7 @@ func (s *BidsService) List(ctx context.Context, opts *ListBidsOptions) (*RawResp
 		addBool(query, "compact", opts.Compact)
 
 	}
-
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsBids), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type GetBidOptions struct {
@@ -174,7 +176,7 @@ type GetBidOptions struct {
 // Returns a list of bids that match the specified criteria.
 // it maps to the `GET` `/projects/0.1/bids/{bid_id}` endpoint
 func (s *BidsService) Get(ctx context.Context, bidID int64, opts *GetBidOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s", ProjectsBids, strconv.FormatInt(bidID, 10))
+	path := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
 	query := url.Values{}
 	if opts != nil {
 		addBool(query, "reputation", opts.Reputation)
@@ -232,7 +234,8 @@ type CreateBidBody struct {
 // Creates a bid on a project. Accepts a JSON object in the style described in the Bid struct (with enums as strings, and objects as dictionaries).
 // It maps to the `POST` `/projects/0.1/bids` endpoint
 func (s *BidsService) Create(ctx context.Context, b CreateBidBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(ProjectsBids), nil, b)
+	path := endpoints.ProjectsBids
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 type ActionBidBody struct {
@@ -242,7 +245,7 @@ type ActionBidBody struct {
 // Performs an action on a bid.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
 func (s *BidsService) Action(ctx context.Context, bidID int64, b *ActionBidBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s", ProjectsBids, strconv.FormatInt(bidID, 10))
+	path := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }
 
@@ -255,7 +258,7 @@ type UpdateBidBody struct {
 // Updates an existing bid on a project. An existing bids information (description,amount,milestone_percentage) can be updated by sending a JSON encoded Bid struct.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
 func (s *BidsService) Update(ctx context.Context, bidID int64, b UpdateBidBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s", ProjectsBids, strconv.FormatInt(bidID, 10))
+	path := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }
 
@@ -271,7 +274,7 @@ type GetTimeTrackingOptions struct {
 // Returns a list of aggregate time tracking data for a bid.
 // It maps to the `GET` `/projects/0.1/bids/{bid_id}/time_tracking` endpoint
 func (s *BidsService) GetTimeTracking(ctx context.Context, bidID int64, opts *GetTimeTrackingOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/time_tracking", ProjectsBids, strconv.FormatInt(bidID, 10))
+	path := fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID)
 	query := url.Values{}
 	if opts != nil {
 		addInt64(query, "from_time", opts.FromTime)
@@ -292,21 +295,20 @@ type CreateTimeTrackingBody struct {
 // Creates a time tracking session for a specific bid.
 // It maps to the `POST` `/projects/0.1/bids/{bid_id}/time_tracking` endpoint
 func (s *BidsService) CreateTimeTracking(ctx context.Context, bidID int64, b CreateTimeTrackingBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/time_tracking", ProjectsBids, strconv.FormatInt(bidID, 10))
+	path := fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
-type GetBidEditRequestsOptions struct {
+type ListBidEditRequestsOptions struct {
 	Statuses          []BidStatus
 	BidEditRequestIDs []int
 }
 
-// TODO: refine with typed response
-
 // Return bid edit requests by bid id.
 // It maps to the `GET` `/projects/0.1/bids/{bid_id}/edit_requests` endpoint
-func (s *BidEditRequestService) Get(ctx context.Context, bidID int64, opts *GetBidEditRequestsOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%si/", ProjectsBids, strconv.FormatInt(bidID, 10))
+// the original name was Get but it was renamed to List due to returning list of edit requests
+func (s *BidEditRequestService) List(ctx context.Context, bidID int64, opts *ListBidEditRequestsOptions) (*ListBidEditRequestsResponse, error) {
+	path := fmt.Sprintf("%s/%d/edit_requests/", endpoints.ProjectsBids, bidID)
 	query := url.Values{}
 	if opts != nil {
 		for _, val := range opts.Statuses {
@@ -316,9 +318,10 @@ func (s *BidEditRequestService) Get(ctx context.Context, bidID int64, opts *GetB
 			query.Add("bid_edit_request_ids[]", strconv.Itoa(val))
 		}
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	return execute[*ListBidEditRequestsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
+// Required: BidID, NewAmount, NewPeriod
 type CreateBidEditRequestsBody struct {
 	BidID     int64 `json:"bid_id"`
 	NewAmount int   `json:"new_amount"`
@@ -328,19 +331,20 @@ type CreateBidEditRequestsBody struct {
 
 // Create a bid edit request on a post accept awarded bid. With no pending bid edit request.
 // It maps to the `POST` `/projects/0.1/bids/edit_requests` endpoint
-func (s *BidEditRequestService) Create(ctx context.Context, bidID int64, b CreateBidEditRequestsBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(ProjectsBidsBidEditRequests), nil, b)
+func (s *BidEditRequestService) Create(ctx context.Context, b CreateBidEditRequestsBody) (*CreateBidEditRequestResponse, error) {
+	path := endpoints.ProjectsBidsBidEditRequests
+	return execute[*CreateBidEditRequestResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
-type BidEditRequestsActionBody struct {
+type ActionBidEditRequestsBody struct {
 	Action BidEditRequestAction `json:"action"`
 }
 
 // Employer perform action on a PENDING bid edit request.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}/edit_requests/{edit_request_id}` endpoint
-func (s *BidEditRequestService) Action(ctx context.Context, bidID, bidEditRequestID int64, b BidEditRequestsActionBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%si/edit_requests/%s", ProjectsBids, strconv.FormatInt(bidID, 10), strconv.FormatInt(bidEditRequestID, 10))
-	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
+func (s *BidEditRequestService) Action(ctx context.Context, bidID, bidEditRequestID int64, b ActionBidEditRequestsBody) (*ActionBidEditRequestResponse, error) {
+	path := fmt.Sprintf("%s/%d/edit_requests/%d", endpoints.ProjectsBids, bidID, bidEditRequestID)
+	return execute[*ActionBidEditRequestResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }
 
 // TODO: refine with typed response
@@ -348,7 +352,7 @@ func (s *BidEditRequestService) Action(ctx context.Context, bidID, bidEditReques
 // Fetch bid rating for a bid
 // It maps to the `GET` `/projects/0.1/bids/{bid_id}/bid_ratings` endpoint
 func (s *BidRatingsService) Get(ctx context.Context, bidID int64) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d/bid_ratings", ProjectsBids, bidID)
+	path := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
@@ -361,7 +365,8 @@ type GetByListOfBidsOptions struct {
 // Fetch bid ratings for multiple bids
 // it maps to the `GET` `/projects/0.1/bid_ratings` endpoint
 func (s *BidRatingsService) GetByListOfBids(ctx context.Context, opts *GetByListOfBidsOptions) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsBidRatings), nil, nil)
+	path := endpoints.ProjectsBidRatings
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
 // Rating required
@@ -373,7 +378,7 @@ type CreateBidRatingsBody struct {
 // Rates a bid (creates a bid rating)
 // It maps to the `POST` `/projects/0.1/bids/{bid_id}/bid_ratings` endpoint
 func (s *BidRatingsService) Create(ctx context.Context, bidID int64, b CreateBidRatingsBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d/bid_ratings", ProjectsBids, bidID)
+	path := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
@@ -385,6 +390,6 @@ type UpdateBidRatingBody struct {
 // Updates an existing bid rating
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}/bid_ratings/{bid_rating_id}` endpoint
 func (s *BidRatingsService) Update(ctx context.Context, bidID int64, bidRatingId int64, b UpdateBidRatingBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d/bid_ratings/%d", ProjectsBids, bidID, bidRatingId)
+	path := fmt.Sprintf("%s/%d/bid_ratings/%d", endpoints.ProjectsBids, bidID, bidRatingId)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }

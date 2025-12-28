@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 type ListReviewsOptions struct {
@@ -69,6 +71,7 @@ type ListReviewsOptions struct {
 // Returns a list of project reviews.
 // It maps to the `GET` `/projects/0.1/reviews` endpoint
 func (s *ReviewsService) List(ctx context.Context, opts *ListReviewsOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsReviews
 	query := url.Values{}
 	if opts != nil {
 		for _, id := range opts.Projects {
@@ -143,7 +146,7 @@ func (s *ReviewsService) List(ctx context.Context, opts *ListReviewsOptions) (*R
 		addBool(query, "compact", opts.Compact)
 
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsReviews), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type CreateReviewBody struct {
@@ -158,7 +161,8 @@ type CreateReviewBody struct {
 // Post a review of a user.
 // It maps to the `POST` `/projects/0.1/reviews` endpoint
 func (s *ReviewsService) Create(ctx context.Context, b CreateReviewBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(ProjectsReviews), nil, b)
+	path := endpoints.ProjectsReviews
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 type ReviewActionBody struct {
@@ -169,6 +173,6 @@ type ReviewActionBody struct {
 // Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
 // It maps to the `PUT` `/projects/0.1/reviews/{review_id}` endpoint
 func (s *ReviewsService) Action(ctx context.Context, reviewID int64, b ReviewActionBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", ProjectsReviews, reviewID)
+	path := fmt.Sprintf("%s/%d", endpoints.ProjectsReviews, reviewID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }

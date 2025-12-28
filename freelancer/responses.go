@@ -100,3 +100,20 @@ type ListSelfLoginDevicesResponse struct {
 		Devices []Device `json:"devices"`
 	} `json:"result"`
 }
+
+type ListBidEditRequestsResponse struct {
+	base
+	Result struct {
+		BidEditRequests []BidEditRequest `json:"bid_edit_requests"`
+	} `json:"result"`
+}
+
+type CreateBidEditRequestResponse struct {
+	base
+	Result BidEditRequest `json:"result"`
+}
+
+type ActionBidEditRequestResponse struct {
+	base
+	Result BidEditRequest `json:"result"`
+}

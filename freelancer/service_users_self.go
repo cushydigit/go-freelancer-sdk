@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 type GetSelfInfoOptions struct {
@@ -49,6 +51,7 @@ type GetSelfInfoOptions struct {
 // Returns information about the current user.
 // It maps to the `GET` `/users/0.1/self` endpoint.
 func (s *SelfService) GetInfo(ctx context.Context, opts *GetSelfInfoOptions) (*GetSelfInfoResponse, error) {
+	path := endpoints.UsersSelf
 	query := url.Values{}
 	if opts != nil {
 		addBool(query, "avatar", opts.Avatar)
@@ -89,13 +92,14 @@ func (s *SelfService) GetInfo(ctx context.Context, opts *GetSelfInfoOptions) (*G
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
 	}
-	return execute[*GetSelfInfoResponse](ctx, s.client, http.MethodGet, string(UsersSelf), query, nil)
+	return execute[*GetSelfInfoResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 // Returns a list of user’s recent logged in devices.
 // It maps to the `GET` `/users/0.1/self/devices` endpoint.
 func (s *SelfService) ListDevices(ctx context.Context) (*ListSelfLoginDevicesResponse, error) {
-	return execute[*ListSelfLoginDevicesResponse](ctx, s.client, http.MethodGet, string(UsersSelfDevices), nil, nil)
+	path := endpoints.UsersSelfDevices
+	return execute[*ListSelfLoginDevicesResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }
 
 type JobsBody struct {
@@ -105,17 +109,20 @@ type JobsBody struct {
 // Add a list of jobs to the job list of a current user.
 // It maps to the `POST` `/users/0.1/self/jobs` endpoint.
 func (s *SelfJobsService) Add(ctx context.Context, b JobsBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, string(UsersSelfJobs), nil, b)
+	path := endpoints.UsersSelfJobs
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 // Sets a list of jobs to the job list of the current user.
 // It maps to the `PUT` `/users/0.1/self/jobs` endpoint.
 func (s *SelfJobsService) Set(ctx context.Context, b JobsBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodPut, string(UsersSelfJobs), nil, b)
+	path := endpoints.UsersSelfJobs
+	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
 }
 
 // Removes a list of jobs from the job list of the current user.
 // It maps to the `DELETE` `/users/0.1/self/jobs` endpoint.
 func (s *SelfJobsService) Delete(ctx context.Context, b JobsBody) (*RawResponse, error) {
-	return execute[*RawResponse](ctx, s.client, http.MethodDelete, string(UsersSelfJobs), nil, b)
+	path := endpoints.UsersSelfJobs
+	return execute[*RawResponse](ctx, s.client, http.MethodDelete, path, nil, b)
 }

@@ -152,38 +152,12 @@ func ListCategories() {
 
 This SDK follows a modular service design. All core logic is located in `freelancer`.
 
-```bash
-  ├── client.go                           
-  ├── endpoints.go
-  ├── enums.go
-  ├── errors.go
-  ├── ratelimiter.go
-  ├── responses.go
-  ├── service_common.go
-  ├── service_projects_bids.go
-  ├── service_projects_collaborations.go
-  ├── service_projects_extra.go
-  ├── service_projects_jobs.go
-  ├── service_projects_milestones.go
-  ├── service_projects_reviews.go
-  ├── service_projects_services.go
-  ├── service_projects.go
-  ├── service_users_extras.go
-  ├── service_users_profiles.go
-  ├── service_users_self.go
-  ├── service_users.go
-  ├── services.go
-  ├── types.go
-  └── utils.go
-```
-
-- **`client.go`**: It holds the Client struct, the NewClient constructor, and the base configuration (BaseURL, HTTPClient, Auth)..
-- **`endpoints.go`**: Contains all your constants for URLs
+- **`client.go`**: It holds core logic
 - **`types.go`**: Shared data structures
-- **`responses`**: The wrappers for API replies:w
+- **`responses`**: The wrappers for API replies
 - **`enums.go`**: Custom types and constants for statuses, roles, and types
-- **`services.go`**: The entry point for all services. It initializes all services when the client is created
-- **`service_*.go`**: Resource-oriented service implementations. Each file encapsulates logic for a specific API domain
+- **`services.go`**: The entry point for all services.
+- **`service_*.go`**: Each file encapsulates logic for a specific API domain
 
 ## Documentation
 
@@ -208,14 +182,14 @@ make test    # Run all unit tests
 make build   # Compile the project
 ```
 
-## 🗺️ Roadmap
+## Roadmap
 
 Current version covers **Projects**, **Users**, and **Common** services.
 
 ### Stability & Quality
 
-- [ ] **Static Analysis:**
-- [ ] **Unit Testing:**
+- [x] **Static Analysis:**
+- [x] **Unit Testing:** (7% coverage)
 - [ ] **Use Case:**
 
 ### Upcoming Features

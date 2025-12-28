@@ -1,0 +1,47 @@
+package endpoints
+
+const (
+	BaseAPIMainURL    = "https://www.freelancer.com/api"
+	BaseAPISandBoxURL = "https://api-sandbox.freelancer.com"
+
+	CommonCountries = "/common/0.1/countries"
+	CommonTimezones = "/common/0.1/timezones"
+
+	Projects                    = "/projects/0.1/projects"
+	ProjectsSelf                = "/projects/0.1/self"
+	ProjectsBudgets             = "/projects/0.1/budgets"
+	ProjectsCategories          = "/projects/0.1/categories"
+	ProjectsCurrencies          = "/projects/0.1/currencies"
+	ProjectsBids                = "/projects/0.1/bids"
+	ProjectsBidsBidEditRequests = "/projects/0.1/bids/bid_edit_requests"
+	ProjectsBidRatings          = "/projects/0.1/bid_ratings"
+	ProjectsReviews             = "/projects/0.1/reviews"
+	ProjectsMilestones          = "/projects/0.1/milestones"
+	ProjectsMilestoneRequests   = "/projects/0.1/milestone_requests"
+	ProjectsHourlyContract      = "/projects/0.1/hourly_contracts"
+	ProjectsActive              = "/projects/0.1/projects/active"
+	ProjectsAll                 = "/projects/0.1/projects/all"
+	ProjectsFees                = "/projects/0.1/projects/fees"
+	ProjectsJobs                = "/projects/0.1/jobs"
+	ProjectsJobBundles          = "/projects/0.1/job_bundles"
+	ProjectsJobBundleCategories = "/projects/0.1/job_bundle_categories"
+	ProjectsJobsSearch          = "/projects/0.1/jobs/search"
+	ProjectsBidsFees            = "/projects/0.1/bids/fees"
+	ProjectsCollaborations      = "/projects/0.1/projects/collaborations"
+	ProjectsServices            = "/projects/0.1/services"
+	ProjectsServicesActive      = "/projects/0.1/services/active"
+	ProjectsExpertGuarantees    = "/projects/0.1/expert_guarantees"
+
+	Users                 = "/users/0.1/users"
+	UsersFreelancers      = "/users/0.1/users/directory"
+	UsersReputations      = "/users/0.1/reputations"
+	UsersPortfolios       = "/users/0.1/portfolios"
+	UsersProfiles         = "/users/0.1/profiles"
+	UsersEnterprises      = "/users/0.1/enterprises"
+	UsersViolationReports = "/users/0.1/violation_reports"
+	UsersPools            = "/users/0.1/pools"
+
+	UsersSelf        = "/users/0.1/self"
+	UsersSelfDevices = "/users/0.1/self/devices"
+	UsersSelfJobs    = "/users/0.1/self/jobs"
+)

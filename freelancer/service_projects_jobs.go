@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
 )
 
 type ListJobsOptions struct {
@@ -23,6 +25,7 @@ type ListJobsOptions struct {
 // Returns a list of milestone requests.
 // It maps to the `GET` `/projects/0.1/jobs` endpoint
 func (s *JobsService) List(ctx context.Context, opts *ListJobsOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsJobs
 	query := url.Values{}
 	if opts != nil {
 		for _, id := range opts.Jobs {
@@ -44,7 +47,7 @@ func (s *JobsService) List(ctx context.Context, opts *ListJobsOptions) (*RawResp
 		addString(query, "lang", opts.Lang)
 	}
 
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsJobs), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type SearchJobsOptions struct {
@@ -65,6 +68,7 @@ type SearchJobsOptions struct {
 // Returns a list of jobs. Note: This performs a sub-string search for all the parameters specified on the jobs.
 // It maps to the `GET` `/projects/0.1/jobs/search` endpoint
 func (s *JobsService) Search(ctx context.Context, opts *SearchJobsOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsJobsSearch
 	query := url.Values{}
 	if opts != nil {
 		for _, id := range opts.Jobs {
@@ -88,7 +92,7 @@ func (s *JobsService) Search(ctx context.Context, opts *SearchJobsOptions) (*Raw
 		addString(query, "seo_country_name", opts.SeoCountryName)
 		addString(query, "lang", opts.Lang)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsJobsSearch), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ListJobBundlesOptions struct {
@@ -102,6 +106,7 @@ type ListJobBundlesOptions struct {
 // Returns a list of job bundles. Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name.
 // It maps to the `GET` `/projects/0.1/job_bundles` endpoint
 func (s *JobsService) ListJobBundles(ctx context.Context, opts *ListJobBundlesOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsJobBundles
 	query := url.Values{}
 	if opts != nil {
 		for _, id := range opts.JobBundles {
@@ -112,7 +117,7 @@ func (s *JobsService) ListJobBundles(ctx context.Context, opts *ListJobBundlesOp
 		}
 		addString(query, "lang", opts.Lang)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsJobBundles), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ListJobBundleCategoriesOptions struct {
@@ -126,6 +131,7 @@ type ListJobBundleCategoriesOptions struct {
 // Returns a list of job bundle categories.
 // It maps to the `GET` `/projects/0.1/job_bundle_categories` endpoint
 func (s *JobsService) ListJobBundleCategories(ctx context.Context, opts *ListJobBundleCategoriesOptions) (*RawResponse, error) {
+	path := endpoints.ProjectsJobBundleCategories
 	query := url.Values{}
 	if opts != nil {
 		for _, id := range opts.JobBundles {
@@ -136,5 +142,5 @@ func (s *JobsService) ListJobBundleCategories(ctx context.Context, opts *ListJob
 		}
 		addString(query, "lang", opts.Lang)
 	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, string(ProjectsJobBundleCategories), query, nil)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
