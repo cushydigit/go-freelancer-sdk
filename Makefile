@@ -22,7 +22,7 @@ test_cover:
 	@go test -cover ./...
 
 test_cover_show:
-	@go test -coverprofile=coverage.out ./freelancer/* && go tool cover -html=coverage.out
+	@go test -coverprofile=coverage.out ./freelancer/... && go tool cover -html=coverage.out
 
 
 
