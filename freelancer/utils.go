@@ -48,6 +48,9 @@ func Int64(v int64) *int64 { return &v }
 // Float64 returns a pointer to the provided float64.
 func Float64(v float64) *float64 { return &v }
 
+// Enum returns a pointer to the provided enum.
+func Enum[T ~string](v T) *T { return &v }
+
 func addBool(q url.Values, key string, b *bool) {
 	if b != nil {
 		q.Set(key, strconv.FormatBool(*b))
@@ -89,5 +92,23 @@ type StringTyped interface {
 func addEnum[T StringTyped](q url.Values, key string, v *T) {
 	if v != nil {
 		q.Set(key, string(*v))
+	}
+}
+
+func addInt64Slice(q url.Values, key string, values []int64) {
+	for _, v := range values {
+		q.Add(key, strconv.FormatInt(v, 10))
+	}
+}
+
+func addStringSlice(q url.Values, key string, values []string) {
+	for _, v := range values {
+		q.Add(key, v)
+	}
+}
+
+func addEnumSlice[T StringTyped](q url.Values, key string, values []T) {
+	for _, v := range values {
+		q.Add(key, string(v))
 	}
 }

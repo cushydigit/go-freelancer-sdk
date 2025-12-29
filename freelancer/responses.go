@@ -53,6 +53,11 @@ type GetProjectResponse struct {
 	base
 	Result Project `json:"result"`
 }
+
+type CreateProjectResponse struct {
+	base
+	Result Project `json:"result"`
+}
 type GetUserResponse struct {
 	base
 	Result User `json:"result"`
