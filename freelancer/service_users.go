@@ -54,12 +54,8 @@ func (s *UsersService) List(ctx context.Context, opts *ListUsersOptions) (*ListU
 	path := endpoints.Users
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Users {
-			addInt64(query, "users[]", &val)
-		}
-		for _, val := range opts.Usernames {
-			addString(query, "usernames[]", &val)
-		}
+		addInt64Slice(query, "users[]", opts.Users)
+		addStringSlice(query, "usernames[]", opts.Usernames)
 		addBool(query, "avatar", opts.Avatar)
 		addBool(query, "country_details", opts.CountryDetails)
 		addBool(query, "profile_description", opts.ProfileDescription)
@@ -169,15 +165,9 @@ func (s *UsersService) SearchFreelancer(ctx context.Context, opts *SearchFreelan
 	query := url.Values{}
 	if opts != nil {
 		addString(query, "query", opts.Query)
-		for _, val := range opts.JobsIDs {
-			addInt64(query, "jobs[]", &val)
-		}
-		for _, val := range opts.Skills {
-			addInt64(query, "skills[]", &val)
-		}
-		for _, val := range opts.Countries {
-			addString(query, "countries[]", &val)
-		}
+		addInt64Slice(query, "jobs[]", opts.JobsIDs)
+		addInt64Slice(query, "skills[]", opts.Skills)
+		addStringSlice(query, "countries[]", opts.Countries)
 		addInt(query, "hourly_rate_min", opts.HourlyRateMin)
 		addInt(query, "hourly_rate_max", opts.HourlyRateMax)
 		addInt(query, "review_count_min", opts.ReviewCountMin)
@@ -185,12 +175,8 @@ func (s *UsersService) SearchFreelancer(ctx context.Context, opts *SearchFreelan
 		addBool(query, "online_only", opts.OnlineOnly)
 		addFloat(query, "location_latitude", opts.LocationLatitude)
 		addFloat(query, "location_longitude", opts.LocationLongitude)
-		for _, val := range opts.Insignias {
-			addInt64(query, "insignias[]", &val)
-		}
-		for _, val := range opts.PoolIds {
-			addInt64(query, "pool_ids[]", &val)
-		}
+		addInt64Slice(query, "insignias[]", opts.Insignias)
+		addInt64Slice(query, "pool_ids[]", opts.PoolIds)
 		addFloat(query, "ratings", opts.Ratings)
 		addInt(query, "sort_field", opts.SortField)
 		addBool(query, "reverse_sort", opts.ReverseSort)
@@ -232,7 +218,6 @@ func (s *UsersService) SearchFreelancer(ctx context.Context, opts *SearchFreelan
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
-
 	}
 	return execute[*SearchFreelancersResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }

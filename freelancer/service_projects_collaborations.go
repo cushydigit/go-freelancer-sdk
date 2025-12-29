@@ -59,5 +59,5 @@ func (s *CollaborationsService) Action(ctx context.Context, projectID int64, col
 // It maps toi the `GET` `/projects/0.1/collaborations` endpoint
 func (s *CollaborationsService) ListAll(ctx context.Context) (*RawResponse, error) {
 	path := endpoints.ProjectsCollaborations
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil) // TODO: add the query paramete
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
 }

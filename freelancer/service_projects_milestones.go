@@ -56,24 +56,12 @@ func (s *MilestonesService) List(ctx context.Context, opts *ListMilestonesOption
 	path := endpoints.ProjectsMilestones
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Projects {
-			addInt64(query, "projects[]", &val)
-		}
-		for _, val := range opts.ProjectOwners {
-			addInt64(query, "project_owners[]", &val)
-		}
-		for _, val := range opts.Bidders {
-			addInt64(query, "bidders[]", &val)
-		}
-		for _, val := range opts.Users {
-			addInt64(query, "users[]", &val)
-		}
-		for _, val := range opts.Bids {
-			addInt64(query, "bids[]", &val)
-		}
-		for _, val := range opts.Statuses {
-			addEnum(query, "statuses[]", &val)
-		}
+		addInt64Slice(query, "projects[]", opts.Projects)
+		addInt64Slice(query, "project_owners[]", opts.ProjectOwners)
+		addInt64Slice(query, "bidders[]", opts.Bidders)
+		addInt64Slice(query, "users[]", opts.Users)
+		addInt64Slice(query, "bids[]", opts.Bids)
+		addEnumSlice(query, "statuses[]", opts.Statuses)
 		addEnum(query, "sort_field", opts.SortField)
 		addEnum(query, "sort_direction", opts.SortDirection)
 		addBool(query, "excluded_milestones", opts.ExcludedMilestones)
@@ -174,7 +162,6 @@ func (s *MilestonesService) GetByID(ctx context.Context, milestoneID int, opts *
 		addBool(query, "sanction_details", opts.SanctionDetails)
 		addBool(query, "limited_account", opts.LimitedAccount)
 		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-
 	}
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
@@ -215,7 +202,7 @@ type ListMilestonesRequestsOptions struct {
 	ProjectOwners               []int64
 	Bidders                     []int64
 	Users                       []int64
-	Bids                        []int
+	Bids                        []int64
 	Statuses                    []MilestoneStatus
 	FromTime                    *int64
 	ToTime                      *int64
@@ -261,27 +248,13 @@ func (s *MilestoneRequestsService) List(ctx context.Context, opts *ListMilestone
 	path := endpoints.ProjectsMilestoneRequests
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.MilestoneRequests {
-			addInt64(query, "milestone_requests[]", &val)
-		}
-		for _, val := range opts.Projects {
-			addInt64(query, "projects[]", &val)
-		}
-		for _, val := range opts.ProjectOwners {
-			addInt64(query, "project_owners[]", &val)
-		}
-		for _, val := range opts.Bidders {
-			addInt64(query, "bidders[]", &val)
-		}
-		for _, val := range opts.Users {
-			addInt64(query, "users[]", &val)
-		}
-		for _, val := range opts.Bids {
-			addInt(query, "bids[]", &val)
-		}
-		for _, val := range opts.Statuses {
-			addEnum(query, "statuses[]", &val)
-		}
+		addInt64Slice(query, "milestone_requests[]", opts.MilestoneRequests)
+		addInt64Slice(query, "projects[]", opts.Projects)
+		addInt64Slice(query, "project_owners[]", opts.ProjectOwners)
+		addInt64Slice(query, "bidders[]", opts.Bidders)
+		addInt64Slice(query, "users[]", opts.Users)
+		addInt64Slice(query, "bids[]", opts.Bids)
+		addEnumSlice(query, "statuses[]", opts.Statuses)
 		addInt64(query, "from_time", opts.FromTime)
 		addInt64(query, "to_time", opts.ToTime)
 		addEnum(query, "sort_field", opts.SortField)
@@ -317,7 +290,6 @@ func (s *MilestoneRequestsService) List(ctx context.Context, opts *ListMilestone
 		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
-
 	}
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }

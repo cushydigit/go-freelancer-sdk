@@ -30,24 +30,12 @@ func (s *ExpertGuaranteesService) List(ctx context.Context, opts *listExpertGuar
 	path := endpoints.ProjectsExpertGuarantees
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.ExpertGuarantees {
-			addInt64(query, "expert_guarantees[]", &val)
-		}
-		for _, val := range opts.Projects {
-			addInt64(query, "projects[]", &val)
-		}
-		for _, val := range opts.ProjectOwners {
-			addInt64(query, "project_owners[]", &val)
-		}
-		for _, val := range opts.Bidders {
-			addInt64(query, "bidders[]", &val)
-		}
-		for _, val := range opts.Bids {
-			addInt64(query, "bids[]", &val)
-		}
-		for _, val := range opts.Statuses {
-			addEnum(query, "statuses[]", &val)
-		}
+		addInt64Slice(query, "expert_guarantees[]", opts.ExpertGuarantees)
+		addInt64Slice(query, "projects[]", opts.Projects)
+		addInt64Slice(query, "project_owners[]", opts.ProjectOwners)
+		addInt64Slice(query, "bidders[]", opts.Bidders)
+		addInt64Slice(query, "bids[]", opts.Bids)
+		addEnumSlice(query, "statuses[]", opts.Statuses)
 		addInt64(query, "from_time", opts.FromTime)
 		addInt64(query, "to_time", opts.ToTime)
 		addInt(query, "offset", opts.Offset)
@@ -69,7 +57,7 @@ func (s *ExpertGuaranteesService) Action(ctx context.Context, expertGuaranteesID
 
 type ListCurrenciesOptions struct {
 	CurrencyCodes             []string
-	CurrencyIDs               []int
+	CurrencyIDs               []int64
 	IncludeExternalCurrencies *bool
 }
 
@@ -79,19 +67,15 @@ func (s *CurrenciesService) List(ctx context.Context, opts *ListCurrenciesOption
 	path := endpoints.ProjectsCurrencies
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.CurrencyCodes {
-			addString(query, "currency_codes[]", &val)
-		}
-		for _, val := range opts.CurrencyIDs {
-			addInt(query, "currency_ids[]", &val)
-		}
+		addStringSlice(query, "currency_codes[]", opts.CurrencyCodes)
+		addInt64Slice(query, "currency_ids[]", opts.CurrencyIDs)
 		addBool(query, "include_external_currencies", opts.IncludeExternalCurrencies)
 	}
 	return execute[*ListCurrenciesResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 type ListCategoriesOptions struct {
-	Categories                []int
+	Categories                []int64
 	JobDetails                *bool
 	Lang                      *string
 	ActiveProjectCountDetails *bool
@@ -104,9 +88,7 @@ func (s *CategoriesService) List(ctx context.Context, opts *ListCategoriesOption
 	path := endpoints.ProjectsCategories
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Categories {
-			addInt(query, "categories[]", &val)
-		}
+		addInt64Slice(query, "categories[]", opts.Categories)
 		addBool(query, "job_details", opts.JobDetails)
 		addString(query, "lang", opts.Lang)
 		addBool(query, "active_project_count_details", opts.ActiveProjectCountDetails)
@@ -117,7 +99,7 @@ func (s *CategoriesService) List(ctx context.Context, opts *ListCategoriesOption
 
 type ListBudgetsOptions struct {
 	CurrencyCodes   []string
-	CurrencyIDs     []int
+	CurrencyIDs     []int64
 	ProjectType     *ProjectType
 	Lang            *string
 	CurrencyDetails *bool
@@ -129,16 +111,11 @@ func (s *BudgetsService) List(ctx context.Context, opts *ListBudgetsOptions) (*L
 	path := endpoints.ProjectsBudgets
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.CurrencyCodes {
-			addString(query, "currency_codes[]", &val)
-		}
-		for _, val := range opts.CurrencyIDs {
-			addInt(query, "currency_ids[]", &val)
-		}
+		addStringSlice(query, "currency_codes[]", opts.CurrencyCodes)
+		addInt64Slice(query, "currency_ids[]", opts.CurrencyIDs)
 		addEnum(query, "project_type", opts.ProjectType)
 		addString(query, "lang", opts.Lang)
 		addBool(query, "currency_details", opts.CurrencyDetails)
 	}
-
 	return execute[*ListBudgetsResponse](ctx, s.client, http.MethodGet, path, nil, opts)
 }

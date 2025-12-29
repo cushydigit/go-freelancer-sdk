@@ -195,9 +195,7 @@ func (s *ProjectsService) List(ctx context.Context, opts *ListProjectsOptions) (
 		addBool(query, "compact", opts.Compact)
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
-
 	}
-
 	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -350,7 +348,6 @@ func (s *ProjectsService) Get(ctx context.Context, projectID int64, opts *GetPro
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
 	}
-
 	return execute[*GetProjectResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -475,7 +472,6 @@ func (s *ProjectsService) SearchActive(ctx context.Context, opts *SearchActivePr
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
 	}
-
 	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -622,7 +618,6 @@ func (s *ProjectsService) SearchAll(ctx context.Context, opts *SearchAllProjects
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
 	}
-
 	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -657,7 +652,6 @@ func (s *ProjectsService) ListUpgradesFees(ctx context.Context, opts *ListUpgrad
 		addBool(query, "fee_upgrade_details", opts.FreeUpgradeDetails)
 		addBool(query, "tax_included", opts.TaxIncluded)
 	}
-
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -751,7 +745,6 @@ func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *L
 		addBool(query, "compact", opts.Compact)
 		addBool(query, "quotations", opts.Quotations)
 	}
-
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -900,7 +893,6 @@ func (s *ProjectsService) ListMilestoneRequests(ctx context.Context, projectID i
 		addBool(query, "sanction_details", opts.SanctionDetails)
 		addBool(query, "limited_account", opts.LimitedAccount)
 		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-
 	}
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
@@ -929,7 +921,6 @@ func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *GetHo
 		addBool(query, "billing_details", opts.billingDetails)
 		addBool(query, "invoice_details", opts.invoiceDetails)
 	}
-
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 

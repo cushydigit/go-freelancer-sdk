@@ -74,30 +74,14 @@ func (s *ReviewsService) List(ctx context.Context, opts *ListReviewsOptions) (*R
 	path := endpoints.ProjectsReviews
 	query := url.Values{}
 	if opts != nil {
-		for _, id := range opts.Projects {
-			addInt64(query, "projects[]", &id)
-		}
-		for _, id := range opts.FromUsers {
-			addInt64(query, "from_users[]", &id)
-		}
-		for _, id := range opts.ToUsers {
-			addInt64(query, "to_users[]", &id)
-		}
-		for _, id := range opts.Contests {
-			addInt64(query, "contests[]", &id)
-		}
-		for _, status := range opts.ReviewTypes {
-			addEnum(query, "review_types[]", &status)
-		}
-		for _, id := range opts.JobIds {
-			addInt64(query, "job_ids[]", &id)
-		}
-		for _, status := range opts.CompletionStatuses {
-			addEnum(query, "completion_statuses[]", &status)
-		}
-		for _, status := range opts.ReviewStatus {
-			addEnum(query, "review_status", &status)
-		}
+		addInt64Slice(query, "projects[]", opts.Projects)
+		addInt64Slice(query, "from_users[]", opts.FromUsers)
+		addInt64Slice(query, "to_users[]", opts.ToUsers)
+		addInt64Slice(query, "contests[]", opts.Contests)
+		addEnumSlice(query, "review_types[]", opts.ReviewTypes)
+		addInt64Slice(query, "job_ids[]", opts.JobIds)
+		addEnumSlice(query, "completion_statuses[]", opts.CompletionStatuses)
+		addEnumSlice(query, "review_status[]", opts.ReviewStatus)
 		addInt64(query, "from_time", opts.FromTime)
 		addInt64(query, "to_time", opts.ToTime)
 		addBool(query, "project_details", opts.ProjectDetails)
@@ -144,7 +128,6 @@ func (s *ReviewsService) List(ctx context.Context, opts *ListReviewsOptions) (*R
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
-
 	}
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
