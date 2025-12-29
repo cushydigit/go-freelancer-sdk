@@ -1,4 +1,4 @@
 .env
-bin/*
+bin
 .vscode
 coverage.out
