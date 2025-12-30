@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strconv"
 
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 type ListBidsOptions struct {
@@ -66,28 +65,13 @@ func (s *BidsService) List(ctx context.Context, opts *ListBidsOptions) (*RawResp
 	path := endpoints.ProjectsBids
 	query := url.Values{}
 	if opts != nil {
-		for _, id := range opts.Bids {
-			addInt64(query, "bids[]", &id)
-		}
-		for _, id := range opts.Projects {
-			addInt64(query, "projects[]", &id)
-		}
-		for _, id := range opts.Bidders {
-			addInt64(query, "bidders[]", &id)
-		}
-		for _, id := range opts.ProjectOwners {
-			addInt64(query, "project_owners[]", &id)
-		}
-		for _, status := range opts.AwardStatuses {
-			addEnum(query, "award_statuses[]", &status)
-		}
-		for _, status := range opts.PaidStatuses {
-
-			addEnum(query, "paid_statuses[]", &status)
-		}
-		for _, status := range opts.CompleteStatuses {
-			addEnum(query, "complete_statuses[]", &status)
-		}
+		addInt64Slice(query, "bids[]", opts.Bids)
+		addInt64Slice(query, "projects[]", opts.Projects)
+		addInt64Slice(query, "bidders[]", opts.Bidders)
+		addInt64Slice(query, "project_owners[]", opts.ProjectOwners)
+		addEnumSlice(query, "award_statuses[]", opts.AwardStatuses)
+		addEnumSlice(query, "paid_statuses[]", opts.PaidStatuses)
+		addEnumSlice(query, "complete_statuses[]", opts.CompleteStatuses)
 		addInt64(query, "from_time", opts.FromTime)
 		addInt64(query, "to_time", opts.ToTime)
 		addBool(query, "reputation", opts.Reputation)
@@ -96,7 +80,6 @@ func (s *BidsService) List(ctx context.Context, opts *ListBidsOptions) (*RawResp
 		addBool(query, "project_details", opts.ProjectDetails)
 		addBool(query, "user_details", opts.UserDetails)
 		addBool(query, "user_avatar", opts.UserAvatar)
-
 		addBool(query, "user_country_details", opts.UserCountryDetails)
 		addBool(query, "user_profile_Description", opts.UserProfileDescription)
 		addBool(query, "user_display_info", opts.UserDisplayInfo)
@@ -123,11 +106,9 @@ func (s *BidsService) List(ctx context.Context, opts *ListBidsOptions) (*RawResp
 		addBool(query, "sanction_details", opts.SanctionDetails)
 		addBool(query, "limited_account", opts.LimitedAccount)
 		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
-
 	}
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
@@ -215,7 +196,6 @@ func (s *BidsService) Get(ctx context.Context, bidID int64, opts *GetBidOptions)
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
 		addBool(query, "quotations", opts.Quotations)
-
 	}
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
@@ -301,7 +281,7 @@ func (s *BidsService) CreateTimeTracking(ctx context.Context, bidID int64, b Cre
 
 type ListBidEditRequestsOptions struct {
 	Statuses          []BidStatus
-	BidEditRequestIDs []int
+	BidEditRequestIDs []int64
 }
 
 // Return bid edit requests by bid id.
@@ -311,12 +291,8 @@ func (s *BidEditRequestService) List(ctx context.Context, bidID int64, opts *Lis
 	path := fmt.Sprintf("%s/%d/edit_requests/", endpoints.ProjectsBids, bidID)
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Statuses {
-			query.Add("statuses[]", string(val))
-		}
-		for _, val := range opts.BidEditRequestIDs {
-			query.Add("bid_edit_request_ids[]", strconv.Itoa(val))
-		}
+		addEnumSlice(query, "statuses[]", opts.Statuses)
+		addInt64Slice(query, "bid_edit_request_ids[]", opts.BidEditRequestIDs)
 	}
 	return execute[*ListBidEditRequestsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
@@ -366,7 +342,11 @@ type GetByListOfBidsOptions struct {
 // it maps to the `GET` `/projects/0.1/bid_ratings` endpoint
 func (s *BidRatingsService) GetByListOfBids(ctx context.Context, opts *GetByListOfBidsOptions) (*RawResponse, error) {
 	path := endpoints.ProjectsBidRatings
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
+	query := url.Values{}
+	if opts != nil {
+		addInt64Slice(query, "bids[]", opts.Bids)
+	}
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 // Rating required

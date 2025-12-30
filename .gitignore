@@ -1,4 +1,5 @@
 .env
-bin/*
+bin
 .vscode
 coverage.out
+.DS_Store

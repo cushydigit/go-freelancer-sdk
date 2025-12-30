@@ -4,9 +4,8 @@ import (
 	"context"
 	"net/http"
 	"net/url"
-	"strconv"
 
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 // CountriesOptions holds optional filters for the ListCountries request.
@@ -20,16 +19,14 @@ func (s *CommonService) ListCountries(ctx context.Context, opts *ListCountriesOp
 	path := endpoints.CommonCountries
 	query := url.Values{}
 	if opts != nil {
-		if opts.ExtraDetails != nil {
-			query.Add("extra_details", strconv.FormatBool(*opts.ExtraDetails))
-		}
+		addBool(query, "extra_details", opts.ExtraDetails)
 	}
 	return execute[*ListCountriesResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
 // TimezonesOptions holds optional filters for the ListTimezones request.
 type ListTimezonesOptions struct {
-	Timezones     []int
+	Timezones     []int64
 	TimezoneNames []string
 }
 
@@ -39,12 +36,8 @@ func (s *CommonService) ListTimezones(ctx context.Context, opts *ListTimezonesOp
 	path := endpoints.CommonTimezones
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Timezones {
-			query.Add("timezones[]", strconv.Itoa(val))
-		}
-		for _, val := range opts.TimezoneNames {
-			query.Add("timezone_names[]", val)
-		}
+		addInt64Slice(query, "timezones[]", opts.Timezones)
+		addStringSlice(query, "timezone_names[]", opts.TimezoneNames)
 	}
 
 	return execute[*ListTimezonesResponse](ctx, s.client, http.MethodGet, path, query, nil)

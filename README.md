@@ -189,13 +189,17 @@ Current version covers **Projects**, **Users**, and **Common** services.
 ### Stability & Quality
 
 - [x] **Static Analysis:**
-- [x] **Unit Testing:** (7% coverage)
+- [x] **Unit Testing:** (13% coverage)
 - [ ] **Use Case:**
 
 ### Upcoming Features
 
 - [ ] **Messaging:** Threads and direct message handling.
 - [ ] **Contests:** Browsing and participating in contests.
+
+## Changelog
+
+For a detailed list of changes, please see the [CHANGELOG.md](CHANGELOG.md).
 
 ## Disclaimer
 

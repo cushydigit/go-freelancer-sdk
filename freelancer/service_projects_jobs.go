@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 type ListJobsOptions struct {
@@ -28,25 +28,16 @@ func (s *JobsService) List(ctx context.Context, opts *ListJobsOptions) (*RawResp
 	path := endpoints.ProjectsJobs
 	query := url.Values{}
 	if opts != nil {
-		for _, id := range opts.Jobs {
-			addInt64(query, "jobs[]", &id)
-		}
-		for _, name := range opts.JobNames {
-			addString(query, "job_names[]", &name)
-		}
-		for _, url := range opts.SeoUrls {
-			addString(query, "seo_urls[]", &url)
-		}
-		for _, id := range opts.Categories {
-			addInt64(query, "categories[]", &id)
-		}
+		addInt64Slice(query, "jobs[]", opts.Jobs)
+		addStringSlice(query, "job_names[]", opts.JobNames)
+		addStringSlice(query, "seo_urls[]", opts.SeoUrls)
+		addInt64Slice(query, "categories[]", opts.Categories)
 		addBool(query, "only_local", opts.OnlyLocal)
 		addBool(query, "active_project_count_details", opts.ActiveProjectCountDetails)
 		addBool(query, "seo_details", opts.SeoDetails)
 		addString(query, "seo_country_name", opts.SeoCountryName)
 		addString(query, "lang", opts.Lang)
 	}
-
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -71,21 +62,11 @@ func (s *JobsService) Search(ctx context.Context, opts *SearchJobsOptions) (*Raw
 	path := endpoints.ProjectsJobsSearch
 	query := url.Values{}
 	if opts != nil {
-		for _, id := range opts.Jobs {
-			addInt64(query, "jobs[]", &id)
-		}
-		for _, name := range opts.JobNames {
-			addString(query, "job_names[]", &name)
-		}
-		for _, url := range opts.SeoUrls {
-			addString(query, "seo_urls[]", &url)
-		}
-		for _, text := range opts.SeoTexts {
-			addString(query, "seo_texts[]", &text)
-		}
-		for _, id := range opts.Categories {
-			addInt64(query, "categories[]", &id)
-		}
+		addInt64Slice(query, "jobs[]", opts.Jobs)
+		addStringSlice(query, "job_names[]", opts.JobNames)
+		addStringSlice(query, "seo_urls[]", opts.SeoUrls)
+		addStringSlice(query, "seo_texts[]", opts.SeoTexts)
+		addInt64Slice(query, "categories[]", opts.Categories)
 		addBool(query, "only_local", opts.OnlyLocal)
 		addBool(query, "active_project_count_details", opts.ActiveProjectCountDetails)
 		addBool(query, "seo_details", opts.SeoDetails)
@@ -109,12 +90,8 @@ func (s *JobsService) ListJobBundles(ctx context.Context, opts *ListJobBundlesOp
 	path := endpoints.ProjectsJobBundles
 	query := url.Values{}
 	if opts != nil {
-		for _, id := range opts.JobBundles {
-			addInt64(query, "job_bundles[]", &id)
-		}
-		for _, id := range opts.Categories {
-			addInt64(query, "categories[]", &id)
-		}
+		addInt64Slice(query, "job_bundles[]", opts.JobBundles)
+		addInt64Slice(query, "categories[]", opts.Categories)
 		addString(query, "lang", opts.Lang)
 	}
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
@@ -134,12 +111,8 @@ func (s *JobsService) ListJobBundleCategories(ctx context.Context, opts *ListJob
 	path := endpoints.ProjectsJobBundleCategories
 	query := url.Values{}
 	if opts != nil {
-		for _, id := range opts.JobBundles {
-			addInt64(query, "job_bundles[]", &id)
-		}
-		for _, id := range opts.Categories {
-			addInt64(query, "categories[]", &id)
-		}
+		addInt64Slice(query, "job_bundles[]", opts.JobBundles)
+		addInt64Slice(query, "categories[]", opts.Categories)
 		addString(query, "lang", opts.Lang)
 	}
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)

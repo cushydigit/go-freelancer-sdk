@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 // Orders one of the available services.
@@ -17,7 +17,7 @@ func (s *ServicesService) Order(ctx context.Context, serviceID int, serviceType 
 }
 
 type ListServicesOptions struct {
-	Services                    []int
+	Services                    []int64
 	Owners                      []int64
 	Statuses                    []ServiceStatusType
 	SubStatuses                 []string
@@ -68,9 +68,7 @@ func (s *ServicesService) List(ctx context.Context, opts *ListServicesOptions) (
 	path := endpoints.ProjectsServices
 	query := url.Values{}
 	if opts != nil {
-		for _, id := range opts.Services {
-			addInt(query, "services[]", &id)
-		}
+		addInt64Slice(query, "services[]", opts.Services)
 		addBool(query, "extra_details", opts.ExtraDetails)
 		addBool(query, "file_details", opts.FileDetails)
 		addBool(query, "job_details", opts.JobDetails)

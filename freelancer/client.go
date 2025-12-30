@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 func (c *Client) GetBaseUrl() string {

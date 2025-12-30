@@ -1,5 +1,11 @@
 package freelancer
 
+import (
+	"fmt"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+)
+
 type Country struct {
 	Name         string  `json:"name,omitempty"`          // Optional
 	Code         string  `json:"code,omitempty"`          // Optional
@@ -225,6 +231,10 @@ type Project struct {
 	FrontendStatus string   `json:"frontend_project_status"`
 	Location       Location `json:"location"`
 	Local          bool     `json:"local"`
+}
+
+func (p *Project) GetFullUrl() string {
+	return fmt.Sprintf("%s/%s", endpoints.BaseAPIMainURL, p.SeoURL)
 }
 
 type Timezone struct {

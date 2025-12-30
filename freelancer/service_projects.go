@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 // Title, Description, Budget, Jobs are required
@@ -37,9 +37,9 @@ type CreateProjectBody struct {
 
 // Create a new project
 // It maps to the `POST` `/projects/0.1/projects` endpoint.
-func (s *ProjectsService) Create(ctx context.Context, b CreateProjectBody) (*RawResponse, error) {
+func (s *ProjectsService) Create(ctx context.Context, b CreateProjectBody) (*CreateProjectResponse, error) {
 	path := endpoints.Projects
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
+	return execute[*CreateProjectResponse](ctx, s.client, http.MethodPost, path, nil, b)
 }
 
 // TODO: check this service functionality so the projectActionBody should have better fields
@@ -58,71 +58,71 @@ func (s *ProjectsService) Action(ctx context.Context, projectID int64, action Pr
 }
 
 type ListProjectsOptions struct {
-	projects                     []int64
-	owners                       []int64
-	bidders                      []int64
-	seoUrls                      []string
-	fromTime                     *int64
-	toTime                       *int64
-	frontendProjectStatuses      []string
-	team                         *bool
-	isNonHireMe                  *bool
-	hasMilestone                 *bool
-	count                        *bool
-	fullDescription              *bool
-	jobDetails                   *bool
-	upgradeDetails               *bool
-	attachmentDetails            *bool
-	fileDetails                  *bool
-	qualificationDetails         *bool
-	selectedBids                 *bool
-	hiremeDetails                *bool
-	userDetails                  *bool
-	invitedFreelancerDetails     *bool
-	recommendedFreelancerDetails *bool
-	supportSessionDetails        *bool
-	locationDetails              *bool
-	ndaSignatureDetails          *bool
-	projectCollaborationDetails  *bool
-	proximityDetails             *bool
-	reviewAvailabilityDetails    *bool
-	negotiatedDetails            *bool
-	driveFileDetails             *bool
-	ndaDetails                   *bool
-	localDetails                 *bool
-	equipmentDetails             *bool
-	clientEngagementDetails      *bool
-	serviceOfferingDetails       *bool
-	userAvatar                   *bool
-	userCountryDetails           *bool
-	userProfileDescription       *bool
-	userDisplayInfo              *bool
-	userJobs                     *bool
-	userBalanceDetails           *bool
-	userQualificationDetails     *bool
-	userMembershipDetails        *bool
-	userFinancialDetails         *bool
-	userLocationDetails          *bool
-	userPortfolioDetails         *bool
-	userPreferredDetails         *bool
-	userBadgeDetails             *bool
-	userStatus                   *bool
-	userReputation               *bool
-	userEmployerReputation       *bool
-	userReputationExtra          *bool
-	userEmployerReputationExtra  *bool
-	userCoverImage               *bool
-	userPastCoverImage           *bool
-	userRecommendations          *bool
-	userResponsiveness           *bool
-	corporateUsers               *bool
-	marketingMobileNumber        *bool
-	sanctionDetails              *bool
-	limitedAccount               *bool
-	equipmentGroupDetails        *bool
-	limit                        *int
-	offset                       *int
-	compact                      *bool
+	Projects                     []int64
+	Owners                       []int64
+	Bidders                      []int64
+	SeoUrls                      []string
+	FromTime                     *int64
+	ToTime                       *int64
+	FrontendProjectStatuses      []string
+	Team                         *bool
+	IsNonHireMe                  *bool
+	HasMilestone                 *bool
+	Count                        *bool
+	FullDescription              *bool
+	JobDetails                   *bool
+	UpgradeDetails               *bool
+	AttachmentDetails            *bool
+	FileDetails                  *bool
+	QualificationDetails         *bool
+	SelectedBids                 *bool
+	HiremeDetails                *bool
+	UserDetails                  *bool
+	InvitedFreelancerDetails     *bool
+	RecommendedFreelancerDetails *bool
+	SupportSessionDetails        *bool
+	LocationDetails              *bool
+	NdaSignatureDetails          *bool
+	ProjectCollaborationDetails  *bool
+	ProximityDetails             *bool
+	ReviewAvailabilityDetails    *bool
+	NegotiatedDetails            *bool
+	DriveFileDetails             *bool
+	NdaDetails                   *bool
+	LocalDetails                 *bool
+	EquipmentDetails             *bool
+	ClientEngagementDetails      *bool
+	ServiceOfferingDetails       *bool
+	UserAvatar                   *bool
+	UserCountryDetails           *bool
+	UserProfileDescription       *bool
+	UserDisplayInfo              *bool
+	UserJobs                     *bool
+	UserBalanceDetails           *bool
+	UserQualificationDetails     *bool
+	UserMembershipDetails        *bool
+	UserFinancialDetails         *bool
+	UserLocationDetails          *bool
+	UserPortfolioDetails         *bool
+	UserPreferredDetails         *bool
+	UserBadgeDetails             *bool
+	UserStatus                   *bool
+	UserReputation               *bool
+	UserEmployerReputation       *bool
+	UserReputationExtra          *bool
+	UserEmployerReputationExtra  *bool
+	UserCoverImage               *bool
+	UserPastCoverImage           *bool
+	UserRecommendations          *bool
+	UserResponsiveness           *bool
+	CorporateUsers               *bool
+	MarketingMobileNumber        *bool
+	SanctionDetails              *bool
+	LimitedAccount               *bool
+	EquipmentGroupDetails        *bool
+	Limit                        *int
+	Offset                       *int
+	Compact                      *bool
 }
 
 // Returns information about multiple projects. Will be ordered by descending submit date (newest-to-oldest).
@@ -131,82 +131,71 @@ func (s *ProjectsService) List(ctx context.Context, opts *ListProjectsOptions) (
 	path := endpoints.Projects
 	query := url.Values{}
 	if opts != nil {
-		for _, id := range opts.projects {
-			addInt64(query, "projects[]", &id)
-		}
-		for _, id := range opts.owners {
-			addInt64(query, "owners[]", &id)
-		}
-		for _, id := range opts.bidders {
-			addInt64(query, "bidders[]", &id)
-		}
-		for _, seo := range opts.seoUrls {
-			addString(query, "seo_urls[]", &seo)
-		}
-		for _, status := range opts.frontendProjectStatuses {
-			addString(query, "frontend_project_statuses[]", &status)
-		}
-		addInt64(query, "from_time", opts.fromTime)
-		addInt64(query, "to_time", opts.toTime)
-		addBool(query, "team", opts.team)
-		addBool(query, "is_none_hire_me", opts.isNonHireMe)
-		addBool(query, "has_milestone", opts.hasMilestone)
-		addBool(query, "count", opts.count)
-		addBool(query, "full_description", opts.fullDescription)
-		addBool(query, "job_details", opts.jobDetails)
-		addBool(query, "upgrade_details", opts.upgradeDetails)
-		addBool(query, "attachment_details", opts.attachmentDetails)
-		addBool(query, "file_details", opts.fileDetails)
-		addBool(query, "qualification_details", opts.qualificationDetails)
-		addBool(query, "selected_bids", opts.selectedBids)
-		addBool(query, "hireme_details", opts.hiremeDetails)
-		addBool(query, "user_details", opts.userDetails)
-		addBool(query, "invited_freelancer_details", opts.invitedFreelancerDetails)
-		addBool(query, "recommended_freelancer_details", opts.recommendedFreelancerDetails)
-		addBool(query, "support_session_details", opts.supportSessionDetails)
-		addBool(query, "location_details", opts.locationDetails)
-		addBool(query, "nda_signature_details", opts.ndaSignatureDetails)
-		addBool(query, "project_collaboration_details", opts.projectCollaborationDetails)
-		addBool(query, "proximity_details", opts.proximityDetails)
-		addBool(query, "review_availability_details", opts.reviewAvailabilityDetails)
-		addBool(query, "negotiated_details", opts.negotiatedDetails)
-		addBool(query, "drive_file_details", opts.driveFileDetails)
-		addBool(query, "nda_details", opts.ndaDetails)
-		addBool(query, "local_details", opts.localDetails)
-		addBool(query, "equipment_details", opts.equipmentDetails)
-		addBool(query, "client_engagement_details", opts.clientEngagementDetails)
-		addBool(query, "service_offering_details", opts.serviceOfferingDetails)
-		addBool(query, "user_avatar", opts.userAvatar)
-		addBool(query, "user_country_details", opts.userCountryDetails)
-		addBool(query, "user_profile_description", opts.userProfileDescription)
-		addBool(query, "user_display_info", opts.userDisplayInfo)
-		addBool(query, "user_jobs", opts.userJobs)
-		addBool(query, "user_balance_details", opts.userBalanceDetails)
-		addBool(query, "user_qualification_details", opts.userQualificationDetails)
-		addBool(query, "user_membership_details", opts.userMembershipDetails)
-		addBool(query, "user_financial_details", opts.userFinancialDetails)
-		addBool(query, "user_location_details", opts.userLocationDetails)
-		addBool(query, "user_portfolio_details", opts.userPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.userPreferredDetails)
-		addBool(query, "user_badge_details", opts.userBadgeDetails)
-		addBool(query, "user_status", opts.userStatus)
-		addBool(query, "user_reputation", opts.userReputation)
-		addBool(query, "user_employer_reputation", opts.userReputation)
-		addBool(query, "user_reputation_extra", opts.userReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.userEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.userCoverImage)
-		addBool(query, "user_past_cover_image", opts.userPastCoverImage)
-		addBool(query, "user_recommendations", opts.userRecommendations)
-		addBool(query, "user_responsiveness", opts.userResponsiveness)
-		addBool(query, "corporate_users", opts.corporateUsers)
-		addBool(query, "marketing_mobile_number", opts.marketingMobileNumber)
-		addBool(query, "sanction_details", opts.sanctionDetails)
-		addBool(query, "limited_account", opts.limitedAccount)
-		addBool(query, "compact", opts.compact)
-		addInt(query, "limit", opts.limit)
-		addInt(query, "offset", opts.offset)
+		addInt64Slice(query, "projects[]", opts.Projects)
+		addInt64Slice(query, "owners[]", opts.Owners)
+		addInt64Slice(query, "bidders[]", opts.Bidders)
+		addStringSlice(query, "seo_urls[]", opts.SeoUrls)
+		addEnumSlice(query, "frontend_project_statuses[]", opts.FrontendProjectStatuses)
+		addInt64(query, "from_time", opts.FromTime)
+		addInt64(query, "to_time", opts.ToTime)
+		addBool(query, "team", opts.Team)
+		addBool(query, "is_none_hire_me", opts.IsNonHireMe)
+		addBool(query, "has_milestone", opts.HasMilestone)
+		addBool(query, "count", opts.Count)
+		addBool(query, "full_description", opts.FullDescription)
+		addBool(query, "job_details", opts.JobDetails)
+		addBool(query, "upgrade_details", opts.UpgradeDetails)
+		addBool(query, "attachment_details", opts.AttachmentDetails)
+		addBool(query, "file_details", opts.FileDetails)
+		addBool(query, "qualification_details", opts.QualificationDetails)
+		addBool(query, "selected_bids", opts.SelectedBids)
+		addBool(query, "hireme_details", opts.HiremeDetails)
+		addBool(query, "user_details", opts.UserDetails)
+		addBool(query, "invited_freelancer_details", opts.InvitedFreelancerDetails)
+		addBool(query, "recommended_freelancer_details", opts.RecommendedFreelancerDetails)
+		addBool(query, "support_session_details", opts.SupportSessionDetails)
+		addBool(query, "location_details", opts.LocationDetails)
+		addBool(query, "nda_signature_details", opts.NdaSignatureDetails)
+		addBool(query, "project_collaboration_details", opts.ProjectCollaborationDetails)
+		addBool(query, "proximity_details", opts.ProximityDetails)
+		addBool(query, "review_availability_details", opts.ReviewAvailabilityDetails)
+		addBool(query, "negotiated_details", opts.NegotiatedDetails)
+		addBool(query, "drive_file_details", opts.DriveFileDetails)
+		addBool(query, "nda_details", opts.NdaDetails)
+		addBool(query, "local_details", opts.LocalDetails)
+		addBool(query, "equipment_details", opts.EquipmentDetails)
+		addBool(query, "client_engagement_details", opts.ClientEngagementDetails)
+		addBool(query, "service_offering_details", opts.ServiceOfferingDetails)
+		addBool(query, "user_avatar", opts.UserAvatar)
+		addBool(query, "user_country_details", opts.UserCountryDetails)
+		addBool(query, "user_profile_description", opts.UserProfileDescription)
+		addBool(query, "user_display_info", opts.UserDisplayInfo)
+		addBool(query, "user_jobs", opts.UserJobs)
+		addBool(query, "user_balance_details", opts.UserBalanceDetails)
+		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
+		addBool(query, "user_membership_details", opts.UserMembershipDetails)
+		addBool(query, "user_financial_details", opts.UserFinancialDetails)
+		addBool(query, "user_location_details", opts.UserLocationDetails)
+		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
+		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
+		addBool(query, "user_badge_details", opts.UserBadgeDetails)
+		addBool(query, "user_status", opts.UserStatus)
+		addBool(query, "user_reputation", opts.UserReputation)
+		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
+		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
+		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
+		addBool(query, "user_cover_image", opts.UserCoverImage)
+		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
+		addBool(query, "user_recommendations", opts.UserRecommendations)
+		addBool(query, "user_responsiveness", opts.UserResponsiveness)
+		addBool(query, "corporate_users", opts.CorporateUsers)
+		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
+		addBool(query, "sanction_details", opts.SanctionDetails)
+		addBool(query, "limited_account", opts.LimitedAccount)
+		addBool(query, "compact", opts.Compact)
+		addInt(query, "limit", opts.Limit)
+		addInt(query, "offset", opts.Offset)
 	}
-
 	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -230,9 +219,7 @@ func (s *ProjectsService) ListSelf(ctx context.Context, opts *ListSelfProjectsOp
 	if opts != nil {
 		addEnum(query, "status", opts.Status)
 		addEnum(query, "role", opts.Role)
-		for _, val := range opts.Types {
-			addEnum(query, "type[]", &val)
-		}
+		addEnumSlice(query, "type[]", opts.Types)
 		addString(query, "query", opts.Query)
 		addEnum(query, "sort_field", opts.SortField)
 		addBool(query, "reverse_sort", opts.ReverseSort)
@@ -361,7 +348,6 @@ func (s *ProjectsService) Get(ctx context.Context, projectID int64, opts *GetPro
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
 	}
-
 	return execute[*GetProjectResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -441,77 +427,51 @@ func (s *ProjectsService) SearchActive(ctx context.Context, opts *SearchActivePr
 	query := url.Values{}
 	if opts != nil {
 		addString(query, "query", opts.Query)
-		for _, projectType := range opts.ProjectTypes {
-			addEnum(query, "project_type[]", &projectType)
-		}
-		for _, projectUpgrade := range opts.ProjectUpgrades {
-			addEnum(query, "project_upgrades[]", &projectUpgrade)
-		}
-		for _, contestUpgrade := range opts.ContestUpgrades {
-			addEnum(query, "contest_upgrades[]", &contestUpgrade)
-		}
+		addEnumSlice(query, "project_type[]", opts.ProjectTypes)
+		addEnumSlice(query, "project_upgrades[]", opts.ProjectUpgrades)
+		addEnumSlice(query, "contest_upgrades[]", opts.ContestUpgrades)
 		addFloat(query, "min_avg_price", opts.MinAvgPrice)
 		addFloat(query, "max_avg_price", opts.MaxAvgPrice)
 		addFloat(query, "max_avg_hourly_rate", opts.MaxAvgHourlyRate)
 		addFloat(query, "min_price", opts.MinPrice)
 		addFloat(query, "max_price", opts.MaxPrice)
 		addFloat(query, "min_hourly_rate", opts.MinHourlyRate)
-		for _, job := range opts.Jobs {
-			addInt64(query, "jobs[]", &job)
-		}
-		for _, country := range opts.Countries {
-			addString(query, "countries[]", &country)
-		}
-		for _, language := range opts.Languages {
-			addString(query, "languages[]", &language)
-		}
-
+		addInt64Slice(query, "jobs[]", opts.Jobs)
+		addStringSlice(query, "countries[]", opts.Countries)
+		addStringSlice(query, "languages[]", opts.Languages)
 		addFloat(query, "latitude", opts.Latitude)
 		addFloat(query, "longitude", opts.Longitude)
 		addInt64(query, "from_time", opts.FromTime)
 		addInt64(query, "to_time", opts.ToTime)
 		addEnum(query, "sort_field", opts.SortField)
-
-		for _, projectID := range opts.ProjectIDs {
-			addInt64(query, "project_ids[]", &projectID)
-		}
-
+		addInt64Slice(query, "project_ids[]", opts.ProjectIDs)
 		addFloat(query, "top_right_latitude", opts.TopRightLatitude)
 		addFloat(query, "top_right_longitude", opts.TopRightLongitude)
 		addFloat(query, "bottom_left_latitude", opts.BottomLeftLatitude)
 		addFloat(query, "bottom_left_longitude", opts.BottomLeftLongitude)
-
 		addBool(query, "reverse_sort", opts.ReverseSort)
 		addString(query, "or_search_query", opts.OrSearchQuery)
-
 		addString(query, "highlight_pre_tags", opts.HighlightPreTags)
 		addString(query, "highlight_post_tags", opts.HighlightPostTags)
-
 		addBool(query, "full_description", opts.FullDescription)
 		addBool(query, "job_details", opts.JobDetails)
 		addBool(query, "upgrade_details", opts.UpgradeDetails)
-
 		addBool(query, "user_status", opts.UserStatus)
 		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
 		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
 		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-
 		addBool(query, "user_cover_image", opts.UserCoverImage)
 		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
 		addBool(query, "user_recommendations", opts.UserRecommendations)
 		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-
 		addBool(query, "corporate_users", opts.CorporateUsers)
 		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
 		addBool(query, "sanction_details", opts.SanctionDetails)
 		addBool(query, "limited_account", opts.LimitedAccount)
-
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
-
 	}
-
 	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -594,15 +554,9 @@ func (s *ProjectsService) SearchAll(ctx context.Context, opts *SearchAllProjects
 	query := url.Values{}
 	if opts != nil {
 		addString(query, "query", opts.Query)
-		for _, projectType := range opts.ProjectTypes {
-			addEnum(query, "project_types[]", &projectType)
-		}
-		for _, projectUpgrade := range opts.ProjectUpgrades {
-			addEnum(query, "project_upgrades[]", &projectUpgrade)
-		}
-		for _, contestUpgrade := range opts.ContestUpgrades {
-			addEnum(query, "contest_upgrades[]", &contestUpgrade)
-		}
+		addEnumSlice(query, "project_types[]", opts.ProjectTypes)
+		addEnumSlice(query, "project_upgrades[]", opts.ProjectUpgrades)
+		addEnumSlice(query, "contest_upgrades[]", opts.ContestUpgrades)
 		addFloat(query, "min_avg_price", opts.MinAvgPrice)
 		addFloat(query, "max_avg_price", opts.MaxAvgPrice)
 		addFloat(query, "min_avg_hourly_rate", opts.MinAvgHourlyRate)
@@ -611,32 +565,18 @@ func (s *ProjectsService) SearchAll(ctx context.Context, opts *SearchAllProjects
 		addFloat(query, "max_price", opts.MaxPrice)
 		addFloat(query, "min_hourly_rate", opts.MinHourlyRate)
 		addFloat(query, "max_hourly_rate", opts.MaxHourlyRate)
-		for _, job := range opts.Jobs {
-			addInt64(query, "jobs[]", &job)
-		}
-		for _, country := range opts.Countries {
-			addString(query, "countries[]", &country)
-		}
-		for _, language := range opts.Languages {
-			addString(query, "languages[]", &language)
-		}
+		addInt64Slice(query, "jobs[]", opts.Jobs)
+		addStringSlice(query, "countries[]", opts.Countries)
+		addStringSlice(query, "languages[]", opts.Languages)
 		addFloat(query, "latitude", opts.Latitude)
 		addFloat(query, "longitude", opts.Longitude)
 		addInt64(query, "from_time", opts.FromTime)
 		addInt64(query, "to_time", opts.ToTime)
 		addEnum(query, "sort_field", opts.SortField)
-		for _, bidAwardStatus := range opts.BidAwardStatuses {
-			addEnum(query, "bid_award_statuses[]", &bidAwardStatus)
-		}
-		for _, bidCompleteStatus := range opts.BidCompleteStatuses {
-			addEnum(query, "bid_complete_statuses[]", &bidCompleteStatus)
-		}
-		for _, projectStatus := range opts.ProjectStatuses {
-			addEnum(query, "project_statuses[]", &projectStatus)
-		}
-		for _, projectID := range opts.ProjectIDs {
-			addInt64(query, "project_ids[]", &projectID)
-		}
+		addEnumSlice(query, "bid_award_statuses[]", opts.BidAwardStatuses)
+		addEnumSlice(query, "bid_complete_statuses[]", opts.BidCompleteStatuses)
+		addEnumSlice(query, "project_statuses[]", opts.ProjectStatuses)
+		addInt64Slice(query, "project_ids[]", opts.ProjectIDs)
 		addFloat(query, "top_right_latitude", opts.TopRightLatitude)
 		addFloat(query, "top_right_longitude", opts.TopRightLongitude)
 		addFloat(query, "bottom_left_latitude", opts.BottomLeftLatitude)
@@ -663,28 +603,21 @@ func (s *ProjectsService) SearchAll(ctx context.Context, opts *SearchAllProjects
 		addBool(query, "user_profile_description", opts.UserProfileDescription)
 		addBool(query, "user_display_info", opts.UserDisplayInfo)
 		addBool(query, "user_jobs", opts.UserJobs)
-
 		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
 		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
 		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
 		addBool(query, "user_cover_image", opts.UserCoverImage)
-
 		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-
 		addBool(query, "user_recommendations", opts.UserRecommendations)
 		addBool(query, "user_responsiveness", opts.UserResponsiveness)
 		addBool(query, "corporate_users", opts.CorporateUsers)
-
 		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
 		addBool(query, "sanction_details", opts.SanctionDetails)
-
 		addBool(query, "limited_account", opts.LimitedAccount)
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 		addBool(query, "compact", opts.Compact)
-
 	}
-
 	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -700,7 +633,7 @@ func (s *ProjectsService) InviteFreelancer(ctx context.Context, projectID int64,
 }
 
 type ListUpgradesFeesOptions struct {
-	Currencies         []int
+	Currencies         []int64
 	Project            *int64
 	FreeUpgradeDetails *bool
 	TaxIncluded        *bool
@@ -714,16 +647,11 @@ func (s *ProjectsService) ListUpgradesFees(ctx context.Context, opts *ListUpgrad
 	path := endpoints.ProjectsFees
 	query := url.Values{}
 	if opts != nil {
-		if opts.Currencies != nil {
-			for _, currency := range opts.Currencies {
-				addInt(query, "currencies[]", &currency)
-			}
-		}
+		addInt64Slice(query, "currencies[]", opts.Currencies)
 		addInt64(query, "project", opts.Project)
 		addBool(query, "fee_upgrade_details", opts.FreeUpgradeDetails)
 		addBool(query, "tax_included", opts.TaxIncluded)
 	}
-
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -817,7 +745,6 @@ func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *L
 		addBool(query, "compact", opts.Compact)
 		addBool(query, "quotations", opts.Quotations)
 	}
-
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 
@@ -867,9 +794,7 @@ func (s *ProjectsService) ListMilestones(ctx context.Context, projectID int64, o
 	path := fmt.Sprintf("%s/%d/milestones", endpoints.Projects, projectID)
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Statuses {
-			addEnum(query, "statuses[]", &val)
-		}
+		addEnumSlice(query, "statuses[]", opts.Statuses)
 		addBool(query, "user_avatar", opts.UserAvatar)
 		addBool(query, "user_country_details", opts.UserCountryDetails)
 		addBool(query, "user_profile_Description", opts.UserProfileDescription)
@@ -940,9 +865,7 @@ func (s *ProjectsService) ListMilestoneRequests(ctx context.Context, projectID i
 	path := fmt.Sprintf("%s/%d/milestone_requests", endpoints.Projects, projectID)
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Statuses {
-			addEnum(query, "statuses[]", &val)
-		}
+		addEnumSlice(query, "statuses[]", opts.Statuses)
 		addBool(query, "user_avatar", opts.UserAvatar)
 		addBool(query, "user_country_details", opts.UserCountryDetails)
 		addBool(query, "user_profile_Description", opts.UserProfileDescription)
@@ -970,7 +893,6 @@ func (s *ProjectsService) ListMilestoneRequests(ctx context.Context, projectID i
 		addBool(query, "sanction_details", opts.SanctionDetails)
 		addBool(query, "limited_account", opts.LimitedAccount)
 		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-
 	}
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
@@ -978,7 +900,7 @@ func (s *ProjectsService) ListMilestoneRequests(ctx context.Context, projectID i
 type GetHourlyContractInfoOptions struct {
 	ProjectIDs        []int64
 	BidderIDs         []int64
-	HourlyContractIDs []int
+	HourlyContractIDs []int64
 	projectOwnerIDs   []int64
 	billingDetails    *bool
 	invoiceDetails    *bool
@@ -992,23 +914,13 @@ func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *GetHo
 	path := endpoints.ProjectsHourlyContract
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.ProjectIDs {
-			addInt64(query, "project_ids[]", &val)
-		}
-		for _, val := range opts.BidderIDs {
-			addInt64(query, "bidder_ids[]", &val)
-		}
-		for _, val := range opts.HourlyContractIDs {
-			addInt(query, "hourly_contract_ids[]", &val)
-		}
-		for _, val := range opts.projectOwnerIDs {
-			query.Add("project_owner_ids[]", strconv.FormatInt(val, 10))
-			addInt64(query, "project_owner_ids[]", &val)
-		}
+		addInt64Slice(query, "project_ids[]", opts.ProjectIDs)
+		addInt64Slice(query, "bidder_ids[]", opts.BidderIDs)
+		addInt64Slice(query, "hourly_contract_ids[]", opts.HourlyContractIDs)
+		addInt64Slice(query, "project_owner_ids[]", opts.projectOwnerIDs)
 		addBool(query, "billing_details", opts.billingDetails)
 		addBool(query, "invoice_details", opts.invoiceDetails)
 	}
-
 	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
 }
 

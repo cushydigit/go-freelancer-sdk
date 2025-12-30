@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 type ListReputationsOptions struct {
@@ -23,12 +23,8 @@ func (s *UsersExtrasService) ListReputations(ctx context.Context, opts *ListRepu
 	path := endpoints.UsersReputations
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Users {
-			addInt64(query, "users[]", &val)
-		}
-		for _, val := range opts.Jobs {
-			addInt64(query, "jobs[]", &val)
-		}
+		addInt64Slice(query, "users[]", opts.Users)
+		addInt64Slice(query, "jobs[]", opts.Jobs)
 		addEnum(query, "role", opts.Role)
 		addBool(query, "job_history", opts.JobHistory)
 		addBool(query, "project_stats", opts.ProjectStats)
@@ -56,18 +52,10 @@ func (s *UsersExtrasService) ListEnterprises(ctx context.Context, opts *ListEnte
 	path := endpoints.UsersEnterprises
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Enterprises {
-			addInt64(query, "enterprises[]", &val)
-		}
-		for _, val := range opts.InternalNames {
-			addString(query, "internal_names[]", &val)
-		}
-		for _, val := range opts.Names {
-			addString(query, "names[]", &val)
-		}
-		for _, val := range opts.SeoUrls {
-			addString(query, "seo_urls[]", &val)
-		}
+		addInt64Slice(query, "enterprises[]", opts.Enterprises)
+		addStringSlice(query, "internal_names[]", opts.InternalNames)
+		addStringSlice(query, "names[]", opts.Names)
+		addStringSlice(query, "seo_urls[]", opts.SeoUrls)
 		addInt64(query, "user_id", opts.UserID)
 		addBool(query, "ignore_test", opts.IgnoreTest)
 		addInt(query, "limit", opts.Limit)
@@ -88,9 +76,7 @@ func (s *UsersExtrasService) ListPortfolios(ctx context.Context, opts *ListPortf
 	path := endpoints.UsersPortfolios
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Users {
-			addInt64(query, "users[]", &val)
-		}
+		addInt64Slice(query, "users[]", opts.Users)
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 	}
@@ -115,7 +101,7 @@ func (s *UsersExtrasService) CreateViolation(ctx context.Context, b CreateViolat
 }
 
 type ListPoolsOptions struct {
-	Pools           []int
+	Pools           []int64
 	Names           []string
 	SeoUrls         []string
 	IgnoreTest      *bool
@@ -132,15 +118,9 @@ func (s *UsersExtrasService) ListPools(ctx context.Context, opts *ListPoolsOptio
 	path := endpoints.UsersPools
 	query := url.Values{}
 	if opts != nil {
-		for _, val := range opts.Pools {
-			addInt(query, "pools[]", &val)
-		}
-		for _, val := range opts.Names {
-			addString(query, "internal_names[]", &val)
-		}
-		for _, val := range opts.SeoUrls {
-			addString(query, "seo_urls[]", &val)
-		}
+		addInt64Slice(query, "pools[]", opts.Pools)
+		addStringSlice(query, "internal_names[]", opts.Names)
+		addStringSlice(query, "seo_urls[]", opts.SeoUrls)
 		addBool(query, "ignore_test", opts.IgnoreTest)
 		addBool(query, "is_talent_network", opts.IsTalentNetwork)
 		addInt(query, "limit", opts.Limit)
