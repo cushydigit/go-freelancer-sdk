@@ -197,6 +197,10 @@ Current version covers **Projects**, **Users**, and **Common** services.
 - [ ] **Messaging:** Threads and direct message handling.
 - [ ] **Contests:** Browsing and participating in contests.
 
+## Changelog
+
+For a detailed list of changes, please see the [CHANGELOG.md](CHANGELOG.md).
+
 ## Disclaimer
 
 This is an unofficial library and is not affiliated with, endorsed by, or associated with Freelancer.com.
