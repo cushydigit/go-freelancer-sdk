@@ -3,7 +3,7 @@ package freelancer
 import (
 	"fmt"
 
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 type Country struct {
