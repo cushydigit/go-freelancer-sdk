@@ -189,7 +189,7 @@ Current version covers **Projects**, **Users**, and **Common** services.
 ### Stability & Quality
 
 - [x] **Static Analysis:**
-- [x] **Unit Testing:** (7% coverage)
+- [x] **Unit Testing:** (13% coverage)
 - [ ] **Use Case:**
 
 ### Upcoming Features
