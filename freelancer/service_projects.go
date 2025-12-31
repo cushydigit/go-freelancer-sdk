@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/query"
 )
 
 // Title, Description, Budget, Jobs are required
@@ -38,8 +39,8 @@ type CreateProjectBody struct {
 // Create a new project
 // It maps to the `POST` `/projects/0.1/projects` endpoint.
 func (s *ProjectsService) Create(ctx context.Context, b CreateProjectBody) (*CreateProjectResponse, error) {
-	path := endpoints.Projects
-	return execute[*CreateProjectResponse](ctx, s.client, http.MethodPost, path, nil, b)
+	p := endpoints.Projects
+	return execute[*CreateProjectResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
 // TODO: check this service functionality so the projectActionBody should have better fields
@@ -53,8 +54,8 @@ type ProjectActionBody struct {
 // Perform an action on a project
 // It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
 func (s *ProjectsService) Action(ctx context.Context, projectID int64, action ProjectActionBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
-	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, projectID)
+	p := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
+	return execute[*RawResponse](ctx, s.client, http.MethodPut, p, nil, projectID)
 }
 
 type ListProjectsOptions struct {
@@ -128,7 +129,7 @@ type ListProjectsOptions struct {
 // Returns information about multiple projects. Will be ordered by descending submit date (newest-to-oldest).
 // it maps to the `GET` `/projects/0.1/projects` endpoint
 func (s *ProjectsService) List(ctx context.Context, opts *ListProjectsOptions) (*ListProjectsResponse, error) {
-	path := endpoints.Projects
+	p := endpoints.Projects
 	query := url.Values{}
 	if opts != nil {
 		addInt64Slice(query, "projects[]", opts.Projects)
@@ -196,7 +197,7 @@ func (s *ProjectsService) List(ctx context.Context, opts *ListProjectsOptions) (
 		addInt(query, "limit", opts.Limit)
 		addInt(query, "offset", opts.Offset)
 	}
-	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, p, query, nil)
 }
 
 type ListSelfProjectsOptions struct {
@@ -214,7 +215,7 @@ type ListSelfProjectsOptions struct {
 // Returns the logged in user’s projects/contests they either created or participated in (by bidding or submitting an entry).
 // it maps to the `GET` `/projects/0.1/self` endpoint
 func (s *ProjectsService) ListSelf(ctx context.Context, opts *ListSelfProjectsOptions) (*ListProjectsResponse, error) {
-	path := endpoints.ProjectsSelf
+	p := endpoints.ProjectsSelf
 	query := url.Values{}
 	if opts != nil {
 		addEnum(query, "status", opts.Status)
@@ -227,398 +228,228 @@ func (s *ProjectsService) ListSelf(ctx context.Context, opts *ListSelfProjectsOp
 		addInt(query, "offset", opts.Offset)
 		addInt(query, "limit", opts.Limit)
 	}
-	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, p, query, nil)
 }
 
 type GetProjectOptions struct {
-	FullDescription              *bool
-	JobDetails                   *bool
-	UpgradeDetails               *bool
-	AttachmentDetails            *bool
-	FileDetails                  *bool
-	QualificationDetails         *bool
-	SelectedBids                 *bool
-	HiremeDetails                *bool
-	UserDetails                  *bool
-	InvitedFreelancerDetails     *bool
-	RecommendedFreelancerDetails *bool
-	HourlyDetails                *bool
-	SupportSessionDetails        *bool
-	LocationDetails              *bool
-	NdaSignatureDetails          *bool
-	ProjectCollaborationDetails  *bool
-	TrackDetails                 *bool
-	ProximityDetails             *bool
-	ReviewAvailabilityDetails    *bool
-	NegotiatedDetails            *bool
-	DriveFileDetails             *bool
-	NdaDetails                   *bool
-	LocalDetails                 *bool
-	EquipmentDetails             *bool
-	ClientEngagementDetails      *bool
-	ServiceOfferingDetails       *bool
-	UserAvatar                   *bool
-	UserCountryDetails           *bool
-	UserProfileDescription       *bool
-	UserDisplayInfo              *bool
-	UserJobs                     *bool
-	UserBalanceDetails           *bool
-	UserQualificationDetails     *bool
-	UserMembershipDetails        *bool
-	UserFinancialDetails         *bool
-	UserLocationDetails          *bool
-	UserPortfolioDetails         *bool
-	UserPreferredDetails         *bool
-	UserBadgeDetails             *bool
-	UserStatus                   *bool
-	UserReputation               *bool
-	UserEmployerReputation       *bool
-	UserReputationExtra          *bool
-	UserEmployerReputationExtra  *bool
-	UserCoverImage               *bool
-	UserPastCoverImage           *bool
-	UserRecommendations          *bool
-	UserResponsiveness           *bool
-	CorporateUsers               *bool
-	MarketingMobileNumber        *bool
-	SanctionDetails              *bool
-	LimitedAccount               *bool
-	EquipmentGroupDetails        *bool
-	Limit                        *int
-	Offset                       *int
-	Compact                      *bool
+	FullDescription              *bool `url:"full_description"`
+	JobDetails                   *bool `url:"job_details"`
+	UpgradeDetails               *bool `url:"upgrade_details"`
+	AttachmentDetails            *bool `url:"attached_details"`
+	FileDetails                  *bool `url:"file_details"`
+	QualificationDetails         *bool `url:"qualification_details"`
+	SelectedBids                 *bool `url:"selected_bid"`
+	HiremeDetails                *bool `url:"hireme_details"`
+	UserDetails                  *bool `url:"user_details"`
+	InvitedFreelancerDetails     *bool `url:"invited_freelancer_details"`
+	RecommendedFreelancerDetails *bool `url:"recommended_freelancer_details"`
+	HourlyDetails                *bool `url:"hourly_details"`
+	SupportSessionDetails        *bool `url:"support_session_details"`
+	LocationDetails              *bool `url:"local_details"`
+	NdaSignatureDetails          *bool `url:"nda_signature_details"`
+	ProjectCollaborationDetails  *bool `url:"project_collaboration_details"`
+	TrackDetails                 *bool `url:"track_details"`
+	ProximityDetails             *bool `url:"proximity_details"`
+	ReviewAvailabilityDetails    *bool `url:"review_availability_details"`
+	NegotiatedDetails            *bool `url:"negotiated_details"`
+	DriveFileDetails             *bool `url:"drive_file_details"`
+	NdaDetails                   *bool `url:"nda_details"`
+	LocalDetails                 *bool `url:"local_details"`
+	EquipmentDetails             *bool `url:"equipment_details"`
+	ClientEngagementDetails      *bool `url:"client_engagement_details"`
+	ServiceOfferingDetails       *bool `url:"service_offering_details"`
+	UserAvatar                   *bool `url:"user_avatar"`
+	UserCountryDetails           *bool `url:"user_country_details"`
+	UserProfileDescription       *bool `url:"user_profile_description"`
+	UserDisplayInfo              *bool `url:"user_display_info"`
+	UserJobs                     *bool `url:"user_jobs"`
+	UserBalanceDetails           *bool `url:"user_balance_details"`
+	UserQualificationDetails     *bool `url:"user_qualification_details"`
+	UserMembershipDetails        *bool `url:"user_membership_details"`
+	UserFinancialDetails         *bool `url:"user_financial_details"`
+	UserLocationDetails          *bool `url:"user_location_details"`
+	UserPortfolioDetails         *bool `url:"user_portfolio_details"`
+	UserPreferredDetails         *bool `url:"user_preferred_details"`
+	UserBadgeDetails             *bool `url:"user_badge_details"`
+	UserStatus                   *bool `url:"user_status"`
+	UserReputation               *bool `url:"user_reputation"`
+	UserEmployerReputation       *bool `url:"user_employer_reputation"`
+	UserReputationExtra          *bool `url:"user_reputation_extra"`
+	UserEmployerReputationExtra  *bool `url:"user_employer_reputation_extra"`
+	UserCoverImage               *bool `url:"user_cover_image"`
+	UserPastCoverImage           *bool `url:"user_past_cover_image"`
+	UserRecommendations          *bool `url:"user_recommendations"`
+	UserResponsiveness           *bool `url:"user_responsiveness"`
+	CorporateUsers               *bool `url:"corporate_users"`
+	MarketingMobileNumber        *bool `url:"marketing_mobile_number"`
+	SanctionDetails              *bool `url:"sanction_details"`
+	LimitedAccount               *bool `url:"limited_account"`
+	EquipmentGroupDetails        *bool `url:"equipment_group_details"`
+	Limit                        *int  `url:"limit"`
+	Offset                       *int  `url:"offset"`
+	Compact                      *bool `url:"compact"`
 }
 
 // Get information about a specific project. The full range of users projection options can be specified as part of this request by first setting theuser_detailsparameter to true.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}` endpoint
 func (s *ProjectsService) Get(ctx context.Context, projectID int64, opts *GetProjectOptions) (*GetProjectResponse, error) {
-	path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
-	query := url.Values{}
-	if opts != nil {
-		addBool(query, "full_description", opts.FullDescription)
-		addBool(query, "job_details", opts.JobDetails)
-		addBool(query, "upgrade_details", opts.UpgradeDetails)
-		addBool(query, "attached_details", opts.AttachmentDetails)
-		addBool(query, "file_details", opts.FileDetails)
-		addBool(query, "qualification_details", opts.QualificationDetails)
-		addBool(query, "selected_bid", opts.SelectedBids)
-		addBool(query, "hireme_details", opts.HiremeDetails)
-		addBool(query, "invited_freelancer_details", opts.InvitedFreelancerDetails)
-		addBool(query, "recommended_freelancer_details", opts.RecommendedFreelancerDetails)
-		addBool(query, "support_session_details", opts.SupportSessionDetails)
-		addBool(query, "local_details", opts.LocalDetails)
-		addBool(query, "nda_signature_details", opts.NdaSignatureDetails)
-		addBool(query, "project_collaboration_details", opts.ProjectCollaborationDetails)
-		addBool(query, "track_details", opts.TrackDetails)
-		addBool(query, "proximity_details", opts.ProximityDetails)
-		addBool(query, "review_availability_details", opts.ReviewAvailabilityDetails)
-		addBool(query, "negotiated_details", opts.NegotiatedDetails)
-		addBool(query, "drive_file_details", opts.DriveFileDetails)
-		addBool(query, "nda_details", opts.NdaDetails)
-		addBool(query, "local_details", opts.LocalDetails)
-		addBool(query, "equipment_details", opts.EquipmentDetails)
-		addBool(query, "client_engagement_details", opts.ClientEngagementDetails)
-		addBool(query, "service_offering_details", opts.ServiceOfferingDetails)
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_Description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-		addInt(query, "limit", opts.Limit)
-		addInt(query, "offset", opts.Offset)
-		addBool(query, "compact", opts.Compact)
-	}
-	return execute[*GetProjectResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
+	q := query.Values(opts)
+	return execute[*GetProjectResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type SearchActiveProjectsOptions struct {
-	Query                       *string
-	ProjectTypes                []ProjectType
-	ProjectUpgrades             []ProjectUpgradeType
-	ContestUpgrades             []ContestUpgradeType
-	MinAvgPrice                 *float64
-	MaxAvgPrice                 *float64
-	MinAvgHourlyRate            *float64
-	MaxAvgHourlyRate            *float64
-	MinPrice                    *float64
-	MaxPrice                    *float64
-	MinHourlyRate               *float64
-	MaxHourlyRate               *float64
-	Jobs                        []int64
-	Countries                   []string
-	Languages                   []string
-	Latitude                    *float64
-	Longitude                   *float64
-	FromTime                    *int64
-	ToTime                      *int64
-	SortField                   *SortField
-	ProjectIDs                  []int64
-	TopRightLatitude            *float64
-	TopRightLongitude           *float64
-	BottomLeftLatitude          *float64
-	BottomLeftLongitude         *float64
-	ReverseSort                 *bool
-	OrSearchQuery               *string
-	HighlightPreTags            *string
-	HighlightPostTags           *string
-	FullDescription             *bool
-	JobDetails                  *bool
-	UpgradeDetails              *bool
-	UserDetails                 *bool
-	LocationDetails             *bool
-	NDASignatureDetails         *bool
-	ProjectCollaborationDetails *bool
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
-	Limit                       *int
-	Offset                      *int
-	Compact                     *bool
+	Query                       *string              `url:"query"`
+	ProjectTypes                []ProjectType        `url:"project_types[]"`
+	ProjectUpgrades             []ProjectUpgradeType `url:"project_upgrades[]"`
+	ContestUpgrades             []ContestUpgradeType `url:"contest_upgrades[]"`
+	MinAvgPrice                 *float64             `url:"min_avg_price"`
+	MaxAvgPrice                 *float64             `url:"max_avg_price"`
+	MinAvgHourlyRate            *float64             `url:"min_avg_hourly_rate"`
+	MaxAvgHourlyRate            *float64             `url:"max_avg_hourly_rate"`
+	MinPrice                    *float64             `url:"min_price"`
+	MaxPrice                    *float64             `url:"max_price"`
+	MinHourlyRate               *float64             `url:"min_hourly_rate"`
+	MaxHourlyRate               *float64             `url:"max_hourly_rate"`
+	Jobs                        []int64              `url:"jobs[]"`
+	Countries                   []string             `url:"countries[]"`
+	Languages                   []string             `url:"languages[]"`
+	Latitude                    *float64             `url:"latitude"`
+	Longitude                   *float64             `url:"longitude"`
+	FromTime                    *int64               `url:"from_time"`
+	ToTime                      *int64               `url:"to_time"`
+	SortField                   *SortField           `url:"sort_field"`
+	ProjectIDs                  []int64              `url:"project_ids[]"`
+	TopRightLatitude            *float64             `url:"top_right_latitude"`
+	TopRightLongitude           *float64             `url:"top_right_longitude"`
+	BottomLeftLatitude          *float64             `url:"bottom_left_latitude"`
+	BottomLeftLongitude         *float64             `url:"bottom_left_longitude"`
+	ReverseSort                 *bool                `url:"reverse_sort"`
+	OrSearchQuery               *string              `url:"or_search_query"`
+	HighlightPreTags            *string              `url:"highlight_pre_tags"`
+	HighlightPostTags           *string              `url:"highlight_post_tags"`
+	FullDescription             *bool                `url:"full_description"`
+	JobDetails                  *bool                `url:"job_details"`
+	UpgradeDetails              *bool                `url:"upgrade_details"`
+	UserDetails                 *bool                `url:"user_details"`
+	LocationDetails             *bool                `url:"location_details"`
+	NDASignatureDetails         *bool                `url:"nda_signature_details"`
+	ProjectCollaborationDetails *bool                `url:"project_collaboration_details"`
+	UserAvatar                  *bool                `url:"user_avatar"`
+	UserCountryDetails          *bool                `url:"user_country_details"`
+	UserProfileDescription      *bool                `url:"user_profile_description"`
+	UserDisplayInfo             *bool                `url:"user_display_info"`
+	UserJobs                    *bool                `url:"user_jobs"`
+	UserBalanceDetails          *bool                `url:"user_balance_details"`
+	UserQualificationDetails    *bool                `url:"user_qualification_details"`
+	UserMembershipDetails       *bool                `url:"user_membership_details"`
+	UserFinancialDetails        *bool                `url:"user_financial_details"`
+	UserLocationDetails         *bool                `url:"user_location_details"`
+	UserPortfolioDetails        *bool                `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool                `url:"user_preferred_details"`
+	UserBadgeDetails            *bool                `url:"user_badge_details"`
+	UserStatus                  *bool                `url:"user_status"`
+	UserReputation              *bool                `url:"user_reputation"`
+	UserEmployerReputation      *bool                `url:"user_employer_reputation"`
+	UserReputationExtra         *bool                `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool                `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool                `url:"user_cover_image"`
+	UserPastCoverImage          *bool                `url:"user_past_cover_image"`
+	UserRecommendations         *bool                `url:"user_recommendations"`
+	UserResponsiveness          *bool                `url:"user_responsiveness"`
+	CorporateUsers              *bool                `url:"corporate_users"`
+	MarketingMobileNumber       *bool                `url:"marketing_mobile_number"`
+	SanctionDetails             *bool                `url:"sanction_details"`
+	LimitedAccount              *bool                `url:"limited_account"`
+	EquipmentGroupDetails       *bool                `url:"equipment_group_details"`
+	Limit                       *int                 `url:"limit"`
+	Offset                      *int                 `url:"offset"`
+	Compact                     *bool                `url:"compact"`
 }
 
 // Searches for active projects matching the desired query.
 // It maps to the `GET` `/projects/0.1/projects/active` endpoint
 func (s *ProjectsService) SearchActive(ctx context.Context, opts *SearchActiveProjectsOptions) (*ListProjectsResponse, error) {
-	path := endpoints.ProjectsActive
-	query := url.Values{}
-	if opts != nil {
-		addString(query, "query", opts.Query)
-		addEnumSlice(query, "project_type[]", opts.ProjectTypes)
-		addEnumSlice(query, "project_upgrades[]", opts.ProjectUpgrades)
-		addEnumSlice(query, "contest_upgrades[]", opts.ContestUpgrades)
-		addFloat(query, "min_avg_price", opts.MinAvgPrice)
-		addFloat(query, "max_avg_price", opts.MaxAvgPrice)
-		addFloat(query, "max_avg_hourly_rate", opts.MaxAvgHourlyRate)
-		addFloat(query, "min_price", opts.MinPrice)
-		addFloat(query, "max_price", opts.MaxPrice)
-		addFloat(query, "min_hourly_rate", opts.MinHourlyRate)
-		addInt64Slice(query, "jobs[]", opts.Jobs)
-		addStringSlice(query, "countries[]", opts.Countries)
-		addStringSlice(query, "languages[]", opts.Languages)
-		addFloat(query, "latitude", opts.Latitude)
-		addFloat(query, "longitude", opts.Longitude)
-		addInt64(query, "from_time", opts.FromTime)
-		addInt64(query, "to_time", opts.ToTime)
-		addEnum(query, "sort_field", opts.SortField)
-		addInt64Slice(query, "project_ids[]", opts.ProjectIDs)
-		addFloat(query, "top_right_latitude", opts.TopRightLatitude)
-		addFloat(query, "top_right_longitude", opts.TopRightLongitude)
-		addFloat(query, "bottom_left_latitude", opts.BottomLeftLatitude)
-		addFloat(query, "bottom_left_longitude", opts.BottomLeftLongitude)
-		addBool(query, "reverse_sort", opts.ReverseSort)
-		addString(query, "or_search_query", opts.OrSearchQuery)
-		addString(query, "highlight_pre_tags", opts.HighlightPreTags)
-		addString(query, "highlight_post_tags", opts.HighlightPostTags)
-		addBool(query, "full_description", opts.FullDescription)
-		addBool(query, "job_details", opts.JobDetails)
-		addBool(query, "upgrade_details", opts.UpgradeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addInt(query, "limit", opts.Limit)
-		addInt(query, "offset", opts.Offset)
-		addBool(query, "compact", opts.Compact)
-	}
-	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := endpoints.ProjectsActive
+	q := query.Values(opts)
+	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type SearchAllProjectsOptions struct {
-	Query                       *string
-	ProjectTypes                []ProjectType
-	ProjectUpgrades             []ProjectUpgradeType
-	ContestUpgrades             []ContestUpgradeType
-	MinAvgPrice                 *float64
-	MaxAvgPrice                 *float64
-	MinAvgHourlyRate            *float64
-	MaxAvgHourlyRate            *float64
-	MinPrice                    *float64
-	MaxPrice                    *float64
-	MinHourlyRate               *float64
-	MaxHourlyRate               *float64
-	Jobs                        []int64
-	Countries                   []string
-	Languages                   []string
-	Latitude                    *float64
-	Longitude                   *float64
-	FromTime                    *int64
-	ToTime                      *int64
-	SortField                   *SortField
-	BidAwardStatuses            []BidAwardStatus
-	BidCompleteStatuses         []BidCompleteStatus
-	ProjectStatuses             []ProjectFrontendStatus
-	ProjectIDs                  []int64
-	TopRightLatitude            *float64
-	TopRightLongitude           *float64
-	BottomLeftLatitude          *float64
-	BottomLeftLongitude         *float64
-	ReverseSort                 *bool
-	OrSearchQuery               *string
-	HighlightPreTags            *string
-	HighlightPostTags           *string
-	FullDescription             *bool
-	JobDetails                  *bool
-	UpgradeDetails              *bool
-	UserDetails                 *bool
-	LocationDetails             *bool
-	NdaSignatureDetails         *bool
-	ProjectCollaborationDetails *bool
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
-	Limit                       *int
-	Offset                      *int
-	Compact                     *bool
+	Query                       *string                 `url:"query"`
+	ProjectTypes                []ProjectType           `url:"project_types[]"`
+	ProjectUpgrades             []ProjectUpgradeType    `url:"project_upgrades[]"`
+	ContestUpgrades             []ContestUpgradeType    `url:"contest_upgrades[]"`
+	MinAvgPrice                 *float64                `url:"min_avg_price"`
+	MaxAvgPrice                 *float64                `url:"max_avg_price"`
+	MinAvgHourlyRate            *float64                `url:"min_avg_hourly_rate"`
+	MaxAvgHourlyRate            *float64                `url:"max_avg_hourly_rate"`
+	MinPrice                    *float64                `url:"min_price"`
+	MaxPrice                    *float64                `url:"max_price"`
+	MinHourlyRate               *float64                `url:"min_hourly_rate"`
+	MaxHourlyRate               *float64                `url:"max_hourly_rate"`
+	Jobs                        []int64                 `url:"jobs[]"`
+	Countries                   []string                `url:"countries[]"`
+	Languages                   []string                `url:"languages[]"`
+	Latitude                    *float64                `url:"latitude"`
+	Longitude                   *float64                `url:"longitude"`
+	FromTime                    *int64                  `url:"from_time"`
+	ToTime                      *int64                  `url:"to_time"`
+	SortField                   *SortField              `url:"sort_field"`
+	BidAwardStatuses            []BidAwardStatus        `url:"bid_award_statuses[]"`
+	BidCompleteStatuses         []BidCompleteStatus     `url:"bid_complete_statuses[]"`
+	ProjectStatuses             []ProjectFrontendStatus `url:"project_statuses[]"`
+	ProjectIDs                  []int64                 `url:"project_ids[]"`
+	TopRightLatitude            *float64                `url:"top_right_latitude"`
+	TopRightLongitude           *float64                `url:"top_right_longitude"`
+	BottomLeftLatitude          *float64                `url:"bottom_left_latitude"`
+	BottomLeftLongitude         *float64                `url:"bottom_left_longitude"`
+	ReverseSort                 *bool                   `url:"reverse_sort"`
+	OrSearchQuery               *string                 `url:"or_search_query"`
+	HighlightPreTags            *string                 `url:"highlight_pre_tags"`
+	HighlightPostTags           *string                 `url:"highlight_post_tags"`
+	FullDescription             *bool                   `url:"full_description"`
+	JobDetails                  *bool                   `url:"job_details"`
+	UpgradeDetails              *bool                   `url:"upgrade_details"`
+	UserDetails                 *bool                   `url:"user_details"`
+	UserAvatar                  *bool                   `url:"user_avatar"`
+	UserCountryDetails          *bool                   `url:"user_country_details"`
+	UserProfileDescription      *bool                   `url:"user_profile_description"`
+	UserDisplayInfo             *bool                   `url:"user_display_info"`
+	UserJobs                    *bool                   `url:"user_jobs"`
+	UserBalanceDetails          *bool                   `url:"user_balance_details"`
+	UserQualificationDetails    *bool                   `url:"user_qualification_details"`
+	UserMembershipDetails       *bool                   `url:"user_membership_details"`
+	UserFinancialDetails        *bool                   `url:"user_financial_details"`
+	UserLocationDetails         *bool                   `url:"user_location_details"`
+	UserPortfolioDetails        *bool                   `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool                   `url:"user_preferred_details"`
+	UserBadgeDetails            *bool                   `url:"user_badge_details"`
+	UserStatus                  *bool                   `url:"user_status"`
+	UserReputation              *bool                   `url:"user_reputation"`
+	UserEmployerReputation      *bool                   `url:"user_employer_reputation"`
+	UserReputationExtra         *bool                   `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool                   `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool                   `url:"user_cover_image"`
+	UserPastCoverImage          *bool                   `url:"user_past_cover_image"`
+	UserRecommendations         *bool                   `url:"user_recommendations"`
+	UserResponsiveness          *bool                   `url:"user_responsiveness"`
+	CorporateUsers              *bool                   `url:"corporate_users"`
+	MarketingMobileNumber       *bool                   `url:"marketing_mobile_number"`
+	SanctionDetails             *bool                   `url:"sanction_details"`
+	LimitedAccount              *bool                   `url:"limited_account"`
+	EquipmentGroupDetails       *bool                   `url:"equipment_group_details"`
+	Limit                       *int                    `url:"limit"`
+	Offset                      *int                    `url:"offset"`
+	Compact                     *bool                   `url:"compact"`
 }
 
 // Searches for all projects matching the desired query.
 // It maps to the `GET` `/projects/0.1/projects/all` endpoint
 func (s *ProjectsService) SearchAll(ctx context.Context, opts *SearchAllProjectsOptions) (*ListProjectsResponse, error) {
-	path := endpoints.ProjectsAll
-	query := url.Values{}
-	if opts != nil {
-		addString(query, "query", opts.Query)
-		addEnumSlice(query, "project_types[]", opts.ProjectTypes)
-		addEnumSlice(query, "project_upgrades[]", opts.ProjectUpgrades)
-		addEnumSlice(query, "contest_upgrades[]", opts.ContestUpgrades)
-		addFloat(query, "min_avg_price", opts.MinAvgPrice)
-		addFloat(query, "max_avg_price", opts.MaxAvgPrice)
-		addFloat(query, "min_avg_hourly_rate", opts.MinAvgHourlyRate)
-		addFloat(query, "max_avg_hourly_rate", opts.MaxAvgHourlyRate)
-		addFloat(query, "min_price", opts.MinPrice)
-		addFloat(query, "max_price", opts.MaxPrice)
-		addFloat(query, "min_hourly_rate", opts.MinHourlyRate)
-		addFloat(query, "max_hourly_rate", opts.MaxHourlyRate)
-		addInt64Slice(query, "jobs[]", opts.Jobs)
-		addStringSlice(query, "countries[]", opts.Countries)
-		addStringSlice(query, "languages[]", opts.Languages)
-		addFloat(query, "latitude", opts.Latitude)
-		addFloat(query, "longitude", opts.Longitude)
-		addInt64(query, "from_time", opts.FromTime)
-		addInt64(query, "to_time", opts.ToTime)
-		addEnum(query, "sort_field", opts.SortField)
-		addEnumSlice(query, "bid_award_statuses[]", opts.BidAwardStatuses)
-		addEnumSlice(query, "bid_complete_statuses[]", opts.BidCompleteStatuses)
-		addEnumSlice(query, "project_statuses[]", opts.ProjectStatuses)
-		addInt64Slice(query, "project_ids[]", opts.ProjectIDs)
-		addFloat(query, "top_right_latitude", opts.TopRightLatitude)
-		addFloat(query, "top_right_longitude", opts.TopRightLongitude)
-		addFloat(query, "bottom_left_latitude", opts.BottomLeftLatitude)
-		addFloat(query, "bottom_left_longitude", opts.BottomLeftLongitude)
-		addBool(query, "reverse_sort", opts.ReverseSort)
-		addString(query, "or_search_query", opts.OrSearchQuery)
-		addString(query, "highlight_pre_tags", opts.HighlightPreTags)
-		addString(query, "highlight_post_tags", opts.HighlightPostTags)
-		addBool(query, "full_description", opts.FullDescription)
-		addBool(query, "job_details", opts.JobDetails)
-		addBool(query, "upgrade_details", opts.UpgradeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "nda_signature_details", opts.NdaSignatureDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_details", opts.UserDetails)
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addInt(query, "limit", opts.Limit)
-		addInt(query, "offset", opts.Offset)
-		addBool(query, "compact", opts.Compact)
-	}
-	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := endpoints.ProjectsAll
+	q := query.Values(opts)
+	return execute[*ListProjectsResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type InviteFreelancersBody struct {
@@ -628,15 +459,15 @@ type InviteFreelancersBody struct {
 // Invites specific freelancers to bid on a project.
 // It maps to the `POST` `/projects/0.1/projects/{project_id}/invite` endpoint
 func (s *ProjectsService) InviteFreelancer(ctx context.Context, projectID int64, b InviteFreelancersBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d/invite", endpoints.Projects, projectID)
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
+	p := fmt.Sprintf("%s/%d/invite", endpoints.Projects, projectID)
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
 type ListUpgradesFeesOptions struct {
-	Currencies         []int64
-	Project            *int64
-	FreeUpgradeDetails *bool
-	TaxIncluded        *bool
+	Currencies         []int64 `url:"currencies[]"`
+	Project            *int64  `url:"project"`
+	FreeUpgradeDetails *bool   `url:"fee_upgrade_details"`
+	TaxIncluded        *bool   `url:"tax_included"`
 }
 
 // TODO: Refine the typed response with
@@ -644,57 +475,50 @@ type ListUpgradesFeesOptions struct {
 // Returns the project upgrade fees for a given list of currencies. Also checks if the current user is eligible for free upgrades if requested.
 // It maps to the `GET` `/projects/0.1/projects/fees` endpoint
 func (s *ProjectsService) ListUpgradesFees(ctx context.Context, opts *ListUpgradesFeesOptions) (*RawResponse, error) {
-	path := endpoints.ProjectsFees
-	query := url.Values{}
-	if opts != nil {
-		addInt64Slice(query, "currencies[]", opts.Currencies)
-		addInt64(query, "project", opts.Project)
-		addBool(query, "fee_upgrade_details", opts.FreeUpgradeDetails)
-		addBool(query, "tax_included", opts.TaxIncluded)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := endpoints.ProjectsFees
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type ListProjectBidsOptions struct {
-	ProjectID                   int64
-	IsShortlisted               *bool
-	Reputation                  *bool
-	RecommendedBid              *bool
-	ShortlistedBid              *bool
-	Distance                    *bool
-	UserDetails                 *bool
-	ExpertGuarantees            *bool
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
-	Limit                       *int
-	Offset                      *int
-	Compact                     *bool
-	Quotations                  *bool
+	IsShortlisted               *bool `url:"is_shortlisted"`
+	Reputation                  *bool `url:"reputation"`
+	RecommendedBid              *bool `url:"recommended_bid"`
+	ShortlistedBid              *bool `url:"shortlisted_bid"`
+	Distance                    *bool `url:"distance"`
+	UserDetails                 *bool `url:"user_details"`
+	ExpertGuarantees            *bool `url:"expert_guarantees"`
+	UserAvatar                  *bool `url:"user_avatar"`
+	UserCountryDetails          *bool `url:"user_country_details"`
+	UserProfileDescription      *bool `url:"user_profile_description"`
+	UserDisplayInfo             *bool `url:"user_display_info"`
+	UserJobs                    *bool `url:"user_jobs"`
+	UserBalanceDetails          *bool `url:"user_balance_details"`
+	UserQualificationDetails    *bool `url:"user_qualification_details"`
+	UserMembershipDetails       *bool `url:"user_membership_details"`
+	UserFinancialDetails        *bool `url:"user_financial_details"`
+	UserLocationDetails         *bool `url:"user_location_details"`
+	UserPortfolioDetails        *bool `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool `url:"user_preferred_details"`
+	UserBadgeDetails            *bool `url:"user_badge_details"`
+	UserStatus                  *bool `url:"user_status"`
+	UserReputation              *bool `url:"user_reputation"`
+	UserEmployerReputation      *bool `url:"user_employer_reputation"`
+	UserReputationExtra         *bool `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool `url:"user_cover_image"`
+	UserPastCoverImage          *bool `url:"user_past_cover_image"`
+	UserRecommendations         *bool `url:"user_recommendations"`
+	UserResponsiveness          *bool `url:"user_responsiveness"`
+	CorporateUsers              *bool `url:"corporate_users"`
+	MarketingMobileNumber       *bool `url:"marketing_mobile_number"`
+	SanctionDetails             *bool `url:"sanction_details"`
+	LimitedAccount              *bool `url:"limited_account"`
+	EquipmentGroupDetails       *bool `url:"equipment_group_details"`
+	Limit                       *int  `url:"limit"`
+	Offset                      *int  `url:"offset"`
+	Compact                     *bool `url:"compact"`
+	Quotations                  *bool `url:"quotations"`
 }
 
 // TODO: Refine the typed response with
@@ -703,49 +527,9 @@ type ListProjectBidsOptions struct {
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/bids` endpoint
 func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *ListProjectBidsOptions) (*RawResponse, error) {
 
-	path := fmt.Sprintf("%s/%s/bids", endpoints.Projects, strconv.FormatInt(projectID, 10))
-	query := url.Values{}
-	if opts != nil {
-		addBool(query, "is_shortlisted", opts.IsShortlisted)
-		addBool(query, "reputation", opts.Reputation)
-		addBool(query, "recommended_bid", opts.RecommendedBid)
-		addBool(query, "shortlisted_bid", opts.ShortlistedBid)
-		addBool(query, "distance", opts.Distance)
-		addBool(query, "user_details", opts.UserDetails)
-		addBool(query, "expert_guarantees", opts.ExpertGuarantees)
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_Description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-		addInt(query, "limit", opts.Limit)
-		addInt(query, "offset", opts.Offset)
-		addBool(query, "compact", opts.Compact)
-		addBool(query, "quotations", opts.Quotations)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := fmt.Sprintf("%s/%s/bids", endpoints.Projects, strconv.FormatInt(projectID, 10))
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 // TODO: refine with typed response
@@ -753,108 +537,78 @@ func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *L
 // Returns information for posting bids on a project.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/bids_info` endpoint
 func (s *ProjectsService) GetBidInfo(ctx context.Context, projectID int64) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d/bids_info", endpoints.Projects, projectID)
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
+	p := fmt.Sprintf("%s/%d/bids_info", endpoints.Projects, projectID)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
 }
 
 type ListProjectMilestonesOptions struct {
-	Statuses                    []MilestoneStatus
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
+	Statuses                    []MilestoneStatus `url:"statuses[]"`
+	UserAvatar                  *bool             `url:"user_avatar"`
+	UserCountryDetails          *bool             `url:"user_country_details"`
+	UserProfileDescription      *bool             `url:"user_profile_description"`
+	UserDisplayInfo             *bool             `url:"user_display_info"`
+	UserJobs                    *bool             `url:"user_jobs"`
+	UserBalanceDetails          *bool             `url:"user_balance_details"`
+	UserQualificationDetails    *bool             `url:"user_qualification_details"`
+	UserMembershipDetails       *bool             `url:"user_membership_details"`
+	UserFinancialDetails        *bool             `url:"user_financial_details"`
+	UserLocationDetails         *bool             `url:"user_location_details"`
+	UserPortfolioDetails        *bool             `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool             `url:"user_preferred_details"`
+	UserBadgeDetails            *bool             `url:"user_badge_details"`
+	UserStatus                  *bool             `url:"user_status"`
+	UserReputation              *bool             `url:"user_reputation"`
+	UserEmployerReputation      *bool             `url:"user_employer_reputation"`
+	UserReputationExtra         *bool             `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool             `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool             `url:"user_cover_image"`
+	UserPastCoverImage          *bool             `url:"user_past_cover_image"`
+	UserRecommendations         *bool             `url:"user_recommendations"`
+	UserResponsiveness          *bool             `url:"user_responsiveness"`
+	CorporateUsers              *bool             `url:"corporate_users"`
+	MarketingMobileNumber       *bool             `url:"marketing_mobile_number"`
+	SanctionDetails             *bool             `url:"sanction_details"`
+	LimitedAccount              *bool             `url:"limited_account"`
+	EquipmentGroupDetails       *bool             `url:"equipment_group_details"`
 }
 
 // Returns a list of milestones on a project. Does not return un-awarded prepaid milestones.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/milestones` endpoint
 func (s *ProjectsService) ListMilestones(ctx context.Context, projectID int64, opts *ListProjectMilestonesOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d/milestones", endpoints.Projects, projectID)
-	query := url.Values{}
-	if opts != nil {
-		addEnumSlice(query, "statuses[]", opts.Statuses)
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_Description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := fmt.Sprintf("%s/%d/milestones", endpoints.Projects, projectID)
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type ListProjectsMilestoneRequestsOptions struct {
-	Statuses                    []MilestoneStatus
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
+	Statuses                    []MilestoneStatus `url:"statuses[]"`
+	UserAvatar                  *bool             `url:"user_avatar"`
+	UserCountryDetails          *bool             `url:"user_country_details"`
+	UserProfileDescription      *bool             `url:"user_profile_description"`
+	UserDisplayInfo             *bool             `url:"user_display_info"`
+	UserJobs                    *bool             `url:"user_jobs"`
+	UserBalanceDetails          *bool             `url:"user_balance_details"`
+	UserQualificationDetails    *bool             `url:"user_qualification_details"`
+	UserMembershipDetails       *bool             `url:"user_membership_details"`
+	UserFinancialDetails        *bool             `url:"user_financial_details"`
+	UserLocationDetails         *bool             `url:"user_location_details"`
+	UserPortfolioDetails        *bool             `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool             `url:"user_preferred_details"`
+	UserBadgeDetails            *bool             `url:"user_badge_details"`
+	UserStatus                  *bool             `url:"user_status"`
+	UserReputation              *bool             `url:"user_reputation"`
+	UserEmployerReputation      *bool             `url:"user_employer_reputation"`
+	UserReputationExtra         *bool             `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool             `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool             `url:"user_cover_image"`
+	UserPastCoverImage          *bool             `url:"user_past_cover_image"`
+	UserRecommendations         *bool             `url:"user_recommendations"`
+	UserResponsiveness          *bool             `url:"user_responsiveness"`
+	CorporateUsers              *bool             `url:"corporate_users"`
+	MarketingMobileNumber       *bool             `url:"marketing_mobile_number"`
+	SanctionDetails             *bool             `url:"sanction_details"`
+	LimitedAccount              *bool             `url:"limited_account"`
+	EquipmentGroupDetails       *bool             `url:"equipment_group_details"`
 }
 
 // TODO: refine with typed response
@@ -862,48 +616,18 @@ type ListProjectsMilestoneRequestsOptions struct {
 // Returns a list of milestone requests by freelancers for a project.
 // it maps to the `GET` `/projects/0.1/projects/{project_id}/milestone_requests` endpoint
 func (s *ProjectsService) ListMilestoneRequests(ctx context.Context, projectID int64, opts *ListProjectsMilestoneRequestsOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d/milestone_requests", endpoints.Projects, projectID)
-	query := url.Values{}
-	if opts != nil {
-		addEnumSlice(query, "statuses[]", opts.Statuses)
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_Description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := fmt.Sprintf("%s/%d/milestone_requests", endpoints.Projects, projectID)
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type GetHourlyContractInfoOptions struct {
-	ProjectIDs        []int64
-	BidderIDs         []int64
-	HourlyContractIDs []int64
-	projectOwnerIDs   []int64
-	billingDetails    *bool
-	invoiceDetails    *bool
+	ProjectIDs        []int64 `url:"project_ids[]"`
+	BidderIDs         []int64 `url:"bidder_ids[]"`
+	HourlyContractIDs []int64 `url:"hourly_contract_ids[]"`
+	projectOwnerIDs   []int64 `url:"project_owner_ids[]"`
+	billingDetails    *bool   `url:"billing_details"`
+	invoiceDetails    *bool   `url:"invoice_details"`
 }
 
 // TODO: refine with typed response
@@ -911,17 +635,9 @@ type GetHourlyContractInfoOptions struct {
 // Fetch the hourly contract matching the desired query.
 // It maps to the `GET` `/projects/0.1/hourly_contract_info` endpoint
 func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *GetHourlyContractInfoOptions) (*RawResponse, error) {
-	path := endpoints.ProjectsHourlyContract
-	query := url.Values{}
-	if opts != nil {
-		addInt64Slice(query, "project_ids[]", opts.ProjectIDs)
-		addInt64Slice(query, "bidder_ids[]", opts.BidderIDs)
-		addInt64Slice(query, "hourly_contract_ids[]", opts.HourlyContractIDs)
-		addInt64Slice(query, "project_owner_ids[]", opts.projectOwnerIDs)
-		addBool(query, "billing_details", opts.billingDetails)
-		addBool(query, "invoice_details", opts.invoiceDetails)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := endpoints.ProjectsHourlyContract
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 // TODO: refine with typed response
@@ -929,13 +645,13 @@ func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *GetHo
 // Fetch the IP contract matching for the project id. If you are an employer it will return all of the contracts, ELSE we will return contract details specific to the logged-in user.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/ip_contract_info` endpoint
 func (s *ProjectsService) GetIPContractInfo(ctx context.Context, projectID int64) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d/ip_contract_info", endpoints.Projects, projectID)
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
+	p := fmt.Sprintf("%s/%d/ip_contract_info", endpoints.Projects, projectID)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
 }
 
 // Delete a project by id. Only projects that are in pending or rejected states may be deleted. This will close the project and remove its visibility.
 // it maps to the `DELETE` `/projects/0.1/projects/{project_id}` endpoint
 func (s *ProjectsService) Delete(ctx context.Context, projectID int64) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
-	return execute[*RawResponse](ctx, s.client, http.MethodDelete, path, nil, nil)
+	p := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
+	return execute[*RawResponse](ctx, s.client, http.MethodDelete, p, nil, nil)
 }
