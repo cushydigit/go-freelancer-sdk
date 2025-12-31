@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.3.0] - 2025-12-31
+
+### Refactoring & Improvements
+
+- New Internal Query Package: Introduced a new internal/query package to handle repetitive logic, significantly reducing boilerplate code across all services.
+
+- Service Architecture Consolidation: Refactored service structures from multiple fragmented files into consolidated single-file modules for better maintainability.
+
+- Response Handling: Updated API responses to return pointer value objects, allowing for better nil-checking and memory efficiency in the SDK consumer layer.
+
+### Testing & Development
+
+- Full Coverage for Query Package: Achieved 100% test coverage for the new internal query package.
+
+- Global Test Coverage: Improved overall SDK test coverage to 32%.
+
+- Real-world Testing Examples: Added golang.org/x/net/proxy within the examples/ package. This allows for testing the client with real SOCKS proxies without adding the dependency to the SDK core.
+
 ## [1.2.2] - 2025-12-30
 
 ### Important Fix: Slice Query Parameters
