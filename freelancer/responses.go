@@ -37,8 +37,8 @@ type ListCategoriesResponse struct {
 type ListProjectsResponse struct {
 	base
 	Result struct {
-		Projects   []Project `json:"projects"`
-		TotalCount int       `json:"total_count"`
+		Projects   []*Project `json:"projects"`
+		TotalCount int        `json:"total_count"`
 	} `json:"result"`
 }
 
