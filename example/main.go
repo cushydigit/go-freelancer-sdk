@@ -4,10 +4,13 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
+	"net/http"
 	"os"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer"
 	"github.com/joho/godotenv"
+	"golang.org/x/net/proxy"
 )
 
 var (
@@ -16,7 +19,8 @@ var (
 )
 
 func main() {
-	Init()
+	// Init()
+	InitWithProxy()
 	// QuickExample()
 	// ListBudgets()
 	// ListCurrencies()
@@ -42,6 +46,43 @@ func Init() {
 		apiAccessToken,
 		freelancer.WithDebug(true),
 	)
+}
+
+func InitWithProxy() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("failed to load .env: %v", err)
+	}
+	proxyAddr := os.Getenv("PROXY_ADDR")
+	if proxyAddr == "" {
+		log.Fatal("'PROXY_ADDR' environment  variable is not set or empty")
+	}
+
+	apiAccessToken = os.Getenv("FREELANCER_ACCESS_TOKEN")
+	if apiAccessToken == "" {
+		log.Fatal("'FREELANCER_ACCESS_TOKEN' environment  variable is not set or emtpy")
+	}
+
+	dialer, err := proxy.SOCKS5("tcp", proxyAddr, nil, proxy.Direct)
+	if err != nil {
+		log.Fatalf("failed to create SOCKS5 dialer: %v", err)
+	}
+
+	transport := &http.Transport{
+		DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			return dialer.Dial(network, addr)
+		},
+	}
+
+	httpClient := &http.Client{
+		Transport: transport,
+	}
+
+	client = freelancer.NewClient(
+		apiAccessToken,
+		freelancer.WithDebug(true),
+		freelancer.WithHttpClient(httpClient),
+	)
+
 }
 func QuickExample() {
 
