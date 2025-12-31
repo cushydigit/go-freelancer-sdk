@@ -2,7 +2,7 @@
 .PHONY: example test fmt lint clean release test_cover test_cover_show
 EXAMPLE_FILE=./example/main.go
 EXAMPLE_BIN=./bin/exmaple
-V=v1.2.2
+V=v1.3.0
 
 build:
 	@echo "Building..."
