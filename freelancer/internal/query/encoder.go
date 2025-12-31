@@ -15,13 +15,13 @@ func Values(v any) url.Values {
 	// handler pointers
 	if val.Kind() == reflect.Ptr {
 		if val.IsNil() {
-			return q
+			return q // not covered
 		}
 		val = val.Elem()
 	}
 
 	if val.Kind() != reflect.Struct {
-		return q
+		return q // not covered
 	}
 	typ := val.Type()
 	for i := 0; i < typ.NumField(); i++ {
@@ -64,10 +64,7 @@ func writeField(q url.Values, key string, v reflect.Value) {
 		for i := 0; i < v.Len(); i++ {
 			q.Add(key, fmt.Sprintf("%v", v.Index(i).Interface()))
 		}
-
 	default:
 		log.Printf("warning unhandled typed")
-
 	}
-
 }
