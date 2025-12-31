@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.1] - 2025-12-31
+
+### Bug Fixes
+
+Project Service: Fixed a critical issue where project URLs were not being constructed correctly. The SDK now ensures the full URL is generated for project-specific requests, preventing 404 or malformed request errors.
+
 ## [1.3.0] - 2025-12-31
 
 ### Refactoring & Improvements

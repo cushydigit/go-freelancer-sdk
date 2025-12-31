@@ -1,8 +1,11 @@
 package endpoints
 
 const (
-	BaseAPIMainURL    = "https://www.freelancer.com/api"
-	BaseAPISandBoxURL = "https://api-sandbox.freelancer.com"
+	Base          = "https://www.freelancer.com"
+	BaseProjects  = Base + "/projects"
+	BaseContests  = Base + "/contests"
+	APIMainURL    = Base + "/api"
+	APISandBoxURL = "https://api-sandbox.freelancer.com"
 
 	CommonCountries = "/common/0.1/countries"
 	CommonTimezones = "/common/0.1/timezones"

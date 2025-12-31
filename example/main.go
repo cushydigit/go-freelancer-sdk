@@ -21,11 +21,11 @@ var (
 func main() {
 	// Init()
 	InitWithProxy()
-	// QuickExample()
+	QuickExample()
 	// ListBudgets()
 	// ListCurrencies()
 	// ListCategories()
-	ListCountries()
+	// ListCountries()
 	//ListTimezones()
 
 }
@@ -87,12 +87,11 @@ func InitWithProxy() {
 func QuickExample() {
 
 	// create client with access token
-	client = freelancer.NewClient(apiAccessToken)
 	opts := freelancer.SearchActiveProjectsOptions{
 		FullDescription: freelancer.Bool(true),
 		Limit:           freelancer.Int(10),
 		Offset:          freelancer.Int(5),
-		Query:           freelancer.String("golang"),
+		Query:           freelancer.String("golang python"),
 	}
 
 	res, err := client.Services.Projects.SearchActive(context.Background(), &opts)
@@ -102,7 +101,7 @@ func QuickExample() {
 		return
 	}
 	for index, p := range res.Result.Projects {
-		fmt.Println(index, p)
+		fmt.Println(index, p.GetFullUrl())
 	}
 }
 

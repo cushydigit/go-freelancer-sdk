@@ -16,7 +16,7 @@ import (
 func TestNewClientOptions(t *testing.T) {
 	c := NewClient("token", WithSandBox(), WithDebug(true))
 
-	assert.Equal(t, c.baseURL, endpoints.BaseAPISandBoxURL)
+	assert.Equal(t, c.baseURL, endpoints.APISandBoxURL)
 	assert.Equal(t, c.debugMode, true)
 }
 

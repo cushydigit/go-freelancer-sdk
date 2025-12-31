@@ -234,7 +234,7 @@ type Project struct {
 }
 
 func (p *Project) GetFullUrl() string {
-	return fmt.Sprintf("%s/%s", endpoints.BaseAPIMainURL, p.SeoURL)
+	return fmt.Sprintf("%s/%s", endpoints.BaseProjects, p.SeoURL)
 }
 
 type Timezone struct {
@@ -243,6 +243,7 @@ type Timezone struct {
 	Timezone string  `json:"timezone,omitempty"` // Optional
 	Offset   float32 `json:"offset,omitempty"`
 }
+
 type Device struct {
 	UserAgent string `json:"user_agent"`
 	Platform  string `json:"platform"`
