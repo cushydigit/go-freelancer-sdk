@@ -128,8 +128,6 @@ func ListBudgets() {
  for index, b := range res.Result.Budgets {
   fmt.Println(index, b)
  }
-
- 
 }
 ```
 
