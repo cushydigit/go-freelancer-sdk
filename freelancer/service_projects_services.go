@@ -4,60 +4,60 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/query"
 )
 
 // Orders one of the available services.
 // It maps to the `POST` `/projects/0.1/services/{service_type}/{service_id}/order` endpoint
 func (s *ServicesService) Order(ctx context.Context, serviceID int, serviceType ServiceType) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%s/%d/order", endpoints.ProjectsServices, serviceType, serviceID)
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, nil)
+	p := fmt.Sprintf("%s/%s/%d/order", endpoints.ProjectsServices, serviceType, serviceID)
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, p, nil, nil)
 }
 
 type ListServicesOptions struct {
-	Services                    []int64
-	Owners                      []int64
-	Statuses                    []ServiceStatusType
-	SubStatuses                 []string
-	Titles                      []string
-	SeoUrls                     []string
-	ExtraDetails                *bool
-	FileDetails                 *bool
-	JobDetails                  *bool
-	UserDetails                 *bool
-	FullDescription             *bool
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
-	Limit                       *int
-	Offset                      *int
-	Compact                     *bool
+	Services                    []int64             `url:"services[]"`
+	Owners                      []int64             `url:"owners[]"`
+	Statuses                    []ServiceStatusType `url:"statuses[]"`
+	SubStatuses                 []string            `url:"sub_statuses[]"`
+	Titles                      []string            `url:"titles[]"`
+	SeoUrls                     []string            `url:"seo_urls[]"`
+	ExtraDetails                *bool               `url:"extra_details"`
+	FileDetails                 *bool               `url:"file_details"`
+	JobDetails                  *bool               `url:"job_details"`
+	UserDetails                 *bool               `url:"user_details"`
+	FullDescription             *bool               `url:"full_description"`
+	UserAvatar                  *bool               `url:"user_avatar"`
+	UserCountryDetails          *bool               `url:"user_country_details"`
+	UserProfileDescription      *bool               `url:"user_profile_description"`
+	UserDisplayInfo             *bool               `url:"user_display_info"`
+	UserJobs                    *bool               `url:"user_jobs"`
+	UserBalanceDetails          *bool               `url:"user_balance_details"`
+	UserQualificationDetails    *bool               `url:"user_qualification_details"`
+	UserMembershipDetails       *bool               `url:"user_membership_details"`
+	UserFinancialDetails        *bool               `url:"user_financial_details"`
+	UserLocationDetails         *bool               `url:"user_location_details"`
+	UserPortfolioDetails        *bool               `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool               `url:"user_preferred_details"`
+	UserBadgeDetails            *bool               `url:"user_badge_details"`
+	UserStatus                  *bool               `url:"user_status"`
+	UserReputation              *bool               `url:"user_reputation"`
+	UserEmployerReputation      *bool               `url:"user_employer_reputation"`
+	UserReputationExtra         *bool               `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool               `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool               `url:"user_cover_image"`
+	UserPastCoverImage          *bool               `url:"user_past_cover_image"`
+	UserRecommendations         *bool               `url:"user_recommendations"`
+	UserResponsiveness          *bool               `url:"user_responsiveness"`
+	CorporateUsers              *bool               `url:"corporate_users"`
+	MarketingMobileNumber       *bool               `url:"marketing_mobile_number"`
+	SanctionDetails             *bool               `url:"sanction_details"`
+	LimitedAccount              *bool               `url:"limited_account"`
+	EquipmentGroupDetails       *bool               `url:"equipment_group_details"`
+	Limit                       *int                `url:"limit"`
+	Offset                      *int                `url:"offset"`
+	Compact                     *bool               `url:"compact"`
 }
 
 // TODO: refine with typed response
@@ -65,59 +65,21 @@ type ListServicesOptions struct {
 // Returns a list of services.
 // it maps to the `GET` `/projects/0.1/services` endpoint
 func (s *ServicesService) List(ctx context.Context, opts *ListServicesOptions) (*RawResponse, error) {
-	path := endpoints.ProjectsServices
-	query := url.Values{}
-	if opts != nil {
-		addInt64Slice(query, "services[]", opts.Services)
-		addBool(query, "extra_details", opts.ExtraDetails)
-		addBool(query, "file_details", opts.FileDetails)
-		addBool(query, "job_details", opts.JobDetails)
-		addBool(query, "user_details", opts.UserDetails)
-		addBool(query, "full_description", opts.FullDescription)
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-		addInt(query, "limit", opts.Limit)
-		addInt(query, "offset", opts.Offset)
-		addBool(query, "compact", opts.Compact)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := endpoints.ProjectsServices
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type SearchActiveServicesOptions struct {
-	Query        *string
-	Sort         *SortType
-	ReverseSort  *bool
-	ExtraDetails *bool
-	FileDetails  *bool
-	JobDetails   *bool
-	UserDetails  *bool
-	Offset       *int
-	Compact      *bool
+	Query        *string   `url:"query"`
+	Sort         *SortType `url:"sort"`
+	ReverseSort  *bool     `url:"reverse_sort"`
+	ExtraDetails *bool     `url:"extra_details"`
+	FileDetails  *bool     `url:"file_details"`
+	JobDetails   *bool     `url:"job_details"`
+	UserDetails  *bool     `url:"user_details"`
+	Offset       *int      `url:"offset"`
+	Compact      *bool     `url:"compact"`
 }
 
 // TODO: refine with typed response
@@ -125,18 +87,7 @@ type SearchActiveServicesOptions struct {
 // Returns active services.
 // it maps to the `GET` `/projects/0.1/services/active` endpoint
 func (s *ServicesService) SearchActive(ctx context.Context, opts *SearchActiveServicesOptions) (*RawResponse, error) {
-	path := endpoints.ProjectsServicesActive
-	query := url.Values{}
-	if opts != nil {
-		addString(query, "query", opts.Query)
-		addEnum(query, "sort", opts.Sort)
-		addBool(query, "reverse_sort", opts.ReverseSort)
-		addBool(query, "extra_details", opts.ExtraDetails)
-		addBool(query, "file_details", opts.FileDetails)
-		addBool(query, "job_details", opts.JobDetails)
-		addBool(query, "user_details", opts.UserDetails)
-		addInt(query, "offset", opts.Offset)
-		addBool(query, "compact", opts.Compact)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := endpoints.ProjectsServicesActive
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }

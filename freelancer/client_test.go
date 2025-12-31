@@ -6,10 +6,10 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"testing"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/query"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -83,17 +83,27 @@ func TestClientQueryParams(t *testing.T) {
 		w.Write([]byte(`{"message": "success"}`))
 	}))
 
+	defer ts.Close()
+
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
+	q := query.Values(struct {
+		Param1 string
+		Param2 string
+		Param3 bool
+		Param4 int
+		Param5 float64
+		Param6 int64
+	}{
+		Param1: "value1",
+		Param2: "value2",
+		Param3: true,
+		Param4: 1,
+		Param5: 1.3,
+		Param6: 1092,
+	})
 
-	query := url.Values{}
-	addString(query, "param1", String("value1"))
-	addString(query, "param2", String("value2"))
-	addBool(query, "param3", Bool(true))
-	addInt(query, "param4", Int(1))
-	addFloat(query, "param5", Float64(1.3))
-	addInt64(query, "param6", Int64(1092))
-
+	c.do(context.Background(), http.MethodGet, "test", q, nil)
 }
 
 func TestClientRequestBody(t *testing.T) {

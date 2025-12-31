@@ -4,48 +4,48 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/query"
 )
 
 type ListMilestonesOptions struct {
-	Projects                    []int64
-	ProjectOwners               []int64
-	Bidders                     []int64
-	Users                       []int64
-	Bids                        []int64
-	Statuses                    []MilestoneStatus
-	SortField                   *SortField
-	SortDirection               *SortDirection
-	ExcludedMilestones          *bool
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
+	Projects                    []int64           `url:"projects[]"`
+	ProjectOwners               []int64           `url:"project_owners[]"`
+	Bidders                     []int64           `url:"bidders[]"`
+	Users                       []int64           `url:"users[]"`
+	Bids                        []int64           `url:"bids[]"`
+	Statuses                    []MilestoneStatus `url:"statuses[]"`
+	SortField                   *SortField        `url:"sort_field"`
+	SortDirection               *SortDirection    `url:"sort_direction"`
+	ExcludedMilestones          *bool             `url:"excluded_milestones"`
+	UserAvatar                  *bool             `url:"user_avatar"`
+	UserCountryDetails          *bool             `url:"user_country_details"`
+	UserProfileDescription      *bool             `url:"user_profile_description"`
+	UserDisplayInfo             *bool             `url:"user_display_info"`
+	UserJobs                    *bool             `url:"user_jobs"`
+	UserBalanceDetails          *bool             `url:"user_balance_details"`
+	UserQualificationDetails    *bool             `url:"user_qualification_details"`
+	UserMembershipDetails       *bool             `url:"user_membership_details"`
+	UserFinancialDetails        *bool             `url:"user_financial_details"`
+	UserLocationDetails         *bool             `url:"user_location_details"`
+	UserPortfolioDetails        *bool             `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool             `url:"user_preferred_details"`
+	UserBadgeDetails            *bool             `url:"user_badge_details"`
+	UserStatus                  *bool             `url:"user_status"`
+	UserReputation              *bool             `url:"user_reputation"`
+	UserEmployerReputation      *bool             `url:"user_employer_reputation"`
+	UserReputationExtra         *bool             `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool             `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool             `url:"user_cover_image"`
+	UserPastCoverImage          *bool             `url:"user_past_cover_image"`
+	UserRecommendations         *bool             `url:"user_recommendations"`
+	UserResponsiveness          *bool             `url:"user_responsiveness"`
+	CorporateUsers              *bool             `url:"corporate_users"`
+	MarketingMobileNumber       *bool             `url:"marketing_mobile_number"`
+	SanctionDetails             *bool             `url:"sanction_details"`
+	LimitedAccount              *bool             `url:"limited_account"`
+	EquipmentGroupDetails       *bool             `url:"equipment_group_details"`
 }
 
 // TODO: refine with typed response
@@ -53,78 +53,40 @@ type ListMilestonesOptions struct {
 // Returns a list of milestones. Does not return un-awarded prepaid milestones.
 // It maps to the `GET` `/projects/0.1/milestones` endpoint
 func (s *MilestonesService) List(ctx context.Context, opts *ListMilestonesOptions) (*RawResponse, error) {
-	path := endpoints.ProjectsMilestones
-	query := url.Values{}
-	if opts != nil {
-		addInt64Slice(query, "projects[]", opts.Projects)
-		addInt64Slice(query, "project_owners[]", opts.ProjectOwners)
-		addInt64Slice(query, "bidders[]", opts.Bidders)
-		addInt64Slice(query, "users[]", opts.Users)
-		addInt64Slice(query, "bids[]", opts.Bids)
-		addEnumSlice(query, "statuses[]", opts.Statuses)
-		addEnum(query, "sort_field", opts.SortField)
-		addEnum(query, "sort_direction", opts.SortDirection)
-		addBool(query, "excluded_milestones", opts.ExcludedMilestones)
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_Description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := endpoints.ProjectsMilestones
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type GetMilestoneOptions struct {
-	MilestoneID                 int
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
+	MilestoneID                 int   `url:"milestone_id"`
+	UserAvatar                  *bool `url:"user_avatar"`
+	UserCountryDetails          *bool `url:"user_country_details"`
+	UserProfileDescription      *bool `url:"user_profile_description"`
+	UserDisplayInfo             *bool `url:"user_display_info"`
+	UserJobs                    *bool `url:"user_jobs"`
+	UserBalanceDetails          *bool `url:"user_balance_details"`
+	UserQualificationDetails    *bool `url:"user_qualification_details"`
+	UserMembershipDetails       *bool `url:"user_membership_details"`
+	UserFinancialDetails        *bool `url:"user_financial_details"`
+	UserLocationDetails         *bool `url:"user_location_details"`
+	UserPortfolioDetails        *bool `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool `url:"user_preferred_details"`
+	UserBadgeDetails            *bool `url:"user_badge_details"`
+	UserStatus                  *bool `url:"user_status"`
+	UserReputation              *bool `url:"user_reputation"`
+	UserEmployerReputation      *bool `url:"user_employer_reputation"`
+	UserReputationExtra         *bool `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool `url:"user_cover_image"`
+	UserPastCoverImage          *bool `url:"user_past_cover_image"`
+	UserRecommendations         *bool `url:"user_recommendations"`
+	UserResponsiveness          *bool `url:"user_responsiveness"`
+	CorporateUsers              *bool `url:"corporate_users"`
+	MarketingMobileNumber       *bool `url:"marketing_mobile_number"`
+	SanctionDetails             *bool `url:"sanction_details"`
+	LimitedAccount              *bool `url:"limited_account"`
+	EquipmentGroupDetails       *bool `url:"equipment_group_details"`
 }
 
 // TODO: refine with typed response
@@ -132,38 +94,9 @@ type GetMilestoneOptions struct {
 // Returns information about a specific milestone.
 // It maps to the `GET` `/projects/0.1/milestones/{milestone_id}` endpoint
 func (s *MilestonesService) GetByID(ctx context.Context, milestoneID int, opts *GetMilestoneOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
-	query := url.Values{}
-	if opts != nil {
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_Description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type CreateMilestoneBody struct {
@@ -177,8 +110,8 @@ type CreateMilestoneBody struct {
 // Post a review of a user.
 // It maps to the `POST` `/projects/0.1/milestones` endpoint
 func (s *MilestonesService) Create(ctx context.Context, b CreateMilestoneBody) (*RawResponse, error) {
-	path := endpoints.ProjectsMilestones
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
+	p := endpoints.ProjectsMilestones
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
 type ActionMilestoneBody struct {
@@ -192,52 +125,52 @@ type ActionMilestoneBody struct {
 // Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
 // It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
 func (s *MilestonesService) Action(ctx context.Context, milestoneID int, b ActionMilestoneBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
-	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
+	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
+	return execute[*RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
 
 type ListMilestonesRequestsOptions struct {
-	MilestoneRequests           []int64
-	Projects                    []int64
-	ProjectOwners               []int64
-	Bidders                     []int64
-	Users                       []int64
-	Bids                        []int64
-	Statuses                    []MilestoneStatus
-	FromTime                    *int64
-	ToTime                      *int64
-	SortField                   *SortField
-	SortDirection               *SortDirection
-	ExcludedMilestones          *bool
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
-	Limit                       *int
-	Offset                      *int
+	MilestoneRequests           []int64           `url:"milestone_requests[]"`
+	Projects                    []int64           `url:"projects[]"`
+	ProjectOwners               []int64           `url:"project_owners[]"`
+	Bidders                     []int64           `url:"bidders[]"`
+	Users                       []int64           `url:"users[]"`
+	Bids                        []int64           `url:"bids[]"`
+	Statuses                    []MilestoneStatus `url:"statuses[]"`
+	FromTime                    *int64            `url:"from_time"`
+	ToTime                      *int64            `url:"to_time"`
+	SortField                   *SortField        `url:"sort_field"`
+	SortDirection               *SortDirection    `url:"sort_direction"`
+	ExcludedMilestones          *bool             `url:"excluded_milestones"`
+	UserAvatar                  *bool             `url:"user_avatar"`
+	UserCountryDetails          *bool             `url:"user_country_details"`
+	UserProfileDescription      *bool             `url:"user_profile_description"`
+	UserDisplayInfo             *bool             `url:"user_display_info"`
+	UserJobs                    *bool             `url:"user_jobs"`
+	UserBalanceDetails          *bool             `url:"user_balance_details"`
+	UserQualificationDetails    *bool             `url:"user_qualification_details"`
+	UserMembershipDetails       *bool             `url:"user_membership_details"`
+	UserFinancialDetails        *bool             `url:"user_financial_details"`
+	UserLocationDetails         *bool             `url:"user_location_details"`
+	UserPortfolioDetails        *bool             `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool             `url:"user_preferred_details"`
+	UserBadgeDetails            *bool             `url:"user_badge_details"`
+	UserStatus                  *bool             `url:"user_status"`
+	UserReputation              *bool             `url:"user_reputation"`
+	UserEmployerReputation      *bool             `url:"user_employer_reputation"`
+	UserReputationExtra         *bool             `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool             `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool             `url:"user_cover_image"`
+	UserPastCoverImage          *bool             `url:"user_past_cover_image"`
+	UserRecommendations         *bool             `url:"user_recommendations"`
+	UserResponsiveness          *bool             `url:"user_responsiveness"`
+	CorporateUsers              *bool             `url:"corporate_users"`
+	MarketingMobileNumber       *bool             `url:"marketing_mobile_number"`
+	SanctionDetails             *bool             `url:"sanction_details"`
+	LimitedAccount              *bool             `url:"limited_account"`
+	EquipmentGroupDetails       *bool             `url:"equipment_group_details"`
+	Limit                       *int              `url:"limit"`
+	Offset                      *int              `url:"offset"`
 }
 
 // TODO: refine with typed response
@@ -245,84 +178,39 @@ type ListMilestonesRequestsOptions struct {
 // Returns a list of milestone requests.
 // It maps to the `GET` `/projects/0.1/milestone_requests` endpoint
 func (s *MilestoneRequestsService) List(ctx context.Context, opts *ListMilestonesRequestsOptions) (*RawResponse, error) {
-	path := endpoints.ProjectsMilestoneRequests
-	query := url.Values{}
-	if opts != nil {
-		addInt64Slice(query, "milestone_requests[]", opts.MilestoneRequests)
-		addInt64Slice(query, "projects[]", opts.Projects)
-		addInt64Slice(query, "project_owners[]", opts.ProjectOwners)
-		addInt64Slice(query, "bidders[]", opts.Bidders)
-		addInt64Slice(query, "users[]", opts.Users)
-		addInt64Slice(query, "bids[]", opts.Bids)
-		addEnumSlice(query, "statuses[]", opts.Statuses)
-		addInt64(query, "from_time", opts.FromTime)
-		addInt64(query, "to_time", opts.ToTime)
-		addEnum(query, "sort_field", opts.SortField)
-		addEnum(query, "sort_direction", opts.SortDirection)
-		addBool(query, "excluded_milestones", opts.ExcludedMilestones)
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-		addInt(query, "limit", opts.Limit)
-		addInt(query, "offset", opts.Offset)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := endpoints.ProjectsMilestoneRequests
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type GetMilestoneRequestOptions struct {
-	MilestoneRequestID          int64
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
+	UserAvatar                  *bool `url:"user_avatar"`
+	UserCountryDetails          *bool `url:"user_country_details"`
+	UserProfileDescription      *bool `url:"user_profile_description"`
+	UserDisplayInfo             *bool `url:"user_display_info"`
+	UserJobs                    *bool `url:"user_jobs"`
+	UserBalanceDetails          *bool `url:"user_balance_details"`
+	UserQualificationDetails    *bool `url:"user_qualification_details"`
+	UserMembershipDetails       *bool `url:"user_membership_details"`
+	UserFinancialDetails        *bool `url:"user_financial_details"`
+	UserLocationDetails         *bool `url:"user_location_details"`
+	UserPortfolioDetails        *bool `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool `url:"user_preferred_details"`
+	UserBadgeDetails            *bool `url:"user_badge_details"`
+	UserStatus                  *bool `url:"user_status"`
+	UserReputation              *bool `url:"user_reputation"`
+	UserEmployerReputation      *bool `url:"user_employer_reputation"`
+	UserReputationExtra         *bool `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool `url:"user_cover_image"`
+	UserPastCoverImage          *bool `url:"user_past_cover_image"`
+	UserRecommendations         *bool `url:"user_recommendations"`
+	UserResponsiveness          *bool `url:"user_responsiveness"`
+	CorporateUsers              *bool `url:"corporate_users"`
+	MarketingMobileNumber       *bool `url:"marketing_mobile_number"`
+	SanctionDetails             *bool `url:"sanction_details"`
+	LimitedAccount              *bool `url:"limited_account"`
+	EquipmentGroupDetails       *bool `url:"equipment_group_details"`
 }
 
 // TODO: refine with typed response
@@ -330,39 +218,9 @@ type GetMilestoneRequestOptions struct {
 // Returns information about a specific milestone request.
 // It maps to the `GET` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
 func (s *MilestoneRequestsService) Get(ctx context.Context, milestoneRequestID int, opts *GetMilestoneRequestOptions) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
-	query := url.Values{}
-	if opts != nil {
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_Description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 // ProjectID, BidID, Amount and Description are required
@@ -376,8 +234,8 @@ type CreateMilestoneRequestBody struct {
 // Creates a milestone request from a given JSON object.
 // It maps to the `POST` `/projects/0.1/milestone_requests` endpoint
 func (s *MilestoneRequestsService) Create(ctx context.Context, b CreateMilestoneRequestBody) (*RawResponse, error) {
-	path := endpoints.ProjectsMilestoneRequests
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
+	p := endpoints.ProjectsMilestoneRequests
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
 type ActionMilestoneRequestBody struct {
@@ -387,6 +245,6 @@ type ActionMilestoneRequestBody struct {
 // Perform an action on a milestone request.
 // It maps to the `PUT` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
 func (s *MilestoneRequestsService) Action(ctx context.Context, milestoneRequestID int, b ActionMilestoneRequestBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
-	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
+	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
+	return execute[*RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }

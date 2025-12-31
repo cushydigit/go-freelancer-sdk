@@ -4,66 +4,66 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/query"
 )
 
 type ListReviewsOptions struct {
-	Projects                    []int64
-	FromUsers                   []int64
-	ToUsers                     []int64
-	Contests                    []int64
-	ReviewTypes                 []ReviewType
-	JobIds                      []int64
-	CompletionStatuses          []CompletionStatus
-	FromTime                    *int64
-	ToTime                      *int64
-	ReviewStatus                []string
-	ProjectDetails              *bool
-	Ratings                     *bool
-	ReviewCount                 *bool
-	Role                        *RoleType
-	ContestDetails              *bool
-	UserDetails                 *bool
-	ProjectFullDescription      *bool
-	ProjectUpgradeDetails       *bool
-	ProjectJobDetails           *bool
-	ProjectSelectedBids         *bool
-	ProjectQualificationDetails *bool
-	ProjectAttachmentDetails    *bool
-	ProjectHiremeDetails        *bool
-	ContestJobDetails           *bool
-	UserAvatar                  *bool
-	UserCountryDetails          *bool
-	UserProfileDescription      *bool
-	UserDisplayInfo             *bool
-	UserJobs                    *bool
-	UserBalanceDetails          *bool
-	UserQualificationDetails    *bool
-	UserMembershipDetails       *bool
-	UserFinancialDetails        *bool
-	UserLocationDetails         *bool
-	UserPortfolioDetails        *bool
-	UserPreferredDetails        *bool
-	UserBadgeDetails            *bool
-	UserStatus                  *bool
-	UserReputation              *bool
-	UserEmployerReputation      *bool
-	UserReputationExtra         *bool
-	UserEmployerReputationExtra *bool
-	UserCoverImage              *bool
-	UserPastCoverImage          *bool
-	UserRecommendations         *bool
-	UserResponsiveness          *bool
-	CorporateUsers              *bool
-	MarketingMobileNumber       *bool
-	SanctionDetails             *bool
-	LimitedAccount              *bool
-	EquipmentGroupDetails       *bool
-	Limit                       *int
-	Offset                      *int
-	Compact                     *bool
+	Projects                    []int64            `url:"projects[]"`
+	FromUsers                   []int64            `url:"from_users[]"`
+	ToUsers                     []int64            `url:"to_users[]"`
+	Contests                    []int64            `url:"contests[]"`
+	ReviewTypes                 []ReviewType       `url:"review_types[]"`
+	JobIds                      []int64            `url:"job_ids[]"`
+	CompletionStatuses          []CompletionStatus `url:"completion_statuses[]"`
+	FromTime                    *int64             `url:"from_time"`
+	ToTime                      *int64             `url:"to_time"`
+	ReviewStatus                []string           `url:"review_status[]"`
+	ProjectDetails              *bool              `url:"project_details"`
+	Ratings                     *bool              `url:"ratings"`
+	ReviewCount                 *bool              `url:"review_count"`
+	Role                        *RoleType          `url:"role"`
+	ContestDetails              *bool              `url:"contest_details"`
+	UserDetails                 *bool              `url:"user_details"`
+	ProjectFullDescription      *bool              `url:"project_full_description"`
+	ProjectUpgradeDetails       *bool              `url:"project_upgrade_details"`
+	ProjectJobDetails           *bool              `url:"project_job_details"`
+	ProjectSelectedBids         *bool              `url:"project_selected_bids"`
+	ProjectQualificationDetails *bool              `url:"project_qualification_details"`
+	ProjectAttachmentDetails    *bool              `url:"project_attachment_details"`
+	ProjectHiremeDetails        *bool              `url:"project_hireme_details"`
+	ContestJobDetails           *bool              `url:"contest_job_details"`
+	UserAvatar                  *bool              `url:"user_avatar"`
+	UserCountryDetails          *bool              `url:"user_country_details"`
+	UserProfileDescription      *bool              `url:"user_profile_description"`
+	UserDisplayInfo             *bool              `url:"user_display_info"`
+	UserJobs                    *bool              `url:"user_jobs"`
+	UserBalanceDetails          *bool              `url:"user_balance_details"`
+	UserQualificationDetails    *bool              `url:"user_qualification_details"`
+	UserMembershipDetails       *bool              `url:"user_membership_details"`
+	UserFinancialDetails        *bool              `url:"user_financial_details"`
+	UserLocationDetails         *bool              `url:"user_location_details"`
+	UserPortfolioDetails        *bool              `url:"user_portfolio_details"`
+	UserPreferredDetails        *bool              `url:"user_preferred_details"`
+	UserBadgeDetails            *bool              `url:"user_badge_details"`
+	UserStatus                  *bool              `url:"user_status"`
+	UserReputation              *bool              `url:"user_reputation"`
+	UserEmployerReputation      *bool              `url:"user_employer_reputation"`
+	UserReputationExtra         *bool              `url:"user_reputation_extra"`
+	UserEmployerReputationExtra *bool              `url:"user_employer_reputation_extra"`
+	UserCoverImage              *bool              `url:"user_cover_image"`
+	UserPastCoverImage          *bool              `url:"user_past_cover_image"`
+	UserRecommendations         *bool              `url:"user_recommendations"`
+	UserResponsiveness          *bool              `url:"user_responsiveness"`
+	CorporateUsers              *bool              `url:"corporate_users"`
+	MarketingMobileNumber       *bool              `url:"marketing_mobile_number"`
+	SanctionDetails             *bool              `url:"sanction_details"`
+	LimitedAccount              *bool              `url:"limited_account"`
+	EquipmentGroupDetails       *bool              `url:"equipment_group_details"`
+	Limit                       *int               `url:"limit"`
+	Offset                      *int               `url:"offset"`
+	Compact                     *bool              `url:"compact"`
 }
 
 // TODO: refine with typed response
@@ -71,65 +71,9 @@ type ListReviewsOptions struct {
 // Returns a list of project reviews.
 // It maps to the `GET` `/projects/0.1/reviews` endpoint
 func (s *ReviewsService) List(ctx context.Context, opts *ListReviewsOptions) (*RawResponse, error) {
-	path := endpoints.ProjectsReviews
-	query := url.Values{}
-	if opts != nil {
-		addInt64Slice(query, "projects[]", opts.Projects)
-		addInt64Slice(query, "from_users[]", opts.FromUsers)
-		addInt64Slice(query, "to_users[]", opts.ToUsers)
-		addInt64Slice(query, "contests[]", opts.Contests)
-		addEnumSlice(query, "review_types[]", opts.ReviewTypes)
-		addInt64Slice(query, "job_ids[]", opts.JobIds)
-		addEnumSlice(query, "completion_statuses[]", opts.CompletionStatuses)
-		addEnumSlice(query, "review_status[]", opts.ReviewStatus)
-		addInt64(query, "from_time", opts.FromTime)
-		addInt64(query, "to_time", opts.ToTime)
-		addBool(query, "project_details", opts.ProjectDetails)
-		addBool(query, "ratings", opts.Ratings)
-		addBool(query, "review_count", opts.ReviewCount)
-		addEnum(query, "role", opts.Role)
-		addBool(query, "contest_details", opts.ContestDetails)
-		addBool(query, "user_details", opts.UserDetails)
-		addBool(query, "project_full_description", opts.ProjectFullDescription)
-		addBool(query, "project_upgrade_details", opts.ProjectUpgradeDetails)
-		addBool(query, "project_job_details", opts.ProjectJobDetails)
-		addBool(query, "project_selected_bids", opts.ProjectSelectedBids)
-		addBool(query, "project_qualification_details", opts.ProjectQualificationDetails)
-		addBool(query, "project_attachment_details", opts.ProjectAttachmentDetails)
-		addBool(query, "project_hireme_details", opts.ProjectHiremeDetails)
-		addBool(query, "contest_job_details", opts.ContestJobDetails)
-		addBool(query, "user_avatar", opts.UserAvatar)
-		addBool(query, "user_country_details", opts.UserCountryDetails)
-		addBool(query, "user_profile_description", opts.UserProfileDescription)
-		addBool(query, "user_display_info", opts.UserDisplayInfo)
-		addBool(query, "user_jobs", opts.UserJobs)
-		addBool(query, "user_balance_details", opts.UserBalanceDetails)
-		addBool(query, "user_qualification_details", opts.UserQualificationDetails)
-		addBool(query, "user_membership_details", opts.UserMembershipDetails)
-		addBool(query, "user_financial_details", opts.UserFinancialDetails)
-		addBool(query, "user_location_details", opts.UserLocationDetails)
-		addBool(query, "user_portfolio_details", opts.UserPortfolioDetails)
-		addBool(query, "user_preferred_details", opts.UserPreferredDetails)
-		addBool(query, "user_badge_details", opts.UserBadgeDetails)
-		addBool(query, "user_status", opts.UserStatus)
-		addBool(query, "user_reputation", opts.UserReputation)
-		addBool(query, "user_employer_reputation", opts.UserEmployerReputation)
-		addBool(query, "user_reputation_extra", opts.UserReputationExtra)
-		addBool(query, "user_employer_reputation_extra", opts.UserEmployerReputationExtra)
-		addBool(query, "user_cover_image", opts.UserCoverImage)
-		addBool(query, "user_past_cover_image", opts.UserPastCoverImage)
-		addBool(query, "user_recommendations", opts.UserRecommendations)
-		addBool(query, "user_responsiveness", opts.UserResponsiveness)
-		addBool(query, "corporate_users", opts.CorporateUsers)
-		addBool(query, "marketing_mobile_number", opts.MarketingMobileNumber)
-		addBool(query, "sanction_details", opts.SanctionDetails)
-		addBool(query, "limited_account", opts.LimitedAccount)
-		addBool(query, "equipment_group_details", opts.EquipmentGroupDetails)
-		addInt(query, "limit", opts.Limit)
-		addInt(query, "offset", opts.Offset)
-		addBool(query, "compact", opts.Compact)
-	}
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, query, nil)
+	p := endpoints.ProjectsReviews
+	q := query.Values(opts)
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 type CreateReviewBody struct {
@@ -144,8 +88,8 @@ type CreateReviewBody struct {
 // Post a review of a user.
 // It maps to the `POST` `/projects/0.1/reviews` endpoint
 func (s *ReviewsService) Create(ctx context.Context, b CreateReviewBody) (*RawResponse, error) {
-	path := endpoints.ProjectsReviews
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
+	p := endpoints.ProjectsReviews
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
 type ReviewActionBody struct {
@@ -156,6 +100,6 @@ type ReviewActionBody struct {
 // Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
 // It maps to the `PUT` `/projects/0.1/reviews/{review_id}` endpoint
 func (s *ReviewsService) Action(ctx context.Context, reviewID int64, b ReviewActionBody) (*RawResponse, error) {
-	path := fmt.Sprintf("%s/%d", endpoints.ProjectsReviews, reviewID)
-	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
+	p := fmt.Sprintf("%s/%d", endpoints.ProjectsReviews, reviewID)
+	return execute[*RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }

@@ -18,8 +18,8 @@ type CreateProfileBody struct {
 // Create a new profile for a user. Returns the created profile
 // It maps to the `POST` `/users/0.1/profiles` endpoint.
 func (s *ProfilesService) Create(ctx context.Context, b CreateProfileBody) (*RawResponse, error) {
-	path := endpoints.UsersProfiles
-	return execute[*RawResponse](ctx, s.client, http.MethodPost, path, nil, b)
+	p := endpoints.UsersProfiles
+	return execute[*RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
 // TODO: the api does not have solid on this endpoint (the get should not have body)
@@ -27,8 +27,8 @@ func (s *ProfilesService) Create(ctx context.Context, b CreateProfileBody) (*Raw
 // Get profile(s)
 // It maps to the `GET` `/users/0.1/profiles` endpoint.
 func (s *ProfilesService) Get(ctx context.Context) (*RawResponse, error) {
-	path := endpoints.UsersProfiles
-	return execute[*RawResponse](ctx, s.client, http.MethodGet, path, nil, nil)
+	p := endpoints.UsersProfiles
+	return execute[*RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
 }
 
 type UpdateProfileBody struct {
@@ -45,6 +45,6 @@ type UpdateProfileBody struct {
 // Update a profile
 // It maps to the `PUT` `/users/0.1/profiles` endpoint.
 func (s *ProfilesService) Update(ctx context.Context, b UpdateProfileBody) (*RawResponse, error) {
-	path := endpoints.UsersProfiles
-	return execute[*RawResponse](ctx, s.client, http.MethodPut, path, nil, b)
+	p := endpoints.UsersProfiles
+	return execute[*RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
