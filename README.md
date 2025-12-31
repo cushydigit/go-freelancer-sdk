@@ -128,8 +128,6 @@ func ListBudgets() {
  for index, b := range res.Result.Budgets {
   fmt.Println(index, b)
  }
-
- 
 }
 ```
 
@@ -189,7 +187,7 @@ Current version covers **Projects**, **Users**, and **Common** services.
 ### Stability & Quality
 
 - [x] **Static Analysis:**
-- [x] **Unit Testing:** (13% coverage)
+- [x] **Unit Testing:** (32% coverage)
 - [ ] **Use Case:**
 
 ### Upcoming Features

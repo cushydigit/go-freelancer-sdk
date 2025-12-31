@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
@@ -210,4 +211,37 @@ func TestProjectsService_SearchActive_OmitNilParams(t *testing.T) {
 	_, err := c.Services.Projects.SearchActive(context.Background(), &SearchActiveProjectsOptions{})
 	assert.NoError(t, err)
 
+}
+
+func TestProjectsService_SearchActive_ReturnsPointers(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Return a mock JSON response
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{
+			"status": "success",
+			"result": {
+				"projects": [
+					{"id": 1, "title": "Project 1"},
+					{"id": 2, "title": "Project 2"}
+				],
+				"total_count": 2
+			}
+		}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	opts := &SearchActiveProjectsOptions{}
+
+	resp, err := c.Services.Projects.SearchActive(context.Background(), opts)
+	assert.NoError(t, err)
+	assert.Equal(t, resp.Result.TotalCount, 2)
+
+	// Check pointer types for projects
+	for _, p := range resp.Result.Projects {
+		assert.NotNil(t, p)
+		assert.Equal(t, reflect.TypeOf(p).Kind(), reflect.Ptr)
+	}
 }
