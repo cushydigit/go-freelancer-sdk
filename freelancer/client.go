@@ -40,7 +40,7 @@ type Client struct {
 type ClientOption func(*Client)
 
 func WithSandBox() ClientOption {
-	return func(c *Client) { c.baseURL = endpoints.BaseAPISandBoxURL }
+	return func(c *Client) { c.baseURL = endpoints.APISandBoxURL }
 }
 
 func WithHttpClient(hc *http.Client) ClientOption {
@@ -59,7 +59,7 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 			Timeout: 30 * time.Second,
 		},
 		apiToken:     apiToken,
-		baseURL:      endpoints.BaseAPIMainURL,
+		baseURL:      endpoints.APIMainURL,
 		debugMode:    false,
 		useRateLimit: true,
 		rateLimiter:  newRateLimiter(),
