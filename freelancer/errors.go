@@ -1,6 +1,9 @@
 package freelancer
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type APIError struct {
 	StatusCode int    `json:"-"` // will set this manually from the HTTP
@@ -34,4 +37,14 @@ func (e *APIError) Error() string {
 
 	return fmt.Sprintf("freelancer api (%d): [%s] %s (request_id: %s)", e.StatusCode, code, msg, e.RequestID)
 
+}
+
+// TODO: add to changelog
+// IsAPIError returns the *APIError and a boolean if the error is an API-specific failure.
+func IsAPIError(err error) (*APIError, bool) {
+	var apiErr *APIError
+	if errors.As(err, &apiErr) {
+		return apiErr, true
+	}
+	return nil, false
 }
