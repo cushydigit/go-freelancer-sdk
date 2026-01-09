@@ -15,7 +15,7 @@ type RoleType string
 type ViolationContext string
 type ViolationReason string
 type ViolationAdditionalReason string
-type ProjectCollaborationAction string
+type CollaborationAction string
 type ServiceType string
 type ServiceStatusType string
 type SortType string
@@ -166,8 +166,8 @@ const (
 	MilestoneActionRequestReject MilestoneActionRequest = "reject"
 	MilestoneActionRequestDelete MilestoneActionRequest = "delete"
 
-	ProjectCollaborationActionRevoke            ProjectCollaborationAction = "revoke"
-	ProjectCollaborationActionUpdatePermissions ProjectCollaborationAction = "update_permissions"
+	CollaborationActionRevoke            CollaborationAction = "revoke"
+	CollaborationActionUpdatePermissions CollaborationAction = "update_permissions"
 
 	ServiceRegular ServiceType = "regular"
 	ServiceLocal   ServiceType = "local"

@@ -2,6 +2,7 @@ package freelancer
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -13,7 +14,62 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestProjectsService_Create(t *testing.T) {
+func TestProjectsService_Create_Base(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+
+		// path
+		assert.Equal(t, endpoints.Projects, r.URL.Path)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Create(context.Background(), utils.CreateProjectBody{})
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectsService_Create_Body(t *testing.T) {
+	b := utils.CreateProjectBody{
+		Title:       "Project Test Title",
+		Description: "Project Description Test",
+		Budget: utils.Budget{
+			Minimum: 10.5,
+			Maximum: utils.Float64(100.6),
+		},
+		Jobs: []int64{1, 2},
+		Type: utils.Enum(utils.ProjectFixed),
+	}
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var res utils.CreateProjectBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.Equal(t, res.Title, b.Title)
+		assert.Equal(t, res.Description, b.Description)
+		assert.Equal(t, res.Budget.Minimum, b.Budget.Minimum)
+		assert.Equal(t, res.Budget.Maximum, b.Budget.Maximum)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+	_, err := c.Services.Projects.Create(context.Background(), b)
+	assert.NoError(t, err)
+
+}
+
+func TestProjectsService_Create_Response(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Method
 		assert.Equal(t, http.MethodPost, r.Method)
@@ -34,6 +90,7 @@ func TestProjectsService_Create(t *testing.T) {
 			}
 		}`))
 	}))
+	defer ts.Close()
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
@@ -48,10 +105,30 @@ func TestProjectsService_Create(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, int64(123), resp.Result.ID)
-	assert.Equal(t, "My Project", resp.Result.Title)
+	assert.Equal(t, body.Title, resp.Result.Title)
 	assert.False(t, resp.Result.Deleted)
-	defer ts.Close()
+}
 
+func TestProjectsService_Action_Base(t *testing.T) {
+	projectID := 100
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+
+		// path
+		expected := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
+		assert.Equal(t, expected, r.URL.Path)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Action(context.Background(), int64(projectID), utils.ActionProject{})
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
 }
 
 func TestProjectsService_SearchActive_Base(t *testing.T) {

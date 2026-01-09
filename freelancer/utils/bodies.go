@@ -2,27 +2,35 @@ package utils
 
 // Title, Description, Budget, Jobs are required
 type CreateProjectBody struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Budget      struct {
-		Minimum    float64  `json:"minimum"`
-		Maximum    *float64 `json:"maximum,omitempty"`
-		CurrencyID *int64   `json:"currency_id,omitempty"`
-	} `json:"budget"`
-	Jobs              []int64      `json:"jobs"`
-	Type              *ProjectType `json:"type,omitempty"`
-	HourlyProjectInfo *struct {
-		Commitment struct {
-			Hours    int          `json:"hours"`
-			Interval IntervalType `json:"interval"`
-		} `json:"commitment"`
-	} `json:"hourly_project_info,omitempty"`
-	HirMe            *bool `json:"hire_me,omitempty"`
-	HiremeInitialBid *struct {
-		BidderID int64   `json:"bidder_id"`
-		Amount   float64 `json:"amount"`
-		Period   int64   `json:"period"`
-	} `json:"hireme_initial_bid,omitempty"`
+	Title             string             `json:"title"`
+	Description       string             `json:"description"`
+	Budget            Budget             `json:"budget"`
+	Jobs              []int64            `json:"jobs"`
+	Type              *ProjectType       `json:"type,omitempty"`
+	HourlyProjectInfo *HourlyProjectInfo `json:"hourly_project_info,omitempty"`
+	HirMe             *bool              `json:"hire_me,omitempty"`
+	HiremeInitialBid  *HiremeInitialBid  `json:"hireme_initial_bid,omitempty"`
+}
+
+type Budget struct {
+	Minimum    float64  `json:"minimum"`
+	Maximum    *float64 `json:"maximum"`
+	CurrencyID *int64   `json:"currency_id"`
+}
+
+type HourlyProjectInfo struct {
+	Commitment Commitment `json:"commitment"`
+}
+
+type Commitment struct {
+	Hours    int          `json:"hours"`
+	Interval IntervalType `json:"interval"`
+}
+
+type HiremeInitialBid struct {
+	BidderID int64   `json:"bidder_id"`
+	Amount   float64 `json:"amount"`
+	Period   int64   `json:"period"`
 }
 
 type InviteFreelancersBody struct {

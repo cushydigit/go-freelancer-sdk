@@ -24,7 +24,7 @@ func (s *ProjectsService) Create(ctx context.Context, b utils.CreateProjectBody)
 
 // Perform an action on a project
 // It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
-func (s *ProjectsService) Action(ctx context.Context, projectID int64, action utils.ProjectActionBody) (*RawResponse, error) {
+func (s *ProjectsService) Action(ctx context.Context, projectID int64, action utils.ActionProject) (*RawResponse, error) {
 	p := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, p, nil, action)
 }
@@ -171,7 +171,7 @@ func (s *CollaborationsService) Create(ctx context.Context, projectID int64, b u
 
 // Performs an action on a collaboration.
 // it maps to the `POST` `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` endpoint
-func (s *CollaborationsService) Action(ctx context.Context, projectID int64, collaborationID int, b utils.ActionProjectCollaborationsBody) (*RawResponse, error) {
+func (s *CollaborationsService) Action(ctx context.Context, projectID int64, collaborationID int, b utils.ActionCollaboration) (*RawResponse, error) {
 	p := fmt.Sprintf("%s/%s/collaborations/%d/actions", endpoints.Projects, strconv.FormatInt(projectID, 10), collaborationID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
@@ -249,7 +249,7 @@ func (s *BidsService) Create(ctx context.Context, b utils.CreateBidBody) (*RawRe
 
 // Performs an action on a bid.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
-func (s *BidsService) Action(ctx context.Context, bidID int64, b *utils.ActionBidBody) (*RawResponse, error) {
+func (s *BidsService) Action(ctx context.Context, bidID int64, b *utils.ActionBid) (*RawResponse, error) {
 	p := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
 	return execute[*RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }

@@ -1,4 +1,9 @@
 # Changelog
+## [1.4.0] - 2025-12-31
+- refactor many packges like actions and body and request to utils package
+- rename some enums to better naiming convenents => action
+
+### Bug Fixes
 
 ## [1.3.1] - 2025-12-31
 
