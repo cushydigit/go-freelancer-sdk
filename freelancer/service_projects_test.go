@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -37,7 +38,7 @@ func TestProjectsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	body := CreateProjectBody{
+	body := utils.CreateProjectBody{
 		Title:       "My Project",
 		Description: "Test",
 	}
@@ -115,10 +116,10 @@ func TestProjectsService_SearchActive_ScalarParams(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	opts := &SearchActiveProjectsOptions{
-		Query:           String("python golang"),
-		MinPrice:        Float64(100.5),
-		FullDescription: Bool(true),
+	opts := &utils.SearchActiveProjectsOptions{
+		Query:           utils.String("python golang"),
+		MinPrice:        utils.Float64(100.5),
+		FullDescription: utils.Bool(true),
 	}
 
 	res, err := c.Services.Projects.SearchActive(context.Background(), opts)
@@ -151,7 +152,7 @@ func TestProjectsService_SearchActive_ArrayParams(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	opts := &SearchActiveProjectsOptions{
+	opts := &utils.SearchActiveProjectsOptions{
 		Jobs:      []int64{1, 2},
 		Countries: []string{"US", "DE"},
 		Languages: []string{"en", "de"},
@@ -166,7 +167,7 @@ func TestProjectsService_SearchActive_EnumParams(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		q := r.URL.Query()
 
-		assert.Equal(t, string(SortFieldsTimeUpdated), q.Get("sort_field"))
+		assert.Equal(t, string(utils.SortFieldsTimeUpdated), q.Get("sort_field"))
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{
@@ -182,8 +183,8 @@ func TestProjectsService_SearchActive_EnumParams(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	opts := &SearchActiveProjectsOptions{
-		SortField: Enum(SortFieldsTimeUpdated),
+	opts := &utils.SearchActiveProjectsOptions{
+		SortField: utils.Enum(utils.SortFieldsTimeUpdated),
 	}
 
 	res, err := c.Services.Projects.SearchActive(context.Background(), opts)
@@ -208,7 +209,7 @@ func TestProjectsService_SearchActive_OmitNilParams(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	_, err := c.Services.Projects.SearchActive(context.Background(), &SearchActiveProjectsOptions{})
+	_, err := c.Services.Projects.SearchActive(context.Background(), &utils.SearchActiveProjectsOptions{})
 	assert.NoError(t, err)
 
 }
@@ -233,7 +234,7 @@ func TestProjectsService_SearchActive_ReturnsPointers(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	opts := &SearchActiveProjectsOptions{}
+	opts := &utils.SearchActiveProjectsOptions{}
 
 	resp, err := c.Services.Projects.SearchActive(context.Background(), opts)
 	assert.NoError(t, err)

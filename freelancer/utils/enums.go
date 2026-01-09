@@ -1,4 +1,4 @@
-package freelancer
+package utils
 
 type TypeType string
 type ProjectType string

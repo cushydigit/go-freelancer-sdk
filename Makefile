@@ -24,8 +24,6 @@ test_cover:
 test_cover_show:
 	@go test -coverprofile=coverage.out ./freelancer/... && go tool cover -html=coverage.out
 
-
-
 release:
 	@echo "Releasing $(V)..."
 	git tag $(V)

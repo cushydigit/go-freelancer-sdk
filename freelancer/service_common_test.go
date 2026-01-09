@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -46,7 +47,7 @@ func TestCommonService_ListCountries(t *testing.T) {
 	c.SetBaseUrl(ts.URL)
 
 	opts := &ListCountriesOptions{
-		ExtraDetails: Bool(true),
+		ExtraDetails: utils.Bool(true),
 	}
 
 	res, err := c.Services.Common.ListCountries(context.Background(), opts)
