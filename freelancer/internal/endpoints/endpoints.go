@@ -2,8 +2,6 @@ package endpoints
 
 const (
 	Base          = "https://www.freelancer.com"
-	BaseProjects  = Base + "/projects"
-	BaseContests  = Base + "/contests"
 	APIMainURL    = Base + "/api"
 	APISandBoxURL = "https://api-sandbox.freelancer.com"
 

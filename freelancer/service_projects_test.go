@@ -182,12 +182,15 @@ func TestProjectsService_List_Base(t *testing.T) {
 func TestProjectsService_List_Options(t *testing.T) {
 	opts := rr.ListProjectsOptions{
 		Projects:                []int64{100, 101, 103},
-		FrontendProjectStatuses: []rr.ProjectFrontendStatus{rr.ProjectFrontendStatusComplete},
+		FrontendProjectStatuses: []rr.ProjectFrontendStatus{rr.ProjectFrontendStatusComplete, rr.ProjectFrontendStatusDraft},
+		FullDescription:         rr.Bool(true),
 	}
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		q := r.URL.Query()
 
-		assert.Equal(t, len(opts.Projects), len(q.Get("project_id")))
+		assert.ElementsMatch(t, []string{"100", "101", "103"}, q["projects[]"])
+		assert.ElementsMatch(t, []string{string(opts.FrontendProjectStatuses[0]), string(opts.FrontendProjectStatuses[1])}, q["frontend_project_statuses[]"])
+		assert.Equal(t, "true", q.Get("full_description"))
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -199,6 +202,98 @@ func TestProjectsService_List_Options(t *testing.T) {
 	c.SetBaseUrl(ts.URL)
 
 	res, err := c.Services.Projects.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestProjectsService_ListSelf_Base(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		assert.Equal(t, endpoints.ProjectsSelf, r.URL.Path)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.ListSelf(context.Background(), nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_ListSelf_Options(t *testing.T) {
+	opts := rr.ListSelfProjectsOptions{
+		Status: rr.Enum(rr.ProjectStatusActive),
+		Types:  []rr.ProjectType{rr.Projects, rr.Contests},
+		Query:  rr.String("python golang"),
+		Offset: rr.Int(10),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		assert.Equal(t, string(*opts.Status), q.Get("status"))
+		assert.Equal(t, string(*opts.Query), q.Get("query"))
+		assert.Equal(t, "10", q.Get("offset"))
+		assert.ElementsMatch(t, []string{string(opts.Types[0]), string(opts.Types[1])}, q["type[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.ListSelf(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestProjectService_Get_Base(t *testing.T) {
+	projectID := int64(100)
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Get(context.Background(), projectID, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_Get_Options(t *testing.T) {
+	projectID := int64(102)
+	opts := rr.GetProjectOptions{
+		FullDescription: rr.Bool(true),
+		Limit:           rr.Int(10),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		assert.Equal(t, "true", q.Get("full_description"))
+		assert.Equal(t, "10", q.Get("limit"))
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Get(context.Background(), projectID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -282,7 +377,6 @@ func TestProjectsService_SearchActive_ScalarParams(t *testing.T) {
 func TestProjectsService_SearchActive_ArrayParams(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		q := r.URL.Query()
-		fmt.Println(r.URL.String())
 
 		assert.ElementsMatch(t, []string{"1", "2"}, q["jobs[]"])
 		assert.ElementsMatch(t, []string{"US", "DE"}, q["countries[]"])
@@ -395,4 +489,99 @@ func TestProjectsService_SearchActive_ReturnsPointers(t *testing.T) {
 		assert.NotNil(t, p)
 		assert.Equal(t, reflect.TypeOf(p).Kind(), reflect.Ptr)
 	}
+}
+
+func TestProjectService_SearchAll_Base(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsAll, r.URL.Path)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.SearchAll(context.Background(), nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_SearchAll_Options(t *testing.T) {
+	opts := rr.SearchAllProjectsOptions{
+		Query:        rr.String("golang excel"),
+		ProjectTypes: []rr.ProjectBudgetType{rr.ProjectBudgetFixed},
+		Jobs:         []int64{1, 2, 3},
+		MaxPrice:     rr.Float64(100.1),
+		Countries:    []string{"USA"},
+		ReverseSort:  rr.Bool(false),
+		Limit:        rr.Int(9),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		assert.Equal(t, "false", q.Get("reverse_sort"))
+		assert.Equal(t, *opts.Query, q.Get("query"))
+		assert.Equal(t, "100.1", q.Get("max_price"))
+		assert.ElementsMatch(t, []string{string(rr.ProjectBudgetFixed)}, q["project_types[]"])
+		assert.ElementsMatch(t, []string{"USA"}, q["countries[]"])
+		assert.ElementsMatch(t, []string{"1", "2", "3"}, q["jobs[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.SearchAll(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_InviteFreelancer_Base(t *testing.T) {
+	projectID := int64(100)
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		path := fmt.Sprintf("%s/%d/invite", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+	res, err := c.Services.Projects.InviteFreelancer(context.Background(), projectID, rr.InviteFreelancersBody{})
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_InviteFreelancer_Body(t *testing.T) {
+	projectID := int64(100)
+	body := rr.InviteFreelancersBody{
+		FreelancerID: int64(20000),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+		assert.NotNil(t, r.Body)
+		var req rr.InviteFreelancersBody
+		err := json.NewDecoder(r.Body).Decode(&req)
+		assert.NoError(t, err)
+		assert.Equal(t, body.FreelancerID, req.FreelancerID)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+	res, err := c.Services.Projects.InviteFreelancer(context.Background(), projectID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
 }

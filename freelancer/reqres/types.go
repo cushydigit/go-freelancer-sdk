@@ -234,7 +234,7 @@ type Project struct {
 }
 
 func (p *Project) GetFullUrl() string {
-	return fmt.Sprintf("%s/%s", endpoints.BaseProjects, p.SeoURL)
+	return fmt.Sprintf("%s/projects/%s", endpoints.Base, p.SeoURL)
 }
 
 type Timezone struct {
