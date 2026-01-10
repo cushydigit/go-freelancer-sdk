@@ -12,77 +12,77 @@ type ListTimezonesOptions struct {
 }
 
 type ListProjectsOptions struct {
-	Projects                     []int64  `url:"projects[]"`
-	Owners                       []int64  `url:"owners[]"`
-	Bidders                      []int64  `url:"bidders[]"`
-	SeoUrls                      []string `url:"seo_urls[]"`
-	FromTime                     *int64   `url:"from_time"`
-	ToTime                       *int64   `url:"to_time"`
-	FrontendProjectStatuses      []string `url:"frontend_project_statuses[]"`
-	Team                         *bool    `url:"team"`
-	IsNonHireMe                  *bool    `url:"is_none_hire_me"`
-	HasMilestone                 *bool    `url:"has_milestone"`
-	Count                        *bool    `url:"count"`
-	FullDescription              *bool    `url:"full_description"`
-	JobDetails                   *bool    `url:"job_details"`
-	UpgradeDetails               *bool    `url:"upgrade_details"`
-	AttachmentDetails            *bool    `url:"attachment_details"`
-	FileDetails                  *bool    `url:"file_details"`
-	QualificationDetails         *bool    `url:"qualification_details"`
-	SelectedBids                 *bool    `url:"selected_bids"`
-	HiremeDetails                *bool    `url:"hireme_details"`
-	UserDetails                  *bool    `url:"user_details"`
-	InvitedFreelancerDetails     *bool    `url:"invited_freelancer_details"`
-	RecommendedFreelancerDetails *bool    `url:"recommended_freelancer_details"`
-	SupportSessionDetails        *bool    `url:"support_session_details"`
-	LocationDetails              *bool    `url:"location_details"`
-	NdaSignatureDetails          *bool    `url:"nda_signature_details"`
-	ProjectCollaborationDetails  *bool    `url:"project_collaboration_details"`
-	ProximityDetails             *bool    `url:"proximity_details"`
-	ReviewAvailabilityDetails    *bool    `url:"review_availability_details"`
-	NegotiatedDetails            *bool    `url:"negotiated_details"`
-	DriveFileDetails             *bool    `url:"drive_file_details"`
-	NdaDetails                   *bool    `url:"nda_details"`
-	LocalDetails                 *bool    `url:"local_details"`
-	EquipmentDetails             *bool    `url:"equipment_details"`
-	ClientEngagementDetails      *bool    `url:"client_engagement_details"`
-	ServiceOfferingDetails       *bool    `url:"service_offering_details"`
-	UserAvatar                   *bool    `url:"user_avatar"`
-	UserCountryDetails           *bool    `url:"user_country_details"`
-	UserProfileDescription       *bool    `url:"user_profile_description"`
-	UserDisplayInfo              *bool    `url:"user_display_info"`
-	UserJobs                     *bool    `url:"user_jobs"`
-	UserBalanceDetails           *bool    `url:"user_balance_details"`
-	UserQualificationDetails     *bool    `url:"user_qualification_details"`
-	UserMembershipDetails        *bool    `url:"user_membership_details"`
-	UserFinancialDetails         *bool    `url:"user_financial_details"`
-	UserLocationDetails          *bool    `url:"user_location_details"`
-	UserPortfolioDetails         *bool    `url:"user_portfolio_details"`
-	UserPreferredDetails         *bool    `url:"user_preferred_details"`
-	UserBadgeDetails             *bool    `url:"user_badge_details"`
-	UserStatus                   *bool    `url:"user_status"`
-	UserReputation               *bool    `url:"user_reputation"`
-	UserEmployerReputation       *bool    `url:"user_employer_reputation"`
-	UserReputationExtra          *bool    `url:"user_reputation_extra"`
-	UserEmployerReputationExtra  *bool    `url:"user_employer_reputation_extra"`
-	UserCoverImage               *bool    `url:"user_cover_image"`
-	UserPastCoverImage           *bool    `url:"user_past_cover_image"`
-	UserRecommendations          *bool    `url:"user_recommendations"`
-	UserResponsiveness           *bool    `url:"user_responsiveness"`
-	CorporateUsers               *bool    `url:"corporate_users"`
-	MarketingMobileNumber        *bool    `url:"marketing_mobile_number"`
-	SanctionDetails              *bool    `url:"sanction_details"`
-	LimitedAccount               *bool    `url:"limited_account"`
-	EquipmentGroupDetails        *bool    `url:"equipment_group_details"`
-	Limit                        *int     `url:"limit"`
-	Offset                       *int     `url:"offset"`
-	Compact                      *bool    `url:"compact"`
+	Projects                     []int64                 `url:"projects[]"`
+	Owners                       []int64                 `url:"owners[]"`
+	Bidders                      []int64                 `url:"bidders[]"`
+	SeoUrls                      []string                `url:"seo_urls[]"`
+	FromTime                     *int64                  `url:"from_time"`
+	ToTime                       *int64                  `url:"to_time"`
+	FrontendProjectStatuses      []ProjectFrontendStatus `url:"frontend_project_statuses[]"`
+	Team                         *bool                   `url:"team"`
+	IsNonHireMe                  *bool                   `url:"is_none_hire_me"`
+	HasMilestone                 *bool                   `url:"has_milestone"`
+	Count                        *bool                   `url:"count"`
+	FullDescription              *bool                   `url:"full_description"`
+	JobDetails                   *bool                   `url:"job_details"`
+	UpgradeDetails               *bool                   `url:"upgrade_details"`
+	AttachmentDetails            *bool                   `url:"attachment_details"`
+	FileDetails                  *bool                   `url:"file_details"`
+	QualificationDetails         *bool                   `url:"qualification_details"`
+	SelectedBids                 *bool                   `url:"selected_bids"`
+	HiremeDetails                *bool                   `url:"hireme_details"`
+	UserDetails                  *bool                   `url:"user_details"`
+	InvitedFreelancerDetails     *bool                   `url:"invited_freelancer_details"`
+	RecommendedFreelancerDetails *bool                   `url:"recommended_freelancer_details"`
+	SupportSessionDetails        *bool                   `url:"support_session_details"`
+	LocationDetails              *bool                   `url:"location_details"`
+	NdaSignatureDetails          *bool                   `url:"nda_signature_details"`
+	ProjectCollaborationDetails  *bool                   `url:"project_collaboration_details"`
+	ProximityDetails             *bool                   `url:"proximity_details"`
+	ReviewAvailabilityDetails    *bool                   `url:"review_availability_details"`
+	NegotiatedDetails            *bool                   `url:"negotiated_details"`
+	DriveFileDetails             *bool                   `url:"drive_file_details"`
+	NdaDetails                   *bool                   `url:"nda_details"`
+	LocalDetails                 *bool                   `url:"local_details"`
+	EquipmentDetails             *bool                   `url:"equipment_details"`
+	ClientEngagementDetails      *bool                   `url:"client_engagement_details"`
+	ServiceOfferingDetails       *bool                   `url:"service_offering_details"`
+	UserAvatar                   *bool                   `url:"user_avatar"`
+	UserCountryDetails           *bool                   `url:"user_country_details"`
+	UserProfileDescription       *bool                   `url:"user_profile_description"`
+	UserDisplayInfo              *bool                   `url:"user_display_info"`
+	UserJobs                     *bool                   `url:"user_jobs"`
+	UserBalanceDetails           *bool                   `url:"user_balance_details"`
+	UserQualificationDetails     *bool                   `url:"user_qualification_details"`
+	UserMembershipDetails        *bool                   `url:"user_membership_details"`
+	UserFinancialDetails         *bool                   `url:"user_financial_details"`
+	UserLocationDetails          *bool                   `url:"user_location_details"`
+	UserPortfolioDetails         *bool                   `url:"user_portfolio_details"`
+	UserPreferredDetails         *bool                   `url:"user_preferred_details"`
+	UserBadgeDetails             *bool                   `url:"user_badge_details"`
+	UserStatus                   *bool                   `url:"user_status"`
+	UserReputation               *bool                   `url:"user_reputation"`
+	UserEmployerReputation       *bool                   `url:"user_employer_reputation"`
+	UserReputationExtra          *bool                   `url:"user_reputation_extra"`
+	UserEmployerReputationExtra  *bool                   `url:"user_employer_reputation_extra"`
+	UserCoverImage               *bool                   `url:"user_cover_image"`
+	UserPastCoverImage           *bool                   `url:"user_past_cover_image"`
+	UserRecommendations          *bool                   `url:"user_recommendations"`
+	UserResponsiveness           *bool                   `url:"user_responsiveness"`
+	CorporateUsers               *bool                   `url:"corporate_users"`
+	MarketingMobileNumber        *bool                   `url:"marketing_mobile_number"`
+	SanctionDetails              *bool                   `url:"sanction_details"`
+	LimitedAccount               *bool                   `url:"limited_account"`
+	EquipmentGroupDetails        *bool                   `url:"equipment_group_details"`
+	Limit                        *int                    `url:"limit"`
+	Offset                       *int                    `url:"offset"`
+	Compact                      *bool                   `url:"compact"`
 }
 
 type ListSelfProjectsOptions struct {
 	Status      *ProjectStatusType `url:"status"`
 	Role        *RoleType          `url:"role"`
-	Types       []TypeType         `url:"type[]"`
+	Types       []ProjectType      `url:"type[]"`
 	Query       *string            `url:"query"`
 	SortField   *SortField         `url:"sort_field"`
 	ReverseSort *bool              `url:"reverse_sort"`
@@ -152,7 +152,7 @@ type GetProjectOptions struct {
 
 type SearchActiveProjectsOptions struct {
 	Query                       *string              `url:"query"`
-	ProjectTypes                []ProjectType        `url:"project_types[]"`
+	ProjectTypes                []ProjectBudgetType  `url:"project_types[]"`
 	ProjectUpgrades             []ProjectUpgradeType `url:"project_upgrades[]"`
 	ContestUpgrades             []ContestUpgradeType `url:"contest_upgrades[]"`
 	MinAvgPrice                 *float64             `url:"min_avg_price"`
@@ -221,7 +221,7 @@ type SearchActiveProjectsOptions struct {
 
 type SearchAllProjectsOptions struct {
 	Query                       *string                 `url:"query"`
-	ProjectTypes                []ProjectType           `url:"project_types[]"`
+	ProjectTypes                []ProjectBudgetType     `url:"project_types[]"`
 	ProjectUpgrades             []ProjectUpgradeType    `url:"project_upgrades[]"`
 	ContestUpgrades             []ContestUpgradeType    `url:"contest_upgrades[]"`
 	MinAvgPrice                 *float64                `url:"min_avg_price"`
@@ -832,11 +832,11 @@ type ListCategoriesOptions struct {
 }
 
 type ListBudgetsOptions struct {
-	CurrencyCodes   []string     `url:"currency_codes[]"`
-	CurrencyIDs     []int64      `url:"currency_ids[]"`
-	ProjectType     *ProjectType `url:"project_type"`
-	Lang            *string      `url:"lang"`
-	CurrencyDetails *bool        `url:"currency_details"`
+	CurrencyCodes   []string           `url:"currency_codes[]"`
+	CurrencyIDs     []int64            `url:"currency_ids[]"`
+	ProjectType     *ProjectBudgetType `url:"project_type"`
+	Lang            *string            `url:"lang"`
+	CurrencyDetails *bool              `url:"currency_details"`
 }
 
 type ListUsersOptions struct {

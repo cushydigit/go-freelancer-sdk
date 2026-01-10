@@ -1,7 +1,7 @@
 package reqres
 
-type TypeType string
 type ProjectType string
+type ProjectBudgetType string
 type ContextType string
 type ProjectUpgradeType string
 type ProjectStatusType string
@@ -38,11 +38,11 @@ type CompletionStatus string
 type ReviewAction string
 
 const (
-	Projects TypeType = "projects"
-	Contests TypeType = "contests"
+	Projects ProjectType = "projects"
+	Contests ProjectType = "contests"
 
-	ProjectFixed  ProjectType = "fixed"
-	ProjectHourly ProjectType = "hourly"
+	ProjectBudgetFixed  ProjectBudgetType = "fixed"
+	ProjectBudgetHourly ProjectBudgetType = "hourly"
 
 	IntervalWeek  IntervalType = "WEEK"
 	IntervalMonth IntervalType = "MONTH"

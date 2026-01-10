@@ -44,7 +44,7 @@ func TestProjectsService_Create_Body(t *testing.T) {
 			Maximum: *rr.Float64(100.2),
 		},
 		Jobs: []int64{1, 2},
-		Type: rr.Enum(rr.ProjectFixed),
+		Type: rr.Enum(rr.ProjectBudgetFixed),
 	}
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -132,6 +132,75 @@ func TestProjectsService_Action_Base(t *testing.T) {
 }
 
 func TestProjectsService_Action_Body(t *testing.T) {
+	action := rr.ActionProject{
+		ProjectID: 100,
+		Action:    rr.ProjectActionUpgrade,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// check the body
+		var a rr.ActionProject
+		err := json.NewDecoder(r.Body).Decode(&a)
+		assert.NoError(t, err)
+		defer r.Body.Close()
+		assert.Equal(t, action.Action, a.Action)
+		assert.Equal(t, action.ProjectID, a.ProjectID)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Action(context.Background(), action.ProjectID, action)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestProjectsService_List_Base(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.Projects, r.URL.Path)
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+	res, err := c.Services.Projects.List(context.Background(), nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestProjectsService_List_Options(t *testing.T) {
+	opts := rr.ListProjectsOptions{
+		Projects:                []int64{100, 101, 103},
+		FrontendProjectStatuses: []rr.ProjectFrontendStatus{rr.ProjectFrontendStatusComplete},
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+
+		assert.Equal(t, len(opts.Projects), len(q.Get("project_id")))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
 
 }
 

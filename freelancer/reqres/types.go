@@ -61,11 +61,11 @@ type Currency struct {
 }
 
 type Budget struct {
-	Minimum     float64     `json:"minimum"`
-	Maximum     float64     `json:"maximum"`
-	Name        string      `json:"name"`
-	ProjectType ProjectType `json:"project_type"`
-	CurrencyID  int         `json:"currency_id"`
+	Minimum     float64           `json:"minimum"`
+	Maximum     float64           `json:"maximum"`
+	Name        string            `json:"name"`
+	ProjectType ProjectBudgetType `json:"project_type"`
+	CurrencyID  int               `json:"currency_id"`
 }
 
 type Upgrades struct {

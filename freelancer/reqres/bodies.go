@@ -6,7 +6,7 @@ type CreateProjectBody struct {
 	Description       string             `json:"description"`
 	Budget            Budget             `json:"budget"`
 	Jobs              []int64            `json:"jobs"`
-	Type              *ProjectType       `json:"type,omitempty"`
+	Type              *ProjectBudgetType `json:"type,omitempty"`
 	HourlyProjectInfo *HourlyProjectInfo `json:"hourly_project_info,omitempty"`
 	HirMe             *bool              `json:"hire_me,omitempty"`
 	HiremeInitialBid  *HiremeInitialBid  `json:"hireme_initial_bid,omitempty"`
