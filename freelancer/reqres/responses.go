@@ -1,4 +1,4 @@
-package freelancer
+package reqres
 
 import "encoding/json"
 

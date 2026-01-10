@@ -1,4 +1,4 @@
-package utils
+package reqres
 
 // TODO: check this service functionality so the projectActionBody should have better fields
 // check : https://developers.freelancer.com/docs/projects/projects#projects-put

@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/utils"
+	rr "github.com/cushydigit/go-freelancer-sdk/freelancer/reqres"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -30,25 +30,25 @@ func TestProjectsService_Create_Base(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Create(context.Background(), utils.CreateProjectBody{})
+	res, err := c.Services.Projects.Create(context.Background(), rr.CreateProjectBody{})
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
 
 func TestProjectsService_Create_Body(t *testing.T) {
-	b := utils.CreateProjectBody{
+	b := rr.CreateProjectBody{
 		Title:       "Project Test Title",
 		Description: "Project Description Test",
-		Budget: utils.Budget{
+		Budget: rr.Budget{
 			Minimum: 10.5,
-			Maximum: utils.Float64(100.6),
+			Maximum: *rr.Float64(100.2),
 		},
 		Jobs: []int64{1, 2},
-		Type: utils.Enum(utils.ProjectFixed),
+		Type: rr.Enum(rr.ProjectFixed),
 	}
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var res utils.CreateProjectBody
+		var res rr.CreateProjectBody
 		err := json.NewDecoder(r.Body).Decode(&res)
 		assert.NoError(t, err)
 		assert.Equal(t, res.Title, b.Title)
@@ -95,7 +95,7 @@ func TestProjectsService_Create_Response(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	body := utils.CreateProjectBody{
+	body := rr.CreateProjectBody{
 		Title:       "My Project",
 		Description: "Test",
 	}
@@ -126,9 +126,13 @@ func TestProjectsService_Action_Base(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Action(context.Background(), int64(projectID), utils.ActionProject{})
+	res, err := c.Services.Projects.Action(context.Background(), int64(projectID), rr.ActionProject{})
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
+}
+
+func TestProjectsService_Action_Body(t *testing.T) {
+
 }
 
 func TestProjectsService_SearchActive_Base(t *testing.T) {
@@ -193,10 +197,10 @@ func TestProjectsService_SearchActive_ScalarParams(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	opts := &utils.SearchActiveProjectsOptions{
-		Query:           utils.String("python golang"),
-		MinPrice:        utils.Float64(100.5),
-		FullDescription: utils.Bool(true),
+	opts := &rr.SearchActiveProjectsOptions{
+		Query:           rr.String("python golang"),
+		MinPrice:        rr.Float64(100.5),
+		FullDescription: rr.Bool(true),
 	}
 
 	res, err := c.Services.Projects.SearchActive(context.Background(), opts)
@@ -229,7 +233,7 @@ func TestProjectsService_SearchActive_ArrayParams(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	opts := &utils.SearchActiveProjectsOptions{
+	opts := &rr.SearchActiveProjectsOptions{
 		Jobs:      []int64{1, 2},
 		Countries: []string{"US", "DE"},
 		Languages: []string{"en", "de"},
@@ -244,7 +248,7 @@ func TestProjectsService_SearchActive_EnumParams(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		q := r.URL.Query()
 
-		assert.Equal(t, string(utils.SortFieldsTimeUpdated), q.Get("sort_field"))
+		assert.Equal(t, string(rr.SortFieldsTimeUpdated), q.Get("sort_field"))
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{
@@ -260,8 +264,8 @@ func TestProjectsService_SearchActive_EnumParams(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	opts := &utils.SearchActiveProjectsOptions{
-		SortField: utils.Enum(utils.SortFieldsTimeUpdated),
+	opts := &rr.SearchActiveProjectsOptions{
+		SortField: rr.Enum(rr.SortFieldsTimeUpdated),
 	}
 
 	res, err := c.Services.Projects.SearchActive(context.Background(), opts)
@@ -286,7 +290,7 @@ func TestProjectsService_SearchActive_OmitNilParams(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	_, err := c.Services.Projects.SearchActive(context.Background(), &utils.SearchActiveProjectsOptions{})
+	_, err := c.Services.Projects.SearchActive(context.Background(), &rr.SearchActiveProjectsOptions{})
 	assert.NoError(t, err)
 
 }
@@ -311,7 +315,7 @@ func TestProjectsService_SearchActive_ReturnsPointers(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	opts := &utils.SearchActiveProjectsOptions{}
+	opts := &rr.SearchActiveProjectsOptions{}
 
 	resp, err := c.Services.Projects.SearchActive(context.Background(), opts)
 	assert.NoError(t, err)

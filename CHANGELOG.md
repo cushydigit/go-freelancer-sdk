@@ -1,6 +1,6 @@
 # Changelog
 ## [1.4.0] - 2025-12-31
-- refactor many packges like actions and body and request to utils package
+- refactor many packges like actions and body and request to reqres package
 - rename some enums to better naiming convenents => action
 
 ### Bug Fixes

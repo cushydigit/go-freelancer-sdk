@@ -1,4 +1,15 @@
-package utils
+package reqres
+
+// CountriesOptions holds optional filters for the ListCountries request.
+type ListCountriesOptions struct {
+	ExtraDetails *bool `url:"extra_details"`
+}
+
+// TimezonesOptions holds optional filters for the ListTimezones request.
+type ListTimezonesOptions struct {
+	Timezones     []int64  `url:"timezones[]"`
+	TimezoneNames []string `url:"timezone_names[]"`
+}
 
 type ListProjectsOptions struct {
 	Projects                     []int64  `url:"projects[]"`

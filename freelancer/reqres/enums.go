@@ -1,4 +1,4 @@
-package utils
+package reqres
 
 type TypeType string
 type ProjectType string

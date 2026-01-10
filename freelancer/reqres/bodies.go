@@ -1,4 +1,4 @@
-package utils
+package reqres
 
 // Title, Description, Budget, Jobs are required
 type CreateProjectBody struct {
@@ -10,12 +10,6 @@ type CreateProjectBody struct {
 	HourlyProjectInfo *HourlyProjectInfo `json:"hourly_project_info,omitempty"`
 	HirMe             *bool              `json:"hire_me,omitempty"`
 	HiremeInitialBid  *HiremeInitialBid  `json:"hireme_initial_bid,omitempty"`
-}
-
-type Budget struct {
-	Minimum    float64  `json:"minimum"`
-	Maximum    *float64 `json:"maximum"`
-	CurrencyID *int64   `json:"currency_id"`
 }
 
 type HourlyProjectInfo struct {

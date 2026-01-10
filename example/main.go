@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer"
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/utils"
+	rr "github.com/cushydigit/go-freelancer-sdk/freelancer/reqres"
 	"github.com/joho/godotenv"
 	"golang.org/x/net/proxy"
 )
@@ -88,11 +88,11 @@ func InitWithProxy() {
 func QuickExample() {
 
 	// create client with access token
-	opts := utils.SearchActiveProjectsOptions{
-		FullDescription: utils.Bool(true),
-		Limit:           utils.Int(10),
-		Offset:          utils.Int(5),
-		Query:           utils.String("golang python"),
+	opts := rr.SearchActiveProjectsOptions{
+		FullDescription: rr.Bool(true),
+		Limit:           rr.Int(10),
+		Offset:          rr.Int(5),
+		Query:           rr.String("golang python"),
 	}
 
 	res, err := client.Services.Projects.SearchActive(context.Background(), &opts)

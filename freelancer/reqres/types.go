@@ -1,10 +1,9 @@
-package freelancer
+package reqres
 
 import (
 	"fmt"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/utils"
 )
 
 type Country struct {
@@ -62,11 +61,11 @@ type Currency struct {
 }
 
 type Budget struct {
-	Minimum     float64           `json:"minimum"`
-	Maximum     float64           `json:"maximum"`
-	Name        string            `json:"name"`
-	ProjectType utils.ProjectType `json:"project_type"`
-	CurrencyID  int               `json:"currency_id"`
+	Minimum     float64     `json:"minimum"`
+	Maximum     float64     `json:"maximum"`
+	Name        string      `json:"name"`
+	ProjectType ProjectType `json:"project_type"`
+	CurrencyID  int         `json:"currency_id"`
 }
 
 type Upgrades struct {

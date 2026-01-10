@@ -1,4 +1,4 @@
-package utils
+package reqres
 
 // Bool returns a pointer to the provided bool.
 func Bool(v bool) *bool { return &v }
