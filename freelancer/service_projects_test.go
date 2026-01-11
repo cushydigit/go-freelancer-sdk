@@ -760,3 +760,109 @@ func TestProjectService_GetHourlyContractInfo(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
+
+func TestProjectService_GetIPContractInfo(t *testing.T) {
+	projectID := int64(100)
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/ip_contract_info", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.GetIPContractInfo(context.Background(), projectID)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_Delete(t *testing.T) {
+	projectID := int64(100)
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodDelete, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Delete(context.Background(), projectID)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestCollaborationService_List(t *testing.T) {
+	projectID := int64(100)
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Collaborations.List(context.Background(), projectID)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+func TestCollaborationService_Create(t *testing.T) {
+	projectID := int64(100)
+	body := rr.CreateCollaborationBody{
+		Email: "test@test.com",
+		Permissions: rr.Permissions{
+			Chat:     true,
+			BidAward: false,
+		},
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		assert.NotNil(t, r.Body)
+		defer r.Body.Close()
+		var res rr.CreateCollaborationBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.Equal(t, body.Email, res.Email)
+		assert.Equal(t, body.Permissions.Chat, res.Permissions.Chat)
+		assert.Equal(t, body.Permissions.BidAward, res.Permissions.BidAward)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Collaborations.Create(context.Background(), projectID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}

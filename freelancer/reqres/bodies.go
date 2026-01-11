@@ -31,7 +31,7 @@ type InviteFreelancersBody struct {
 	FreelancerID int64 `json:"freelancer_id"`
 }
 
-type CreateProjectCollaborationsBody struct {
+type CreateCollaborationBody struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 	Title    string `json:"title"`

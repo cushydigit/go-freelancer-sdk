@@ -164,9 +164,9 @@ func (s *CollaborationsService) List(ctx context.Context, projectID int64) (*rr.
 
 // Creates a new project collaboration.
 // It maps to the `POST` `/projects/0.1/projects/{project_id}/collaborations` endpoint
-func (s *CollaborationsService) Create(ctx context.Context, projectID int64, b rr.CreateProjectCollaborationsBody) (*rr.RawResponse, error) {
+func (s *CollaborationsService) Create(ctx context.Context, projectID int64, b rr.CreateCollaborationBody) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%s/collaborations", endpoints.Projects, strconv.FormatInt(projectID, 10))
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, nil)
+	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
 // Performs an action on a collaboration.
