@@ -19,7 +19,7 @@ const (
 	ProjectsReviews             = "/projects/0.1/reviews"
 	ProjectsMilestones          = "/projects/0.1/milestones"
 	ProjectsMilestoneRequests   = "/projects/0.1/milestone_requests"
-	ProjectsHourlyContract      = "/projects/0.1/hourly_contracts"
+	ProjectsHourlyContract      = "/projects/0.1/hourly_contract_info"
 	ProjectsActive              = "/projects/0.1/projects/active"
 	ProjectsAll                 = "/projects/0.1/projects/all"
 	ProjectsFees                = "/projects/0.1/projects/fees"

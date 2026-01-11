@@ -91,7 +91,7 @@ func (s *ProjectsService) ListUpgradesFees(ctx context.Context, opts *rr.ListUpg
 // Returns bids for a single project. Employers will see bids in a sorted order, which begins with sponsored bids, then by bid ranking. Freelancers will receive the bid list ordered by date. Note: This method is expensive to compute so it is recommended that reputation and user projection options are not set.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/bids` endpoint
 func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *rr.ListProjectBidsOptions) (*rr.RawResponse, error) {
-	p := fmt.Sprintf("%s/%s/bids", endpoints.Projects, strconv.FormatInt(projectID, 10))
+	p := fmt.Sprintf("%s/%d/bids", endpoints.Projects, projectID)
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }

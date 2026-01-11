@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -582,6 +583,180 @@ func TestProjectService_InviteFreelancer_Body(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 	res, err := c.Services.Projects.InviteFreelancer(context.Background(), projectID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_ListUpgradesFees(t *testing.T) {
+	opts := rr.ListUpgradesFeesOptions{
+		Currencies:  []int64{1, 2, 3},
+		Project:     rr.Int64(100),
+		TaxIncluded: rr.Bool(false),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsFees, r.URL.Path)
+		// options
+		assert.Equal(t, "false", q.Get("tax_included"))
+		assert.Equal(t, "100", q.Get("project"))
+		assert.ElementsMatch(t, []string{"1", "2", "3"}, q["currencies[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+	res, err := c.Services.Projects.ListUpgradesFees(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestProjectService_ListBids(t *testing.T) {
+	projectID := int64(100)
+	opts := rr.ListProjectBidsOptions{
+		IsShortlisted: rr.Bool(true),
+		Limit:         rr.Int(10),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/bids", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("is_shortlisted"))
+		assert.Equal(t, "10", q.Get("limit"))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.ListBids(context.Background(), projectID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestProjectService_GetBidInfo(t *testing.T) {
+	projectID := int64(100)
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/bids_info", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.GetBidInfo(context.Background(), projectID)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+	log.Println(res)
+}
+
+func TestProjectService_ListMilestones(t *testing.T) {
+	projectID := int64(100)
+	opts := rr.ListProjectMilestonesOptions{
+		Statuses:   []rr.MilestoneStatus{rr.MilestoneStatusCanceled},
+		UserAvatar: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/milestones", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_avatar"))
+		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.ListMilestones(context.Background(), projectID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_ListMilestoneRequests(t *testing.T) {
+	projectID := int64(100)
+	opts := rr.ListProjectsMilestoneRequestsOptions{
+		Statuses:   []rr.MilestoneStatus{rr.MilestoneStatusCanceled},
+		UserAvatar: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/milestone_requests", endpoints.Projects, projectID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_avatar"))
+		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.ListMilestoneRequests(context.Background(), projectID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_GetHourlyContractInfo(t *testing.T) {
+	opts := rr.GetHourlyContractInfoOptions{
+		ProjectIDs:     []int64{1, 2, 3},
+		BillingDetails: rr.Bool(false),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsHourlyContract, r.URL.Path)
+		// options
+		assert.Equal(t, "false", q.Get("billing_details"))
+		assert.ElementsMatch(t, []string{"1", "2", "3"}, q["project_ids[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.GetHourlyContractInfo(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }

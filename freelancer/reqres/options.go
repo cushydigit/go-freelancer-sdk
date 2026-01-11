@@ -402,9 +402,9 @@ type GetHourlyContractInfoOptions struct {
 	ProjectIDs        []int64 `url:"project_ids[]"`
 	BidderIDs         []int64 `url:"bidder_ids[]"`
 	HourlyContractIDs []int64 `url:"hourly_contract_ids[]"`
-	projectOwnerIDs   []int64 `url:"project_owner_ids[]"`
-	billingDetails    *bool   `url:"billing_details"`
-	invoiceDetails    *bool   `url:"invoice_details"`
+	ProjectOwnerIDs   []int64 `url:"project_owner_ids[]"`
+	BillingDetails    *bool   `url:"billing_details"`
+	InvoiceDetails    *bool   `url:"invoice_details"`
 }
 
 type ListServicesOptions struct {
