@@ -129,7 +129,7 @@ func ListCountries() {
 }
 
 func ListCurrencies() {
-	res, err := client.Services.Projects.Extras.Currencies.List(context.Background(), nil)
+	res, err := client.Services.Projects.Currencies.List(context.Background(), nil)
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -140,7 +140,7 @@ func ListCurrencies() {
 }
 
 func ListBudgets() {
-	res, err := client.Services.Projects.Extras.Budgets.List(context.Background(), nil)
+	res, err := client.Services.Projects.Budgets.List(context.Background(), nil)
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -151,7 +151,7 @@ func ListBudgets() {
 }
 
 func ListCategories() {
-	res, err := client.Services.Projects.Extras.Categories.List(context.Background(), nil)
+	res, err := client.Services.Projects.Categories.List(context.Background(), nil)
 	if err != nil {
 		log.Printf("error: %v", err)
 		return

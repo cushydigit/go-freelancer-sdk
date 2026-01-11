@@ -366,7 +366,7 @@ func (s *JobsService) Search(ctx context.Context, opts *rr.SearchJobsOptions) (*
 
 // Returns a list of job bundles. Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name.
 // It maps to the `GET` `/projects/0.1/job_bundles` endpoint
-func (s *JobsService) ListJobBundles(ctx context.Context, opts *rr.ListJobBundlesOptions) (*rr.RawResponse, error) {
+func (s *JobBundlesService) List(ctx context.Context, opts *rr.ListJobBundlesOptions) (*rr.RawResponse, error) {
 	p := endpoints.ProjectsJobBundles
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
@@ -376,7 +376,7 @@ func (s *JobsService) ListJobBundles(ctx context.Context, opts *rr.ListJobBundle
 
 // Returns a list of job bundle categories.
 // It maps to the `GET` `/projects/0.1/job_bundle_categories` endpoint
-func (s *JobsService) ListJobBundleCategories(ctx context.Context, opts *rr.ListJobBundleCategoriesOptions) (*rr.RawResponse, error) {
+func (s *JobBundleCategoriesService) List(ctx context.Context, opts *rr.ListJobBundleCategoriesOptions) (*rr.RawResponse, error) {
 	p := endpoints.ProjectsJobBundleCategories
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)

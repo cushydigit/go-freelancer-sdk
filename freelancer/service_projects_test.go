@@ -1283,7 +1283,7 @@ func TestBidEditRequestsService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.EditRequests.List(context.Background(), bidID, &opts)
+	res, err := c.Services.Projects.BidEditRequests.List(context.Background(), bidID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1318,7 +1318,7 @@ func TestBidEditRequestsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.EditRequests.Create(context.Background(), body)
+	res, err := c.Services.Projects.BidEditRequests.Create(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1352,7 +1352,7 @@ func TestBidEditRequestsService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.EditRequests.Action(context.Background(), bidID, bidEditRequestID, body)
+	res, err := c.Services.Projects.BidEditRequests.Action(context.Background(), bidID, bidEditRequestID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1376,7 +1376,7 @@ func TestBidRatingsService_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.Ratings.Get(context.Background(), bidID)
+	res, err := c.Services.Projects.BidRatings.Get(context.Background(), bidID)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1404,7 +1404,7 @@ func TestBidRatingsService_GetByListOfBids(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.Ratings.GetByListOfBids(context.Background(), &opts)
+	res, err := c.Services.Projects.BidRatings.GetByListOfBids(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1438,7 +1438,7 @@ func TestBidRatingsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.Ratings.Create(context.Background(), bidID, body)
+	res, err := c.Services.Projects.BidRatings.Create(context.Background(), bidID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1473,7 +1473,131 @@ func TestBidRatingsService_Update(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.Ratings.Update(context.Background(), bidID, bidRatingID, body)
+	res, err := c.Services.Projects.BidRatings.Update(context.Background(), bidID, bidRatingID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestJobsService_List(t *testing.T) {
+	opts := rr.ListJobsOptions{
+		Jobs:      []int64{1, 2},
+		JobNames:  []string{"test", "test2"},
+		OnlyLocal: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsJobs, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("only_local"))
+		assert.ElementsMatch(t, []string{"1", "2"}, q["jobs[]"])
+		assert.ElementsMatch(t, []string{"test", "test2"}, q["job_names[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Jobs.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestJobsService_Search(t *testing.T) {
+	opts := rr.SearchJobsOptions{
+		Jobs:      []int64{1, 2},
+		JobNames:  []string{"test", "test2"},
+		OnlyLocal: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsJobsSearch, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("only_local"))
+		assert.ElementsMatch(t, []string{"1", "2"}, q["jobs[]"])
+		assert.ElementsMatch(t, []string{"test", "test2"}, q["job_names[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Jobs.Search(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestJobBundles_List(t *testing.T) {
+	opts := rr.ListJobBundlesOptions{
+		JobBundles: []int64{3, 4},
+		Lang:       rr.String("en"),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsJobBundles, r.URL.Path)
+		// options
+		assert.Equal(t, "en", q.Get("lang"))
+		assert.ElementsMatch(t, []string{"3", "4"}, q["job_bundles[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.JobBundles.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestJobBundleCategories_List(t *testing.T) {
+	opts := rr.ListJobBundleCategoriesOptions{
+		JobBundles: []int64{3, 4},
+		Lang:       rr.String("en"),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsJobBundleCategories, r.URL.Path)
+		// options
+		assert.Equal(t, "en", q.Get("lang"))
+		assert.ElementsMatch(t, []string{"3", "4"}, q["job_bundles[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.JobBundleCategories.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
