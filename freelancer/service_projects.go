@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/query"
@@ -24,7 +23,8 @@ func (s *ProjectsService) Create(ctx context.Context, b rr.CreateProjectBody) (*
 
 // Perform an action on a project
 // It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
-func (s *ProjectsService) Action(ctx context.Context, projectID int64, action rr.ActionProject) (*rr.RawResponse, error) {
+func (s *ProjectsService) Action(ctx context.Context, projectID int64, action rr.ActionProjectBody) (*rr.RawResponse, error) {
+
 	p := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, action)
 }
@@ -134,6 +134,7 @@ func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *rr.Ge
 }
 
 // TODO: refine with typed response
+// TODO: check the endpoint
 
 // Fetch the IP contract matching for the project id. If you are an employer it will return all of the contracts, ELSE we will return contract details specific to the logged-in user.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/ip_contract_info` endpoint
@@ -158,25 +159,28 @@ func (s *ProjectsService) Delete(ctx context.Context, projectID int64) (*rr.RawR
 // Returns a list of project collaboration data for a project.
 // it maps to the `GET` `/projects/0.1/projects/{project_id}/collaborations` endpoint
 func (s *CollaborationsService) List(ctx context.Context, projectID int64) (*rr.RawResponse, error) {
-	p := fmt.Sprintf("%s/%s/collaborations", endpoints.Projects, strconv.FormatInt(projectID, 10))
+	p := fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
 }
 
 // Creates a new project collaboration.
 // It maps to the `POST` `/projects/0.1/projects/{project_id}/collaborations` endpoint
 func (s *CollaborationsService) Create(ctx context.Context, projectID int64, b rr.CreateCollaborationBody) (*rr.RawResponse, error) {
-	p := fmt.Sprintf("%s/%s/collaborations", endpoints.Projects, strconv.FormatInt(projectID, 10))
+	p := fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
+// TODO: check the method
+
 // Performs an action on a collaboration.
-// it maps to the `POST` `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` endpoint
-func (s *CollaborationsService) Action(ctx context.Context, projectID int64, collaborationID int, b rr.ActionCollaboration) (*rr.RawResponse, error) {
-	p := fmt.Sprintf("%s/%s/collaborations/%d/actions", endpoints.Projects, strconv.FormatInt(projectID, 10), collaborationID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+// it maps to the `PUT` `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` endpoint
+func (s *CollaborationsService) Action(ctx context.Context, projectID int64, collaborationID int64, b rr.ActionCollaborationBody) (*rr.RawResponse, error) {
+	p := fmt.Sprintf("%s/%d/collaborations/%d/actions", endpoints.Projects, projectID, collaborationID)
+	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
 
 // TODO: refine with typed response
+// TODO: check the endpoint
 
 // Returns a list of all collaboration data for a user.
 // It maps toi the `GET` `/projects/0.1/collaborations` endpoint
@@ -191,7 +195,7 @@ func (s *CollaborationsService) ListAll(ctx context.Context) (*rr.RawResponse, e
 
 // Orders one of the available services.
 // It maps to the `POST` `/projects/0.1/services/{service_type}/{service_id}/order` endpoint
-func (s *ServicesService) Order(ctx context.Context, serviceID int, serviceType rr.ServiceType) (*rr.RawResponse, error) {
+func (s *ServicesService) Order(ctx context.Context, serviceID int64, serviceType rr.ServiceType) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%s/%d/order", endpoints.ProjectsServices, serviceType, serviceID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, nil)
 }
@@ -249,7 +253,7 @@ func (s *BidsService) Create(ctx context.Context, b rr.CreateBidBody) (*rr.RawRe
 
 // Performs an action on a bid.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
-func (s *BidsService) Action(ctx context.Context, bidID int64, b *rr.ActionBid) (*rr.RawResponse, error) {
+func (s *BidsService) Action(ctx context.Context, bidID int64, b rr.ActionBidBody) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
@@ -281,22 +285,22 @@ func (s *BidsService) CreateTimeTracking(ctx context.Context, bidID int64, b rr.
 // Return bid edit requests by bid id.
 // It maps to the `GET` `/projects/0.1/bids/{bid_id}/edit_requests` endpoint
 // the original name was Get but it was renamed to List due to returning list of edit requests
-func (s *BidEditRequestService) List(ctx context.Context, bidID int64, opts *rr.ListBidEditRequestsOptions) (*rr.ListBidEditRequestsResponse, error) {
-	p := fmt.Sprintf("%s/%d/edit_requests/", endpoints.ProjectsBids, bidID)
+func (s *BidEditRequestsService) List(ctx context.Context, bidID int64, opts *rr.ListBidEditRequestsOptions) (*rr.ListBidEditRequestsResponse, error) {
+	p := fmt.Sprintf("%s/%d/edit_requests", endpoints.ProjectsBids, bidID)
 	q := query.Values(opts)
 	return execute[*rr.ListBidEditRequestsResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
 // Create a bid edit request on a post accept awarded bid. With no pending bid edit request.
 // It maps to the `POST` `/projects/0.1/bids/edit_requests` endpoint
-func (s *BidEditRequestService) Create(ctx context.Context, b rr.CreateBidEditRequestsBody) (*rr.CreateBidEditRequestResponse, error) {
-	p := endpoints.ProjectsBidsBidEditRequests
+func (s *BidEditRequestsService) Create(ctx context.Context, b rr.CreateBidEditRequestBody) (*rr.CreateBidEditRequestResponse, error) {
+	p := endpoints.ProjectsBidEditRequests
 	return execute[*rr.CreateBidEditRequestResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
 // Employer perform action on a PENDING bid edit request.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}/edit_requests/{edit_request_id}` endpoint
-func (s *BidEditRequestService) Action(ctx context.Context, bidID, bidEditRequestID int64, b rr.ActionBidEditRequestsBody) (*rr.ActionBidEditRequestResponse, error) {
+func (s *BidEditRequestsService) Action(ctx context.Context, bidID, bidEditRequestID int64, b rr.ActionBidEditRequestBody) (*rr.ActionBidEditRequestResponse, error) {
 	p := fmt.Sprintf("%s/%d/edit_requests/%d", endpoints.ProjectsBids, bidID, bidEditRequestID)
 	return execute[*rr.ActionBidEditRequestResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
@@ -322,15 +326,15 @@ func (s *BidRatingsService) GetByListOfBids(ctx context.Context, opts *rr.GetByL
 
 // Rates a bid (creates a bid rating)
 // It maps to the `POST` `/projects/0.1/bids/{bid_id}/bid_ratings` endpoint
-func (s *BidRatingsService) Create(ctx context.Context, bidID int64, b rr.CreateBidRatingsBody) (*rr.RawResponse, error) {
+func (s *BidRatingsService) Create(ctx context.Context, bidID int64, b rr.CreateBidRatingBody) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
 // Updates an existing bid rating
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}/bid_ratings/{bid_rating_id}` endpoint
-func (s *BidRatingsService) Update(ctx context.Context, bidID int64, bidRatingId int64, b rr.UpdateBidRatingBody) (*rr.RawResponse, error) {
-	p := fmt.Sprintf("%s/%d/bid_ratings/%d", endpoints.ProjectsBids, bidID, bidRatingId)
+func (s *BidRatingsService) Update(ctx context.Context, bidID int64, bidRatingID int64, b rr.UpdateBidRatingBody) (*rr.RawResponse, error) {
+	p := fmt.Sprintf("%s/%d/bid_ratings/%d", endpoints.ProjectsBids, bidID, bidRatingID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
 

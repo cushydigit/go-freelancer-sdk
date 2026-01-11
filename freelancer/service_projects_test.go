@@ -127,19 +127,19 @@ func TestProjectsService_Action_Base(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Action(context.Background(), int64(projectID), rr.ActionProject{})
+	res, err := c.Services.Projects.Action(context.Background(), int64(projectID), rr.ActionProjectBody{})
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
 
 func TestProjectsService_Action_Body(t *testing.T) {
-	action := rr.ActionProject{
+	action := rr.ActionProjectBody{
 		ProjectID: 100,
 		Action:    rr.ProjectActionUpgrade,
 	}
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// check the body
-		var a rr.ActionProject
+		var a rr.ActionProjectBody
 		err := json.NewDecoder(r.Body).Decode(&a)
 		assert.NoError(t, err)
 		defer r.Body.Close()
@@ -865,4 +865,616 @@ func TestCollaborationService_Create(t *testing.T) {
 	res, err := c.Services.Projects.Collaborations.Create(context.Background(), projectID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
+}
+
+func TestCollaborationService_Action(t *testing.T) {
+	projectID := int64(100)
+	collaborationID := int64(4)
+	body := rr.ActionCollaborationBody{
+		Action: rr.CollaborationActionRevoke,
+		Permissions: rr.Permissions{
+			Chat:     true,
+			BidAward: false,
+		},
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/collaborations/%d/actions", endpoints.Projects, projectID, collaborationID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		assert.NotNil(t, r.Body)
+		defer r.Body.Close()
+		var res rr.ActionCollaborationBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.Equal(t, body.Action, res.Action)
+		assert.Equal(t, body.Permissions.Chat, res.Permissions.Chat)
+		assert.Equal(t, body.Permissions.BidAward, res.Permissions.BidAward)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Collaborations.Action(context.Background(), projectID, collaborationID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestCollaborationService_ListAll(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsCollaborations, r.URL.Path)
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Collaborations.ListAll(context.Background())
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestServicesService_Order(t *testing.T) {
+	serviceID := int64(150)
+	serviceType := rr.ServiceLocal
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%s/%d/order", endpoints.ProjectsServices, serviceType, serviceID)
+		assert.Equal(t, path, r.URL.Path)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Services.Order(context.Background(), serviceID, serviceType)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestServicesService_List(t *testing.T) {
+	opts := rr.ListServicesOptions{
+		Services: []int64{1, 2},
+		Statuses: []rr.ServiceStatusType{rr.ServiceStatusActive},
+		Titles:   []string{"t1", "t2"},
+		Compact:  rr.Bool(true),
+		Offset:   rr.Int(3),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsServices, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("compact"))
+		assert.Equal(t, "3", q.Get("offset"))
+		assert.ElementsMatch(t, []string{"1", "2"}, q["services[]"])
+		assert.ElementsMatch(t, []string{string(rr.ServiceStatusActive)}, q["statuses[]"])
+		assert.ElementsMatch(t, []string{"t1", "t2"}, q["titles[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Services.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestServicesService_SearchActive(t *testing.T) {
+	opts := rr.SearchActiveServicesOptions{
+		Query:   rr.String("test"),
+		Sort:    rr.Enum(rr.SortNewest),
+		Compact: rr.Bool(true),
+		Offset:  rr.Int(3),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsServicesActive, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("compact"))
+		assert.Equal(t, "3", q.Get("offset"))
+		assert.Equal(t, "test", q.Get("query"))
+		assert.Equal(t, string(rr.SortNewest), q.Get("sort"))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Services.SearchActive(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidsService_List(t *testing.T) {
+	opts := rr.ListBidsOptions{
+		Bids:          []int64{1, 2},
+		AwardStatuses: []rr.BidAwardStatus{rr.BidAwardStatusAwarded},
+		Compact:       rr.Bool(true),
+		Offset:        rr.Int(3),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsBids, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("compact"))
+		assert.Equal(t, "3", q.Get("offset"))
+		assert.ElementsMatch(t, []string{"1", "2"}, q["bids[]"])
+		assert.ElementsMatch(t, []string{string(rr.BidAwardStatusAwarded)}, q["award_statuses[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidsService_Get(t *testing.T) {
+	bidID := int64(100)
+	opts := rr.GetBidOptions{
+		Compact: rr.Bool(true),
+		Offset:  rr.Int(3),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("compact"))
+		assert.Equal(t, "3", q.Get("offset"))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.Get(context.Background(), bidID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidsService_Create(t *testing.T) {
+	body := rr.CreateBidBody{
+		ProjectID:   int64(100),
+		BidderID:    int64(200),
+		Amount:      100,
+		Description: "test",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsBids, r.URL.Path)
+		// body
+		var res rr.CreateBidBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.NotNil(t, res)
+		assert.Equal(t, body.ProjectID, res.ProjectID)
+		assert.Equal(t, body.BidderID, res.BidderID)
+		assert.Equal(t, body.Amount, res.Amount)
+		assert.Equal(t, body.Description, res.Description)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.Create(context.Background(), body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidsService_Action(t *testing.T) {
+	bidID := int64(100)
+	body := rr.ActionBidBody{
+		Action: rr.BidActionAward,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.ActionBidBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.NotNil(t, res)
+		assert.Equal(t, body.Action, res.Action)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.Action(context.Background(), bidID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidsService_Update(t *testing.T) {
+	bidID := int64(100)
+	body := rr.UpdateBidBody{
+		Amount:      100,
+		Description: "test",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.UpdateBidBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.NotNil(t, res)
+		assert.Equal(t, body.Amount, res.Amount)
+		assert.Equal(t, body.Description, res.Description)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.Update(context.Background(), bidID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidsService_GetTimeTracking(t *testing.T) {
+	bidID := int64(100)
+	opts := rr.GetTimeTrackingOptions{
+		Invoiced: rr.Bool(false),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+		assert.Equal(t, "false", q.Get("invoiced"))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.GetTimeTracking(context.Background(), bidID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidsService_CreateTimeTracking(t *testing.T) {
+	bidID := int64(100)
+	body := rr.CreateTimeTrackingBody{
+		Seconds: 1000,
+		Note:    "test",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+
+		path := fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.CreateTimeTrackingBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.NotNil(t, res)
+		assert.Equal(t, body.Seconds, res.Seconds)
+		assert.Equal(t, body.Note, res.Note)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.CreateTimeTracking(context.Background(), bidID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidEditRequestsService_List(t *testing.T) {
+	bidID := int64(100)
+	opts := rr.ListBidEditRequestsOptions{
+		Statuses:          []rr.BidStatus{rr.BidStatusAccepted},
+		BidEditRequestIDs: []int64{1, 2},
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/edit_requests", endpoints.ProjectsBids, bidID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+		assert.ElementsMatch(t, []string{string(rr.BidStatusAccepted)}, q["statuses[]"])
+		assert.ElementsMatch(t, []string{"1", "2"}, q["bid_edit_request_ids[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.EditRequests.List(context.Background(), bidID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidEditRequestsService_Create(t *testing.T) {
+	body := rr.CreateBidEditRequestBody{
+		BidID:     int64(1),
+		NewAmount: 100,
+		Comment:   "test",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsBidEditRequests, r.URL.Path)
+		// body
+		var res rr.CreateBidEditRequestBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.NotNil(t, res)
+		assert.Equal(t, body.BidID, res.BidID)
+		assert.Equal(t, body.NewAmount, res.NewAmount)
+		assert.Equal(t, body.Comment, res.Comment)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.EditRequests.Create(context.Background(), body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidEditRequestsService_Action(t *testing.T) {
+	bidID := int64(100)
+	bidEditRequestID := int64(200)
+	body := rr.ActionBidEditRequestBody{
+		Action: rr.BidEditRequestActionAccept,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/edit_requests/%d", endpoints.ProjectsBids, bidID, bidEditRequestID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.ActionBidEditRequestBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.NotNil(t, res)
+		assert.Equal(t, body.Action, res.Action)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.EditRequests.Action(context.Background(), bidID, bidEditRequestID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidRatingsService_Get(t *testing.T) {
+	bidID := int64(100)
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
+		assert.Equal(t, path, r.URL.Path)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.Ratings.Get(context.Background(), bidID)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidRatingsService_GetByListOfBids(t *testing.T) {
+	opts := rr.GetByListOfBidsOptions{
+		Bids: []int64{1, 2, 3},
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsBidRatings, r.URL.Path)
+		// options
+		assert.ElementsMatch(t, []string{"1", "2", "3"}, q["bids[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.Ratings.GetByListOfBids(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidRatingsService_Create(t *testing.T) {
+	bidID := int64(199)
+	body := rr.CreateBidRatingBody{
+		Rating:  10,
+		Comment: "test",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.CreateBidRatingBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.Equal(t, body.Rating, res.Rating)
+		assert.Equal(t, body.Comment, res.Comment)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.Ratings.Create(context.Background(), bidID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestBidRatingsService_Update(t *testing.T) {
+	bidID := int64(199)
+	bidRatingID := int64(9)
+	body := rr.UpdateBidRatingBody{
+		Rating:  10,
+		Comment: "test",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d/bid_ratings/%d", endpoints.ProjectsBids, bidID, bidRatingID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.UpdateBidRatingBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.Equal(t, body.Rating, res.Rating)
+		assert.Equal(t, body.Comment, res.Comment)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Bids.Ratings.Update(context.Background(), bidID, bidRatingID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
 }

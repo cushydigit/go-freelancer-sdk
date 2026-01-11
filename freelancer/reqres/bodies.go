@@ -36,10 +36,7 @@ type CreateCollaborationBody struct {
 	Username string `json:"username"`
 	Title    string `json:"title"`
 	// required
-	Permissions struct {
-		Chat     bool `json:"CHAT"`
-		BidAward bool `json:"BID_AWARD"`
-	}
+	Permissions Permissions `json:"permissions"`
 }
 
 // ProjectID, BidderID, Amount, Period (days), MilestonePercentage (0-100) required
@@ -62,24 +59,24 @@ type UpdateBidBody struct {
 // StartTime and Seconds (Duration of session in seconds) required
 type CreateTimeTrackingBody struct {
 	StartTime int64  `json:"time_start"`
-	Seconds   int    `json:"seconds"`
+	Seconds   int64  `json:"seconds"`
 	Note      string `json:"note"`
 }
 
 // Required: BidID, NewAmount, NewPeriod
-type CreateBidEditRequestsBody struct {
-	BidID     int64 `json:"bid_id"`
-	NewAmount int   `json:"new_amount"`
-	NewPeriod int   `json:"new_period"`
-	Comment   int   `json:"comment"`
+type CreateBidEditRequestBody struct {
+	BidID     int64  `json:"bid_id"`
+	NewAmount int    `json:"new_amount"`
+	NewPeriod int    `json:"new_period"`
+	Comment   string `json:"comment"`
 }
 
-type ActionBidEditRequestsBody struct {
+type ActionBidEditRequestBody struct {
 	Action BidEditRequestAction `json:"action"`
 }
 
 // Rating required
-type CreateBidRatingsBody struct {
+type CreateBidRatingBody struct {
 	Rating  int    `json:"rating"`
 	Comment string `json:"comment"`
 }
