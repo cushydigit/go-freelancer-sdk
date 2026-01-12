@@ -33,7 +33,11 @@ func newServices(c *Client) *Services {
 	s.Users.Self = &SelfService{client: c}
 	s.Users.SelfJob = &SelfJobsService{client: c}
 	s.Users.Profiles = &ProfilesService{client: c}
-	s.Users.Extras = &UsersExtrasService{client: c}
+	s.Users.Reputations = &ReputationsService{client: c}
+	s.Users.Enterprises = &EnterprisesService{client: c}
+	s.Users.Portfolios = &PortfoliosService{client: c}
+	s.Users.Violations = &ViolationsService{client: c}
+	s.Users.Pools = &PoolsService{client: c}
 
 	// init common services
 	s.Common = &CommonService{client: c}
@@ -77,16 +81,24 @@ type CurrenciesService struct{ client *Client }
 type CategoriesService struct{ client *Client }
 
 type UsersService struct {
-	client   *Client
-	Self     *SelfService
-	SelfJob  *SelfJobsService
-	Profiles *ProfilesService
-	Extras   *UsersExtrasService
+	client      *Client
+	Self        *SelfService
+	SelfJob     *SelfJobsService
+	Profiles    *ProfilesService
+	Reputations *ReputationsService
+	Enterprises *EnterprisesService
+	Portfolios  *PortfoliosService
+	Violations  *ViolationsService
+	Pools       *PoolsService
 }
 
 type SelfService struct{ client *Client }
 type SelfJobsService struct{ client *Client }
 type ProfilesService struct{ client *Client }
-type UsersExtrasService struct{ client *Client }
+type ReputationsService struct{ client *Client }
+type EnterprisesService struct{ client *Client }
+type PortfoliosService struct{ client *Client }
+type ViolationsService struct{ client *Client }
+type PoolsService struct{ client *Client }
 
 type CommonService struct{ client *Client }

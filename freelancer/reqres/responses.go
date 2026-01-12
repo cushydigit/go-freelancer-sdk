@@ -110,7 +110,7 @@ type ListUsersPortfoliosResponse struct {
 	Result json.RawMessage `json:"result"`
 }
 
-type ListSelfLoginDevicesResponse struct {
+type ListSelfDevicesResponse struct {
 	base
 	Result struct {
 		Devices []*Device `json:"devices"`

@@ -880,7 +880,7 @@ type ListUsersOptions struct {
 
 type SearchFreelancerOptions struct {
 	Query                         *string  `url:"query"`
-	JobsIDs                       []int64  `url:"jobs[]"`
+	JobIDs                        []int64  `url:"jobs[]"`
 	Skills                        []int64  `url:"skills[]"`
 	Countries                     []string `url:"countries[]"`
 	HourlyRateMin                 *int     `url:"hourly_rate_min"`
@@ -976,8 +976,8 @@ type GetSelfInfoOptions struct {
 }
 
 type ListReputationsOptions struct {
-	Users        []int64   `url:"users"`
-	Jobs         []int64   `url:"jobs"`
+	Users        []int64   `url:"users[]"`
+	Jobs         []int64   `url:"jobs[]"`
 	Role         *RoleType `url:"role"`
 	JobHistory   *bool     `url:"job_history"`
 	ProjectStats *bool     `url:"project_stats"`

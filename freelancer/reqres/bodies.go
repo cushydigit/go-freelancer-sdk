@@ -136,25 +136,29 @@ type JobsBody struct {
 	Jobs []int64 `json:"jobs[]"`
 }
 
+type AddJobsBody = JobsBody
+type SetJobsBody = JobsBody
+type DeleteJobsBody = JobsBody
+
 type CreateProfileBody struct {
-	Tagline     string `json:"tagline"`
-	HourlyRate  int    `json:"hourly_Rate"`
-	Description string `json:"description"`
-	ProfileName string `json:"profile_name,omitempty"`
-	SkillIDs    []int  `json:"skill_ids,omitempty"`
+	Tagline     string  `json:"tagline"`
+	HourlyRate  int     `json:"hourly_Rate"`
+	Description string  `json:"description"`
+	ProfileName string  `json:"profile_name,omitempty"`
+	SkillIDs    []int64 `json:"skill_ids,omitempty"`
 }
 
 type UpdateProfileBody struct {
-	ProfileID   int    `json:"profile_id"`
-	Tagline     string `json:"tagline,omitempty"`
-	HourlyRate  int    `json:"hourly_Rate,omitempty"`
-	Description string `json:"description,omitempty"`
-	ProfileName string `json:"profile_name,omitempty"`
-	SkillIDs    []int  `json:"skill_ids,omitempty"`
+	ProfileID   int64   `json:"profile_id"`
+	Tagline     string  `json:"tagline,omitempty"`
+	HourlyRate  int     `json:"hourly_Rate,omitempty"`
+	Description string  `json:"description,omitempty"`
+	ProfileName string  `json:"profile_name,omitempty"`
+	SkillIDs    []int64 `json:"skill_ids,omitempty"`
 }
 
 type CreateViolationBody struct {
-	ContextID        int                       `json:"context_id"`
+	ContextID        int64                     `json:"context_id"`
 	ContextType      ViolationContext          `json:"context_type"`
 	ViolatorUserID   int64                     `json:"violator_user_id"`
 	Reason           ViolationReason           `json:"reason"`

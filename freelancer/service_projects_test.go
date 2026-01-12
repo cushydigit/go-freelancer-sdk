@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -670,7 +669,6 @@ func TestProjectService_GetBidInfo(t *testing.T) {
 	res, err := c.Services.Projects.GetBidInfo(context.Background(), projectID)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
-	log.Println(res)
 }
 
 func TestProjectService_ListMilestones(t *testing.T) {
