@@ -703,7 +703,7 @@ func TestProjectService_ListMilestones(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
-func TestProjectService_ListMilestoneRequests(t *testing.T) {
+func TestProjectService_List(t *testing.T) {
 	projectID := int64(100)
 	opts := rr.ListProjectsMilestoneRequestsOptions{
 		Statuses:   []rr.MilestoneStatus{rr.MilestoneStatusCanceled},
@@ -1598,6 +1598,546 @@ func TestJobBundleCategories_List(t *testing.T) {
 	c.SetBaseUrl(ts.URL)
 
 	res, err := c.Services.Projects.JobBundleCategories.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestonesService_List(t *testing.T) {
+	opts := rr.ListMilestonesOptions{
+		Projects:   []int64{1, 2},
+		Statuses:   []rr.MilestoneStatus{rr.MilestoneStatusCanceled},
+		SortField:  rr.Enum(rr.SortFieldsBidAvgUsd),
+		UserStatus: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsMilestones, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_status"))
+		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
+		assert.ElementsMatch(t, []string{"1", "2"}, q["projects[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Milestones.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestonesService_Get(t *testing.T) {
+	milestoneID := int64(100)
+	opts := rr.GetMilestoneOptions{
+		UserAvatar: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_avatar"))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Milestones.Get(context.Background(), milestoneID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestonesService_Create(t *testing.T) {
+	body := rr.CreateMilestoneBody{
+		ProjectID:   int64(100),
+		BidderID:    int64(199),
+		Amount:      200,
+		Reason:      rr.MilestoneCreateReasonFullPayment,
+		Description: "test2",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsMilestones, r.URL.Path)
+		// body
+		var res rr.CreateBidBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.ProjectID, res.ProjectID)
+		assert.Equal(t, body.BidderID, res.BidderID)
+		assert.Equal(t, body.Reason, body.Reason)
+		assert.Equal(t, body.Amount, body.Amount)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Milestones.Create(context.Background(), body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestonesService_Action(t *testing.T) {
+	milestoneID := int64(100)
+	body := rr.ActionMilestoneBody{
+		Action: rr.MilestoneActionCancel,
+		Amount: 200,
+		Reason: rr.MilestoneActionReasonAccidentallyCreated,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+
+		path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.ActionMilestoneBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.Action, res.Action)
+		assert.Equal(t, body.Reason, body.Reason)
+		assert.Equal(t, body.Amount, body.Amount)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Milestones.Action(context.Background(), milestoneID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestoneRequestsService_List(t *testing.T) {
+	opts := rr.ListMilestoneRequestsOptions{
+		Projects:   []int64{1, 2},
+		Statuses:   []rr.MilestoneStatus{rr.MilestoneStatusCanceled},
+		SortField:  rr.Enum(rr.SortFieldsBidAvgUsd),
+		UserStatus: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsMilestoneRequests, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_status"))
+		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
+		assert.ElementsMatch(t, []string{"1", "2"}, q["projects[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.MilestoneRequests.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestoneRequestsService_Get(t *testing.T) {
+	milestoneRequestID := int64(100)
+	opts := rr.GetMilestoneRequestOptions{
+		UserAvatar: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
+		assert.Equal(t, path, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_avatar"))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.MilestoneRequests.Get(context.Background(), milestoneRequestID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestoneRequestsService_Create(t *testing.T) {
+	body := rr.CreateMilestoneRequestBody{
+		ProjectID:   int64(100),
+		Amount:      200,
+		Description: "test2",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsMilestoneRequests, r.URL.Path)
+		// body
+		var res rr.CreateMilestoneRequestBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.ProjectID, res.ProjectID)
+		assert.Equal(t, body.Amount, body.Amount)
+		assert.Equal(t, body.Description, res.Description)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.MilestoneRequests.Create(context.Background(), body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestoneRequestsService_Action(t *testing.T) {
+	milestoneRequestID := int64(100)
+	body := rr.ActionMilestoneRequestBody{
+		Action: rr.MilestoneActionRequestAccept,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.ActionMilestoneRequestBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.Action, res.Action)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.MilestoneRequests.Action(context.Background(), milestoneRequestID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestReviewsService_List(t *testing.T) {
+	opts := rr.ListReviewsOptions{
+		Projects:    []int64{1, 2},
+		ReviewTypes: []rr.ReviewType{rr.ReviewTypeProject},
+		UserStatus:  rr.Bool(true),
+		Limit:       rr.Int(10),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsReviews, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_status"))
+		assert.Equal(t, "10", q.Get("limit"))
+		assert.ElementsMatch(t, []string{string(rr.ReviewTypeProject)}, q["review_types[]"])
+		assert.ElementsMatch(t, []string{"1", "2"}, q["projects[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Reviews.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestReviewsService_Create(t *testing.T) {
+	body := rr.CreateReviewBody{
+		ProjectID:  int64(100),
+		Comment:    "test",
+		ReviewType: rr.ReviewTypeProject,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsReviews, r.URL.Path)
+		// body
+		var res rr.CreateReviewBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.ProjectID, res.ProjectID)
+		assert.Equal(t, body.Comment, body.Comment)
+		assert.Equal(t, body.ReviewType, res.ReviewType)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Reviews.Create(context.Background(), body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestReviewsService_Action(t *testing.T) {
+	reviewID := int64(100)
+	body := rr.ActionReviewBody{
+		Action:     rr.ReviewActionFeature,
+		ReviewType: rr.ReviewTypeContest,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.ProjectsReviews, reviewID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.ActionReviewBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.Action, res.Action)
+		assert.Equal(t, body.ReviewType, res.ReviewType)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Reviews.Action(context.Background(), reviewID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestExpertGuaranteesService_List(t *testing.T) {
+	opts := rr.ListExpertGuaranteesOptions{
+		Projects: []int64{1, 2},
+		Limit:    rr.Int(10),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsExpertGuarantees, r.URL.Path)
+		// options
+		assert.Equal(t, "10", q.Get("limit"))
+		assert.ElementsMatch(t, []string{"1", "2"}, q["projects[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.ExpertGuarantees.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestExpertGuaranteesService_Action(t *testing.T) {
+	expertGuaranteesID := int64(100)
+	body := rr.ActionExpertGuaranteesBody{
+		Action: rr.ExpertGuaranteesActionRelease,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		path := fmt.Sprintf("%s/%d", endpoints.ProjectsExpertGuarantees, expertGuaranteesID)
+		assert.Equal(t, path, r.URL.Path)
+		// body
+		var res rr.ActionExpertGuaranteesBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.Action, res.Action)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.ExpertGuarantees.Action(context.Background(), expertGuaranteesID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestExpertCurrencies_List(t *testing.T) {
+	opts := rr.ListCurrenciesOptions{
+		CurrencyCodes:             []string{"usd", "cad"},
+		CurrencyIDs:               []int64{1, 2},
+		IncludeExternalCurrencies: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsCurrencies, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("include_external_currencies"))
+		assert.ElementsMatch(t, []string{"1", "2"}, q["currency_ids[]"])
+		assert.ElementsMatch(t, []string{"usd", "cad"}, q["currency_codes[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Currencies.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestExpertCategories_List(t *testing.T) {
+	opts := rr.ListCategoriesOptions{
+		Categories: []int64{1, 2},
+		Lang:       rr.String("en"),
+		SeoDetails: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsCategories, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("seo_details"))
+		assert.Equal(t, "en", q.Get("lang"))
+		assert.ElementsMatch(t, []string{"1", "2"}, q["categories[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Categories.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestExpertBudgets_List(t *testing.T) {
+	opts := rr.ListBudgetsOptions{
+		CurrencyCodes:   []string{"usd", "cad"},
+		Lang:            rr.String("en"),
+		CurrencyDetails: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, endpoints.ProjectsBudgets, r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("currency_details"))
+		assert.Equal(t, "en", q.Get("lang"))
+		assert.ElementsMatch(t, []string{"usd", "cad"}, q["currency_codes[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, err := c.Services.Projects.Budgets.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 

@@ -400,7 +400,7 @@ func (s *MilestonesService) List(ctx context.Context, opts *rr.ListMilestonesOpt
 
 // Returns information about a specific milestone.
 // It maps to the `GET` `/projects/0.1/milestones/{milestone_id}` endpoint
-func (s *MilestonesService) GetByID(ctx context.Context, milestoneID int, opts *rr.GetMilestoneOptions) (*rr.RawResponse, error) {
+func (s *MilestonesService) Get(ctx context.Context, milestoneID int64, opts *rr.GetMilestoneOptions) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
@@ -415,7 +415,7 @@ func (s *MilestonesService) Create(ctx context.Context, b rr.CreateMilestoneBody
 
 // Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
 // It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
-func (s *MilestonesService) Action(ctx context.Context, milestoneID int, b rr.ActionMilestoneBody) (*rr.RawResponse, error) {
+func (s *MilestonesService) Action(ctx context.Context, milestoneID int64, b rr.ActionMilestoneBody) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
@@ -424,7 +424,7 @@ func (s *MilestonesService) Action(ctx context.Context, milestoneID int, b rr.Ac
 
 // Returns a list of milestone requests.
 // It maps to the `GET` `/projects/0.1/milestone_requests` endpoint
-func (s *MilestoneRequestsService) List(ctx context.Context, opts *rr.ListMilestonesRequestsOptions) (*rr.RawResponse, error) {
+func (s *MilestoneRequestsService) List(ctx context.Context, opts *rr.ListMilestoneRequestsOptions) (*rr.RawResponse, error) {
 	p := endpoints.ProjectsMilestoneRequests
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
@@ -434,7 +434,7 @@ func (s *MilestoneRequestsService) List(ctx context.Context, opts *rr.ListMilest
 
 // Returns information about a specific milestone request.
 // It maps to the `GET` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
-func (s *MilestoneRequestsService) Get(ctx context.Context, milestoneRequestID int, opts *rr.GetMilestoneRequestOptions) (*rr.RawResponse, error) {
+func (s *MilestoneRequestsService) Get(ctx context.Context, milestoneRequestID int64, opts *rr.GetMilestoneRequestOptions) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
@@ -449,7 +449,7 @@ func (s *MilestoneRequestsService) Create(ctx context.Context, b rr.CreateMilest
 
 // Perform an action on a milestone request.
 // It maps to the `PUT` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
-func (s *MilestoneRequestsService) Action(ctx context.Context, milestoneRequestID int, b rr.ActionMilestoneRequestBody) (*rr.RawResponse, error) {
+func (s *MilestoneRequestsService) Action(ctx context.Context, milestoneRequestID int64, b rr.ActionMilestoneRequestBody) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
@@ -477,13 +477,13 @@ func (s *ReviewsService) Create(ctx context.Context, b rr.CreateReviewBody) (*rr
 
 // Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
 // It maps to the `PUT` `/projects/0.1/reviews/{review_id}` endpoint
-func (s *ReviewsService) Action(ctx context.Context, reviewID int64, b rr.ReviewActionBody) (*rr.RawResponse, error) {
+func (s *ReviewsService) Action(ctx context.Context, reviewID int64, b rr.ActionReviewBody) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%d", endpoints.ProjectsReviews, reviewID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
 
 // --------------------------------------
-// PROJECTS-EXTRAS
+// PROJECTS-OTHERS
 // --------------------------------------
 
 // TODO: refine with typed response
@@ -498,7 +498,7 @@ func (s *ExpertGuaranteesService) List(ctx context.Context, opts *rr.ListExpertG
 
 // Perform an action on a expert guarantee.
 // It maps to the `PUT` `/projects/0.1/expert_guarantees/{expert_guarantee_id}` endpoint
-func (s *ExpertGuaranteesService) Action(ctx context.Context, expertGuaranteesID int64, b rr.ExpertGuaranteesActionRequestBody) (*rr.RawResponse, error) {
+func (s *ExpertGuaranteesService) Action(ctx context.Context, expertGuaranteesID int64, b rr.ActionExpertGuaranteesBody) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%d", endpoints.ProjectsExpertGuarantees, expertGuaranteesID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }

@@ -105,7 +105,7 @@ type ActionMilestoneBody struct {
 // ProjectID, BidID, Amount and Description are required
 type CreateMilestoneRequestBody struct {
 	ProjectID   int64  `json:"project_id"`
-	BidID       int    `json:"bid_id"`
+	BidID       int64  `json:"bid_id"`
 	Amount      int    `json:"amount"`
 	Description string `json:"description"`
 }
@@ -123,12 +123,12 @@ type CreateReviewBody struct {
 	Role       RoleType   `json:"role"`
 }
 
-type ReviewActionBody struct {
+type ActionReviewBody struct {
 	Action     ReviewAction `json:"action"`
 	ReviewType ReviewType   `json:"review_type"`
 }
 
-type ExpertGuaranteesActionRequestBody struct {
+type ActionExpertGuaranteesBody struct {
 	Action ExpertGuaranteesAction `json:"action"`
 }
 

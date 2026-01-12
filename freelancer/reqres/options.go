@@ -673,7 +673,7 @@ type GetMilestoneOptions struct {
 	EquipmentGroupDetails       *bool `url:"equipment_group_details"`
 }
 
-type ListMilestonesRequestsOptions struct {
+type ListMilestoneRequestsOptions struct {
 	MilestoneRequests           []int64           `url:"milestone_requests[]"`
 	Projects                    []int64           `url:"projects[]"`
 	ProjectOwners               []int64           `url:"project_owners[]"`
