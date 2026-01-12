@@ -27,7 +27,7 @@ func TestClientDoSuccess(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	c := NewClient("token", WithHttpClient(ts.Client()))
+	c := NewClient("token", WithHttpClient(ts.Client()), WithDebug(true))
 	c.SetBaseUrl(ts.URL)
 
 	data, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
@@ -119,6 +119,34 @@ func TestClientRequestBody(t *testing.T) {
 	c.SetBaseUrl(ts.URL)
 	_, err := c.do(context.Background(), http.MethodPost, "/test", nil, bytes.NewReader([]byte(`{"name": "Alice", "age": 30}`)))
 	assert.NoError(t, err)
+}
+
+func TestClient_GetBaseUrl(t *testing.T) {
+	c := NewClient("token")
+	assert.Equal(t, endpoints.APIMainURL, c.GetBaseUrl())
+	c.SetBaseUrl(endpoints.APISandBoxURL)
+	assert.Equal(t, endpoints.APISandBoxURL, c.GetBaseUrl())
+}
+
+func TestClient_SetUseRateLimit(t *testing.T) {
+	c := NewClient("token")
+	c.SetUseRateLimit(true)
+	assert.Equal(t, true, c.useRateLimit)
+	c.SetUseRateLimit(false)
+	assert.Equal(t, false, c.useRateLimit)
+}
+
+func TestClient_NewClient(t *testing.T) {
+	apiToken := "token"
+	opts := []ClientOption{
+		WithSandBox(),
+		WithHttpClient(&http.Client{}),
+		WithDebug(true),
+	}
+	c := NewClient(apiToken, opts...)
+	if c.httpClient == nil || !c.debugMode || c.baseURL != endpoints.APISandBoxURL {
+		t.Errorf("unexpected configuration: %v", c)
+	}
 }
 
 func TestExecuteInvalidJSON(t *testing.T) {
