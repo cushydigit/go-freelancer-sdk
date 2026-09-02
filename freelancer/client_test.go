@@ -128,14 +128,6 @@ func TestClient_GetBaseUrl(t *testing.T) {
 	assert.Equal(t, endpoints.APISandBoxURL, c.GetBaseUrl())
 }
 
-func TestClient_SetUseRateLimit(t *testing.T) {
-	c := NewClient("token")
-	c.SetUseRateLimit(true)
-	assert.Equal(t, true, c.useRateLimit)
-	c.SetUseRateLimit(false)
-	assert.Equal(t, false, c.useRateLimit)
-}
-
 func TestClient_NewClient(t *testing.T) {
 	apiToken := "token"
 	opts := []ClientOption{

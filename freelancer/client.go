@@ -1,4 +1,3 @@
-// Package freelancer provides a Go SDK for interacting with the Freelancer API.
 package freelancer
 
 import (
@@ -21,19 +20,14 @@ func (c *Client) GetBaseUrl() string {
 func (c *Client) SetBaseUrl(url string) {
 	c.baseURL = url
 }
-func (c *Client) SetUseRateLimit(enabled bool) {
-	c.useRateLimit = enabled
-}
 
 type Client struct {
-	httpClient  *http.Client
-	logger      *log.Logger
-	rateLimiter *RateLimiter
+	httpClient *http.Client
+	logger     *log.Logger
 
-	apiToken     string
-	baseURL      string
-	useRateLimit bool
-	debugMode    bool
+	apiToken  string
+	baseURL   string
+	debugMode bool
 
 	Services *Services
 }
@@ -59,11 +53,9 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
-		apiToken:     apiToken,
-		baseURL:      endpoints.APIMainURL,
-		debugMode:    false,
-		useRateLimit: true,
-		rateLimiter:  newRateLimiter(),
+		apiToken:  apiToken,
+		baseURL:   endpoints.APIMainURL,
+		debugMode: false,
 	}
 
 	for _, opt := range opts {
@@ -96,14 +88,7 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 	// Set headers
 	req.Header.Set("freelancer-oauth-v1", c.apiToken)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "GoFreelancerSDK/1.2 (+github.com/cushydigit/go-freelancer-sdk)")
-
-	// Wait for rate limit
-	if c.useRateLimit {
-		if err := c.rateLimiter.wait(ctx); err != nil {
-			return nil, fmt.Errorf("rate limit: %w", err)
-		}
-	}
+	req.Header.Set("User-Agent", "GoFreelancerSDK/1.4 (+github.com/cushydigit/go-freelancer-sdk)")
 
 	// Send request
 	if c.debugMode {
@@ -114,11 +99,6 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 		return nil, fmt.Errorf("network error: %w", err)
 	}
 	defer resp.Body.Close()
-
-	// Update rate limit
-	if c.useRateLimit {
-		c.rateLimiter.updateFromHeader(resp.Header)
-	}
 
 	// Handle response
 	if c.debugMode {
