@@ -88,16 +88,14 @@ func (s *ProfilesService) Create(ctx context.Context, b rr.CreateProfileBody) (*
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
-// TODO: the api does not have solid on this endpoint (the get should not have body)
-// TODO: refined with typed response
+// NOTE: the api does not have solid on this endpoint (the get should not have body)
+
 // Get profile(s)
 // It maps to the `GET` `/users/0.1/profiles` endpoint.
 func (s *ProfilesService) Get(ctx context.Context) (*rr.RawResponse, *ResponseMeta, error) {
 	p := endpoints.UsersProfiles
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
 }
-
-// TODO: refine with typed response
 
 // Update a profile
 // It maps to the `PUT` `/users/0.1/profiles` endpoint.
@@ -117,8 +115,6 @@ func (s *ReputationsService) List(ctx context.Context, opts *rr.ListReputationsO
 	q := query.Values(opts)
 	return execute[*rr.ListUsersReputationsResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
-
-// TODO: refine with typed response
 
 // Returns a list of enterprises.
 // It maps to the `GET` `/users/0.1/enterprises` endpoint.
@@ -142,8 +138,6 @@ func (s *ViolationsService) Create(ctx context.Context, b rr.CreateViolationBody
 	p := endpoints.UsersViolationReports
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
-
-// TODO: refine with typed response
 
 // Returns a list of pools belonging to the current user.
 // It maps to the `GET` `/users/0.1/pools` endpoint.

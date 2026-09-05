@@ -41,7 +41,6 @@ func (e *APIError) Error() string {
 
 }
 
-// TODO: add to changelog
 // IsAPIError returns the *APIError and a boolean if the error is an API-specific failure.
 func IsAPIError(err error) (*APIError, bool) {
 	var apiErr *APIError
