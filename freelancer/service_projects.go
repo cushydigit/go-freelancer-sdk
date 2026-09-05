@@ -24,7 +24,6 @@ func (s *ProjectsService) Create(ctx context.Context, b rr.CreateProjectBody) (*
 // Perform an action on a project
 // It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
 func (s *ProjectsService) Action(ctx context.Context, projectID int64, action rr.ActionProjectBody) (*rr.RawResponse, error) {
-
 	p := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, action)
 }
@@ -76,8 +75,6 @@ func (s *ProjectsService) InviteFreelancer(ctx context.Context, projectID int64,
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
-// TODO: Refine the typed response with
-
 // Returns the project upgrade fees for a given list of currencies. Also checks if the current user is eligible for free upgrades if requested.
 // It maps to the `GET` `/projects/0.1/projects/fees` endpoint
 func (s *ProjectsService) ListUpgradesFees(ctx context.Context, opts *rr.ListUpgradesFeesOptions) (*rr.RawResponse, error) {
@@ -86,8 +83,6 @@ func (s *ProjectsService) ListUpgradesFees(ctx context.Context, opts *rr.ListUpg
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
-// TODO: Refine the typed response with
-
 // Returns bids for a single project. Employers will see bids in a sorted order, which begins with sponsored bids, then by bid ranking. Freelancers will receive the bid list ordered by date. Note: This method is expensive to compute so it is recommended that reputation and user projection options are not set.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/bids` endpoint
 func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *rr.ListProjectBidsOptions) (*rr.RawResponse, error) {
@@ -95,8 +90,6 @@ func (s *ProjectsService) ListBids(ctx context.Context, projectID int64, opts *r
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
-
-// TODO: refine with typed response
 
 // Returns information for posting bids on a project.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/bids_info` endpoint
@@ -113,8 +106,6 @@ func (s *ProjectsService) ListMilestones(ctx context.Context, projectID int64, o
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
-// TODO: refine with typed response
-
 // Returns a list of milestone requests by freelancers for a project.
 // it maps to the `GET` `/projects/0.1/projects/{project_id}/milestone_requests` endpoint
 func (s *ProjectsService) ListMilestoneRequests(ctx context.Context, projectID int64, opts *rr.ListProjectsMilestoneRequestsOptions) (*rr.RawResponse, error) {
@@ -123,8 +114,6 @@ func (s *ProjectsService) ListMilestoneRequests(ctx context.Context, projectID i
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
-// TODO: refine with typed response
-
 // Fetch the hourly contract matching the desired query.
 // It maps to the `GET` `/projects/0.1/hourly_contract_info` endpoint
 func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *rr.GetHourlyContractInfoOptions) (*rr.RawResponse, error) {
@@ -132,9 +121,6 @@ func (s *ProjectsService) GetHourlyContractInfo(ctx context.Context, opts *rr.Ge
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
-
-// TODO: refine with typed response
-// TODO: check the endpoint
 
 // Fetch the IP contract matching for the project id. If you are an employer it will return all of the contracts, ELSE we will return contract details specific to the logged-in user.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}/ip_contract_info` endpoint
@@ -154,8 +140,6 @@ func (s *ProjectsService) Delete(ctx context.Context, projectID int64) (*rr.RawR
 // PROJECTS-COLLABORATIONS
 // --------------------------------------
 
-// TODO: refine with typed response
-
 // Returns a list of project collaboration data for a project.
 // it maps to the `GET` `/projects/0.1/projects/{project_id}/collaborations` endpoint
 func (s *CollaborationsService) List(ctx context.Context, projectID int64) (*rr.RawResponse, error) {
@@ -170,8 +154,6 @@ func (s *CollaborationsService) Create(ctx context.Context, projectID int64, b r
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
 }
 
-// TODO: check the method
-
 // Performs an action on a collaboration.
 // it maps to the `PUT` `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` endpoint
 func (s *CollaborationsService) Action(ctx context.Context, projectID int64, collaborationID int64, b rr.ActionCollaborationBody) (*rr.RawResponse, error) {
@@ -179,11 +161,8 @@ func (s *CollaborationsService) Action(ctx context.Context, projectID int64, col
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
 
-// TODO: refine with typed response
-// TODO: check the endpoint
-
 // Returns a list of all collaboration data for a user.
-// It maps toi the `GET` `/projects/0.1/collaborations` endpoint
+// It maps toi the `GET` `/projects/0.1/projects/collaborations` endpoint
 func (s *CollaborationsService) ListAll(ctx context.Context) (*rr.RawResponse, error) {
 	p := endpoints.ProjectsCollaborations
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
@@ -200,8 +179,6 @@ func (s *ServicesService) Order(ctx context.Context, serviceID int64, serviceTyp
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, nil)
 }
 
-// TODO: refine with typed response
-
 // Returns a list of services.
 // it maps to the `GET` `/projects/0.1/services` endpoint
 func (s *ServicesService) List(ctx context.Context, opts *rr.ListServicesOptions) (*rr.RawResponse, error) {
@@ -209,8 +186,6 @@ func (s *ServicesService) List(ctx context.Context, opts *rr.ListServicesOptions
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
-
-// TODO: refine with typed response
 
 // Returns active services.
 // it maps to the `GET` `/projects/0.1/services/active` endpoint
@@ -224,8 +199,6 @@ func (s *ServicesService) SearchActive(ctx context.Context, opts *rr.SearchActiv
 // PROJECTS-BIDS
 // --------------------------------------
 
-// TODO: refine with typed response
-
 // Returns a list of bids that match the specified criteria.
 // It maps to the `GET` `/projects/0.1/bids` endpoint
 func (s *BidsService) List(ctx context.Context, opts *rr.ListBidsOptions) (*rr.RawResponse, error) {
@@ -233,8 +206,6 @@ func (s *BidsService) List(ctx context.Context, opts *rr.ListBidsOptions) (*rr.R
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
-
-// TODO: refine with typed response
 
 // Returns a list of bids that match the specified criteria.
 // it maps to the `GET` `/projects/0.1/bids/{bid_id}` endpoint
@@ -264,8 +235,6 @@ func (s *BidsService) Update(ctx context.Context, bidID int64, b rr.UpdateBidBod
 	p := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
-
-// TODO: refine with typed response
 
 // Returns a list of aggregate time tracking data for a bid.
 // It maps to the `GET` `/projects/0.1/bids/{bid_id}/time_tracking` endpoint
@@ -305,16 +274,12 @@ func (s *BidEditRequestsService) Action(ctx context.Context, bidID, bidEditReque
 	return execute[*rr.ActionBidEditRequestResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
 
-// TODO: refine with typed response
-
 // Fetch bid rating for a bid
 // It maps to the `GET` `/projects/0.1/bids/{bid_id}/bid_ratings` endpoint
 func (s *BidRatingsService) Get(ctx context.Context, bidID int64) (*rr.RawResponse, error) {
 	p := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
 }
-
-// TODO: refine with typed response
 
 // Fetch bid ratings for multiple bids
 // it maps to the `GET` `/projects/0.1/bid_ratings` endpoint
@@ -342,8 +307,6 @@ func (s *BidRatingsService) Update(ctx context.Context, bidID int64, bidRatingID
 // PROJECTS-JOBS
 // --------------------------------------
 
-// TODO: refine with typed response
-
 // Returns a list of milestone requests.
 // It maps to the `GET` `/projects/0.1/jobs` endpoint
 func (s *JobsService) List(ctx context.Context, opts *rr.ListJobsOptions) (*rr.RawResponse, error) {
@@ -351,8 +314,6 @@ func (s *JobsService) List(ctx context.Context, opts *rr.ListJobsOptions) (*rr.R
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
-
-// TODO: refine with typed response
 
 // Returns a list of jobs. Note: This performs a sub-string search for all the parameters specified on the jobs.
 // It maps to the `GET` `/projects/0.1/jobs/search` endpoint
@@ -362,8 +323,6 @@ func (s *JobsService) Search(ctx context.Context, opts *rr.SearchJobsOptions) (*
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
 
-// TODO: refine with typed response
-
 // Returns a list of job bundles. Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name.
 // It maps to the `GET` `/projects/0.1/job_bundles` endpoint
 func (s *JobBundlesService) List(ctx context.Context, opts *rr.ListJobBundlesOptions) (*rr.RawResponse, error) {
@@ -371,8 +330,6 @@ func (s *JobBundlesService) List(ctx context.Context, opts *rr.ListJobBundlesOpt
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
-
-// TODO: refine with typed response
 
 // Returns a list of job bundle categories.
 // It maps to the `GET` `/projects/0.1/job_bundle_categories` endpoint
@@ -386,8 +343,6 @@ func (s *JobBundleCategoriesService) List(ctx context.Context, opts *rr.ListJobB
 // PROJECTS-MILESTONES
 // --------------------------------------
 
-// TODO: refine with typed response
-
 // Returns a list of milestones. Does not return un-awarded prepaid milestones.
 // It maps to the `GET` `/projects/0.1/milestones` endpoint
 func (s *MilestonesService) List(ctx context.Context, opts *rr.ListMilestonesOptions) (*rr.RawResponse, error) {
@@ -395,8 +350,6 @@ func (s *MilestonesService) List(ctx context.Context, opts *rr.ListMilestonesOpt
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
-
-// TODO: refine with typed response
 
 // Returns information about a specific milestone.
 // It maps to the `GET` `/projects/0.1/milestones/{milestone_id}` endpoint
@@ -420,8 +373,6 @@ func (s *MilestonesService) Action(ctx context.Context, milestoneID int64, b rr.
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
 }
 
-// TODO: refine with typed response
-
 // Returns a list of milestone requests.
 // It maps to the `GET` `/projects/0.1/milestone_requests` endpoint
 func (s *MilestoneRequestsService) List(ctx context.Context, opts *rr.ListMilestoneRequestsOptions) (*rr.RawResponse, error) {
@@ -429,8 +380,6 @@ func (s *MilestoneRequestsService) List(ctx context.Context, opts *rr.ListMilest
 	q := query.Values(opts)
 	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, q, nil)
 }
-
-// TODO: refine with typed response
 
 // Returns information about a specific milestone request.
 // It maps to the `GET` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
@@ -458,8 +407,6 @@ func (s *MilestoneRequestsService) Action(ctx context.Context, milestoneRequestI
 // PROJECTS-REVIEWS
 // --------------------------------------
 
-// TODO: refine with typed response
-
 // Returns a list of project reviews.
 // It maps to the `GET` `/projects/0.1/reviews` endpoint
 func (s *ReviewsService) List(ctx context.Context, opts *rr.ListReviewsOptions) (*rr.RawResponse, error) {
@@ -485,8 +432,6 @@ func (s *ReviewsService) Action(ctx context.Context, reviewID int64, b rr.Action
 // --------------------------------------
 // PROJECTS-OTHERS
 // --------------------------------------
-
-// TODO: refine with typed response
 
 // Returns a list of expert guarantees.
 // It maps to the `GET` `/projects/0.1/expert_guarantees` endpoint

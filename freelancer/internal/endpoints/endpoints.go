@@ -28,7 +28,7 @@ const (
 	ProjectsJobBundleCategories = "/projects/0.1/job_bundle_categories"
 	ProjectsJobsSearch          = "/projects/0.1/jobs/search"
 	ProjectsBidsFees            = "/projects/0.1/bids/fees"
-	ProjectsCollaborations      = "/projects/0.1/collaborations"
+	ProjectsCollaborations      = "/projects/0.1/projects/collaborations"
 	ProjectsServices            = "/projects/0.1/services"
 	ProjectsServicesActive      = "/projects/0.1/services/active"
 	ProjectsExpertGuarantees    = "/projects/0.1/expert_guarantees"
