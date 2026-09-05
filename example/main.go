@@ -20,8 +20,8 @@ var (
 )
 
 func main() {
-	// Init()
-	InitWithProxy()
+	Init()
+	// InitWithProxy()
 	QuickExample()
 	// ListBudgets()
 	// ListCurrencies()
@@ -95,19 +95,33 @@ func QuickExample() {
 		Query:           rr.String("golang python"),
 	}
 
-	res, err := client.Services.Projects.SearchActive(context.Background(), &opts)
+	res, _, err := client.Services.Projects.SearchActive(context.Background(), &opts)
 	// set parameters
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
 	}
 	for index, p := range res.Result.Projects {
-		fmt.Println(index, p.GetFullUrl())
+		fmt.Println(index, p.GetFullUrl(), p.ID)
+	}
+
+	ps := []int64{40652988, 40652989}
+
+	res, _, err = client.Services.Projects.List(context.Background(), &rr.ListProjectsOptions{
+		Projects:           ps,
+		UserDetails:        rr.Bool(true),
+		UserAvatar:         rr.Bool(true),
+		UserCountryDetails: rr.Bool(true),
+		UserDisplayInfo:    rr.Bool(true),
+	})
+
+	for index, p := range res.Result.Projects {
+		fmt.Println(index, p.GetFullUrl(), p.OwnerID)
 	}
 }
 
 func ListTimezones() {
-	res, err := client.Services.Common.ListTimezones(context.Background(), nil)
+	res, _, err := client.Services.Common.ListTimezones(context.Background(), nil)
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -118,7 +132,7 @@ func ListTimezones() {
 }
 
 func ListCountries() {
-	res, err := client.Services.Common.ListCountries(context.Background(), nil)
+	res, _, err := client.Services.Common.ListCountries(context.Background(), nil)
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -129,7 +143,7 @@ func ListCountries() {
 }
 
 func ListCurrencies() {
-	res, err := client.Services.Projects.Currencies.List(context.Background(), nil)
+	res, _, err := client.Services.Projects.Currencies.List(context.Background(), nil)
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -140,7 +154,7 @@ func ListCurrencies() {
 }
 
 func ListBudgets() {
-	res, err := client.Services.Projects.Budgets.List(context.Background(), nil)
+	res, _, err := client.Services.Projects.Budgets.List(context.Background(), nil)
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -151,7 +165,7 @@ func ListBudgets() {
 }
 
 func ListCategories() {
-	res, err := client.Services.Projects.Categories.List(context.Background(), nil)
+	res, _, err := client.Services.Projects.Categories.List(context.Background(), nil)
 	if err != nil {
 		log.Printf("error: %v", err)
 		return

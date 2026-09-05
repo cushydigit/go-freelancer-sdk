@@ -51,7 +51,7 @@ func TestCommonService_ListCountries(t *testing.T) {
 		ExtraDetails: rr.Bool(true),
 	}
 
-	res, err := c.Services.Common.ListCountries(context.Background(), opts)
+	res, _, err := c.Services.Common.ListCountries(context.Background(), opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 	assert.Len(t, res.Result.Countries, 2)
@@ -89,7 +89,7 @@ func TestCommonService_Timezones(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Common.ListTimezones(context.Background(), nil)
+	res, _, err := c.Services.Common.ListTimezones(context.Background(), nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 	assert.Len(t, res.Result.Timezones, 1)

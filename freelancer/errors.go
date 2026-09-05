@@ -6,7 +6,7 @@ import (
 )
 
 type APIError struct {
-	StatusCode int    `json:"-"` // will set this manually from the HTTP
+	StatusCode int    `json:"-"`
 	Status     string `json:"status"`
 	Message    string `json:"message"`
 	RequestID  string `json:"request_id"`
@@ -18,9 +18,11 @@ type APIError struct {
 		Source   string `json:"source"`
 	} `json:"error"`
 
-	RawPayload []byte `json:"-"`
-
 	LegacyErrorCode string `json:"error_code"`
+
+	RawPayload []byte `json:"_"`
+
+	Meta *ResponseMeta `json:"-"`
 }
 
 func (e *APIError) Error() string {

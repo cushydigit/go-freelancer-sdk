@@ -30,7 +30,7 @@ func TestProjectsService_Create_Base(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Create(context.Background(), rr.CreateProjectBody{})
+	res, _, err := c.Services.Projects.Create(context.Background(), rr.CreateProjectBody{})
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -64,7 +64,7 @@ func TestProjectsService_Create_Body(t *testing.T) {
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
-	_, err := c.Services.Projects.Create(context.Background(), b)
+	_, _, err := c.Services.Projects.Create(context.Background(), b)
 	assert.NoError(t, err)
 
 }
@@ -100,7 +100,7 @@ func TestProjectsService_Create_Response(t *testing.T) {
 		Description: "Test",
 	}
 
-	resp, err := c.Services.Projects.Create(context.Background(), body)
+	resp, _, err := c.Services.Projects.Create(context.Background(), body)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
@@ -126,7 +126,7 @@ func TestProjectsService_Action_Base(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Action(context.Background(), int64(projectID), rr.ActionProjectBody{})
+	res, _, err := c.Services.Projects.Action(context.Background(), int64(projectID), rr.ActionProjectBody{})
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -153,7 +153,7 @@ func TestProjectsService_Action_Body(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Action(context.Background(), action.ProjectID, action)
+	res, _, err := c.Services.Projects.Action(context.Background(), action.ProjectID, action)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -173,7 +173,7 @@ func TestProjectsService_List_Base(t *testing.T) {
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
-	res, err := c.Services.Projects.List(context.Background(), nil)
+	res, _, err := c.Services.Projects.List(context.Background(), nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -201,7 +201,7 @@ func TestProjectsService_List_Options(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -221,7 +221,7 @@ func TestProjectsService_ListSelf_Base(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.ListSelf(context.Background(), nil)
+	res, _, err := c.Services.Projects.ListSelf(context.Background(), nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -248,7 +248,7 @@ func TestProjectService_ListSelf_Options(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.ListSelf(context.Background(), &opts)
+	res, _, err := c.Services.Projects.ListSelf(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -271,7 +271,7 @@ func TestProjectService_Get_Base(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Get(context.Background(), projectID, nil)
+	res, _, err := c.Services.Projects.Get(context.Background(), projectID, nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -293,7 +293,7 @@ func TestProjectService_Get_Options(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Get(context.Background(), projectID, &opts)
+	res, _, err := c.Services.Projects.Get(context.Background(), projectID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -330,7 +330,7 @@ func TestProjectsService_SearchActive_Base(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	resp, err := c.Services.Projects.SearchActive(context.Background(), nil)
+	resp, _, err := c.Services.Projects.SearchActive(context.Background(), nil)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
@@ -367,7 +367,7 @@ func TestProjectsService_SearchActive_ScalarParams(t *testing.T) {
 		FullDescription: rr.Bool(true),
 	}
 
-	res, err := c.Services.Projects.SearchActive(context.Background(), opts)
+	res, _, err := c.Services.Projects.SearchActive(context.Background(), opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 	assert.Equal(t, len(res.Result.Projects), 0)
@@ -402,7 +402,7 @@ func TestProjectsService_SearchActive_ArrayParams(t *testing.T) {
 		Languages: []string{"en", "de"},
 	}
 
-	_, err := c.Services.Projects.SearchActive(context.Background(), opts)
+	_, _, err := c.Services.Projects.SearchActive(context.Background(), opts)
 	assert.NoError(t, err)
 
 }
@@ -431,7 +431,7 @@ func TestProjectsService_SearchActive_EnumParams(t *testing.T) {
 		SortField: rr.Enum(rr.SortFieldsTimeUpdated),
 	}
 
-	res, err := c.Services.Projects.SearchActive(context.Background(), opts)
+	res, _, err := c.Services.Projects.SearchActive(context.Background(), opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -453,7 +453,7 @@ func TestProjectsService_SearchActive_OmitNilParams(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	_, err := c.Services.Projects.SearchActive(context.Background(), &rr.SearchActiveProjectsOptions{})
+	_, _, err := c.Services.Projects.SearchActive(context.Background(), &rr.SearchActiveProjectsOptions{})
 	assert.NoError(t, err)
 
 }
@@ -480,7 +480,7 @@ func TestProjectsService_SearchActive_ReturnsPointers(t *testing.T) {
 
 	opts := &rr.SearchActiveProjectsOptions{}
 
-	resp, err := c.Services.Projects.SearchActive(context.Background(), opts)
+	resp, _, err := c.Services.Projects.SearchActive(context.Background(), opts)
 	assert.NoError(t, err)
 	assert.Equal(t, resp.Result.TotalCount, 2)
 
@@ -506,7 +506,7 @@ func TestProjectService_SearchAll_Base(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.SearchAll(context.Background(), nil)
+	res, _, err := c.Services.Projects.SearchAll(context.Background(), nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -537,7 +537,7 @@ func TestProjectService_SearchAll_Options(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.SearchAll(context.Background(), &opts)
+	res, _, err := c.Services.Projects.SearchAll(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -556,7 +556,7 @@ func TestProjectService_InviteFreelancer_Base(t *testing.T) {
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
-	res, err := c.Services.Projects.InviteFreelancer(context.Background(), projectID, rr.InviteFreelancersBody{})
+	res, _, err := c.Services.Projects.InviteFreelancer(context.Background(), projectID, rr.InviteFreelancersBody{})
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -581,7 +581,7 @@ func TestProjectService_InviteFreelancer_Body(t *testing.T) {
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
-	res, err := c.Services.Projects.InviteFreelancer(context.Background(), projectID, body)
+	res, _, err := c.Services.Projects.InviteFreelancer(context.Background(), projectID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -611,7 +611,7 @@ func TestProjectService_ListUpgradesFees(t *testing.T) {
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
-	res, err := c.Services.Projects.ListUpgradesFees(context.Background(), &opts)
+	res, _, err := c.Services.Projects.ListUpgradesFees(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -643,7 +643,7 @@ func TestProjectService_ListBids(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.ListBids(context.Background(), projectID, &opts)
+	res, _, err := c.Services.Projects.ListBids(context.Background(), projectID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -666,7 +666,7 @@ func TestProjectService_GetBidInfo(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.GetBidInfo(context.Background(), projectID)
+	res, _, err := c.Services.Projects.GetBidInfo(context.Background(), projectID)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -696,7 +696,7 @@ func TestProjectService_ListMilestones(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.ListMilestones(context.Background(), projectID, &opts)
+	res, _, err := c.Services.Projects.ListMilestones(context.Background(), projectID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -726,7 +726,7 @@ func TestProjectService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.ListMilestoneRequests(context.Background(), projectID, &opts)
+	res, _, err := c.Services.Projects.ListMilestoneRequests(context.Background(), projectID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -754,7 +754,7 @@ func TestProjectService_GetHourlyContractInfo(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.GetHourlyContractInfo(context.Background(), &opts)
+	res, _, err := c.Services.Projects.GetHourlyContractInfo(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -777,7 +777,7 @@ func TestProjectService_GetIPContractInfo(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.GetIPContractInfo(context.Background(), projectID)
+	res, _, err := c.Services.Projects.GetIPContractInfo(context.Background(), projectID)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -800,7 +800,7 @@ func TestProjectService_Delete(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Delete(context.Background(), projectID)
+	res, _, err := c.Services.Projects.Delete(context.Background(), projectID)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -823,7 +823,7 @@ func TestCollaborationService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Collaborations.List(context.Background(), projectID)
+	res, _, err := c.Services.Projects.Collaborations.List(context.Background(), projectID)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -860,7 +860,7 @@ func TestCollaborationService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Collaborations.Create(context.Background(), projectID, body)
+	res, _, err := c.Services.Projects.Collaborations.Create(context.Background(), projectID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -899,7 +899,7 @@ func TestCollaborationService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Collaborations.Action(context.Background(), projectID, collaborationID, body)
+	res, _, err := c.Services.Projects.Collaborations.Action(context.Background(), projectID, collaborationID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -918,7 +918,7 @@ func TestCollaborationService_ListAll(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Collaborations.ListAll(context.Background())
+	res, _, err := c.Services.Projects.Collaborations.ListAll(context.Background())
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -942,7 +942,7 @@ func TestServicesService_Order(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Services.Order(context.Background(), serviceID, serviceType)
+	res, _, err := c.Services.Projects.Services.Order(context.Background(), serviceID, serviceType)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -978,7 +978,7 @@ func TestServicesService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Services.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Services.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1012,7 +1012,7 @@ func TestServicesService_SearchActive(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Services.SearchActive(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Services.SearchActive(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1046,7 +1046,7 @@ func TestBidsService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Bids.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1078,7 +1078,7 @@ func TestBidsService_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.Get(context.Background(), bidID, &opts)
+	res, _, err := c.Services.Projects.Bids.Get(context.Background(), bidID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1115,7 +1115,7 @@ func TestBidsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.Create(context.Background(), body)
+	res, _, err := c.Services.Projects.Bids.Create(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1148,7 +1148,7 @@ func TestBidsService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.Action(context.Background(), bidID, body)
+	res, _, err := c.Services.Projects.Bids.Action(context.Background(), bidID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1183,7 +1183,7 @@ func TestBidsService_Update(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.Update(context.Background(), bidID, body)
+	res, _, err := c.Services.Projects.Bids.Update(context.Background(), bidID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1213,7 +1213,7 @@ func TestBidsService_GetTimeTracking(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.GetTimeTracking(context.Background(), bidID, &opts)
+	res, _, err := c.Services.Projects.Bids.GetTimeTracking(context.Background(), bidID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1249,7 +1249,7 @@ func TestBidsService_CreateTimeTracking(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Bids.CreateTimeTracking(context.Background(), bidID, body)
+	res, _, err := c.Services.Projects.Bids.CreateTimeTracking(context.Background(), bidID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1281,7 +1281,7 @@ func TestBidEditRequestsService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.BidEditRequests.List(context.Background(), bidID, &opts)
+	res, _, err := c.Services.Projects.BidEditRequests.List(context.Background(), bidID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1316,7 +1316,7 @@ func TestBidEditRequestsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.BidEditRequests.Create(context.Background(), body)
+	res, _, err := c.Services.Projects.BidEditRequests.Create(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1350,7 +1350,7 @@ func TestBidEditRequestsService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.BidEditRequests.Action(context.Background(), bidID, bidEditRequestID, body)
+	res, _, err := c.Services.Projects.BidEditRequests.Action(context.Background(), bidID, bidEditRequestID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1374,7 +1374,7 @@ func TestBidRatingsService_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.BidRatings.Get(context.Background(), bidID)
+	res, _, err := c.Services.Projects.BidRatings.Get(context.Background(), bidID)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1402,7 +1402,7 @@ func TestBidRatingsService_GetByListOfBids(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.BidRatings.GetByListOfBids(context.Background(), &opts)
+	res, _, err := c.Services.Projects.BidRatings.GetByListOfBids(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1436,7 +1436,7 @@ func TestBidRatingsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.BidRatings.Create(context.Background(), bidID, body)
+	res, _, err := c.Services.Projects.BidRatings.Create(context.Background(), bidID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1471,7 +1471,7 @@ func TestBidRatingsService_Update(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.BidRatings.Update(context.Background(), bidID, bidRatingID, body)
+	res, _, err := c.Services.Projects.BidRatings.Update(context.Background(), bidID, bidRatingID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1503,7 +1503,7 @@ func TestJobsService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Jobs.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Jobs.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1535,7 +1535,7 @@ func TestJobsService_Search(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Jobs.Search(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Jobs.Search(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1565,7 +1565,7 @@ func TestJobBundles_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.JobBundles.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.JobBundles.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1595,7 +1595,7 @@ func TestJobBundleCategories_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.JobBundleCategories.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.JobBundleCategories.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1628,7 +1628,7 @@ func TestMilestonesService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Milestones.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Milestones.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1658,7 +1658,7 @@ func TestMilestonesService_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Milestones.Get(context.Background(), milestoneID, &opts)
+	res, _, err := c.Services.Projects.Milestones.Get(context.Background(), milestoneID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1697,7 +1697,7 @@ func TestMilestonesService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Milestones.Create(context.Background(), body)
+	res, _, err := c.Services.Projects.Milestones.Create(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1736,7 +1736,7 @@ func TestMilestonesService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Milestones.Action(context.Background(), milestoneID, body)
+	res, _, err := c.Services.Projects.Milestones.Action(context.Background(), milestoneID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1769,7 +1769,7 @@ func TestMilestoneRequestsService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.MilestoneRequests.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.MilestoneRequests.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1799,7 +1799,7 @@ func TestMilestoneRequestsService_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.MilestoneRequests.Get(context.Background(), milestoneRequestID, &opts)
+	res, _, err := c.Services.Projects.MilestoneRequests.Get(context.Background(), milestoneRequestID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1835,7 +1835,7 @@ func TestMilestoneRequestsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.MilestoneRequests.Create(context.Background(), body)
+	res, _, err := c.Services.Projects.MilestoneRequests.Create(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1869,7 +1869,7 @@ func TestMilestoneRequestsService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.MilestoneRequests.Action(context.Background(), milestoneRequestID, body)
+	res, _, err := c.Services.Projects.MilestoneRequests.Action(context.Background(), milestoneRequestID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1903,7 +1903,7 @@ func TestReviewsService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Reviews.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Reviews.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1939,7 +1939,7 @@ func TestReviewsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Reviews.Create(context.Background(), body)
+	res, _, err := c.Services.Projects.Reviews.Create(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1975,7 +1975,7 @@ func TestReviewsService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Reviews.Action(context.Background(), reviewID, body)
+	res, _, err := c.Services.Projects.Reviews.Action(context.Background(), reviewID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -2005,7 +2005,7 @@ func TestExpertGuaranteesService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.ExpertGuarantees.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.ExpertGuarantees.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -2039,7 +2039,7 @@ func TestExpertGuaranteesService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.ExpertGuarantees.Action(context.Background(), expertGuaranteesID, body)
+	res, _, err := c.Services.Projects.ExpertGuarantees.Action(context.Background(), expertGuaranteesID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -2071,7 +2071,7 @@ func TestExpertCurrencies_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Currencies.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Currencies.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -2103,7 +2103,7 @@ func TestExpertCategories_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Categories.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Categories.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -2135,7 +2135,7 @@ func TestExpertBudgets_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Projects.Budgets.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Budgets.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 

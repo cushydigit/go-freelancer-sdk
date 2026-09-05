@@ -11,7 +11,7 @@ import (
 
 // ListCountries fetches a list of countries from the Freelancer API.
 // It maps to the `GET` `/common/0.1/countries` endpoint.
-func (s *CommonService) ListCountries(ctx context.Context, opts *rr.ListCountriesOptions) (*rr.ListCountriesResponse, error) {
+func (s *CommonService) ListCountries(ctx context.Context, opts *rr.ListCountriesOptions) (*rr.ListCountriesResponse, *ResponseMeta, error) {
 	p := endpoints.CommonCountries
 	q := query.Values(opts)
 	return execute[*rr.ListCountriesResponse](ctx, s.client, http.MethodGet, p, q, nil)
@@ -19,7 +19,7 @@ func (s *CommonService) ListCountries(ctx context.Context, opts *rr.ListCountrie
 
 // ListTimezones fetches a list of timezones from the Freelancer API.
 // It maps to the `GET` `/common/0.1/timezones` endpoint.
-func (s *CommonService) ListTimezones(ctx context.Context, opts *rr.ListTimezonesOptions) (*rr.ListTimezonesResponse, error) {
+func (s *CommonService) ListTimezones(ctx context.Context, opts *rr.ListTimezonesOptions) (*rr.ListTimezonesResponse, *ResponseMeta, error) {
 	p := endpoints.CommonTimezones
 	q := query.Values(opts)
 	return execute[*rr.ListTimezonesResponse](ctx, s.client, http.MethodGet, p, q, nil)

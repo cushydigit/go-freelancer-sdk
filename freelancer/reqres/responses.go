@@ -1,13 +1,14 @@
 package reqres
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type base struct {
 	Status    string `json:"status"`
 	RequestID string `json:"request_id"`
-	// TODO: check the idea
-	// StatusCode int    `json:"-"`
 }
+
 type RawResponse struct {
 	base
 	Result json.RawMessage `json:"result"`

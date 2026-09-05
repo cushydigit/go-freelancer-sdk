@@ -39,7 +39,7 @@ func TestUsersService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.List(context.Background(), &opts)
+	res, _, err := c.Services.Users.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -61,7 +61,7 @@ func TestUsersService_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Get(context.Background(), userID)
+	res, _, err := c.Services.Users.Get(context.Background(), userID)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -96,7 +96,7 @@ func TestUsersService_SearchFreelancer(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.SearchFreelancer(context.Background(), &opts)
+	res, _, err := c.Services.Users.SearchFreelancer(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -125,7 +125,7 @@ func TestSelfService_GetInfo(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Self.GetInfo(context.Background(), &opts)
+	res, _, err := c.Services.Users.Self.GetInfo(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -146,7 +146,7 @@ func TestSelfService_ListDevices(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Self.ListDevices(context.Background())
+	res, _, err := c.Services.Users.Self.ListDevices(context.Background())
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -178,7 +178,7 @@ func TestSelfJobs_Add(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.SelfJob.Add(context.Background(), body)
+	res, _, err := c.Services.Users.SelfJob.Add(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -211,7 +211,7 @@ func TestSelfJobs_Set(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.SelfJob.Set(context.Background(), body)
+	res, _, err := c.Services.Users.SelfJob.Set(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -244,7 +244,7 @@ func TestSelfJobs_Delete(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.SelfJob.Delete(context.Background(), body)
+	res, _, err := c.Services.Users.SelfJob.Delete(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -285,7 +285,7 @@ func TestProfiles_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Profiles.Create(context.Background(), body)
+	res, _, err := c.Services.Users.Profiles.Create(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -308,7 +308,7 @@ func TestProfiles_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Profiles.Get(context.Background())
+	res, _, err := c.Services.Users.Profiles.Get(context.Background())
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -351,7 +351,7 @@ func TestProfiles_Update(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Profiles.Update(context.Background(), body)
+	res, _, err := c.Services.Users.Profiles.Update(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -383,7 +383,7 @@ func TestReputations_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Reputations.List(context.Background(), &opts)
+	res, _, err := c.Services.Users.Reputations.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -416,7 +416,7 @@ func TestEnterprises_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Enterprises.List(context.Background(), &opts)
+	res, _, err := c.Services.Users.Enterprises.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -445,7 +445,7 @@ func TestPortfolios_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Portfolios.List(context.Background(), &opts)
+	res, _, err := c.Services.Users.Portfolios.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -476,7 +476,7 @@ func TestPools_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Pools.List(context.Background(), &opts)
+	res, _, err := c.Services.Users.Pools.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
@@ -517,7 +517,7 @@ func TestViolations_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, err := c.Services.Users.Violations.Create(context.Background(), body)
+	res, _, err := c.Services.Users.Violations.Create(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }

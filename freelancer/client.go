@@ -67,12 +67,12 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 
 }
 
-func (c *Client) do(ctx context.Context, method, path string, query url.Values, body io.Reader) ([]byte, error) {
+func (c *Client) do(ctx context.Context, method, path string, query url.Values, body io.Reader) ([]byte, *ResponseMeta, error) {
 
 	// Parse Path
 	endpoint, err := url.Parse(fmt.Sprintf("%s%s", c.baseURL, path))
 	if err != nil {
-		return nil, fmt.Errorf("invalid path: %w", err)
+		return nil, nil, fmt.Errorf("invalid path: %w", err)
 	}
 
 	// Add Query Params
@@ -83,20 +83,21 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 	// Create Request
 	req, err := http.NewRequestWithContext(ctx, method, endpoint.String(), body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
+		return nil, nil, fmt.Errorf("failed to create request: %w", err)
 	}
 	// Set headers
 	req.Header.Set("freelancer-oauth-v1", c.apiToken)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", "GoFreelancerSDK/1.4 (+github.com/cushydigit/go-freelancer-sdk)")
 
-	// Send request
 	if c.debugMode {
 		c.logger.Printf("--> %s %s", method, endpoint.String())
 	}
+
+	// Send request
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("network error: %w", err)
+		return nil, nil, fmt.Errorf("network error: %w", err)
 	}
 	defer resp.Body.Close()
 
@@ -106,14 +107,18 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 	}
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read response: %w", err)
+		return nil, nil, fmt.Errorf("failed to read response: %w", err)
 	}
+
+	// parse response meta
+	meta := parseResponseMeta(resp)
 
 	// Handle errors
 	if resp.StatusCode >= 400 {
 		apiErr := &APIError{
 			StatusCode: resp.StatusCode,
 			RawPayload: data,
+			Meta:       meta,
 		}
 		// try to parse the JSON error body
 		if json.Valid(data) {
@@ -124,7 +129,8 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 		if apiErr.Message == "" {
 			apiErr.Message = http.StatusText(resp.StatusCode)
 		}
-		return nil, apiErr
+
+		return nil, meta, apiErr
 	}
 
 	// Handle success
@@ -132,28 +138,28 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 		c.logger.Printf("<-- %d (%d bytes)", resp.StatusCode, len(data))
 	}
 
-	return data, nil
+	return data, meta, nil
 }
 
-func execute[T any](ctx context.Context, c *Client, method, path string, query url.Values, body any) (T, error) {
+func execute[T any](ctx context.Context, c *Client, method, path string, query url.Values, body any) (T, *ResponseMeta, error) {
 	var result T
 
 	var bodyReader io.Reader
 	if body != nil {
 		b, err := json.Marshal(body)
 		if err != nil {
-			return result, err
+			return result, nil, err
 		}
 		bodyReader = bytes.NewReader(b)
 	}
-	data, err := c.do(ctx, method, path, query, bodyReader)
+	data, meta, err := c.do(ctx, method, path, query, bodyReader)
 	if err != nil {
-		return result, err
+		return result, meta, err
 	}
 
 	if err := json.Unmarshal(data, &result); err != nil {
-		return result, fmt.Errorf("decode error: %w", err)
+		return result, meta, fmt.Errorf("decode error: %w", err)
 	}
 
-	return result, nil
+	return result, meta, nil
 }

@@ -30,7 +30,7 @@ func TestClientDoSuccess(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()), WithDebug(true))
 	c.SetBaseUrl(ts.URL)
 
-	data, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
+	data, _, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
 	assert.NoError(t, err)
 	assert.Contains(t, string(data), `{"message": "success"}`)
 }
@@ -45,7 +45,7 @@ func TestClientDoError(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	_, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
+	_, _, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
 	assert.Error(t, err)
 	apiErr, ok := err.(*APIError)
 	assert.True(t, ok)
@@ -57,7 +57,7 @@ func TestClientHeaders(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "token", r.Header.Get("freelancer-oauth-v1"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
-		assert.Equal(t, "GoFreelancerSDK/1.2 (+github.com/cushydigit/go-freelancer-sdk)", r.Header.Get("User-Agent"))
+		assert.Equal(t, "GoFreelancerSDK/1.4 (+github.com/cushydigit/go-freelancer-sdk)", r.Header.Get("User-Agent"))
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message": "success"}`))
 	}))
@@ -66,7 +66,7 @@ func TestClientHeaders(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	_, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
+	_, _, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
 	assert.NoError(t, err)
 }
 
@@ -117,7 +117,7 @@ func TestClientRequestBody(t *testing.T) {
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
-	_, err := c.do(context.Background(), http.MethodPost, "/test", nil, bytes.NewReader([]byte(`{"name": "Alice", "age": 30}`)))
+	_, _, err := c.do(context.Background(), http.MethodPost, "/test", nil, bytes.NewReader([]byte(`{"name": "Alice", "age": 30}`)))
 	assert.NoError(t, err)
 }
 
@@ -156,7 +156,7 @@ func TestExecuteInvalidJSON(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	_, err := execute[Person](context.Background(), c, http.MethodGet, "/test", nil, nil)
+	_, _, err := execute[Person](context.Background(), c, http.MethodGet, "/test", nil, nil)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "decode error")
 }
@@ -176,7 +176,7 @@ func TestExecuteGeneric(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	result, err := execute[Person](context.Background(), c, http.MethodGet, "/test", nil, nil)
+	result, _, err := execute[Person](context.Background(), c, http.MethodGet, "/test", nil, nil)
 	assert.NoError(t, err)
 	assert.Equal(t, "Alice", result.Name)
 	assert.Equal(t, 30, result.Age)
