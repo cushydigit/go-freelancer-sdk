@@ -43,10 +43,7 @@ func Init() {
 	}
 
 	//create instance for freelancer client
-	client = freelancer.NewClient(
-		apiAccessToken,
-		freelancer.WithDebug(true),
-	)
+	client = freelancer.NewClient(apiAccessToken)
 }
 
 func InitWithProxy() {
@@ -80,7 +77,6 @@ func InitWithProxy() {
 
 	client = freelancer.NewClient(
 		apiAccessToken,
-		freelancer.WithDebug(true),
 		freelancer.WithHttpClient(httpClient),
 	)
 

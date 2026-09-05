@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
@@ -14,10 +16,10 @@ import (
 )
 
 func TestNewClientOptions(t *testing.T) {
-	c := NewClient("token", WithSandBox(), WithDebug(true))
+	c := NewClient("token", WithSandBox())
 
 	assert.Equal(t, c.baseURL, endpoints.APISandBoxURL)
-	assert.Equal(t, c.debugMode, true)
+	assert.NotNil(t, c.logger)
 }
 
 func TestClientDoSuccess(t *testing.T) {
@@ -27,7 +29,7 @@ func TestClientDoSuccess(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	c := NewClient("token", WithHttpClient(ts.Client()), WithDebug(true))
+	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
 	data, _, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
@@ -133,10 +135,16 @@ func TestClient_NewClient(t *testing.T) {
 	opts := []ClientOption{
 		WithSandBox(),
 		WithHttpClient(&http.Client{}),
-		WithDebug(true),
+		WithLogger(
+			slog.New(
+				slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+					Level: slog.LevelDebug,
+				}),
+			),
+		),
 	}
 	c := NewClient(apiToken, opts...)
-	if c.httpClient == nil || !c.debugMode || c.baseURL != endpoints.APISandBoxURL {
+	if c.httpClient == nil || c.baseURL != endpoints.APISandBoxURL {
 		t.Errorf("unexpected configuration: %v", c)
 	}
 }
