@@ -73,7 +73,8 @@ func main() {
 
 **Environment Variable:**
 The examples assume these environment variable:
-| Variable | Description | Example value |
+| Variable | Description | Example |
+| :------- | :---------- | :------ |
 | FREELANCER_ACCESS_TOKEN | OAuth2 access token | frl_xxxxxxxxxxxx |
 | (Optional) PROXY_ADDR | SOCKS proxy address | socks5://localhost:1080 |
 
@@ -194,14 +195,15 @@ if err != nil {
 #### API Error Structure
 
 | Field | Description |
-| StatusCode | HTTP status code (e.g, 429 for rate limited) |
-| Status | API status text (OK, ERROR, etc.) |
-| Message | User-facing error message |
-| RequestID | Freelancer's request ID fro support tickets |
-| InnerError.Code | Specified API error code |
-| InnerError.Details | Detailed explanation of the error |
-| RawPayload | Raw response bytes (for custom handling) |
-| Meta | Associated metadata including rate limit info |
+| :---- | :---------- |
+| `StatusCode` | HTTP status code (e.g, 429 for rate limited) |
+| `Status` | API status text (OK, ERROR, etc.) |
+| `Message` | User-facing error message |
+| `RequestID` | Freelancer's request ID fro support tickets |
+| `InnerError.Code` | Specified API error code |
+| `InnerError.Details` | Detailed explanation of the error |
+| `RawPayload` | Raw response bytes (for custom handling) |
+| `Meta` | Associated metadata including rate limit info |
 
 #### Rate Limit Errors
 
