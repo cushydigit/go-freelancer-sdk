@@ -42,7 +42,7 @@ I spent a significant amount of time hand-coding these service wrappers to handl
 
 ---
 
-### Installation
+## Installation
 
 to add this SDK to your project:
 
@@ -73,6 +73,7 @@ func main() {
 
 **Environment Variable:**
 The examples assume these environment variable:
+
 | Variable | Description | Example |
 | :------- | :---------- | :------ |
 | FREELANCER_ACCESS_TOKEN | OAuth2 access token | frl_xxxxxxxxxxxx |
@@ -163,11 +164,11 @@ client = freelancer.NewClient(
 - **Use the sandbox for development** - `WithSandBox()` uses the test API endpoint
 - **Set appropriate timeouts** - The default 30-second timeout may not be suitable for all use cases
 
-### Error Handling
+## Error Handling
 
 All API requests return three values: `(result, meta, error)`.
 
-#### Basic Error Checking
+### Basic Error Checking
 
 ```go
 res, meta, err := client.Services.Projects.SearchActive(ctx, opts)
@@ -192,7 +193,7 @@ if err != nil {
 }
 ```
 
-#### API Error Structure
+### API Error Structure
 
 | Field | Description |
 | :---- | :---------- |
@@ -205,7 +206,7 @@ if err != nil {
 | `RawPayload` | Raw response bytes (for custom handling) |
 | `Meta` | Associated metadata including rate limit info |
 
-#### Rate Limit Errors
+### Rate Limit Errors
 
 THe SDK no longer enforces client-side rate limits (v1.4.0 change)
 
@@ -226,7 +227,7 @@ if meta.RateLimit.Remaining == 0 {
 - `RawRemaining`: Raw header value as string
 - `RawLimit`: Raw limit info from headers
 
-#### Context Cancellation Errors
+### Context Cancellation Errors
 
 ```Go
 ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -239,6 +240,332 @@ if err != nil {
     } else {
         // Other errors
         log.Printf("API error: %v", err)
+    }
+}
+```
+
+## Use-Cases
+
+### Project Service
+
+Manage active and archived projects, retrieve project details, create new projects, and work with bids, milestones, and reviews.
+
+#### Core Methods
+
+| Method | Description | Example Use Case |
+| :----- | :---------- | :--------------- |
+| `List(ctx, opts)` | Get user's projects | Fetch all projects |
+| `SearchActive(ctx, opts)` | Search active projects | Find jobs matching criteria |
+| `SearchAll(ctx, opts)` | Search all projects | Browse archived and active |
+| `Get(ctx, id, opts)` | Get single project | View project details |
+| `Create(ctx, body)` | Create new project | Post a new job |
+| `Delete(ctx, id)` | Delete project | Remove closed projects |
+
+#### Searching Active Projects
+
+```go
+// Basic search with filters
+opts := rr.SearchActiveProjectsOptions{
+    Query:           rr.String("Go developer"),
+    Limit:           rr.Int(20),      // Results per page
+    Offset:          rr.Int(0),
+    
+    // Filtering options
+    UserDetails:     rr.Bool(true),         // Include user info
+    
+    // Sort and pagination
+    SortField:    rr.SortFieldsTimeUpdated,
+    ReverseSort:  rr.Bool(false),           // Newest first
+}
+// Execute search
+res, meta, err := client.Services.Projects.SearchActive(ctx, &opts)
+if err != nil {
+    log.Printf("Error: %v", err)
+    return
+}
+
+// Process results
+for _, p := range res.Result.Projects {
+    fmt.Printf("- Project #%d: %s\n",p.ID, p.Title)
+}
+
+fmt.Printf("Showing %d of %d total projects\n", len(res.Result.Projects), res.Result.TotalCount)
+```
+
+#### Searching with Geographic Bounds
+
+Use lat/lng coordinates for location-based filtering:
+
+```Go
+opts := rr.SearchActiveProjectsOptions{
+    Query:     rr.String("website"),
+    
+    // Geographic bounding box
+    Latitude:          rr.Float64(40.7128),
+    Longitude:         rr.Float64(-74.0060),  // New York
+    TopRightLatitude:  rr.Float64(41.0),
+    TopRightLongitude: rr.Float64(-73.5),
+    BottomLeftLatitude: rr.Float64(40.4),
+    BottomLeftLongitude: rr.Float64(-74.5),
+}
+
+res, _, err := client.Services.Projects.SearchActive(ctx, &opts)
+```
+
+#### Creating a Project
+
+```Go
+body := reqres.CreateProjectBody{
+    Title: "Go Developer Needed",
+    Description: "Need an experienced Go developer...",
+    
+    Budget: rr.Budget{
+        Minimum: 100.0,
+        Maximum: 5000.0,
+    },
+    
+    Type: rr.Enum(rr.ProjectBudgetFixed),
+}
+
+res, meta, err := client.Services.Projects.Create(ctx, body)
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Printf("Project created with ID: %d\n", res.Result.ID)
+```
+
+#### Working with Bids on a Project
+
+```Go
+// List bids for a project
+bidsOpts := rr.ListBidsOptions{
+    Limit:       rr.Int(10),
+    Reputation:  rr.Bool(true),   // Include reputation data
+    UserDetails: rr.Bool(false),  // Don't load full user info yet
+}
+
+res, _, err := client.Services.Projects.ListBids(ctx, projectId, &bidsOpts)
+```
+
+#### Milestones and Milestone Request
+
+```Go
+// List milestones
+mileOpts := rr.ListMilestonesOptions{
+    Projects: []int64{projectId},
+    Limit:    rr.Int(25),
+}
+res, _, err := client.Services.Projects.Milestones.List(ctx, &mileOpts)
+
+// Create a milestone request
+body := reqres.CreateMilestoneRequestBody{
+    ProjectID:   projectId,
+    BidID:       bidId,          // Required: the bid to award this milestone on
+    Amount:      2500,           // Milestone amount
+}
+res, _, err := client.Services.Projects.MilestoneRequests.Create(ctx, body)
+
+// Award (release) a milestone request
+action := rr.MilestoneActionRequestRelease()
+apiBody := reqres.ActionMilestoneRequestBody{
+    Action: rr.Enum(action),
+}
+res, _, err := client.Services.Projects.MilestoneRequests.Action(ctx, requestId, &apiBody)
+```
+
+#### Reviews
+
+```Go
+// Create a review for a freelancer
+body := reqres.CreateReviewBody{
+    ProjectID:  projectId,
+    ToUserID:   freelancerUserId,
+    FromUserID: currentUserId(),       // Implement in your code logic
+    ReviewType: rr.ReviewTypeProject(),
+    Role:       rr.RoleFreelancer(),
+    Comment:    "Great work, very professional!",
+}
+
+res, _, err := client.Services.Projects.Reviews.Create(ctx, body)
+```
+
+### Users Section
+
+Interact with freelancer profiles, user directory, and personal profile management.
+
+#### Core User Methods
+
+| Method | Description | Returns |
+| :----- | :---------- | :------ |
+| `List(ctx, opts)` | Get users by IDs or usernames | Map of user data |
+| `SearchFreelancer(ctx, opts)` | Search freelancer directory | Filtered list |
+| `Get(ctx, id)` | Get single user by ID | User details |
+
+#### Directory Search - Finding Freelancers
+
+```Go
+// Find freelancers matching criteria
+searchOpts := rr.SearchFreelancerOptions{
+    Query:     rr.String("golang"),
+    
+    // Price and skill filters
+    HourlyRateMin: rr.Int(30),
+    ReviewCountMin:  rr.Int(5),        // At least 5 reviews
+    
+    // Pagination
+    Limit:  rr.Int(20),
+    Offset: rr.Int(0),
+    
+    // Include detailed data
+    Reputation:        rr.Bool(true),
+    ProfileDescription: rr.Bool(true),
+}
+
+res, meta, err := client.Services.Users.SearchFreelancer(ctx, &searchOpts)
+if err != nil {
+    log.Printf("Error: %v", err)
+    return nil
+}
+
+// Process results
+freelancers := res.Result.Users
+for _, u := range freelancers {
+    fmt.Printf("- %s: $%.2f/hr, Reviews: %d\n", 
+        u.DisplayName, u.HourlyRate, u.Reputation.Entrity)
+}
+
+fmt.Printf("Found %d freelancers out of %d total\n", 
+    len(freelancers), res.Result.TotalCount)
+```
+
+#### Getting User Details
+
+```Go
+// Direct user lookup by ID
+userData, _, err := client.Services.Users.Get(ctx, userId)
+if err != nil {
+    log.Printf("Error: %v", err)
+    return
+}
+```
+
+#### Working with User Profile
+
+```Go
+// Create a profile for yourself or another user
+createOpts := rr.CreateProfileBody{
+    Tagline:     "Experienced Go developer",
+    HourlyRate:  75,
+    Description: "Full-stack software engineer specializing in Go and Rust.",
+}
+
+res, _, err := client.Services.Users.Profiles.Create(ctx, createOpts)
+if err != nil {
+    log.Printf("Error: %v", err)
+    return
+}
+
+// Update an existing profile
+updateOpts := rr.UpdateProfileBody{
+    HourlyRate:  85,
+    Description: "Senior Go engineer with 8 years experience...",
+}
+
+res, _, err = client.Services.Users.Profiles.Update(ctx, updateOpts)
+```
+
+#### Device Management
+
+```Go
+// List devices used by current user (authenticated endpoint)
+devices, _, err := client.Services.UsersSelfDevices.List(ctx)
+if err != nil {
+    log.Printf("Error: %v", err)
+}
+
+for _, device := range devices.Result.Devices {
+    fmt.Printf("- %s in %s (%d)\n", 
+        device.City, device.Country, device.LastLogin)
+}
+```
+
+### Common Service
+
+Access platform-wide resources like countries, timezones and currencies.
+
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `ListCountries(ctx, opts)` | `/common/countries` | Country list for filtering |
+| `ListTimezones(ctx, opts)` | `/common/timezones` | Timezone data with offsets |
+| `ListCurrencies(ctx, opts)` | `/projects/currencies` | Currency conversion info |
+
+#### List Countries
+
+```Go
+opts := rr.ListCountriesOptions{
+    ExtraDetails: rr.Bool(true), // Include flag URLs, population, etc.
+}
+
+res, meta, err := client.Services.Common.ListCountries(ctx, &opts)
+if err != nil {
+    log.Printf("Error: %v", err)
+    return
+}
+
+// Each country structure includes location data
+for _, c := range res.Result.Countries {
+   // Do rest 
+}
+```
+
+#### Listing Timezones
+
+```Go
+opts := rr.ListTimezonesOptions{
+    TimezoneNames: []string{
+        "America/New_York",
+        "Europe/London",
+        "Asia/Tokyo",
+    },
+}
+
+res, _, err := client.Services.Common.ListTimezones(ctx, &opts)
+if res.Result.Timezones != nil && len(res.Result.Timezones) > 0 {
+    for _, tz := range res.Result.Timezones {
+        fmt.Printf("%s: offset=%.2f (UTC+%.1f)\n", 
+            tz.ISO8601, tz.Offset, tz.Offset)
+    }
+}
+
+fmt.Printf("Fetched %d timezone(s)\n", len(res.Result.Timezones))
+```
+
+#### Listing Currencies
+
+```Go
+opts := rr.ListCurrenciesOptions{
+    IncludeExternalCurrencies:  rr.Bool(true), // Also show third-party currencies
+    
+    // Or filter by specific codes
+    CurrencyCodes: []string{"USD", "EUR", "GBP"},
+}
+
+res, meta, err := client.Services.Projects.Currencies.List(ctx, &opts)
+if err != nil {
+    log.Printf("Error: %v", err)
+    return nil
+}
+
+// Each currency record supports exchange rates for calculations
+currencyMap[rr.ID_BudgetCurrency()] = res.Result.Currencies[id]
+
+fmt.Printf("%.2f EUR to USD\n", 
+    res.Result.Currencies[rr.BudgetCurrency()].ExchangeRate)
+
+for _, c := range res.Result.Currencies {
+    fmt.Printf("%s: %.3f USD rate, Country=%s\n", 
+        c.Code, c.ExchangeRate, c.Country)
     }
 }
 ```
