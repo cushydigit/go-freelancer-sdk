@@ -1,12 +1,12 @@
-// Package freelancer provides a Go SDK for interacting with the Freelancer API.
 package freelancer
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"time"
@@ -20,19 +20,13 @@ func (c *Client) GetBaseUrl() string {
 func (c *Client) SetBaseUrl(url string) {
 	c.baseURL = url
 }
-func (c *Client) SetUseRateLimit(enabled bool) {
-	c.useRateLimit = enabled
-}
 
 type Client struct {
-	httpClient  *http.Client
-	logger      *log.Logger
-	rateLimiter *RateLimiter
+	httpClient *http.Client
+	logger     *slog.Logger
 
-	apiToken     string
-	baseURL      string
-	useRateLimit bool
-	debugMode    bool
+	apiToken string
+	baseURL  string
 
 	Services *Services
 }
@@ -47,22 +41,19 @@ func WithHttpClient(hc *http.Client) ClientOption {
 	return func(c *Client) { c.httpClient = hc }
 }
 
-func WithDebug(enabled bool) ClientOption {
-	return func(c *Client) { c.debugMode = enabled }
+func WithLogger(l *slog.Logger) ClientOption {
+	return func(c *Client) { c.logger = l }
 }
 
 func NewClient(apiToken string, opts ...ClientOption) *Client {
 
 	c := &Client{
-		logger: log.Default(),
+		logger: slog.New(slog.NewTextHandler(io.Discard, nil)),
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
-		apiToken:     apiToken,
-		baseURL:      endpoints.APIMainURL,
-		debugMode:    false,
-		useRateLimit: true,
-		rateLimiter:  newRateLimiter(),
+		apiToken: apiToken,
+		baseURL:  endpoints.APIMainURL,
 	}
 
 	for _, opt := range opts {
@@ -74,13 +65,18 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 
 }
 
-func (c *Client) do(ctx context.Context, method, path string, query url.Values, body io.Reader) ([]byte, error) {
+func (c *Client) do(ctx context.Context, method, path string, query url.Values, body io.Reader) ([]byte, *ResponseMeta, error) {
 
 	// Parse Path
 	endpoint, err := url.Parse(fmt.Sprintf("%s%s", c.baseURL, path))
 	if err != nil {
-		return nil, fmt.Errorf("invalid path: %w", err)
+		return nil, nil, fmt.Errorf("invalid path: %w", err)
 	}
+
+	logger := c.logger.With(
+		"method", method,
+		"url", endpoint.String(),
+	)
 
 	// Add Query Params
 	if query != nil {
@@ -90,49 +86,66 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 	// Create Request
 	req, err := http.NewRequestWithContext(ctx, method, endpoint.String(), body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
+		return nil, nil, fmt.Errorf("failed to create request: %w", err)
 	}
 	// Set headers
 	req.Header.Set("freelancer-oauth-v1", c.apiToken)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "GoFreelancerSDK/1.2 (+github.com/cushydigit/go-freelancer-sdk)")
+	req.Header.Set("User-Agent", "GoFreelancerSDK/1.4 (+github.com/cushydigit/go-freelancer-sdk)")
 
-	// Wait for rate limit
-	if c.useRateLimit {
-		if err := c.rateLimiter.wait(ctx); err != nil {
-			return nil, fmt.Errorf("rate limit: %w", err)
-		}
-	}
+	start := time.Now()
+
+	logger.Debug(
+		"sending request",
+		"query", query.Encode(),
+	)
 
 	// Send request
-	if c.debugMode {
-		c.logger.Printf("--> %s %s", method, endpoint.String())
-	}
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("network error: %w", err)
+		logger.Error(
+			"request failed",
+			"error", err,
+			"duration", time.Since(start),
+		)
+		return nil, nil, fmt.Errorf("network error: %w", err)
 	}
 	defer resp.Body.Close()
 
-	// Update rate limit
-	if c.useRateLimit {
-		c.rateLimiter.updateFromHeader(resp.Header)
-	}
+	logger.Debug(
+		"received response",
+		"status", resp.StatusCode,
+		"duration", time.Since(start),
+	)
 
 	// Handle response
-	if c.debugMode {
-		c.logger.Printf("<-- %s %s ", resp.Status, endpoint.String())
-	}
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read response: %w", err)
+		return nil, nil, fmt.Errorf("failed to read response: %w", err)
 	}
+
+	// parse response meta
+	meta := parseResponseMeta(resp)
 
 	// Handle errors
 	if resp.StatusCode >= 400 {
+		if resp.StatusCode == http.StatusTooManyRequests {
+			logger.Warn(
+				"rate limit exceeded",
+				"status", resp.StatusCode,
+				"rate_limit", meta.RateLimit.Limits,
+				"rate_remaining", meta.RateLimit.Remaining,
+			)
+		} else {
+			logger.Debug(
+				"request return HTTP error",
+				"status", resp.StatusCode,
+			)
+		}
 		apiErr := &APIError{
 			StatusCode: resp.StatusCode,
 			RawPayload: data,
+			Meta:       meta,
 		}
 		// try to parse the JSON error body
 		if json.Valid(data) {
@@ -143,13 +156,46 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 		if apiErr.Message == "" {
 			apiErr.Message = http.StatusText(resp.StatusCode)
 		}
-		return nil, apiErr
+
+		return nil, meta, apiErr
 	}
 
 	// Handle success
-	if c.debugMode {
-		c.logger.Printf("<-- %d (%d bytes)", resp.StatusCode, len(data))
+	return data, meta, nil
+}
+
+func execute[T any](ctx context.Context, c *Client, method, path string, query url.Values, body any) (T, *ResponseMeta, error) {
+	var result T
+
+	logger := c.logger.With(
+		"method", method,
+		"path", path,
+	)
+
+	var bodyReader io.Reader
+	if body != nil {
+		b, err := json.Marshal(body)
+		if err != nil {
+			logger.Error(
+				"failed to encode request body",
+				"error", err,
+			)
+			return result, nil, err
+		}
+		bodyReader = bytes.NewReader(b)
+	}
+	data, meta, err := c.do(ctx, method, path, query, bodyReader)
+	if err != nil {
+		return result, meta, err
 	}
 
-	return data, nil
+	if err := json.Unmarshal(data, &result); err != nil {
+		logger.Error(
+			"failed to decode response",
+			"error", err,
+		)
+		return result, meta, fmt.Errorf("decode error: %w", err)
+	}
+
+	return result, meta, nil
 }

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.0] - 2025-12-31
+
+### Refactoring & Improvements
+
+- Refactored request-related packages, including `actions`, `body`, and `request`, into the `reqres` package.
+- Renamed several enums and types to improve naming consistency and API clarity.
+- Replaced the previous debug logging mechanism with Go's structured `slog` logging.
+- Added `IsAPIError` helper for detecting and extracting `*APIError` from wrapped errors.
+
+### Breaking Changes
+
+- Removed explicit client-side rate limiting from the SDK.
+- Added response metadata support for exposing API rate-limit information, including rate-limit limits and windows.
+
+
 ## [1.3.1] - 2025-12-31
 
 ### Bug Fixes

@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
@@ -14,10 +16,10 @@ import (
 )
 
 func TestNewClientOptions(t *testing.T) {
-	c := NewClient("token", WithSandBox(), WithDebug(true))
+	c := NewClient("token", WithSandBox())
 
 	assert.Equal(t, c.baseURL, endpoints.APISandBoxURL)
-	assert.Equal(t, c.debugMode, true)
+	assert.NotNil(t, c.logger)
 }
 
 func TestClientDoSuccess(t *testing.T) {
@@ -30,7 +32,7 @@ func TestClientDoSuccess(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	data, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
+	data, _, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
 	assert.NoError(t, err)
 	assert.Contains(t, string(data), `{"message": "success"}`)
 }
@@ -45,7 +47,7 @@ func TestClientDoError(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	_, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
+	_, _, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
 	assert.Error(t, err)
 	apiErr, ok := err.(*APIError)
 	assert.True(t, ok)
@@ -57,7 +59,7 @@ func TestClientHeaders(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "token", r.Header.Get("freelancer-oauth-v1"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
-		assert.Equal(t, "GoFreelancerSDK/1.2 (+github.com/cushydigit/go-freelancer-sdk)", r.Header.Get("User-Agent"))
+		assert.Equal(t, "GoFreelancerSDK/1.4 (+github.com/cushydigit/go-freelancer-sdk)", r.Header.Get("User-Agent"))
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message": "success"}`))
 	}))
@@ -66,7 +68,7 @@ func TestClientHeaders(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	_, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
+	_, _, err := c.do(context.Background(), http.MethodGet, "/test", nil, nil)
 	assert.NoError(t, err)
 }
 
@@ -117,8 +119,34 @@ func TestClientRequestBody(t *testing.T) {
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
-	_, err := c.do(context.Background(), http.MethodPost, "/test", nil, bytes.NewReader([]byte(`{"name": "Alice", "age": 30}`)))
+	_, _, err := c.do(context.Background(), http.MethodPost, "/test", nil, bytes.NewReader([]byte(`{"name": "Alice", "age": 30}`)))
 	assert.NoError(t, err)
+}
+
+func TestClient_GetBaseUrl(t *testing.T) {
+	c := NewClient("token")
+	assert.Equal(t, endpoints.APIMainURL, c.GetBaseUrl())
+	c.SetBaseUrl(endpoints.APISandBoxURL)
+	assert.Equal(t, endpoints.APISandBoxURL, c.GetBaseUrl())
+}
+
+func TestClient_NewClient(t *testing.T) {
+	apiToken := "token"
+	opts := []ClientOption{
+		WithSandBox(),
+		WithHttpClient(&http.Client{}),
+		WithLogger(
+			slog.New(
+				slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+					Level: slog.LevelDebug,
+				}),
+			),
+		),
+	}
+	c := NewClient(apiToken, opts...)
+	if c.httpClient == nil || c.baseURL != endpoints.APISandBoxURL {
+		t.Errorf("unexpected configuration: %v", c)
+	}
 }
 
 func TestExecuteInvalidJSON(t *testing.T) {
@@ -136,7 +164,28 @@ func TestExecuteInvalidJSON(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	_, err := execute[Person](context.Background(), c, http.MethodGet, "/test", nil, nil)
+	_, _, err := execute[Person](context.Background(), c, http.MethodGet, "/test", nil, nil)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "decode error")
+}
+
+func TestExecuteGeneric(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"Name":"Alice","Age":30}`))
+	}))
+	defer ts.Close()
+
+	type Person struct {
+		Name string
+		Age  int
+	}
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	result, _, err := execute[Person](context.Background(), c, http.MethodGet, "/test", nil, nil)
+	assert.NoError(t, err)
+	assert.Equal(t, "Alice", result.Name)
+	assert.Equal(t, 30, result.Age)
 }

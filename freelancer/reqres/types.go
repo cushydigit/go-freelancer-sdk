@@ -1,4 +1,4 @@
-package freelancer
+package reqres
 
 import (
 	"fmt"
@@ -61,11 +61,11 @@ type Currency struct {
 }
 
 type Budget struct {
-	Minimum     float64     `json:"minimum"`
-	Maximum     float64     `json:"maximum"`
-	Name        string      `json:"name"`
-	ProjectType ProjectType `json:"project_type"`
-	CurrencyID  int         `json:"currency_id"`
+	Minimum     float64           `json:"minimum"`
+	Maximum     float64           `json:"maximum"`
+	Name        string            `json:"name"`
+	ProjectType ProjectBudgetType `json:"project_type"`
+	CurrencyID  int               `json:"currency_id"`
 }
 
 type Upgrades struct {
@@ -234,7 +234,7 @@ type Project struct {
 }
 
 func (p *Project) GetFullUrl() string {
-	return fmt.Sprintf("%s/%s", endpoints.BaseProjects, p.SeoURL)
+	return fmt.Sprintf("%s/projects/%s", endpoints.Base, p.SeoURL)
 }
 
 type Timezone struct {

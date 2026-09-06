@@ -1,11 +1,14 @@
-package freelancer
+package reqres
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type base struct {
 	Status    string `json:"status"`
 	RequestID string `json:"request_id"`
 }
+
 type RawResponse struct {
 	base
 	Result json.RawMessage `json:"result"`
@@ -47,6 +50,15 @@ type ListUsersResponse struct {
 	Result struct {
 		Users map[string]*User `json:"users"`
 	} `json:"result"`
+}
+
+// Users returns the users as a slice
+func (r *ListUsersResponse) Users() []*User {
+	users := make([]*User, 0, len(r.Result.Users))
+	for _, user := range r.Result.Users {
+		users = append(users, user)
+	}
+	return users
 }
 
 type GetProjectResponse struct {
@@ -99,7 +111,7 @@ type ListUsersPortfoliosResponse struct {
 	Result json.RawMessage `json:"result"`
 }
 
-type ListSelfLoginDevicesResponse struct {
+type ListSelfDevicesResponse struct {
 	base
 	Result struct {
 		Devices []*Device `json:"devices"`

@@ -1,7 +1,7 @@
-package freelancer
+package reqres
 
-type TypeType string
 type ProjectType string
+type ProjectBudgetType string
 type ContextType string
 type ProjectUpgradeType string
 type ProjectStatusType string
@@ -15,7 +15,7 @@ type RoleType string
 type ViolationContext string
 type ViolationReason string
 type ViolationAdditionalReason string
-type ProjectCollaborationAction string
+type CollaborationAction string
 type ServiceType string
 type ServiceStatusType string
 type SortType string
@@ -38,11 +38,11 @@ type CompletionStatus string
 type ReviewAction string
 
 const (
-	Projects TypeType = "projects"
-	Contests TypeType = "contests"
+	Projects ProjectType = "projects"
+	Contests ProjectType = "contests"
 
-	ProjectFixed  ProjectType = "fixed"
-	ProjectHourly ProjectType = "hourly"
+	ProjectBudgetFixed  ProjectBudgetType = "fixed"
+	ProjectBudgetHourly ProjectBudgetType = "hourly"
 
 	IntervalWeek  IntervalType = "WEEK"
 	IntervalMonth IntervalType = "MONTH"
@@ -166,8 +166,8 @@ const (
 	MilestoneActionRequestReject MilestoneActionRequest = "reject"
 	MilestoneActionRequestDelete MilestoneActionRequest = "delete"
 
-	ProjectCollaborationActionRevoke            ProjectCollaborationAction = "revoke"
-	ProjectCollaborationActionUpdatePermissions ProjectCollaborationAction = "update_permissions"
+	CollaborationActionRevoke            CollaborationAction = "revoke"
+	CollaborationActionUpdatePermissions CollaborationAction = "update_permissions"
 
 	ServiceRegular ServiceType = "regular"
 	ServiceLocal   ServiceType = "local"
