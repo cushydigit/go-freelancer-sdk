@@ -42,107 +42,202 @@ I spent a significant amount of time hand-coding these service wrappers to handl
 
 ---
 
-## Installation
+### Installation
+
+to add this SDK to your project:
 
 ```bash
-go get github.com/cushydigit/freelancer-go-sdk
+go get github.com/cushydigit/freelancer-go-sdk@v1.4.0
 ```
 
-## Usage
+**Important Notes:**
+
+- this package imports as github.com/cushydigit/go-freelancer-sdk/freelancer in you code
+- You'll need a freelancer.com OAuth access token to authenticate request
+- The SDK require GO 1.24 or later (specified)
+
+**Minimal Import Example:**
+
+```Go
+package main
+
+import (
+    "github.com/cushydigit/go-freelancer-sdk/freelancer"
+)
+
+func main() {
+    // SDK initialization - token should be provided securely
+    client := freelancer.NewClient(yourAccessToken)
+}
+```
+
+**Environment Variable:**
+The examples assume these environment variable:
+| Variable | Description | Example value |
+| FREELANCER_ACCESS_TOKEN | OAuth2 access token | frl_xxxxxxxxxxxx |
+| (Optional) PROXY_ADDR | SOCKS proxy address | socks5://localhost:1080 |
+
+### Quick Start
+
+Get your Freelancer.com access token from the [Freelancer Developer Portal](https://accounts.freelancer.com/), then run:
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+    
+    "github.com/cushydigit/go-freelancer-sdk/freelancer"
+    rr "github.com/cushydigit/go-freelancer-sdk/freelancer/reqres"
+)
+
+func main() {
+    // Step 1: Create client with your access token
+    client := freelancer.NewClient(os.Getenv("FREELANCER_ACCESS_TOKEN"))
+    
+    // Step 2: Configure search options
+    opts := rr.SearchActiveProjectsOptions{
+        Limit:     rr.Int(5),           // Number of results per page
+        Query:     rr.String("golang"), // Search keyword
+        FullDescription: rr.Bool(true), // Include full project description
+    }
+    
+    // Step 3: Fetch projects with context for timeout control
+    ctx := context.Background()
+    res, meta, err := client.Services.Projects.SearchActive(ctx, &opts)
+    if err != nil {
+        log.Fatalf("Search failed: %v", err)
+    }
+    
+    // Step 4: Process results
+    fmt.Printf("Found %d active projects\n", len(res.Result.Projects))
+    for _, p := range res.Result.Projects {
+        fmt.Printf("- Project %d: %s (URL: %s)\n", 
+            p.ID, p.Title, p.GetFullUrl())
+    }
+    
+    // Step 5: Access rate limit info (v1.4.0 feature)
+    if meta.RateLimit.Remaining > 0 {
+        fmt.Printf("Rate limit remaining: %d requests\n", meta.RateLimit.Remaining)
+    }
+}
+```
 
 ### Authentication
 
-You will need an OAuth2 access token from Freelancer.com. You can generate one in the [Freelancer Developer Portal](https://accounts.freelancer.com/).
+This SDK authenticates with Freelancer.com using OAuth2 access tokens. The token is sent via the `freelancer-oauth-v1` header on every request.
 
-### Quick Examples
+**Creating a Client:**
 
-fetch active projects
-
-```Go
+```go
 import (
- "log"
- "github.com/cushydigit/go-freelancer-sdk/freelancer"
+    "github.com/cushydigit/go-freelancer-sdk/freelancer"
 )
-func QuickExample() {
-// create client with access token
- client = freelancer.NewClient(apiAccessToken)
- opts := freelancer.SearchActiveProjectsOptions{
-  FullDescription: freelancer.Bool(true),
-  Limit:           freelancer.Int(10),
-  Offset:          freelancer.Int(5),
-  Query:           freelancer.String("golang"),
- }
 
- res, err := client.Services.Projects.SearchActive(context.Background(), &opts)
- // set parameters
- if err != nil {
-  log.Printf("error: %v", err)
-  return
- }
- for index, p := range res.Result.Projects {
-  log.Println(index, p)
- }
+// Basic client creation
+client := freelancer.NewClient("your_access_token_here")
+
+// With custom HTTP client (for timeouts, proxies, etc.)
+httpClient := &http.Client{
+    Timeout: 30 * time.Second,
+}
+client = freelancer.NewClient(
+    "your_access_token",
+    freelancer.WithHttpClient(httpClient),
+)
+
+// Use sandbox environment for testing
+client = freelancer.NewClient(
+    "your_access_token",
+    freelancer.WithSandBox(), // Uses api-sandbox.freelancer.com
+)
 ```
 
-fetch timezones
+**Important Security Notes:**
 
-```GO
-func ListTimezones() {
-res, err := client.Services.Common.ListTimezones(context.Background(), nil)
- if err != nil {
-  log.Printf("error: %v", err)
-  return
- }
- for index, t := range res.Result.Timezones {
-  log.Println(index, t)
- }
+- **Never hard-code tokens in source code** - use environment variables
+- **Rotate credential regularly** - if your token expired or compromised, revoke and generate a new one.
+- **Use the sandbox for development** - `WithSandBox()` uses the test API endpoint
+- **Set appropriate timeouts** - The default 30-second timeout may not be suitable for all use cases
+
+### Error Handling
+
+All API requests return three values: `(result, meta, error)`.
+
+#### Basic Error Checking
+
+```go
+res, meta, err := client.Services.Projects.SearchActive(ctx, opts)
+if err != nil {
+    // Handle various error types
+    
+    // Check for API-specific errors
+    if apiErr, isAPIError := freelancer.IsAPIError(err); isAPIError {
+        fmt.Printf("API Error: Code=%s, Message=%s\n", 
+            apiErr.LegacyErrorCode, apiErr.Message)
+        
+        // Access detailed error info
+        if apiErr.InnerError.Detail != "" {
+            fmt.Println(apiErr.InnerError.Detail)
+        }
+    } else {
+        // Network or other errors
+        fmt.Printf("Request failed: %v", err)
+    }
+} else {
+    // Process successful response
 }
 ```
 
-fetch countries
+#### API Error Structure
 
-```GO
-func ListCountries() {
- res, err := client.Services.Common.ListCountries(context.Background(), nil)
- if err != nil {
-  log.Printf("error: %v", err)
-  return
- }
- for index, c := range res.Result.Countries {
-  fmt.Println(index, c)
- }
-}
+| Field | Description |
+| StatusCode | HTTP status code (e.g, 429 for rate limited) |
+| Status | API status text (OK, ERROR, etc.) |
+| Message | User-facing error message |
+| RequestID | Freelancer's request ID fro support tickets |
+| InnerError.Code | Specified API error code |
+| InnerError.Details | Detailed explanation of the error |
+| RawPayload | Raw response bytes (for custom handling) |
+| Meta | Associated metadata including rate limit info |
 
-```
+#### Rate Limit Errors
 
-fetch budgets
+THe SDK no longer enforces client-side rate limits (v1.4.0 change)
 
 ```Go
-
-func ListBudgets() {
- res, err := client.Services.Projects.Extras.Budgets.List(context.Background(), nil)
- if err != nil {
-  log.Printf("error: %v", err)
-  return
- }
- for index, b := range res.Result.Budgets {
-  fmt.Println(index, b)
- }
+// Check if you've been rate limited
+if meta.RateLimit.Remaining == 0 {
+    fmt.Printf("Rate limit reached. Current window: %v\n", 
+        meta.RateLimit.Limits)
+    
+    // Calculate wait time based on API response headers
 }
 ```
 
-fetch categories
+**Rate Limit Headers Explained:**
+
+- `Remaining`: Requests remaining in current window
+- `Limits`: Array of quote windows
+- `RawRemaining`: Raw header value as string
+- `RawLimit`: Raw limit info from headers
+
+#### Context Cancellation Errors
 
 ```Go
-func ListCategories() {
- res, err := client.Services.Projects.Extras.Categories.List(context.Background(), nil)
- if err != nil {
-  log.Printf("error: %v", err)
-  return
- }
- for index, c := range res.Result.Categories {
-  fmt.Println(index, c)
- }
+ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+defer cancel()
+
+res, meta, err := client.Services.Projects.SearchActive(ctx, opts)
+if err != nil {
+    if errors.Is(err, ctx.Err()) {
+        fmt.Println("Request timed out or was cancelled")
+    } else {
+        // Other errors
+        log.Printf("API error: %v", err)
+    }
 }
 ```
 
