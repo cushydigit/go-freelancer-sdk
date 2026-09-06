@@ -21,11 +21,11 @@ type Country struct {
 
 type Job struct {
 	ID                 int64     `json:"id"`
-	Name               *string   `json:"name,omitempty"`
+	Name               string    `json:"name,omitempty"`
 	Category           *Category `json:"category,omitempty"`
 	ActiveProjectCount float64   `json:"active_project_count"`
-	SeoURL             *string   `json:"seo_url,omitempty"`
-	Local              *bool     `json:"local,omitempty"`
+	SeoURL             string    `json:"seo_url,omitempty"`
+	Local              bool      `json:"local,omitempty"`
 }
 
 type JobHistory struct {

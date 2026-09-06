@@ -33,7 +33,8 @@ type ListCategoriesResponse struct {
 	base
 	Result struct {
 		Categories []*Category `json:"categories"`
-		Jobs       []*Job      `json:"jobs,omitempty"`
+		// jobs is dictionary with category ID as key and list of jobs as value
+		Jobs map[string][]Job `json:"jobs,omitempty"`
 	} `json:"result"`
 }
 
