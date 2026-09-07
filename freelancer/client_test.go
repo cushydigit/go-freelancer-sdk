@@ -89,7 +89,7 @@ func TestClientQueryParams(t *testing.T) {
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
-	q := query.Values(struct {
+	q, _ := query.Values(struct {
 		Param1 string
 		Param2 string
 		Param3 bool
