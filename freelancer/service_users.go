@@ -19,8 +19,14 @@ func (s *UsersService) List(
 	ctx context.Context,
 	opts *rr.ListUsersOptions,
 ) (*rr.ListUsersResponse, *ResponseMeta, error) {
-	p := endpoints.Users
-	return execute[*rr.ListUsersResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListUsersResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.Users,
+		opts,
+		nil,
+	)
 }
 
 // Returns information about a specific user.
@@ -29,8 +35,14 @@ func (s *UsersService) Get(
 	ctx context.Context,
 	userID int64,
 ) (*rr.GetUserResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.Users, userID)
-	return execute[*rr.GetUserResponse](ctx, s.client, http.MethodGet, p, nil, nil)
+	return execute[*rr.GetUserResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d", endpoints.Users, userID),
+		nil,
+		nil,
+	)
 }
 
 // Returns a list of Freelancers. The total_count field is the total number of eligible Freelancers, but these users can be limited by the offset and limit parameters.
@@ -39,8 +51,14 @@ func (s *UsersService) SearchFreelancer(
 	ctx context.Context,
 	opts *rr.SearchFreelancerOptions,
 ) (*rr.SearchFreelancersResponse, *ResponseMeta, error) {
-	p := endpoints.UsersFreelancers
-	return execute[*rr.SearchFreelancersResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.SearchFreelancersResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.UsersFreelancers,
+		opts,
+		nil,
+	)
 }
 
 // --------------------------------------
@@ -53,8 +71,14 @@ func (s *SelfService) GetInfo(
 	ctx context.Context,
 	opts *rr.GetSelfInfoOptions,
 ) (*rr.GetSelfInfoResponse, *ResponseMeta, error) {
-	p := endpoints.UsersSelf
-	return execute[*rr.GetSelfInfoResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.GetSelfInfoResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.UsersSelf,
+		opts,
+		nil,
+	)
 }
 
 // Returns a list of user’s recent logged in devices.
@@ -62,8 +86,14 @@ func (s *SelfService) GetInfo(
 func (s *SelfService) ListDevices(
 	ctx context.Context,
 ) (*rr.ListSelfDevicesResponse, *ResponseMeta, error) {
-	p := endpoints.UsersSelfDevices
-	return execute[*rr.ListSelfDevicesResponse](ctx, s.client, http.MethodGet, p, nil, nil)
+	return execute[*rr.ListSelfDevicesResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.UsersSelfDevices,
+		nil,
+		nil,
+	)
 }
 
 // Add a list of jobs to the job list of a current user.
@@ -72,8 +102,14 @@ func (s *SelfJobsService) Add(
 	ctx context.Context,
 	b rr.AddJobsBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.UsersSelfJobs
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.UsersSelfJobs,
+		nil,
+		b,
+	)
 }
 
 // Sets a list of jobs to the job list of the current user.
@@ -82,8 +118,14 @@ func (s *SelfJobsService) Set(
 	ctx context.Context,
 	b rr.SetJobsBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.UsersSelfJobs
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		endpoints.UsersSelfJobs,
+		nil,
+		b,
+	)
 }
 
 // Removes a list of jobs from the job list of the current user.
@@ -92,8 +134,14 @@ func (s *SelfJobsService) Delete(
 	ctx context.Context,
 	b rr.DeleteJobsBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.UsersSelfJobs
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodDelete, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodDelete,
+		endpoints.UsersSelfJobs,
+		nil,
+		b,
+	)
 }
 
 // --------------------------------------
@@ -106,8 +154,14 @@ func (s *ProfilesService) Create(
 	ctx context.Context,
 	b rr.CreateProfileBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.UsersProfiles
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.UsersProfiles,
+		nil,
+		b,
+	)
 }
 
 // NOTE: the api does not have solid on this endpoint (the get should not have body)
@@ -117,8 +171,14 @@ func (s *ProfilesService) Create(
 func (s *ProfilesService) Get(
 	ctx context.Context,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.UsersProfiles
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.UsersProfiles,
+		nil,
+		nil,
+	)
 }
 
 // Update a profile
@@ -127,8 +187,14 @@ func (s *ProfilesService) Update(
 	ctx context.Context,
 	b rr.UpdateProfileBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.UsersProfiles
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		endpoints.UsersProfiles,
+		nil,
+		b,
+	)
 }
 
 // --------------------------------------
@@ -141,8 +207,14 @@ func (s *ReputationsService) List(
 	ctx context.Context,
 	opts *rr.ListReputationsOptions,
 ) (*rr.ListUsersReputationsResponse, *ResponseMeta, error) {
-	p := endpoints.UsersReputations
-	return execute[*rr.ListUsersReputationsResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListUsersReputationsResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.UsersReputations,
+		opts,
+		nil,
+	)
 }
 
 // Returns a list of enterprises.
@@ -151,8 +223,14 @@ func (s *EnterprisesService) List(
 	ctx context.Context,
 	opts *rr.ListEnterprisesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.UsersEnterprises
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.UsersEnterprises,
+		opts,
+		nil,
+	)
 }
 
 // The service gets the portfolios for a list of users
@@ -161,8 +239,14 @@ func (s *PortfoliosService) List(
 	ctx context.Context,
 	opts *rr.ListPortfoliosOptions,
 ) (*rr.ListUsersPortfoliosResponse, *ResponseMeta, error) {
-	p := endpoints.UsersPortfolios
-	return execute[*rr.ListUsersPortfoliosResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListUsersPortfoliosResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.UsersPortfolios,
+		opts,
+		nil,
+	)
 }
 
 // Creates a user violation report.
@@ -171,8 +255,14 @@ func (s *ViolationsService) Create(
 	ctx context.Context,
 	b rr.CreateViolationBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.UsersViolationReports
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.UsersViolationReports,
+		nil,
+		b,
+	)
 }
 
 // Returns a list of pools belonging to the current user.
@@ -181,6 +271,12 @@ func (s *PoolsService) List(
 	ctx context.Context,
 	opts *rr.ListPoolsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.UsersPools
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.UsersPools,
+		opts,
+		nil,
+	)
 }

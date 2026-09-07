@@ -19,8 +19,14 @@ func (s *ProjectsService) Create(
 	ctx context.Context,
 	b rr.CreateProjectBody,
 ) (*rr.CreateProjectResponse, *ResponseMeta, error) {
-	p := endpoints.Projects
-	return execute[*rr.CreateProjectResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.CreateProjectResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.Projects,
+		nil,
+		b,
+	)
 }
 
 // Perform an action on a project
@@ -30,8 +36,14 @@ func (s *ProjectsService) Action(
 	projectID int64,
 	b rr.ActionProjectBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d", endpoints.Projects, projectID),
+		nil,
+		b,
+	)
 }
 
 // Returns information about multiple projects. Will be ordered by descending submit date (newest-to-oldest).
@@ -40,8 +52,14 @@ func (s *ProjectsService) List(
 	ctx context.Context,
 	opts *rr.ListProjectsOptions,
 ) (*rr.ListProjectsResponse, *ResponseMeta, error) {
-	p := endpoints.Projects
-	return execute[*rr.ListProjectsResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListProjectsResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.Projects,
+		opts,
+		nil,
+	)
 }
 
 // Returns the logged in user’s projects/contests they either created or participated in (by bidding or submitting an entry).
@@ -50,8 +68,14 @@ func (s *ProjectsService) ListSelf(
 	ctx context.Context,
 	opts *rr.ListSelfProjectsOptions,
 ) (*rr.ListProjectsResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsSelf
-	return execute[*rr.ListProjectsResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListProjectsResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsSelf,
+		opts,
+		nil,
+	)
 }
 
 // Get information about a specific project. The full range of users projection options can be specified as part of this request by first setting theuser_detailsparameter to true.
@@ -61,8 +85,14 @@ func (s *ProjectsService) Get(
 	projectID int64,
 	opts *rr.GetProjectOptions,
 ) (*rr.GetProjectResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
-	return execute[*rr.GetProjectResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.GetProjectResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d", endpoints.Projects, projectID),
+		opts,
+		nil,
+	)
 }
 
 // Searches for active projects matching the desired query.
@@ -71,8 +101,14 @@ func (s *ProjectsService) SearchActive(
 	ctx context.Context,
 	opts *rr.SearchActiveProjectsOptions,
 ) (*rr.ListProjectsResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsActive
-	return execute[*rr.ListProjectsResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListProjectsResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsActive,
+		opts,
+		nil,
+	)
 }
 
 // Searches for all projects matching the desired query.
@@ -81,8 +117,14 @@ func (s *ProjectsService) SearchAll(
 	ctx context.Context,
 	opts *rr.SearchAllProjectsOptions,
 ) (*rr.ListProjectsResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsAll
-	return execute[*rr.ListProjectsResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListProjectsResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsAll,
+		opts,
+		nil,
+	)
 }
 
 // Invites specific freelancers to bid on a project.
@@ -92,8 +134,14 @@ func (s *ProjectsService) InviteFreelancer(
 	projectID int64,
 	b rr.InviteFreelancersBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/invite", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		fmt.Sprintf("%s/%d/invite", endpoints.Projects, projectID),
+		nil,
+		b,
+	)
 }
 
 // Returns the project upgrade fees for a given list of currencies. Also checks if the current user is eligible for free upgrades if requested.
@@ -102,8 +150,14 @@ func (s *ProjectsService) ListUpgradesFees(
 	ctx context.Context,
 	opts *rr.ListUpgradesFeesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsFees
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsFees,
+		opts,
+		nil,
+	)
 }
 
 // Returns bids for a single project. Employers will see bids in a sorted order, which begins with sponsored bids, then by bid ranking. Freelancers will receive the bid list ordered by date. Note: This method is expensive to compute so it is recommended that reputation and user projection options are not set.
@@ -113,8 +167,14 @@ func (s *ProjectsService) ListBids(
 	projectID int64,
 	opts *rr.ListProjectBidsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/bids", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d/bids", endpoints.Projects, projectID),
+		opts,
+		nil,
+	)
 }
 
 // Returns information for posting bids on a project.
@@ -123,8 +183,14 @@ func (s *ProjectsService) GetBidInfo(
 	ctx context.Context,
 	projectID int64,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/bids_info", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d/bids_info", endpoints.Projects, projectID),
+		nil,
+		nil,
+	)
 }
 
 // Returns a list of milestones on a project. Does not return un-awarded prepaid milestones.
@@ -134,8 +200,14 @@ func (s *ProjectsService) ListMilestones(
 	projectID int64,
 	opts *rr.ListProjectMilestonesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/milestones", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d/milestones", endpoints.Projects, projectID),
+		opts,
+		nil,
+	)
 }
 
 // Returns a list of milestone requests by freelancers for a project.
@@ -145,8 +217,14 @@ func (s *ProjectsService) ListMilestoneRequests(
 	projectID int64,
 	opts *rr.ListProjectsMilestoneRequestsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/milestone_requests", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d/milestone_requests", endpoints.Projects, projectID),
+		opts,
+		nil,
+	)
 }
 
 // Fetch the hourly contract matching the desired query.
@@ -155,8 +233,14 @@ func (s *ProjectsService) GetHourlyContractInfo(
 	ctx context.Context,
 	opts *rr.GetHourlyContractInfoOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsHourlyContract
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsHourlyContract,
+		opts,
+		nil,
+	)
 }
 
 // Fetch the IP contract matching for the project id. If you are an employer it will return all of the contracts, ELSE we will return contract details specific to the logged-in user.
@@ -165,8 +249,14 @@ func (s *ProjectsService) GetIPContractInfo(
 	ctx context.Context,
 	projectID int64,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/ip_contract_info", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d/ip_contract_info", endpoints.Projects, projectID),
+		nil,
+		nil,
+	)
 }
 
 // Delete a project by id. Only projects that are in pending or rejected states may be deleted. This will close the project and remove its visibility.
@@ -175,8 +265,14 @@ func (s *ProjectsService) Delete(
 	ctx context.Context,
 	projectID int64,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodDelete, p, nil, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodDelete,
+		fmt.Sprintf("%s/%d", endpoints.Projects, projectID),
+		nil,
+		nil,
+	)
 }
 
 // --------------------------------------
@@ -189,8 +285,14 @@ func (s *CollaborationsService) List(
 	ctx context.Context,
 	projectID int64,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID),
+		nil,
+		nil,
+	)
 }
 
 // Creates a new project collaboration.
@@ -199,8 +301,14 @@ func (s *CollaborationsService) Create(
 	ctx context.Context,
 	projectID int64, b rr.CreateCollaborationBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID),
+		nil,
+		b,
+	)
 }
 
 // Performs an action on a collaboration.
@@ -211,8 +319,14 @@ func (s *CollaborationsService) Action(
 	collaborationID int64,
 	b rr.ActionCollaborationBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/collaborations/%d/actions", endpoints.Projects, projectID, collaborationID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d/collaborations/%d/actions", endpoints.Projects, projectID, collaborationID),
+		nil,
+		b,
+	)
 }
 
 // Returns a list of all collaboration data for a user.
@@ -220,8 +334,14 @@ func (s *CollaborationsService) Action(
 func (s *CollaborationsService) ListAll(
 	ctx context.Context,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsCollaborations
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsCollaborations,
+		nil,
+		nil,
+	)
 }
 
 // --------------------------------------
@@ -235,8 +355,14 @@ func (s *ServicesService) Order(
 	serviceID int64,
 	serviceType rr.ServiceType,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%s/%d/order", endpoints.ProjectsServices, serviceType, serviceID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		fmt.Sprintf("%s/%s/%d/order", endpoints.ProjectsServices, serviceType, serviceID),
+		nil,
+		nil,
+	)
 }
 
 // Returns a list of services.
@@ -245,8 +371,14 @@ func (s *ServicesService) List(
 	ctx context.Context,
 	opts *rr.ListServicesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsServices
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsServices,
+		opts,
+		nil,
+	)
 }
 
 // Returns active services.
@@ -255,8 +387,14 @@ func (s *ServicesService) SearchActive(
 	ctx context.Context,
 	opts *rr.SearchActiveServicesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsServicesActive
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsServicesActive,
+		opts,
+		nil,
+	)
 }
 
 // --------------------------------------
@@ -269,8 +407,14 @@ func (s *BidsService) List(
 	ctx context.Context,
 	opts *rr.ListBidsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsBids
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsBids,
+		opts,
+		nil,
+	)
 }
 
 // Returns a list of bids that match the specified criteria.
@@ -280,8 +424,14 @@ func (s *BidsService) Get(
 	bidID int64,
 	opts *rr.GetBidOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID),
+		opts,
+		nil,
+	)
 }
 
 // Creates a bid on a project. Accepts a JSON object in the style described in the Bid struct (with enums as strings, and objects as dictionaries).
@@ -290,8 +440,14 @@ func (s *BidsService) Create(
 	ctx context.Context,
 	b rr.CreateBidBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsBids
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.ProjectsBids,
+		nil,
+		b,
+	)
 }
 
 // Performs an action on a bid.
@@ -301,8 +457,14 @@ func (s *BidsService) Action(
 	bidID int64,
 	b rr.ActionBidBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID),
+		nil,
+		b,
+	)
 }
 
 // Updates an existing bid on a project. An existing bids information (description,amount,milestone_percentage) can be updated by sending a JSON encoded Bid struct.
@@ -312,8 +474,14 @@ func (s *BidsService) Update(
 	bidID int64,
 	b rr.UpdateBidBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID),
+		nil,
+		b,
+	)
 }
 
 // Returns a list of aggregate time tracking data for a bid.
@@ -323,8 +491,14 @@ func (s *BidsService) GetTimeTracking(
 	bidID int64,
 	opts *rr.GetTimeTrackingOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID),
+		opts,
+		nil,
+	)
 }
 
 // Creates a time tracking session for a specific bid.
@@ -334,8 +508,14 @@ func (s *BidsService) CreateTimeTracking(
 	bidID int64,
 	b rr.CreateTimeTrackingBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID),
+		nil,
+		b,
+	)
 }
 
 // Return bid edit requests by bid id.
@@ -346,8 +526,14 @@ func (s *BidEditRequestsService) List(
 	bidID int64,
 	opts *rr.ListBidEditRequestsOptions,
 ) (*rr.ListBidEditRequestsResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/edit_requests", endpoints.ProjectsBids, bidID)
-	return execute[*rr.ListBidEditRequestsResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListBidEditRequestsResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d/edit_requests", endpoints.ProjectsBids, bidID),
+		opts,
+		nil,
+	)
 }
 
 // Create a bid edit request on a post accept awarded bid. With no pending bid edit request.
@@ -356,8 +542,14 @@ func (s *BidEditRequestsService) Create(
 	ctx context.Context,
 	b rr.CreateBidEditRequestBody,
 ) (*rr.CreateBidEditRequestResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsBidEditRequests
-	return execute[*rr.CreateBidEditRequestResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.CreateBidEditRequestResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.ProjectsBidEditRequests,
+		nil,
+		b,
+	)
 }
 
 // Employer perform action on a PENDING bid edit request.
@@ -367,8 +559,14 @@ func (s *BidEditRequestsService) Action(
 	bidID, bidEditRequestID int64,
 	b rr.ActionBidEditRequestBody,
 ) (*rr.ActionBidEditRequestResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/edit_requests/%d", endpoints.ProjectsBids, bidID, bidEditRequestID)
-	return execute[*rr.ActionBidEditRequestResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.ActionBidEditRequestResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d/edit_requests/%d", endpoints.ProjectsBids, bidID, bidEditRequestID),
+		nil,
+		b,
+	)
 }
 
 // Fetch bid rating for a bid
@@ -377,8 +575,14 @@ func (s *BidRatingsService) Get(
 	ctx context.Context,
 	bidID int64,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, nil, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID),
+		nil,
+		nil,
+	)
 }
 
 // Fetch bid ratings for multiple bids
@@ -387,8 +591,14 @@ func (s *BidRatingsService) GetByListOfBids(
 	ctx context.Context,
 	opts *rr.GetByListOfBidsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsBidRatings
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsBidRatings,
+		opts,
+		nil,
+	)
 }
 
 // Rates a bid (creates a bid rating)
@@ -398,8 +608,14 @@ func (s *BidRatingsService) Create(
 	bidID int64,
 	b rr.CreateBidRatingBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID),
+		nil,
+		b,
+	)
 }
 
 // Updates an existing bid rating
@@ -410,8 +626,14 @@ func (s *BidRatingsService) Update(
 	bidRatingID int64,
 	b rr.UpdateBidRatingBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d/bid_ratings/%d", endpoints.ProjectsBids, bidID, bidRatingID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d/bid_ratings/%d", endpoints.ProjectsBids, bidID, bidRatingID),
+		nil,
+		b,
+	)
 }
 
 // --------------------------------------
@@ -424,8 +646,14 @@ func (s *JobsService) List(
 	ctx context.Context,
 	opts *rr.ListJobsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsJobs
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsJobs,
+		opts,
+		nil,
+	)
 }
 
 // Returns a list of jobs. Note: This performs a sub-string search for all the parameters specified on the jobs.
@@ -434,8 +662,14 @@ func (s *JobsService) Search(
 	ctx context.Context,
 	opts *rr.SearchJobsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsJobsSearch
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsJobsSearch,
+		opts,
+		nil,
+	)
 }
 
 // Returns a list of job bundles. Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name.
@@ -444,8 +678,14 @@ func (s *JobBundlesService) List(
 	ctx context.Context,
 	opts *rr.ListJobBundlesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsJobBundles
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsJobBundles,
+		opts,
+		nil,
+	)
 }
 
 // Returns a list of job bundle categories.
@@ -454,8 +694,14 @@ func (s *JobBundleCategoriesService) List(
 	ctx context.Context,
 	opts *rr.ListJobBundleCategoriesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsJobBundleCategories
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsJobBundleCategories,
+		opts,
+		nil,
+	)
 }
 
 // --------------------------------------
@@ -468,8 +714,14 @@ func (s *MilestonesService) List(
 	ctx context.Context,
 	opts *rr.ListMilestonesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsMilestones
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsMilestones,
+		opts,
+		nil,
+	)
 }
 
 // Returns information about a specific milestone.
@@ -479,8 +731,14 @@ func (s *MilestonesService) Get(
 	milestoneID int64,
 	opts *rr.GetMilestoneOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID),
+		opts,
+		nil,
+	)
 }
 
 // Post a review of a user.
@@ -489,8 +747,14 @@ func (s *MilestonesService) Create(
 	ctx context.Context,
 	b rr.CreateMilestoneBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsMilestones
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.ProjectsMilestones,
+		nil,
+		b,
+	)
 }
 
 // Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
@@ -500,8 +764,14 @@ func (s *MilestonesService) Action(
 	milestoneID int64,
 	b rr.ActionMilestoneBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID),
+		nil,
+		b,
+	)
 }
 
 // Returns a list of milestone requests.
@@ -510,8 +780,14 @@ func (s *MilestoneRequestsService) List(
 	ctx context.Context,
 	opts *rr.ListMilestoneRequestsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsMilestoneRequests
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsMilestoneRequests,
+		opts,
+		nil,
+	)
 }
 
 // Returns information about a specific milestone request.
@@ -521,8 +797,14 @@ func (s *MilestoneRequestsService) Get(
 	milestoneRequestID int64,
 	opts *rr.GetMilestoneRequestOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID),
+		opts,
+		nil,
+	)
 }
 
 // Creates a milestone request from a given JSON object.
@@ -531,8 +813,14 @@ func (s *MilestoneRequestsService) Create(
 	ctx context.Context,
 	b rr.CreateMilestoneRequestBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsMilestoneRequests
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.ProjectsMilestoneRequests,
+		nil,
+		b,
+	)
 }
 
 // Perform an action on a milestone request.
@@ -542,8 +830,14 @@ func (s *MilestoneRequestsService) Action(
 	milestoneRequestID int64,
 	b rr.ActionMilestoneRequestBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID),
+		nil,
+		b,
+	)
 }
 
 // --------------------------------------
@@ -556,8 +850,14 @@ func (s *ReviewsService) List(
 	ctx context.Context,
 	opts *rr.ListReviewsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsReviews
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsReviews,
+		opts,
+		nil,
+	)
 }
 
 // Post a review of a user.
@@ -566,8 +866,14 @@ func (s *ReviewsService) Create(
 	ctx context.Context,
 	b rr.CreateReviewBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsReviews
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPost, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.ProjectsReviews,
+		nil,
+		b,
+	)
 }
 
 // Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
@@ -577,8 +883,14 @@ func (s *ReviewsService) Action(
 	reviewID int64,
 	b rr.ActionReviewBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.ProjectsReviews, reviewID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d", endpoints.ProjectsReviews, reviewID),
+		nil,
+		b,
+	)
 }
 
 // --------------------------------------
@@ -591,8 +903,14 @@ func (s *ExpertGuaranteesService) List(
 	ctx context.Context,
 	opts *rr.ListExpertGuaranteesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsExpertGuarantees
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsExpertGuarantees,
+		opts,
+		nil,
+	)
 }
 
 // Perform an action on a expert guarantee.
@@ -602,8 +920,14 @@ func (s *ExpertGuaranteesService) Action(
 	expertGuaranteesID int64,
 	b rr.ActionExpertGuaranteesBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
-	p := fmt.Sprintf("%s/%d", endpoints.ProjectsExpertGuarantees, expertGuaranteesID)
-	return execute[*rr.RawResponse](ctx, s.client, http.MethodPut, p, nil, b)
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		fmt.Sprintf("%s/%d", endpoints.ProjectsExpertGuarantees, expertGuaranteesID),
+		nil,
+		b,
+	)
 }
 
 // Returns a list of currencies.currency_codes and currency_ids are incompatible with each other.
@@ -612,8 +936,14 @@ func (s *CurrenciesService) List(
 	ctx context.Context,
 	opts *rr.ListCurrenciesOptions,
 ) (*rr.ListCurrenciesResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsCurrencies
-	return execute[*rr.ListCurrenciesResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListCurrenciesResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsCurrencies,
+		opts,
+		nil,
+	)
 }
 
 // Returns a list of categories. If job_details is set, a map of category IDs to jobs in those categories.
@@ -622,8 +952,14 @@ func (s *CategoriesService) List(
 	ctx context.Context,
 	opts *rr.ListCategoriesOptions,
 ) (*rr.ListCategoriesResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsCategories
-	return execute[*rr.ListCategoriesResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListCategoriesResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsCategories,
+		opts,
+		nil,
+	)
 }
 
 // Returns a list of budgets with the specified currencies.currency_codes and currency_ids are incompatible with each other.
@@ -632,6 +968,12 @@ func (s *BudgetsService) List(
 	ctx context.Context,
 	opts *rr.ListBudgetsOptions,
 ) (*rr.ListBudgetsResponse, *ResponseMeta, error) {
-	p := endpoints.ProjectsBudgets
-	return execute[*rr.ListBudgetsResponse](ctx, s.client, http.MethodGet, p, opts, nil)
+	return execute[*rr.ListBudgetsResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ProjectsBudgets,
+		opts,
+		nil,
+	)
 }
