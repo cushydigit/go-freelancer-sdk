@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/query"
 )
 
 func (c *Client) GetBaseUrl() string {
@@ -65,7 +66,12 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 
 }
 
-func (c *Client) do(ctx context.Context, method, path string, query url.Values, body io.Reader) ([]byte, *ResponseMeta, error) {
+func (c *Client) do(
+	ctx context.Context,
+	method, path string,
+	query url.Values,
+	body io.Reader,
+) ([]byte, *ResponseMeta, error) {
 
 	// Parse Path
 	endpoint, err := url.Parse(fmt.Sprintf("%s%s", c.baseURL, path))
@@ -164,13 +170,27 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 	return data, meta, nil
 }
 
-func execute[T any](ctx context.Context, c *Client, method, path string, query url.Values, body any) (T, *ResponseMeta, error) {
+func execute[T any](
+	ctx context.Context,
+	c *Client,
+	method, path string,
+	opts, body any,
+) (T, *ResponseMeta, error) {
 	var result T
 
 	logger := c.logger.With(
 		"method", method,
 		"path", path,
 	)
+
+	query, err := query.Values(opts)
+	if err != nil {
+		logger.Error(
+			"failed to encode query parameters",
+			"error", err,
+		)
+		return result, nil, fmt.Errorf("encode query parameters: %w", err)
+	}
 
 	var bodyReader io.Reader
 	if body != nil {
