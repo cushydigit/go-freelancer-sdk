@@ -185,13 +185,17 @@ func execute[T any](
 		"endpoint", string(endpoint),
 	)
 
-	query, err := query.Values(opts)
-	if err != nil {
-		logger.Error(
-			"failed to encode query parameters",
-			"error", err,
-		)
-		return result, nil, fmt.Errorf("encode query parameters: %w", err)
+	q := url.Values{}
+	var err error
+	if opts != nil {
+		q, err = query.Values(opts)
+		if err != nil {
+			logger.Error(
+				"failed to encode query parameters",
+				"error", err,
+			)
+			return result, nil, fmt.Errorf("encode query parameters: %w", err)
+		}
 	}
 
 	var bodyReader io.Reader
@@ -206,7 +210,7 @@ func execute[T any](
 		}
 		bodyReader = bytes.NewReader(b)
 	}
-	data, meta, err := c.do(ctx, method, endpoint, query, bodyReader)
+	data, meta, err := c.do(ctx, method, endpoint, q, bodyReader)
 	if err != nil {
 		return result, meta, err
 	}
