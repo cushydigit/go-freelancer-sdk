@@ -3,7 +3,6 @@ package freelancer
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -20,7 +19,7 @@ func TestProjectsService_Create_Base(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method)
 
 		// path
-		assert.Equal(t, endpoints.Projects, r.URL.Path)
+		assert.Equal(t, string(endpoints.Projects), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -75,7 +74,7 @@ func TestProjectsService_Create_Response(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method)
 
 		// Path
-		assert.Equal(t, endpoints.Projects, r.URL.Path)
+		assert.Equal(t, string(endpoints.Projects), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{
@@ -110,14 +109,13 @@ func TestProjectsService_Create_Response(t *testing.T) {
 }
 
 func TestProjectsService_Action_Base(t *testing.T) {
-	projectID := 100
+	projectID := int64(100)
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 
 		// path
-		expected := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
-		assert.Equal(t, expected, r.URL.Path)
+		assert.Equal(t, string(endpoints.Project(projectID)), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -164,7 +162,7 @@ func TestProjectsService_List_Base(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Projects, r.URL.Path)
+		assert.Equal(t, string(endpoints.Projects), r.URL.Path)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
 
@@ -211,7 +209,7 @@ func TestProjectsService_ListSelf_Base(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
-		assert.Equal(t, endpoints.ProjectsSelf, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectsSelf), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -260,8 +258,7 @@ func TestProjectService_Get_Base(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.Project(projectID)), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -305,7 +302,7 @@ func TestProjectsService_SearchActive_Base(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method)
 
 		// path
-		assert.Equal(t, endpoints.ProjectsActive, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectsActive), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{
@@ -496,7 +493,7 @@ func TestProjectService_SearchAll_Base(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsAll, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectsAll), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -547,8 +544,7 @@ func TestProjectService_InviteFreelancer_Base(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
-		path := fmt.Sprintf("%s/%d/invite", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectInvite(projectID)), r.URL.Path)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
 	}))
@@ -597,7 +593,7 @@ func TestProjectService_ListUpgradesFees(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsFees, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectsFees), r.URL.Path)
 		// options
 		assert.Equal(t, "false", q.Get("tax_included"))
 		assert.Equal(t, "100", q.Get("project"))
@@ -628,8 +624,7 @@ func TestProjectService_ListBids(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/bids", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectBids(projectID)), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("is_shortlisted"))
 		assert.Equal(t, "10", q.Get("limit"))
@@ -655,8 +650,7 @@ func TestProjectService_GetBidInfo(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/bids_info", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectBidsInfo(projectID)), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -682,8 +676,7 @@ func TestProjectService_ListMilestones(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/milestones", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectMilestoneRequests(projectID)), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("user_avatar"))
 		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
@@ -712,8 +705,7 @@ func TestProjectService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/milestone_requests", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectMilestoneRequests(projectID)), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("user_avatar"))
 		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
@@ -741,7 +733,7 @@ func TestProjectService_GetHourlyContractInfo(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsHourlyContract, r.URL.Path)
+		assert.Equal(t, string(endpoints.HourlyContractInfo), r.URL.Path)
 		// options
 		assert.Equal(t, "false", q.Get("billing_details"))
 		assert.ElementsMatch(t, []string{"1", "2", "3"}, q["project_ids[]"])
@@ -765,8 +757,7 @@ func TestProjectService_GetIPContractInfo(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/ip_contract_info", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectIPContractInfo(projectID)), r.URL.Path)
 		// options
 
 		w.WriteHeader(http.StatusOK)
@@ -788,8 +779,7 @@ func TestProjectService_Delete(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodDelete, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.Project(projectID)), r.URL.Path)
 		// options
 
 		w.WriteHeader(http.StatusOK)
@@ -811,8 +801,7 @@ func TestCollaborationService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectCollaborations(projectID)), r.URL.Path)
 		// options
 
 		w.WriteHeader(http.StatusOK)
@@ -840,8 +829,7 @@ func TestCollaborationService_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectCollaborations(projectID)), r.URL.Path)
 		// body
 		assert.NotNil(t, r.Body)
 		defer r.Body.Close()
@@ -879,8 +867,11 @@ func TestCollaborationService_Action(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/collaborations/%d/actions", endpoints.Projects, projectID, collaborationID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(
+			t,
+			string(endpoints.ProjectCollaborationsActions(projectID, collaborationID)),
+			r.URL.Path,
+		)
 		// body
 		assert.NotNil(t, r.Body)
 		defer r.Body.Close()
@@ -909,7 +900,7 @@ func TestCollaborationService_ListAll(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsCollaborations, r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectsCollaborations), r.URL.Path)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
 	}))
@@ -930,8 +921,7 @@ func TestServicesService_Order(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%s/%d/order", endpoints.ProjectsServices, serviceType, serviceID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ServicesOrder(string(serviceType), serviceID)), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -961,7 +951,7 @@ func TestServicesService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsServices, r.URL.Path)
+		assert.Equal(t, string(endpoints.Services), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("compact"))
 		assert.Equal(t, "3", q.Get("offset"))
@@ -996,7 +986,7 @@ func TestServicesService_SearchActive(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsServicesActive, r.URL.Path)
+		assert.Equal(t, string(endpoints.ServicesActive), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("compact"))
 		assert.Equal(t, "3", q.Get("offset"))
@@ -1030,7 +1020,7 @@ func TestBidsService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsBids, r.URL.Path)
+		assert.Equal(t, string(endpoints.Bids), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("compact"))
 		assert.Equal(t, "3", q.Get("offset"))
@@ -1063,8 +1053,7 @@ func TestBidsService_Get(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.Bid(bidID)), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("compact"))
 		assert.Equal(t, "3", q.Get("offset"))
@@ -1095,7 +1084,7 @@ func TestBidsService_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsBids, r.URL.Path)
+		assert.Equal(t, string(endpoints.Bids), r.URL.Path)
 		// body
 		var res rr.CreateBidBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1130,8 +1119,7 @@ func TestBidsService_Action(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.Bid(bidID)), r.URL.Path)
 		// body
 		var res rr.ActionBidBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1164,8 +1152,7 @@ func TestBidsService_Update(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.Bid(bidID)), r.URL.Path)
 		// body
 		var res rr.UpdateBidBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1199,8 +1186,7 @@ func TestBidsService_GetTimeTracking(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.BidTimeTracking(bidID)), r.URL.Path)
 		// options
 		assert.Equal(t, "false", q.Get("invoiced"))
 
@@ -1230,8 +1216,7 @@ func TestBidsService_CreateTimeTracking(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
 
-		path := fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.BidTimeTracking(bidID)), r.URL.Path)
 		// body
 		var res rr.CreateTimeTrackingBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1266,8 +1251,7 @@ func TestBidEditRequestsService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/edit_requests", endpoints.ProjectsBids, bidID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.BidEditRequests(bidID)), r.URL.Path)
 		// options
 		assert.ElementsMatch(t, []string{string(rr.BidStatusAccepted)}, q["statuses[]"])
 		assert.ElementsMatch(t, []string{"1", "2"}, q["bid_edit_request_ids[]"])
@@ -1297,7 +1281,7 @@ func TestBidEditRequestsService_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsBidEditRequests, r.URL.Path)
+		assert.Equal(t, string(endpoints.BidEditRequests(body.BidID)), r.URL.Path)
 		// body
 		var res rr.CreateBidEditRequestBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1332,8 +1316,7 @@ func TestBidEditRequestsService_Action(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/edit_requests/%d", endpoints.ProjectsBids, bidID, bidEditRequestID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.BidEditRequest(bidID, bidEditRequestID)), r.URL.Path)
 		// body
 		var res rr.ActionBidEditRequestBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1362,8 +1345,7 @@ func TestBidRatingsService_Get(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.BidsRatings(bidID)), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -1389,7 +1371,7 @@ func TestBidRatingsService_GetByListOfBids(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsBidRatings, r.URL.Path)
+		assert.Equal(t, string(endpoints.BidRatings), r.URL.Path)
 		// options
 		assert.ElementsMatch(t, []string{"1", "2", "3"}, q["bids[]"])
 
@@ -1418,8 +1400,7 @@ func TestBidRatingsService_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.BidsRatings(bidID)), r.URL.Path)
 		// body
 		var res rr.CreateBidRatingBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1453,8 +1434,7 @@ func TestBidRatingsService_Update(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d/bid_ratings/%d", endpoints.ProjectsBids, bidID, bidRatingID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.BidRating(bidID, bidRatingID)), r.URL.Path)
 		// body
 		var res rr.UpdateBidRatingBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1488,7 +1468,7 @@ func TestJobsService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsJobs, r.URL.Path)
+		assert.Equal(t, string(endpoints.Jobs), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("only_local"))
 		assert.ElementsMatch(t, []string{"1", "2"}, q["jobs[]"])
@@ -1520,7 +1500,7 @@ func TestJobsService_Search(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsJobsSearch, r.URL.Path)
+		assert.Equal(t, string(endpoints.JobsSearch), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("only_local"))
 		assert.ElementsMatch(t, []string{"1", "2"}, q["jobs[]"])
@@ -1551,7 +1531,7 @@ func TestJobBundles_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsJobBundles, r.URL.Path)
+		assert.Equal(t, string(endpoints.JobBundles), r.URL.Path)
 		// options
 		assert.Equal(t, "en", q.Get("lang"))
 		assert.ElementsMatch(t, []string{"3", "4"}, q["job_bundles[]"])
@@ -1581,7 +1561,7 @@ func TestJobBundleCategories_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsJobBundleCategories, r.URL.Path)
+		assert.Equal(t, string(endpoints.JobBundleCategories), r.URL.Path)
 		// options
 		assert.Equal(t, "en", q.Get("lang"))
 		assert.ElementsMatch(t, []string{"3", "4"}, q["job_bundles[]"])
@@ -1613,7 +1593,7 @@ func TestMilestonesService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsMilestones, r.URL.Path)
+		assert.Equal(t, string(endpoints.Milestones), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("user_status"))
 		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
@@ -1644,8 +1624,7 @@ func TestMilestonesService_Get(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.Milestone(milestoneID)), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("user_avatar"))
 
@@ -1676,7 +1655,7 @@ func TestMilestonesService_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsMilestones, r.URL.Path)
+		assert.Equal(t, string(endpoints.Milestones), r.URL.Path)
 		// body
 		var res rr.CreateBidBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1715,8 +1694,7 @@ func TestMilestonesService_Action(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
 
-		path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.Milestone(milestoneID)), r.URL.Path)
 		// body
 		var res rr.ActionMilestoneBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1754,7 +1732,7 @@ func TestMilestoneRequestsService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsMilestoneRequests, r.URL.Path)
+		assert.Equal(t, string(endpoints.MilestoneRequests), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("user_status"))
 		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
@@ -1785,8 +1763,7 @@ func TestMilestoneRequestsService_Get(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.MilestoneRequest(milestoneRequestID)), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("user_avatar"))
 
@@ -1815,7 +1792,7 @@ func TestMilestoneRequestsService_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsMilestoneRequests, r.URL.Path)
+		assert.Equal(t, string(endpoints.MilestoneRequests), r.URL.Path)
 		// body
 		var res rr.CreateMilestoneRequestBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1850,8 +1827,7 @@ func TestMilestoneRequestsService_Action(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.MilestoneRequest(milestoneRequestID)), r.URL.Path)
 		// body
 		var res rr.ActionMilestoneRequestBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1887,7 +1863,7 @@ func TestReviewsService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsReviews, r.URL.Path)
+		assert.Equal(t, string(endpoints.Reviews), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("user_status"))
 		assert.Equal(t, "10", q.Get("limit"))
@@ -1919,7 +1895,7 @@ func TestReviewsService_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsReviews, r.URL.Path)
+		assert.Equal(t, string(endpoints.Reviews), r.URL.Path)
 		// body
 		var res rr.CreateReviewBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1955,8 +1931,7 @@ func TestReviewsService_Action(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.ProjectsReviews, reviewID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.Review(reviewID)), r.URL.Path)
 		// body
 		var res rr.ActionReviewBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -1991,7 +1966,7 @@ func TestExpertGuaranteesService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsExpertGuarantees, r.URL.Path)
+		assert.Equal(t, string(endpoints.ExpertGuarantees), r.URL.Path)
 		// options
 		assert.Equal(t, "10", q.Get("limit"))
 		assert.ElementsMatch(t, []string{"1", "2"}, q["projects[]"])
@@ -2020,8 +1995,7 @@ func TestExpertGuaranteesService_Action(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		path := fmt.Sprintf("%s/%d", endpoints.ProjectsExpertGuarantees, expertGuaranteesID)
-		assert.Equal(t, path, r.URL.Path)
+		assert.Equal(t, string(endpoints.ExpertGuarantee(expertGuaranteesID)), r.URL.Path)
 		// body
 		var res rr.ActionExpertGuaranteesBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -2056,7 +2030,7 @@ func TestExpertCurrencies_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsCurrencies, r.URL.Path)
+		assert.Equal(t, string(endpoints.Currencies), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("include_external_currencies"))
 		assert.ElementsMatch(t, []string{"1", "2"}, q["currency_ids[]"])
@@ -2088,7 +2062,7 @@ func TestExpertCategories_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsCategories, r.URL.Path)
+		assert.Equal(t, string(endpoints.Categories), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("seo_details"))
 		assert.Equal(t, "en", q.Get("lang"))
@@ -2120,7 +2094,7 @@ func TestExpertBudgets_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.ProjectsBudgets, r.URL.Path)
+		assert.Equal(t, string(endpoints.Budgets), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("currency_details"))
 		assert.Equal(t, "en", q.Get("lang"))

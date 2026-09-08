@@ -68,29 +68,30 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 
 func (c *Client) do(
 	ctx context.Context,
-	method, path string,
+	method string,
+	endpoint endpoints.Endpoint,
 	query url.Values,
 	body io.Reader,
 ) ([]byte, *ResponseMeta, error) {
 
 	// Parse Path
-	endpoint, err := url.Parse(fmt.Sprintf("%s%s", c.baseURL, path))
+	fullURL, err := url.Parse(fmt.Sprintf("%s%s", c.baseURL, string(endpoint)))
 	if err != nil {
 		return nil, nil, fmt.Errorf("invalid path: %w", err)
 	}
 
 	logger := c.logger.With(
 		"method", method,
-		"url", endpoint.String(),
+		"url", fullURL.String(),
 	)
 
 	// Add Query Params
 	if query != nil {
-		endpoint.RawQuery = query.Encode()
+		fullURL.RawQuery = query.Encode()
 	}
 
 	// Create Request
-	req, err := http.NewRequestWithContext(ctx, method, endpoint.String(), body)
+	req, err := http.NewRequestWithContext(ctx, method, fullURL.String(), body)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -173,14 +174,15 @@ func (c *Client) do(
 func execute[T any](
 	ctx context.Context,
 	c *Client,
-	method, path string,
+	method string,
+	endpoint endpoints.Endpoint,
 	opts, body any,
 ) (T, *ResponseMeta, error) {
 	var result T
 
 	logger := c.logger.With(
 		"method", method,
-		"path", path,
+		"endpoint", string(endpoint),
 	)
 
 	query, err := query.Values(opts)
@@ -204,7 +206,7 @@ func execute[T any](
 		}
 		bodyReader = bytes.NewReader(b)
 	}
-	data, meta, err := c.do(ctx, method, path, query, bodyReader)
+	data, meta, err := c.do(ctx, method, endpoint, query, bodyReader)
 	if err != nil {
 		return result, meta, err
 	}

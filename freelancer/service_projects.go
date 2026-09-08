@@ -2,7 +2,6 @@ package freelancer
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
@@ -40,7 +39,7 @@ func (s *ProjectsService) Action(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d", endpoints.Projects, projectID),
+		endpoints.Project(projectID),
 		nil,
 		b,
 	)
@@ -89,7 +88,7 @@ func (s *ProjectsService) Get(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d", endpoints.Projects, projectID),
+		endpoints.Project(projectID),
 		opts,
 		nil,
 	)
@@ -138,7 +137,7 @@ func (s *ProjectsService) InviteFreelancer(
 		ctx,
 		s.client,
 		http.MethodPost,
-		fmt.Sprintf("%s/%d/invite", endpoints.Projects, projectID),
+		endpoints.ProjectInvite(projectID),
 		nil,
 		b,
 	)
@@ -171,7 +170,7 @@ func (s *ProjectsService) ListBids(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d/bids", endpoints.Projects, projectID),
+		endpoints.ProjectBids(projectID),
 		opts,
 		nil,
 	)
@@ -187,7 +186,7 @@ func (s *ProjectsService) GetBidInfo(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d/bids_info", endpoints.Projects, projectID),
+		endpoints.ProjectBidsInfo(projectID),
 		nil,
 		nil,
 	)
@@ -204,7 +203,7 @@ func (s *ProjectsService) ListMilestones(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d/milestones", endpoints.Projects, projectID),
+		endpoints.ProjectMilestones(projectID),
 		opts,
 		nil,
 	)
@@ -221,7 +220,7 @@ func (s *ProjectsService) ListMilestoneRequests(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d/milestone_requests", endpoints.Projects, projectID),
+		endpoints.ProjectMilestoneRequests(projectID),
 		opts,
 		nil,
 	)
@@ -237,7 +236,7 @@ func (s *ProjectsService) GetHourlyContractInfo(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsHourlyContract,
+		endpoints.HourlyContractInfo,
 		opts,
 		nil,
 	)
@@ -253,7 +252,7 @@ func (s *ProjectsService) GetIPContractInfo(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d/ip_contract_info", endpoints.Projects, projectID),
+		endpoints.ProjectIPContractInfo(projectID),
 		nil,
 		nil,
 	)
@@ -269,7 +268,7 @@ func (s *ProjectsService) Delete(
 		ctx,
 		s.client,
 		http.MethodDelete,
-		fmt.Sprintf("%s/%d", endpoints.Projects, projectID),
+		endpoints.Project(projectID),
 		nil,
 		nil,
 	)
@@ -289,7 +288,7 @@ func (s *CollaborationsService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID),
+		endpoints.ProjectCollaborations(projectID),
 		nil,
 		nil,
 	)
@@ -305,7 +304,7 @@ func (s *CollaborationsService) Create(
 		ctx,
 		s.client,
 		http.MethodPost,
-		fmt.Sprintf("%s/%d/collaborations", endpoints.Projects, projectID),
+		endpoints.ProjectCollaborations(projectID),
 		nil,
 		b,
 	)
@@ -323,7 +322,7 @@ func (s *CollaborationsService) Action(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d/collaborations/%d/actions", endpoints.Projects, projectID, collaborationID),
+		endpoints.ProjectCollaborationsActions(projectID, collaborationID),
 		nil,
 		b,
 	)
@@ -359,7 +358,7 @@ func (s *ServicesService) Order(
 		ctx,
 		s.client,
 		http.MethodPost,
-		fmt.Sprintf("%s/%s/%d/order", endpoints.ProjectsServices, serviceType, serviceID),
+		endpoints.ServicesOrder(string(serviceType), serviceID),
 		nil,
 		nil,
 	)
@@ -375,7 +374,7 @@ func (s *ServicesService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsServices,
+		endpoints.Services,
 		opts,
 		nil,
 	)
@@ -391,7 +390,7 @@ func (s *ServicesService) SearchActive(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsServicesActive,
+		endpoints.ServicesActive,
 		opts,
 		nil,
 	)
@@ -411,7 +410,7 @@ func (s *BidsService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsBids,
+		endpoints.Bids,
 		opts,
 		nil,
 	)
@@ -428,7 +427,7 @@ func (s *BidsService) Get(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID),
+		endpoints.Bid(bidID),
 		opts,
 		nil,
 	)
@@ -444,7 +443,7 @@ func (s *BidsService) Create(
 		ctx,
 		s.client,
 		http.MethodPost,
-		endpoints.ProjectsBids,
+		endpoints.Bids,
 		nil,
 		b,
 	)
@@ -461,7 +460,7 @@ func (s *BidsService) Action(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID),
+		endpoints.Bid(bidID),
 		nil,
 		b,
 	)
@@ -478,7 +477,7 @@ func (s *BidsService) Update(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d", endpoints.ProjectsBids, bidID),
+		endpoints.Bid(bidID),
 		nil,
 		b,
 	)
@@ -495,7 +494,7 @@ func (s *BidsService) GetTimeTracking(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID),
+		endpoints.BidTimeTracking(bidID),
 		opts,
 		nil,
 	)
@@ -512,7 +511,7 @@ func (s *BidsService) CreateTimeTracking(
 		ctx,
 		s.client,
 		http.MethodPost,
-		fmt.Sprintf("%s/%d/time_tracking", endpoints.ProjectsBids, bidID),
+		endpoints.BidTimeTracking(bidID),
 		nil,
 		b,
 	)
@@ -530,7 +529,7 @@ func (s *BidEditRequestsService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d/edit_requests", endpoints.ProjectsBids, bidID),
+		endpoints.BidEditRequests(bidID),
 		opts,
 		nil,
 	)
@@ -546,7 +545,7 @@ func (s *BidEditRequestsService) Create(
 		ctx,
 		s.client,
 		http.MethodPost,
-		endpoints.ProjectsBidEditRequests,
+		endpoints.BidsEditRequests,
 		nil,
 		b,
 	)
@@ -563,7 +562,7 @@ func (s *BidEditRequestsService) Action(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d/edit_requests/%d", endpoints.ProjectsBids, bidID, bidEditRequestID),
+		endpoints.BidEditRequest(bidID, bidEditRequestID),
 		nil,
 		b,
 	)
@@ -579,7 +578,7 @@ func (s *BidRatingsService) Get(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID),
+		endpoints.BidsRatings(bidID),
 		nil,
 		nil,
 	)
@@ -595,7 +594,7 @@ func (s *BidRatingsService) GetByListOfBids(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsBidRatings,
+		endpoints.BidRatings,
 		opts,
 		nil,
 	)
@@ -612,7 +611,7 @@ func (s *BidRatingsService) Create(
 		ctx,
 		s.client,
 		http.MethodPost,
-		fmt.Sprintf("%s/%d/bid_ratings", endpoints.ProjectsBids, bidID),
+		endpoints.BidsRatings(bidID),
 		nil,
 		b,
 	)
@@ -630,7 +629,7 @@ func (s *BidRatingsService) Update(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d/bid_ratings/%d", endpoints.ProjectsBids, bidID, bidRatingID),
+		endpoints.BidRating(bidID, bidRatingID),
 		nil,
 		b,
 	)
@@ -650,7 +649,7 @@ func (s *JobsService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsJobs,
+		endpoints.Jobs,
 		opts,
 		nil,
 	)
@@ -666,7 +665,7 @@ func (s *JobsService) Search(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsJobsSearch,
+		endpoints.JobsSearch,
 		opts,
 		nil,
 	)
@@ -682,7 +681,7 @@ func (s *JobBundlesService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsJobBundles,
+		endpoints.JobBundles,
 		opts,
 		nil,
 	)
@@ -698,7 +697,7 @@ func (s *JobBundleCategoriesService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsJobBundleCategories,
+		endpoints.JobBundleCategories,
 		opts,
 		nil,
 	)
@@ -718,7 +717,7 @@ func (s *MilestonesService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsMilestones,
+		endpoints.Milestones,
 		opts,
 		nil,
 	)
@@ -735,7 +734,7 @@ func (s *MilestonesService) Get(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID),
+		endpoints.Milestone(milestoneID),
 		opts,
 		nil,
 	)
@@ -751,7 +750,7 @@ func (s *MilestonesService) Create(
 		ctx,
 		s.client,
 		http.MethodPost,
-		endpoints.ProjectsMilestones,
+		endpoints.Milestones,
 		nil,
 		b,
 	)
@@ -768,7 +767,7 @@ func (s *MilestonesService) Action(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d", endpoints.ProjectsMilestones, milestoneID),
+		endpoints.Milestone(milestoneID),
 		nil,
 		b,
 	)
@@ -784,7 +783,7 @@ func (s *MilestoneRequestsService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsMilestoneRequests,
+		endpoints.MilestoneRequests,
 		opts,
 		nil,
 	)
@@ -801,7 +800,7 @@ func (s *MilestoneRequestsService) Get(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID),
+		endpoints.MilestoneRequest(milestoneRequestID),
 		opts,
 		nil,
 	)
@@ -817,7 +816,7 @@ func (s *MilestoneRequestsService) Create(
 		ctx,
 		s.client,
 		http.MethodPost,
-		endpoints.ProjectsMilestoneRequests,
+		endpoints.MilestoneRequests,
 		nil,
 		b,
 	)
@@ -834,7 +833,7 @@ func (s *MilestoneRequestsService) Action(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d", endpoints.ProjectsMilestoneRequests, milestoneRequestID),
+		endpoints.MilestoneRequest(milestoneRequestID),
 		nil,
 		b,
 	)
@@ -854,7 +853,7 @@ func (s *ReviewsService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsReviews,
+		endpoints.Reviews,
 		opts,
 		nil,
 	)
@@ -870,7 +869,7 @@ func (s *ReviewsService) Create(
 		ctx,
 		s.client,
 		http.MethodPost,
-		endpoints.ProjectsReviews,
+		endpoints.Reviews,
 		nil,
 		b,
 	)
@@ -887,7 +886,7 @@ func (s *ReviewsService) Action(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d", endpoints.ProjectsReviews, reviewID),
+		endpoints.Review(reviewID),
 		nil,
 		b,
 	)
@@ -907,7 +906,7 @@ func (s *ExpertGuaranteesService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsExpertGuarantees,
+		endpoints.ExpertGuarantees,
 		opts,
 		nil,
 	)
@@ -924,7 +923,7 @@ func (s *ExpertGuaranteesService) Action(
 		ctx,
 		s.client,
 		http.MethodPut,
-		fmt.Sprintf("%s/%d", endpoints.ProjectsExpertGuarantees, expertGuaranteesID),
+		endpoints.ExpertGuarantee(expertGuaranteesID),
 		nil,
 		b,
 	)
@@ -940,7 +939,7 @@ func (s *CurrenciesService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsCurrencies,
+		endpoints.Currencies,
 		opts,
 		nil,
 	)
@@ -956,7 +955,7 @@ func (s *CategoriesService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsCategories,
+		endpoints.Categories,
 		opts,
 		nil,
 	)
@@ -972,7 +971,7 @@ func (s *BudgetsService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.ProjectsBudgets,
+		endpoints.Budgets,
 		opts,
 		nil,
 	)

@@ -2,7 +2,6 @@ package freelancer
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
@@ -39,7 +38,7 @@ func (s *UsersService) Get(
 		ctx,
 		s.client,
 		http.MethodGet,
-		fmt.Sprintf("%s/%d", endpoints.Users, userID),
+		endpoints.User(userID),
 		nil,
 		nil,
 	)
@@ -55,7 +54,7 @@ func (s *UsersService) SearchFreelancer(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.UsersFreelancers,
+		endpoints.Freelancers,
 		opts,
 		nil,
 	)
@@ -75,7 +74,7 @@ func (s *SelfService) GetInfo(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.UsersSelf,
+		endpoints.Self,
 		opts,
 		nil,
 	)
@@ -90,7 +89,7 @@ func (s *SelfService) ListDevices(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.UsersSelfDevices,
+		endpoints.Devices,
 		nil,
 		nil,
 	)
@@ -106,7 +105,7 @@ func (s *SelfJobsService) Add(
 		ctx,
 		s.client,
 		http.MethodPost,
-		endpoints.UsersSelfJobs,
+		endpoints.SelfJobs,
 		nil,
 		b,
 	)
@@ -122,7 +121,7 @@ func (s *SelfJobsService) Set(
 		ctx,
 		s.client,
 		http.MethodPut,
-		endpoints.UsersSelfJobs,
+		endpoints.SelfJobs,
 		nil,
 		b,
 	)
@@ -138,7 +137,7 @@ func (s *SelfJobsService) Delete(
 		ctx,
 		s.client,
 		http.MethodDelete,
-		endpoints.UsersSelfJobs,
+		endpoints.SelfJobs,
 		nil,
 		b,
 	)
@@ -158,7 +157,7 @@ func (s *ProfilesService) Create(
 		ctx,
 		s.client,
 		http.MethodPost,
-		endpoints.UsersProfiles,
+		endpoints.Profiles,
 		nil,
 		b,
 	)
@@ -175,7 +174,7 @@ func (s *ProfilesService) Get(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.UsersProfiles,
+		endpoints.Profiles,
 		nil,
 		nil,
 	)
@@ -191,7 +190,7 @@ func (s *ProfilesService) Update(
 		ctx,
 		s.client,
 		http.MethodPut,
-		endpoints.UsersProfiles,
+		endpoints.Profiles,
 		nil,
 		b,
 	)
@@ -211,7 +210,7 @@ func (s *ReputationsService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.UsersReputations,
+		endpoints.Reputations,
 		opts,
 		nil,
 	)
@@ -227,7 +226,7 @@ func (s *EnterprisesService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.UsersEnterprises,
+		endpoints.Enterprises,
 		opts,
 		nil,
 	)
@@ -243,7 +242,7 @@ func (s *PortfoliosService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.UsersPortfolios,
+		endpoints.Portfolios,
 		opts,
 		nil,
 	)
@@ -259,7 +258,7 @@ func (s *ViolationsService) Create(
 		ctx,
 		s.client,
 		http.MethodPost,
-		endpoints.UsersViolationReports,
+		endpoints.ViolationReports,
 		nil,
 		b,
 	)
@@ -275,7 +274,7 @@ func (s *PoolsService) List(
 		ctx,
 		s.client,
 		http.MethodGet,
-		endpoints.UsersPools,
+		endpoints.Pools,
 		opts,
 		nil,
 	)

@@ -18,7 +18,7 @@ func TestCommonService_ListCountries(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method)
 
 		// path
-		assert.Equal(t, endpoints.CommonCountries, r.URL.Path)
+		assert.Equal(t, string(endpoints.CommonCountries), r.URL.Path)
 
 		// query
 		assert.Equal(t, "true", r.URL.Query().Get("extra_details"))
@@ -65,7 +65,7 @@ func TestCommonService_Timezones(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method)
 
 		// path
-		assert.Equal(t, endpoints.CommonTimezones, r.URL.Path)
+		assert.Equal(t, string(endpoints.CommonTimezones), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{
