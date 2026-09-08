@@ -23,7 +23,7 @@ func TestUsersService_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Users, r.URL.Path)
+		assert.Equal(t, string(endpoints.Users), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("avatar"))
 		assert.ElementsMatch(t, []string{"1", "2"}, q["users[]"])
@@ -48,7 +48,7 @@ func TestUsersService_Get(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.User(userID), r.URL.Path)
+		assert.Equal(t, string(endpoints.User(userID)), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -76,7 +76,7 @@ func TestUsersService_SearchFreelancer(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Freelancers, r.URL.Path)
+		assert.Equal(t, string(endpoints.Freelancers), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("compact"))
 		assert.Equal(t, "10", q.Get("limit"))
@@ -107,7 +107,7 @@ func TestSelfService_GetInfo(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Self, r.URL.Path)
+		assert.Equal(t, string(endpoints.Self), r.URL.Path)
 		// options
 		assert.Equal(t, "19", q.Get("offset"))
 		assert.Equal(t, "true", q.Get("compact"))
@@ -130,7 +130,7 @@ func TestSelfService_ListDevices(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Devices, r.URL.Path)
+		assert.Equal(t, string(endpoints.Devices), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -153,7 +153,7 @@ func TestSelfJobs_Add(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		assert.Equal(t, endpoints.SelfJobs, r.URL.Path)
+		assert.Equal(t, string(endpoints.SelfJobs), r.URL.Path)
 		// body
 		var res rr.AddJobsBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -185,7 +185,7 @@ func TestSelfJobs_Set(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		assert.Equal(t, endpoints.SelfJobs, r.URL.Path)
+		assert.Equal(t, string(endpoints.SelfJobs), r.URL.Path)
 		// body
 		var res rr.SetJobsBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -217,7 +217,7 @@ func TestSelfJobs_Delete(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodDelete, r.Method)
 		// path
-		assert.Equal(t, endpoints.SelfJobs, r.URL.Path)
+		assert.Equal(t, string(endpoints.SelfJobs), r.URL.Path)
 		// body
 		var res rr.DeleteJobsBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -253,7 +253,7 @@ func TestProfiles_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		assert.Equal(t, endpoints.Profiles, r.URL.Path)
+		assert.Equal(t, string(endpoints.Profiles), r.URL.Path)
 		// body
 		var res rr.CreateProfileBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -286,7 +286,7 @@ func TestProfiles_Get(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Profiles, r.URL.Path)
+		assert.Equal(t, string(endpoints.Profiles), r.URL.Path)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -316,7 +316,7 @@ func TestProfiles_Update(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPut, r.Method)
 		// path
-		assert.Equal(t, endpoints.Profiles, r.URL.Path)
+		assert.Equal(t, string(endpoints.Profiles), r.URL.Path)
 		// body
 		var res rr.UpdateProfileBody
 		err := json.NewDecoder(r.Body).Decode(&res)
@@ -356,7 +356,7 @@ func TestReputations_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Reputations, r.URL.Path)
+		assert.Equal(t, string(endpoints.Reputations), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("job_history"))
 		assert.Equal(t, string(rr.RoleEmployer), q.Get("role"))
@@ -387,7 +387,7 @@ func TestEnterprises_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Enterprises, r.URL.Path)
+		assert.Equal(t, string(endpoints.Enterprises), r.URL.Path)
 		// options
 		assert.Equal(t, "100", q.Get("user_id"))
 		assert.Equal(t, "10", q.Get("limit"))
@@ -417,7 +417,7 @@ func TestPortfolios_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Portfolios, r.URL.Path)
+		assert.Equal(t, string(endpoints.Portfolios), r.URL.Path)
 		// options
 		assert.Equal(t, "10", q.Get("limit"))
 		assert.ElementsMatch(t, []string{"1", "2"}, q["users[]"])
@@ -446,7 +446,7 @@ func TestPools_List(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, endpoints.Pools, r.URL.Path)
+		assert.Equal(t, string(endpoints.Pools), r.URL.Path)
 		// options
 		assert.Equal(t, "10", q.Get("limit"))
 		assert.Equal(t, "true", q.Get("ignore_test"))
@@ -478,7 +478,7 @@ func TestViolations_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		assert.Equal(t, endpoints.ViolationReports, r.URL.Path)
+		assert.Equal(t, string(endpoints.ViolationReports), r.URL.Path)
 		// body
 		var res rr.CreateViolationBody
 		err := json.NewDecoder(r.Body).Decode(&res)
