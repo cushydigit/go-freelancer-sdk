@@ -676,7 +676,7 @@ func TestProjectService_ListMilestones(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
 		// path
-		assert.Equal(t, string(endpoints.ProjectMilestoneRequests(projectID)), r.URL.Path)
+		assert.Equal(t, string(endpoints.ProjectMilestones(projectID)), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("user_avatar"))
 		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
@@ -1281,7 +1281,7 @@ func TestBidEditRequestsService_Create(t *testing.T) {
 		// method
 		assert.Equal(t, http.MethodPost, r.Method)
 		// path
-		assert.Equal(t, string(endpoints.BidEditRequests(body.BidID)), r.URL.Path)
+		assert.Equal(t, string(endpoints.BidsEditRequests), r.URL.Path)
 		// body
 		var res rr.CreateBidEditRequestBody
 		err := json.NewDecoder(r.Body).Decode(&res)
