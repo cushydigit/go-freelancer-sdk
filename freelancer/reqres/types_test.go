@@ -2,8 +2,6 @@ package reqres
 
 import (
 	"testing"
-
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 func TestGetFullUrl(t *testing.T) {
@@ -15,11 +13,11 @@ func TestGetFullUrl(t *testing.T) {
 	}{
 		{
 			seoURL:   "my-project",
-			expected: endpoints.Base + "/projects/my-project",
+			expected: "https://www.freelancer.com" + "/projects/my-project",
 		},
 		{
 			seoURL:   "my-project2",
-			expected: endpoints.Base + "/projects/my-project2",
+			expected: "https://www.freelancer.com" + "/projects/my-project2",
 		},
 	}
 

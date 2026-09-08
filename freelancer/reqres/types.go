@@ -2,8 +2,6 @@ package reqres
 
 import (
 	"fmt"
-
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
 )
 
 type Country struct {
@@ -234,7 +232,7 @@ type Project struct {
 }
 
 func (p *Project) GetFullUrl() string {
-	return fmt.Sprintf("%s/projects/%s", endpoints.Base, p.SeoURL)
+	return fmt.Sprintf("%s/projects/%s", "https://www.freelancer.com", p.SeoURL)
 }
 
 type Timezone struct {
