@@ -1,5 +1,7 @@
 package reqres
 
+import "time"
+
 // CountriesOptions holds optional filters for the ListCountries request.
 type ListCountriesOptions struct {
 	ExtraDetails *bool `url:"extra_details"`
@@ -168,8 +170,8 @@ type SearchActiveProjectsOptions struct {
 	Languages                   []string             `url:"languages[]"`
 	Latitude                    *float64             `url:"latitude"`
 	Longitude                   *float64             `url:"longitude"`
-	FromTime                    *int64               `url:"from_time"`
-	ToTime                      *int64               `url:"to_time"`
+	FromTime                    *time.Time           `url:"from_time"`
+	ToTime                      *time.Time           `url:"to_time"`
 	SortField                   *SortField           `url:"sort_field"`
 	ProjectIDs                  []int64              `url:"project_ids[]"`
 	TopRightLatitude            *float64             `url:"top_right_latitude"`
@@ -237,8 +239,8 @@ type SearchAllProjectsOptions struct {
 	Languages                   []string                `url:"languages[]"`
 	Latitude                    *float64                `url:"latitude"`
 	Longitude                   *float64                `url:"longitude"`
-	FromTime                    *int64                  `url:"from_time"`
-	ToTime                      *int64                  `url:"to_time"`
+	FromTime                    *time.Time              `url:"from_time"`
+	ToTime                      *time.Time              `url:"to_time"`
 	SortField                   *SortField              `url:"sort_field"`
 	BidAwardStatuses            []BidAwardStatus        `url:"bid_award_statuses[]"`
 	BidCompleteStatuses         []BidCompleteStatus     `url:"bid_complete_statuses[]"`
@@ -472,8 +474,8 @@ type ListBidsOptions struct {
 	PaidStatuses                []BidPaidStatus     `url:"paid_statuses[]"`
 	CompleteStatuses            []BidCompleteStatus `url:"complete_statuses[]"`
 	FrontBidStatuses            []BidFrontendStatus `url:"front_bid_statuses[]"`
-	FromTime                    *int64              `url:"from_time"`
-	ToTime                      *int64              `url:"to_time"`
+	FromTime                    *time.Time          `url:"from_time"`
+	ToTime                      *time.Time          `url:"to_time"`
 	Reputation                  *bool               `url:"reputation"`
 	BuyerProjectFee             *bool               `url:"buyer_project_fee"`
 	AwardStatusPossibilities    *bool               `url:"award_status_possibilities"`
@@ -551,10 +553,10 @@ type GetBidOptions struct {
 }
 
 type GetTimeTrackingOptions struct {
-	FromTime              *int64 `url:"from_time"`
-	ToTime                *int64 `url:"to_time"`
-	DailyAggregateDetails *bool  `url:"daily_aggregate_details"`
-	Invoiced              *bool  `url:"invoiced"`
+	FromTime              *time.Time `url:"from_time"`
+	ToTime                *time.Time `url:"to_time"`
+	DailyAggregateDetails *bool      `url:"daily_aggregate_details"`
+	Invoiced              *bool      `url:"invoiced"`
 }
 
 type ListBidEditRequestsOptions struct {
@@ -681,8 +683,8 @@ type ListMilestoneRequestsOptions struct {
 	Users                       []int64           `url:"users[]"`
 	Bids                        []int64           `url:"bids[]"`
 	Statuses                    []MilestoneStatus `url:"statuses[]"`
-	FromTime                    *int64            `url:"from_time"`
-	ToTime                      *int64            `url:"to_time"`
+	FromTime                    *time.Time        `url:"from_time"`
+	ToTime                      *time.Time        `url:"to_time"`
 	SortField                   *SortField        `url:"sort_field"`
 	SortDirection               *SortDirection    `url:"sort_direction"`
 	ExcludedMilestones          *bool             `url:"excluded_milestones"`
@@ -755,8 +757,8 @@ type ListReviewsOptions struct {
 	ReviewTypes                 []ReviewType       `url:"review_types[]"`
 	JobIds                      []int64            `url:"job_ids[]"`
 	CompletionStatuses          []CompletionStatus `url:"completion_statuses[]"`
-	FromTime                    *int64             `url:"from_time"`
-	ToTime                      *int64             `url:"to_time"`
+	FromTime                    *time.Time         `url:"from_time"`
+	ToTime                      *time.Time         `url:"to_time"`
 	ReviewStatus                []string           `url:"review_status[]"`
 	ProjectDetails              *bool              `url:"project_details"`
 	Ratings                     *bool              `url:"ratings"`
@@ -811,8 +813,8 @@ type ListExpertGuaranteesOptions struct {
 	Bidders          []int64                  `url:"bidders[]"`
 	Bids             []int64                  `url:"bids[]"`
 	Statuses         []ExpertGuaranteesStatus `url:"statuses[]"`
-	FromTime         *int64                   `url:"from_time"`
-	ToTime           *int64                   `url:"to_time"`
+	FromTime         *time.Time               `url:"from_time"`
+	ToTime           *time.Time               `url:"to_time"`
 	Offset           *int                     `url:"offset"`
 	Limit            *int                     `url:"limit"`
 }
