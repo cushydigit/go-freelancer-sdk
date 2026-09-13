@@ -2,6 +2,7 @@ package reqres
 
 import (
 	"fmt"
+	"time"
 )
 
 type Country struct {
@@ -187,7 +188,7 @@ type User struct {
 	Jobs               []Job               `json:"jobs,omitempty"`
 	ProfileDescription *string             `json:"profile_description"`
 	HourlyRate         *float64            `json:"hourly_rate,omitempty"`
-	RegistrationDate   int64               `json:"registration_date,omitempty"`
+	RegistrationDate   *int64              `json:"registration_date,omitempty"`
 	LimitedAccount     bool                `json:"limited_account,omitempty"`
 	DisplayName        string              `json:"display_name,omitempty"`
 	Tagline            *string             `json:"tagline,omitempty"`
@@ -204,6 +205,12 @@ type User struct {
 	PublicName         string              `json:"public_name,omitempty"`
 }
 
+// RegisteredDateAt return the user's `RegistrationDate` as time.Time.
+// it returns nil when the field is not provided.
+func (u *User) RegisteredDateAt() *time.Time {
+	return unixTime(u.RegistrationDate)
+}
+
 type Project struct {
 	ID             int64    `json:"id"`
 	OwnerID        int64    `json:"owner_id"`
@@ -212,7 +219,6 @@ type Project struct {
 	SeoURL         string   `json:"seo_url"`
 	Currency       Currency `json:"currency"`
 	Description    string   `json:"description"`
-	SubmitDate     int64    `json:"submitdate"`
 	PreviewDesc    string   `json:"preview_description"`
 	Deleted        bool     `json:"deleted"`
 	Nonpublic      bool     `json:"nonpublic"`
@@ -222,8 +228,9 @@ type Project struct {
 	Budget         Budget   `json:"budget"`
 	Featured       bool     `json:"featured"`
 	Urgent         bool     `json:"urgent"`
-	TimeSubmitted  int64    `json:"time_submitted"`
-	TimeUpdated    int64    `json:"time_updated"`
+	SubmitDate     *int64   `json:"submitdate,omitempty"`
+	TimeSubmitted  *int64   `json:"time_submitted,omitempty"`
+	TimeUpdated    *int64   `json:"time_updated,omitempty"`
 	Upgrades       Upgrades `json:"upgrades"`
 	Language       string   `json:"language"`
 	FrontendStatus string   `json:"frontend_project_status"`
@@ -233,6 +240,24 @@ type Project struct {
 
 func (p *Project) GetFullUrl() string {
 	return fmt.Sprintf("%s/projects/%s", "https://www.freelancer.com", p.SeoURL)
+}
+
+// SubmittedAt return the project's `TimeSubmitted` field as time.Time.
+// it returns nil when the field is not provided.
+func (p *Project) SubmittedAt() *time.Time {
+	return unixTime(p.TimeSubmitted)
+}
+
+// UpdatedAt return the project's `TimeUpdated` field as time.Time.
+// it returns nil when the field is not provided.
+func (p *Project) UpdatedAt() *time.Time {
+	return unixTime(p.TimeUpdated)
+}
+
+// SubmitDateAt return the project's `SubmitDate` field as time.Time.
+// it returns nil when this field is not provided.
+func (p *Project) SubmitDateAt() *time.Time {
+	return unixTime(p.SubmitDate)
 }
 
 type Timezone struct {
@@ -247,7 +272,13 @@ type Device struct {
 	Platform  string `json:"platform"`
 	City      string `json:"city"`
 	Country   string `json:"country"`
-	LastLogin int64  `json:"last_login"`
+	LastLogin *int64 `json:"last_login,omitempty"`
+}
+
+// LastLoginAt returns the device's `LastLogin` field as time.Time.
+// it returns nil when the field is not provided.
+func (d *Device) LastLoginAt() *time.Time {
+	return unixTime(d.LastLogin)
 }
 
 type BidEditRequest struct {
@@ -259,6 +290,27 @@ type BidEditRequest struct {
 	NewPeriod     int     `json:"new_period"`
 	OldAmount     float64 `json:"old_amount"`
 	OldPeriod     int     `json:"old_period"`
-	TimeRequested int64   `json:"time_requested"`           // Unix timestamp
+	TimeRequested *int64  `json:"time_requested,omitempty"` // Unix timestamp
 	TimeResponded *int64  `json:"time_responded,omitempty"` // optional, Unix timestamp
+}
+
+// RequestedTimeAt returns bid edit request `TimeRequested` as time.Time.
+// it returns nil when the field is not provided.
+func (b *BidEditRequest) RequestedTimeAt() *time.Time {
+	return unixTime(b.TimeRequested)
+}
+
+// RespondedTimeAt returns bid edit request `TimeResponded` as time.Time.
+// it returns nil when the field is not provided.
+func (b *BidEditRequest) RespondedTimeAt() *time.Time {
+	return unixTime(b.TimeResponded)
+}
+
+func unixTime(v *int64) *time.Time {
+	if v == nil {
+		return nil
+	}
+
+	t := time.Unix(*v, 0)
+	return &t
 }
