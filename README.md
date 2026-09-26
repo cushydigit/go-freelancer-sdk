@@ -244,44 +244,53 @@ if err != nil {
 }
 ```
 
-## Use-Cases
+## Services
 
 ### Project Services
 
 Manage active and archived projects, retrieve project details, create new projects, and work with bids, milestones, and reviews.
 
-| Service | Endpoint | Description |
-| :------ | :------------ | :---------- |
-| `Projects` | `/projects/0.1/projects` | Core projects Methods |
-| `Collaborations` | `/projects/0.1/projects/collaboration` | .... |
-| `Services` | `/projects/0.1/services` | .... |
-| `Bids` | `/projects/0.1/bids` | .... |
-| `BidEditRequests` | `/projects/0.1/bids/edit_requests` | .... |
-| `BidRatings` | `/projects/0.1/bids/{bid_id}/bid_ratings` | .... |
-| `Jobs` | `/projects/0.1/jobs` | .... |
-| `JobBundles` | `/projects/0.1/job_bundles` | ... |
-| `JobBundleCategories` | `/projects/0.1/job_bundle_categories` | .... |
-| `Milestones` | `/projects/0.1/milestones` | .... |
-| `MilestoneRequests` | `/projects/0.1/milestone_requests` | .... |
-| `Reviews` | `/projects/0.1/reviews` | ... |
-| `ExpertGuarantees` | `/projects/0.1/expert_guarantees` | ... | 
-| `Currencies` | `/projects/0.1/currencies` | ... |
-| `Categories` | `/projects/0.1/categories` | ... |
-| `Budgets` | `/projects/0.1/budgets` | ... |
+| Service | Endpoint |
+| :------ | :------------ |
+| `Projects` | `/projects/0.1/projects` |
+| `Collaborations` | `/projects/0.1/projects/collaboration` |
+| `Services` | `/projects/0.1/services` |
+| `Bids` | `/projects/0.1/bids` |
+| `BidEditRequests` | `/projects/0.1/bids/edit_requests` |
+| `BidRatings` | `/projects/0.1/bids/{bid_id}/bid_ratings` |
+| `Jobs` | `/projects/0.1/jobs` |
+| `JobBundles` | `/projects/0.1/job_bundles` |
+| `JobBundleCategories` | `/projects/0.1/job_bundle_categories` |
+| `Milestones` | `/projects/0.1/milestones` |
+| `MilestoneRequests` | `/projects/0.1/milestone_requests` |
+| `Reviews` | `/projects/0.1/reviews` |
+| `ExpertGuarantees` | `/projects/0.1/expert_guarantees` |
+| `Currencies` | `/projects/0.1/currencies` |
+| `Categories` | `/projects/0.1/categories` |
+| `Budgets` | `/projects/0.1/budgets` |
 
-
-#### Core Project Methods
+#### Projects Service Methods
 
 | Method | Endpoint | Description |
 | :----- | :------- | :---------- |
-| `List(ctx, opts)` | `/projects/0.1/projects` | List spcefic | Fetch all projects |
-| `SearchActive(ctx, opts)` | Search active projects | Find jobs matching criteria |
-| `SearchAll(ctx, opts)` | Search all projects | Browse archived and active |
-| `Get(ctx, id, opts)` | Get single project | View project details |
-| `Create(ctx, body)` | Create new project | Post a new job |
-| `Delete(ctx, id)` | Delete project | Remove closed projects |
+| `Action(ctx, body)` | `/projects/0.1/projects/{project_id}` | Perform action on a project |
+| `Get(ctx, id, opts)` | `/projects/0.1/projects/{project_id}` | Get single project |
+| `Delete(ctx, id)` | `/projects/0.1/projects/{project_id}` | Delete project |
+| `Create(ctx, body)` | `/projects/0.1/projects` | Create new project |
+| `List(ctx, opts)` | `/projects/0.1/projects` | List projects by projects Ids |
+| `SearchActive(ctx, opts)` | `/projects/0.1/projects/active` | Search active projects |
+| `SearchAll(ctx, opts)` | `/projects/0.1/projects/all` | Search archived and active projects |
+| `ListSelf(ctx, opts)` | `/projects/0.1/self` | List current authenticated user's projects |
+| `InviteFreelancer(ctx, id, body)` | `/projects/0.1/projects/{project_id}/invite` | Invite freelancer to bid on the project |
+| `ListUpgradesFees(ctx, opts)` | `/projects/0.1/projects/fees` | List Project upgrade fees for a given list of currencies |
+| `ListBids(ctx, id, opts)` | `/projects/0.1/projects/{project_id}/bids` | List of bids for a single project |
+| `GetBidInfo(ctx, id)` | `/projects/0.1/projects/{project_id}/bids_info` | Get information for posting bids on a project |
+| `ListMilestones(ctx, id, opts)` | `/projects/0.1/projects/{project_id}/milestones` | List of milestones for a single project |
+| `ListMilestoneRequests(ctx, id, opts)` | `/projects/0.1/projects/{project_id}/milestone_requests` | List of milestone requests for a single project |
+| `GetHourlyContractInfo(ctx, opts)` | `/projects/0.1/hourly_contract_info` | Fetch the hourly contract matching the desired query |
+| `GetIPContractInfo(ctx, id)` | `/projects/0.1/projects/{project_id}/ip_contract_info` | Get the IP contract matching for the project |
 
-#### Searching Active Projects
+##### Searching Active Projects
 
 ```go
 from := time.Now().Add(-24 * time.Hour) // 
@@ -329,7 +338,7 @@ if err == nil && len(res.Result.Projects) > 0 {
 }
 ```
 
-#### Searching with Geographic Bounds
+##### Searching with Geographic Bounds
 
 Use lat/lng coordinates for location-based filtering:
 
@@ -349,7 +358,7 @@ opts := rr.SearchActiveProjectsOptions{
 res, _, err := client.Services.Projects.SearchActive(ctx, &opts)
 ```
 
-#### Creating a Project
+##### Creating a Project
 
 ```Go
 body := reqres.CreateProjectBody{
@@ -372,7 +381,7 @@ if err != nil {
 }
 ```
 
-#### Working with Bids on a Project
+##### Working with Bids on a Project
 
 ```Go
 // List bids for a project
@@ -385,7 +394,7 @@ bidsOpts := rr.ListBidsOptions{
 res, _, err := client.Services.Projects.ListBids(ctx, projectId, &bidsOpts)
 ```
 
-#### Milestones and Milestone Request
+##### Milestones and Milestone Request
 
 ```Go
 // List milestones
@@ -411,23 +420,58 @@ apiBody := reqres.ActionMilestoneRequestBody{
 res, _, err := client.Services.Projects.MilestoneRequests.Action(ctx, requestId, &apiBody)
 ```
 
-#### Reviews
+#### Collaborations Service Methods
 
-```Go
-// Create a review for a freelancer
-body := reqres.CreateReviewBody{
-    ProjectID:  projectId,
-    ToUserID:   freelancerUserId,
-    FromUserID: currentUserId(),       // Implement in your code logic
-    ReviewType: rr.ReviewTypeProject(),
-    Role:       rr.RoleFreelancer(),
-    Comment:    "Great work, very professional!",
-}
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `List(ctx, id)` | `/projects/0.1/projects/{project_id}/collaborations` | List of project collaboration data for a project |
+| `Create(ctx, id)` | `/projects/0.1/projects/{project_id}/collaborations` | Create a new project collaboration |
+| `Action(ctx, id, coll_id, body)` | `/projects/0.1/projects/{project_id}/collaborations/{coll_id}/actions` | Perform action an a collaboration |
+| `ListAll(ctx)` | `/projects/0.1/projects/collaborations` |
 
-res, _, err := client.Services.Projects.Reviews.Create(ctx, body)
-```
+#### Services Service Methods
 
-### Users Service
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `List(ctx, opts)` | `/projects/0.1/services` | List of service |
+| `ListActive(ctx, opts)` | `/projects/0.1/services/active` | List of active services |
+| `Order(ctx, service_id, service_type)` | `/projects/0.1/services/{service_type}/{service_id}/order` | Orders one of the available services |
+
+#### Bids Service Methods
+
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `List(ctx, opts)` | `/projects/0.1/bids` | List of bids that match the specific criteria |
+| `Create(ctx, body)` | `/projects/0.1/bids` | Create a bid on a project |
+| `Get(ctx, id, opts)` | `/projects/0.1/bids/{bid_id}` | Get information about specific bid |
+| `Action(ctx, id, body)` | `/projects/0.1/bids/{bid_id}` | Performs an action on a bid |
+| `Update(ctx, id, body)` | `/projects/0.1/bids/{bid_id}` | Update and existing bid on a project |
+| `GetTimeTracking(ctx, id, opts)` | `/projects/0.1/bids/{bid_id}/time_tracking` | Return a list of aggregate time tracking data for a bid |
+| `CreateTimeTracking(ctx, id, body)` | `/projects/0.1/bids/{bid_id}/time_tracking` | Create a time time tracking session for a specific bid |
+| `ListEditRequests(ctx, id ,opts)` | `/projects/0.1/bids/{bid_id}/edit_requests` | List of bid edit requests by bid id |
+| `CreateEditRequest(ctx, body)` | `/projects/0.1/bids/edit_requests` | Create a bid edit request on a post that awarded bid |
+| `ActionEditRequest(ctx, id, body)` | `/projects/0.1/bids/{bid_id}/edit_requests` | Employer perform action on a PENDING bid edit request |
+| `GetRating(ctx, id)` | `/projects/0.1/bids/{bid_id}/bid_ratings` | Fetch bid rating for a bid |
+| `ListRatings(ctx, id ,opts)` | `/projects/0.1/bid_ratings` | List of bid ratings for a list of bids |
+| `CreateRating(ctx, bid_id ,body)` | `/projects/0.1/bids/{bid_id}/edit_requests` | Rates a bid (create a bid rating) |
+| `UpdateRating(ctx, id, bid_rating_id, body)` | `/projects/0.1/bids/{bid_id}/bid_ratings/{bid_rating_id}` | Update an existing bid rating |
+
+#### Jobs Service Methods
+
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `List(ctx, opts)` | `/projects/0.1/jobs` | List of jobs |
+| `Search(ctx, opts)` | `/projects/0.1/jobs/search` | Search for job by all parameters specified on the job |
+| `ListBundles(ctx, opts)` | `/projects/0.1/job_bundles` | List of job bundles |
+| `ListBundleCategories(ctx, id, opts)` | `/projects/0.1/job_bundle_categories` | List of job bundle categories |
+
+#### Milestones Service Methods
+
+#### MilestoneRequests Service Methods
+
+#### Reviews Service Methods
+
+### User Services
 
 Interact with freelancer profiles, user directory, and personal profile management.
 
