@@ -97,7 +97,7 @@ func TestUsersService_SearchFreelancer(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
-func TestSelfService_GetInfo(t *testing.T) {
+func TestSelfService_Get(t *testing.T) {
 	opts := rr.GetSelfInfoOptions{
 		Offset:  rr.Int(19),
 		Compact: rr.Bool(true),
@@ -120,7 +120,7 @@ func TestSelfService_GetInfo(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.Self.GetInfo(context.Background(), &opts)
+	res, _, err := c.Services.Users.Self.Get(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }

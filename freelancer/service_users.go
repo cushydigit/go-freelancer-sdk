@@ -60,146 +60,6 @@ func (s *UsersService) SearchFreelancer(
 	)
 }
 
-// --------------------------------------
-// USERS - Authenticated (SELF)
-// --------------------------------------
-
-// Returns information about the current user.
-// It maps to the `GET` `/users/0.1/self` endpoint.
-func (s *SelfService) GetInfo(
-	ctx context.Context,
-	opts *rr.GetSelfInfoOptions,
-) (*rr.GetSelfInfoResponse, *ResponseMeta, error) {
-	return execute[*rr.GetSelfInfoResponse](
-		ctx,
-		s.client,
-		http.MethodGet,
-		endpoints.Self,
-		opts,
-		nil,
-	)
-}
-
-// Returns a list of user’s recent logged in devices.
-// It maps to the `GET` `/users/0.1/self/devices` endpoint.
-func (s *SelfService) ListDevices(
-	ctx context.Context,
-) (*rr.ListSelfDevicesResponse, *ResponseMeta, error) {
-	return execute[*rr.ListSelfDevicesResponse](
-		ctx,
-		s.client,
-		http.MethodGet,
-		endpoints.Devices,
-		nil,
-		nil,
-	)
-}
-
-// Add a list of jobs to the job list of a current user.
-// It maps to the `POST` `/users/0.1/self/jobs` endpoint.
-func (s *SelfService) AddJobs(
-	ctx context.Context,
-	b rr.AddJobsBody,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		s.client,
-		http.MethodPost,
-		endpoints.SelfJobs,
-		nil,
-		b,
-	)
-}
-
-// Sets a list of jobs to the job list of the current user.
-// It maps to the `PUT` `/users/0.1/self/jobs` endpoint.
-func (s *SelfService) UpdateJobs(
-	ctx context.Context,
-	b rr.SetJobsBody,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		s.client,
-		http.MethodPut,
-		endpoints.SelfJobs,
-		nil,
-		b,
-	)
-}
-
-// Removes a list of jobs from the job list of the current user.
-// It maps to the `DELETE` `/users/0.1/self/jobs` endpoint.
-func (s *SelfService) DeleteJobs(
-	ctx context.Context,
-	b rr.DeleteJobsBody,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		s.client,
-		http.MethodDelete,
-		endpoints.SelfJobs,
-		nil,
-		b,
-	)
-}
-
-// --------------------------------------
-// USERS - PROFILES
-// --------------------------------------
-
-// Create a new profile for a user. Returns the created profile
-// It maps to the `POST` `/users/0.1/profiles` endpoint.
-func (s *SelfService) CreateProfile(
-	ctx context.Context,
-	b rr.CreateProfileBody,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		s.client,
-		http.MethodPost,
-		endpoints.Profiles,
-		nil,
-		b,
-	)
-}
-
-// NOTE: the api does not have solid on this endpoint (the get should not have body)
-
-// Get profile(s)
-// It maps to the `GET` `/users/0.1/profiles` endpoint.
-func (s *SelfService) GetProfile(
-	ctx context.Context,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		s.client,
-		http.MethodGet,
-		endpoints.Profiles,
-		nil,
-		nil,
-	)
-}
-
-// Update a profile
-// It maps to the `PUT` `/users/0.1/profiles` endpoint.
-func (s *SelfService) UpdateProfile(
-	ctx context.Context,
-	b rr.UpdateProfileBody,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		s.client,
-		http.MethodPut,
-		endpoints.Profiles,
-		nil,
-		b,
-	)
-}
-
-// --------------------------------------
-// USERS - EXTRAS
-// --------------------------------------
-
 // Gets the reputations for a list of users.
 // It maps to the `GET` `/users/0.1/reputations` endpoint.
 func (s *UsersService) ListReputations(
@@ -277,5 +137,137 @@ func (s *UsersService) ListPools(
 		endpoints.Pools,
 		opts,
 		nil,
+	)
+}
+
+// --------------------------------------
+// USERS - Authenticated (SELF)
+// --------------------------------------
+
+// Returns information about the current user.
+// It maps to the `GET` `/users/0.1/self` endpoint.
+func (s *SelfService) Get(
+	ctx context.Context,
+	opts *rr.GetSelfInfoOptions,
+) (*rr.GetSelfInfoResponse, *ResponseMeta, error) {
+	return execute[*rr.GetSelfInfoResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.Self,
+		opts,
+		nil,
+	)
+}
+
+// Returns a list of user’s recent logged in devices.
+// It maps to the `GET` `/users/0.1/self/devices` endpoint.
+func (s *SelfService) ListDevices(
+	ctx context.Context,
+) (*rr.ListSelfDevicesResponse, *ResponseMeta, error) {
+	return execute[*rr.ListSelfDevicesResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.Devices,
+		nil,
+		nil,
+	)
+}
+
+// Add a list of jobs to the job list of a current user.
+// It maps to the `POST` `/users/0.1/self/jobs` endpoint.
+func (s *SelfService) AddJobs(
+	ctx context.Context,
+	b rr.AddJobsBody,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.SelfJobs,
+		nil,
+		b,
+	)
+}
+
+// Sets a list of jobs to the job list of the current user.
+// It maps to the `PUT` `/users/0.1/self/jobs` endpoint.
+func (s *SelfService) UpdateJobs(
+	ctx context.Context,
+	b rr.SetJobsBody,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		endpoints.SelfJobs,
+		nil,
+		b,
+	)
+}
+
+// Removes a list of jobs from the job list of the current user.
+// It maps to the `DELETE` `/users/0.1/self/jobs` endpoint.
+func (s *SelfService) DeleteJobs(
+	ctx context.Context,
+	b rr.DeleteJobsBody,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodDelete,
+		endpoints.SelfJobs,
+		nil,
+		b,
+	)
+}
+
+// Create a new profile for a user. Returns the created profile
+// It maps to the `POST` `/users/0.1/profiles` endpoint.
+func (s *SelfService) CreateProfile(
+	ctx context.Context,
+	b rr.CreateProfileBody,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.Profiles,
+		nil,
+		b,
+	)
+}
+
+// NOTE: the api does not have solid on this endpoint (the get should not have body)
+
+// Get profile(s)
+// It maps to the `GET` `/users/0.1/profiles` endpoint.
+func (s *SelfService) GetProfile(
+	ctx context.Context,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.Profiles,
+		nil,
+		nil,
+	)
+}
+
+// Update a profile
+// It maps to the `PUT` `/users/0.1/profiles` endpoint.
+func (s *SelfService) UpdateProfile(
+	ctx context.Context,
+	b rr.UpdateProfileBody,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		endpoints.Profiles,
+		nil,
+		b,
 	)
 }
