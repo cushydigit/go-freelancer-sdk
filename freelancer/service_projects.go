@@ -775,7 +775,7 @@ func (s *MilestonesService) Action(
 
 // Returns a list of milestone requests.
 // It maps to the `GET` `/projects/0.1/milestone_requests` endpoint
-func (s *MilestoneRequestsService) List(
+func (s *MilestonesService) ListRequests(
 	ctx context.Context,
 	opts *rr.ListMilestoneRequestsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -791,7 +791,7 @@ func (s *MilestoneRequestsService) List(
 
 // Returns information about a specific milestone request.
 // It maps to the `GET` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
-func (s *MilestoneRequestsService) Get(
+func (s *MilestonesService) GetRequest(
 	ctx context.Context,
 	milestoneRequestID int64,
 	opts *rr.GetMilestoneRequestOptions,
@@ -808,7 +808,7 @@ func (s *MilestoneRequestsService) Get(
 
 // Creates a milestone request from a given JSON object.
 // It maps to the `POST` `/projects/0.1/milestone_requests` endpoint
-func (s *MilestoneRequestsService) Create(
+func (s *MilestonesService) CreateRequest(
 	ctx context.Context,
 	b rr.CreateMilestoneRequestBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -824,7 +824,7 @@ func (s *MilestoneRequestsService) Create(
 
 // Perform an action on a milestone request.
 // It maps to the `PUT` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
-func (s *MilestoneRequestsService) Action(
+func (s *MilestonesService) ActionRequest(
 	ctx context.Context,
 	milestoneRequestID int64,
 	b rr.ActionMilestoneRequestBody,

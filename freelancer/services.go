@@ -16,7 +16,6 @@ func newServices(c *Client) *Services {
 	s.Projects.Services = &ServicesService{client: c}
 	s.Projects.Bids = &BidsService{client: c}
 	s.Projects.Milestones = &MilestonesService{client: c}
-	s.Projects.MilestoneRequests = &MilestoneRequestsService{client: c}
 	s.Projects.Reviews = &ReviewsService{client: c}
 	s.Projects.Jobs = &JobsService{client: c}
 	s.Projects.Budgets = &BudgetsService{client: c}
@@ -42,18 +41,17 @@ func newServices(c *Client) *Services {
 }
 
 type ProjectsService struct {
-	client            *Client
-	Collaborations    *CollaborationsService
-	Services          *ServicesService
-	Bids              *BidsService
-	Jobs              *JobsService
-	Milestones        *MilestonesService
-	MilestoneRequests *MilestoneRequestsService
-	Reviews           *ReviewsService
-	Budgets           *BudgetsService
-	Currencies        *CurrenciesService
-	Categories        *CategoriesService
-	ExpertGuarantees  *ExpertGuaranteesService
+	client           *Client
+	Collaborations   *CollaborationsService
+	Services         *ServicesService
+	Bids             *BidsService
+	Jobs             *JobsService
+	Milestones       *MilestonesService
+	Reviews          *ReviewsService
+	Budgets          *BudgetsService
+	Currencies       *CurrenciesService
+	Categories       *CategoriesService
+	ExpertGuarantees *ExpertGuaranteesService
 }
 
 type CollaborationsService struct{ client *Client }
@@ -62,7 +60,6 @@ type BidsService struct{ client *Client }
 type JobsService struct{ client *Client }
 type MilestonesService struct{ client *Client }
 type ReviewsService struct{ client *Client }
-type MilestoneRequestsService struct{ client *Client }
 type ExpertGuaranteesService struct{ client *Client }
 type BudgetsService struct{ client *Client }
 type CurrenciesService struct{ client *Client }

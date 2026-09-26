@@ -1720,7 +1720,7 @@ func TestMilestonesService_Action(t *testing.T) {
 
 }
 
-func TestMilestoneRequestsService_List(t *testing.T) {
+func TestMilestoneService_ListRequests(t *testing.T) {
 	opts := rr.ListMilestoneRequestsOptions{
 		Projects:   []int64{1, 2},
 		Statuses:   []rr.MilestoneStatus{rr.MilestoneStatusCanceled},
@@ -1747,13 +1747,13 @@ func TestMilestoneRequestsService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.MilestoneRequests.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Milestones.ListRequests(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestMilestoneRequestsService_Get(t *testing.T) {
+func TestMilestonesService_GetRequest(t *testing.T) {
 	milestoneRequestID := int64(100)
 	opts := rr.GetMilestoneRequestOptions{
 		UserAvatar: rr.Bool(true),
@@ -1776,13 +1776,13 @@ func TestMilestoneRequestsService_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.MilestoneRequests.Get(context.Background(), milestoneRequestID, &opts)
+	res, _, err := c.Services.Projects.Milestones.GetRequest(context.Background(), milestoneRequestID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestMilestoneRequestsService_Create(t *testing.T) {
+func TestMilestonesService_CreateRequest(t *testing.T) {
 	body := rr.CreateMilestoneRequestBody{
 		ProjectID:   int64(100),
 		Amount:      200,
@@ -1812,13 +1812,13 @@ func TestMilestoneRequestsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.MilestoneRequests.Create(context.Background(), body)
+	res, _, err := c.Services.Projects.Milestones.CreateRequest(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestMilestoneRequestsService_Action(t *testing.T) {
+func TestMilestonesService_ActionRequest(t *testing.T) {
 	milestoneRequestID := int64(100)
 	body := rr.ActionMilestoneRequestBody{
 		Action: rr.MilestoneActionRequestAccept,
@@ -1845,7 +1845,7 @@ func TestMilestoneRequestsService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.MilestoneRequests.Action(context.Background(), milestoneRequestID, body)
+	res, _, err := c.Services.Projects.Milestones.ActionRequest(context.Background(), milestoneRequestID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
