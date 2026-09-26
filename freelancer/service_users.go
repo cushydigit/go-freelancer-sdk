@@ -202,7 +202,7 @@ func (s *SelfService) UpdateProfile(
 
 // Gets the reputations for a list of users.
 // It maps to the `GET` `/users/0.1/reputations` endpoint.
-func (s *ReputationsService) List(
+func (s *UsersService) ListReputations(
 	ctx context.Context,
 	opts *rr.ListReputationsOptions,
 ) (*rr.ListUsersReputationsResponse, *ResponseMeta, error) {
@@ -218,7 +218,7 @@ func (s *ReputationsService) List(
 
 // Returns a list of enterprises.
 // It maps to the `GET` `/users/0.1/enterprises` endpoint.
-func (s *EnterprisesService) List(
+func (s *UsersService) ListEnterprises(
 	ctx context.Context,
 	opts *rr.ListEnterprisesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -234,7 +234,7 @@ func (s *EnterprisesService) List(
 
 // The service gets the portfolios for a list of users
 // Returns a list of portfolios of users. Number of portfolios of all users can be limited by the offset and limit parameters.
-func (s *PortfoliosService) List(
+func (s *UsersService) ListPortfolios(
 	ctx context.Context,
 	opts *rr.ListPortfoliosOptions,
 ) (*rr.ListUsersPortfoliosResponse, *ResponseMeta, error) {
@@ -250,7 +250,7 @@ func (s *PortfoliosService) List(
 
 // Creates a user violation report.
 // It maps to the `POST` `/users/0.1/violation_reports` endpoint.
-func (s *ViolationsService) Create(
+func (s *UsersService) CreateViolationReport(
 	ctx context.Context,
 	b rr.CreateViolationBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -266,7 +266,7 @@ func (s *ViolationsService) Create(
 
 // Returns a list of pools belonging to the current user.
 // It maps to the `GET` `/users/0.1/pools` endpoint.
-func (s *PoolsService) List(
+func (s *UsersService) ListPools(
 	ctx context.Context,
 	opts *rr.ListPoolsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {

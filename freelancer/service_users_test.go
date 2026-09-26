@@ -345,7 +345,7 @@ func TestSelfService_UpdateProfile(t *testing.T) {
 
 }
 
-func TestReputations_List(t *testing.T) {
+func TestUsers_ListReputations(t *testing.T) {
 	opts := rr.ListReputationsOptions{
 		Users:      []int64{1, 2},
 		Role:       rr.Enum(rr.RoleEmployer),
@@ -370,12 +370,12 @@ func TestReputations_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.Reputations.List(context.Background(), &opts)
+	res, _, err := c.Services.Users.ListReputations(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
 
-func TestEnterprises_List(t *testing.T) {
+func TestUsersService_ListEnterprises(t *testing.T) {
 	opts := rr.ListEnterprisesOptions{
 		Enterprises:   []int64{1, 2},
 		InternalNames: []string{"test1", "test2"},
@@ -402,12 +402,12 @@ func TestEnterprises_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.Enterprises.List(context.Background(), &opts)
+	res, _, err := c.Services.Users.ListEnterprises(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
 
-func TestPortfolios_List(t *testing.T) {
+func TestUsersService_ListPortfolios(t *testing.T) {
 	opts := rr.ListPortfoliosOptions{
 		Users: []int64{1, 2},
 		Limit: rr.Int(10),
@@ -430,12 +430,12 @@ func TestPortfolios_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.Portfolios.List(context.Background(), &opts)
+	res, _, err := c.Services.Users.ListPortfolios(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
 
-func TestPools_List(t *testing.T) {
+func TestUsersService_ListPools(t *testing.T) {
 	opts := rr.ListPoolsOptions{
 		Pools:      []int64{1, 2},
 		IgnoreTest: rr.Bool(true),
@@ -460,12 +460,12 @@ func TestPools_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.Pools.List(context.Background(), &opts)
+	res, _, err := c.Services.Users.ListPools(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
 
-func TestViolations_Create(t *testing.T) {
+func TestUserService_CreateViolationsReport(t *testing.T) {
 	body := rr.CreateViolationBody{
 		ContextID:        int64(100),
 		ContextType:      rr.ViolationContextBid,
@@ -500,7 +500,7 @@ func TestViolations_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.Violations.Create(context.Background(), body)
+	res, _, err := c.Services.Users.CreateViolationReport(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }
