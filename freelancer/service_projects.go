@@ -639,7 +639,7 @@ func (s *BidRatingsService) Update(
 // PROJECTS-JOBS
 // --------------------------------------
 
-// Returns a list of milestone requests.
+// Returns a list of jobs.
 // It maps to the `GET` `/projects/0.1/jobs` endpoint
 func (s *JobsService) List(
 	ctx context.Context,
