@@ -39,3 +39,51 @@ func (s *CommonService) ListTimezones(
 		nil,
 	)
 }
+
+// Returns a list of currencies.currency_codes and currency_ids are incompatible with each other.
+// It maps to the `GET` `/projects/0.1/currencies` endpoint
+func (s *CommonService) ListCurrencies(
+	ctx context.Context,
+	opts *rr.ListCurrenciesOptions,
+) (*rr.ListCurrenciesResponse, *ResponseMeta, error) {
+	return execute[*rr.ListCurrenciesResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.Currencies,
+		opts,
+		nil,
+	)
+}
+
+// Returns a list of categories. If job_details is set, a map of category IDs to jobs in those categories.
+// it maps to the `GET` `/projects/0.1/categories` endpoint
+func (s *CommonService) ListCategories(
+	ctx context.Context,
+	opts *rr.ListCategoriesOptions,
+) (*rr.ListCategoriesResponse, *ResponseMeta, error) {
+	return execute[*rr.ListCategoriesResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.Categories,
+		opts,
+		nil,
+	)
+}
+
+// Returns a list of budgets with the specified currencies.currency_codes and currency_ids are incompatible with each other.
+// It maps to the `GET` `/projects/0.1/budgets` endpoint
+func (s *CommonService) ListBudgets(
+	ctx context.Context,
+	opts *rr.ListBudgetsOptions,
+) (*rr.ListBudgetsResponse, *ResponseMeta, error) {
+	return execute[*rr.ListBudgetsResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.Budgets,
+		opts,
+		nil,
+	)
+}
