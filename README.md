@@ -198,7 +198,7 @@ if err != nil {
 | Field | Description |
 | :---- | :---------- |
 | `StatusCode` | HTTP status code (e.g, 429 for rate limited) |
-| `Status` | API status text (OK, ERROR, etc.) |
+| `Status` | API status text (success, error, etc.) |
 | `Message` | User-facing error message |
 | `RequestID` | Freelancer's request ID fro support tickets |
 | `InnerError.Code` | Specified API error code |
@@ -246,15 +246,35 @@ if err != nil {
 
 ## Use-Cases
 
-### Project Service
+### Project Services
 
 Manage active and archived projects, retrieve project details, create new projects, and work with bids, milestones, and reviews.
 
-#### Core Methods
+| Service | Endpoint | Description |
+| :------ | :------------ | :---------- |
+| `Projects` | `/projects/0.1/projects` | Core projects Methods |
+| `Collaborations` | `/projects/0.1/projects/collaboration` | .... |
+| `Services` | `/projects/0.1/services` | .... |
+| `Bids` | `/projects/0.1/bids` | .... |
+| `BidEditRequests` | `/projects/0.1/bids/edit_requests` | .... |
+| `BidRatings` | `/projects/0.1/bids/{bid_id}/bid_ratings` | .... |
+| `Jobs` | `/projects/0.1/jobs` | .... |
+| `JobBundles` | `/projects/0.1/job_bundles` | ... |
+| `JobBundleCategories` | `/projects/0.1/job_bundle_categories` | .... |
+| `Milestones` | `/projects/0.1/milestones` | .... |
+| `MilestoneRequests` | `/projects/0.1/milestone_requests` | .... |
+| `Reviews` | `/projects/0.1/reviews` | ... |
+| `ExpertGuarantees` | `/projects/0.1/expert_guarantees` | ... | 
+| `Currencies` | `/projects/0.1/currencies` | ... |
+| `Categories` | `/projects/0.1/categories` | ... |
+| `Budgets` | `/projects/0.1/budgets` | ... |
 
-| Method | Description | Example Use Case |
-| :----- | :---------- | :--------------- |
-| `List(ctx, opts)` | Get user's projects | Fetch all projects |
+
+#### Core Project Methods
+
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `List(ctx, opts)` | `/projects/0.1/projects` | List spcefic | Fetch all projects |
 | `SearchActive(ctx, opts)` | Search active projects | Find jobs matching criteria |
 | `SearchAll(ctx, opts)` | Search all projects | Browse archived and active |
 | `Get(ctx, id, opts)` | Get single project | View project details |
@@ -264,32 +284,49 @@ Manage active and archived projects, retrieve project details, create new projec
 #### Searching Active Projects
 
 ```go
+from := time.Now().Add(-24 * time.Hour) // 
+
 // Basic search with filters
 opts := rr.SearchActiveProjectsOptions{
-    Query:           rr.String("Go developer"),
-    Limit:           rr.Int(20),      // Results per page
-    Offset:          rr.Int(0),
-    
+    Query:  rr.String("Go developer"),
+    Limit:  rr.Int(20), // Results per page
+    Offset: rr.Int(0),
+
     // Filtering options
-    UserDetails:     rr.Bool(true),         // Include user info
-    
-    // Sort and pagination
-    SortField:    rr.SortFieldsTimeUpdated,
-    ReverseSort:  rr.Bool(false),           // Newest first
+    FromTime:    &from, // Filter projects within 24 hours
+    UserDetails: rr.Bool(true), // Include user info
+    // Sort
+    SortField:   rr.Enum(rr.SortFieldsTimeUpdated),
+    ReverseSort: rr.Bool(false), // Newest first
 }
 // Execute search
-res, meta, err := client.Services.Projects.SearchActive(ctx, &opts)
-if err != nil {
-    log.Printf("Error: %v", err)
-    return
-}
+res, _, err := c.Services.Projects.SearchActive(ctx, &opts)
+if err == nil && len(res.Result.Projects) > 0 {
+    for _, p := range res.Result.Projects {
+        budgetString := fmt.Sprintf(
+            "[%s%1.f - %s%1.f]",
+            p.Currency.Sign,
+            p.Budget.Minimum,
+            p.Currency.Sign,
+            p.Budget.Minimum,
+        )
+        fmt.Printf("\n-%d: %s %s\n", p.ID, budgetString, p.Title)
+        // access unix time easily
+        time1, time2, time3 := p.SubmitDateAt(), p.UpdatedAt(), p.SubmittedAt()
+        if time1 != nil && time2 != nil && time3 != nil {
+            fmt.Printf(
+                "SubmitDate: %s\tTimeUpdated: %s\tTimeSubmitted: %s\n",
+                time1.Format("Jan 2, 2006 at 15:04"),
+                time2.Format("Jan 2, 2006 at 15:04"),
+                time3.Format("Jan 2, 2006 at 15:04"),
+            )
+        }
+        if p.SubmitDateAt() != nil && p.UpdatedAt() != nil && p.SubmittedAt() != nil {
 
-// Process results
-for _, p := range res.Result.Projects {
-    fmt.Printf("- Project #%d: %s\n",p.ID, p.Title)
+        }
+    }
+    fmt.Printf("Showing %d of %d total projects\n", len(res.Result.Projects), res.Result.TotalCount)
 }
-
-fmt.Printf("Showing %d of %d total projects\n", len(res.Result.Projects), res.Result.TotalCount)
 ```
 
 #### Searching with Geographic Bounds
@@ -316,23 +353,23 @@ res, _, err := client.Services.Projects.SearchActive(ctx, &opts)
 
 ```Go
 body := reqres.CreateProjectBody{
-    Title: "Go Developer Needed",
+    Title:       "Go Developer Needed",
     Description: "Need an experienced Go developer...",
-    
+
     Budget: rr.Budget{
-        Minimum: 100.0,
-        Maximum: 5000.0,
+        Minimum:    100.0,
+        Maximum:    250.0,
+        CurrencyID: 1,
     },
-    
+
     Type: rr.Enum(rr.ProjectBudgetFixed),
 }
 
-res, meta, err := client.Services.Projects.Create(ctx, body)
+res, _, err := c.Services.Projects.Create(ctx, body)
 if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
+    return
 }
-
-fmt.Printf("Project created with ID: %d\n", res.Result.ID)
 ```
 
 #### Working with Bids on a Project
@@ -390,17 +427,19 @@ body := reqres.CreateReviewBody{
 res, _, err := client.Services.Projects.Reviews.Create(ctx, body)
 ```
 
-### Users Section
+### Users Service
 
 Interact with freelancer profiles, user directory, and personal profile management.
 
-#### Core User Methods
+#### Core Users Methods
 
-| Method | Description | Returns |
-| :----- | :---------- | :------ |
-| `List(ctx, opts)` | Get users by IDs or usernames | Map of user data |
-| `SearchFreelancer(ctx, opts)` | Search freelancer directory | Filtered list |
-| `Get(ctx, id)` | Get single user by ID | User details |
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `List(ctx, opts)` | `/users/0.1/users/` | Get users by IDs or usernames |
+| `SearchFreelancer(ctx, opts)` | `/users/0.1/users/directory` | Search freelancer directory |
+| `Get(ctx, id)` | `/users/0.1/users/{user_id}` | Get single user by ID |
+| `GetInfo(ctx, opts)` | `/users/0.1/self` | Get information for current user |
+| `ListDevices(ctx)` | `/users/0.1/self/devices` | Get a list of current user's recent logged in devices |
 
 #### Directory Search - Finding Freelancers
 
@@ -504,18 +543,16 @@ Access platform-wide resources like countries, timezones and currencies.
 
 ```Go
 opts := rr.ListCountriesOptions{
-    ExtraDetails: rr.Bool(true), // Include flag URLs, population, etc.
+    ExtraDetails: rr.Bool(true), // Include extra details
 }
 
-res, meta, err := client.Services.Common.ListCountries(ctx, &opts)
-if err != nil {
-    log.Printf("Error: %v", err)
-    return
-}
-
-// Each country structure includes location data
-for _, c := range res.Result.Countries {
-   // Do rest 
+res, _, err := c.Services.Common.ListCountries(ctx, &opts)
+// nil slices has length of zero
+if err == nil && len(res.Result.Countries) > 0 {
+    for _, c := range res.Result.Countries {
+        fmt.Printf("Name: %s, Code: %s PhoneCode: %.0f\n", c.Name, c.Code, c.PhoneCode)
+    }
+    fmt.Printf("Fetched %d countries\n", len(res.Result.Countries))
 }
 ```
 
@@ -530,43 +567,27 @@ opts := rr.ListTimezonesOptions{
     },
 }
 
-res, _, err := client.Services.Common.ListTimezones(ctx, &opts)
-if res.Result.Timezones != nil && len(res.Result.Timezones) > 0 {
+res, _, err := c.Services.Common.ListTimezones(ctx, &opts)
+// nil slices has length of zero
+if len(res.Result.Timezones) > 0 && err == nil {
     for _, tz := range res.Result.Timezones {
-        fmt.Printf("%s: offset=%.2f (UTC+%.1f)\n", 
-            tz.ISO8601, tz.Offset, tz.Offset)
+        fmt.Printf("%d: country=%s (UTC+%.1f)\n", tz.ID, tz.Country, tz.Offset)
     }
+    fmt.Printf("Fetched %d timezone(s)\n", len(res.Result.Timezones))
 }
-
-fmt.Printf("Fetched %d timezone(s)\n", len(res.Result.Timezones))
 ```
 
 #### Listing Currencies
 
 ```Go
-opts := rr.ListCurrenciesOptions{
-    IncludeExternalCurrencies:  rr.Bool(true), // Also show third-party currencies
-    
-    // Or filter by specific codes
-    CurrencyCodes: []string{"USD", "EUR", "GBP"},
-}
-
-res, meta, err := client.Services.Projects.Currencies.List(ctx, &opts)
-if err != nil {
-    log.Printf("Error: %v", err)
-    return nil
-}
-
-// Each currency record supports exchange rates for calculations
-currencyMap[rr.ID_BudgetCurrency()] = res.Result.Currencies[id]
-
-fmt.Printf("%.2f EUR to USD\n", 
-    res.Result.Currencies[rr.BudgetCurrency()].ExchangeRate)
-
-for _, c := range res.Result.Currencies {
-    fmt.Printf("%s: %.3f USD rate, Country=%s\n", 
-        c.Code, c.ExchangeRate, c.Country)
+res, _, err := c.Services.Projects.Currencies.List(ctx, nil)
+// nil slices has length of zero
+if len(res.Result.Currencies) > 0 && err == nil {
+    for _, cur := range res.Result.Currencies {
+        // Each currency record supports exchange rates for calculations
+        fmt.Printf("%s: %.3f USD rate, Country=%s\n", cur.Code, cur.ExchangeRate, cur.Country)
     }
+    fmt.Printf("Fetched %d countries\n", len(res.Result.Currencies))
 }
 ```
 
@@ -581,19 +602,9 @@ This SDK follows a modular service design. All core logic is located in `freelan
 - **`services.go`**: The entry point for all services.
 - **`service_*.go`**: Each file encapsulates logic for a specific API domain
 
-## Documentation
-
-Full documentation is available at [pkg.go.dev](https://pkg.go.dev/github.com/cushydigit/go-freelancer-sdk).
-
-For details on the underlying API endpoints and parameters, refer to the official [Freelancer.com API Documentation](https://developers.freelancer.com/).
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 ### Development
 
@@ -627,6 +638,8 @@ For a detailed list of changes, please see the [CHANGELOG.md](CHANGELOG.md).
 
 This is an unofficial library and is not affiliated with, endorsed by, or associated with Freelancer.com.
 Please ensure you comply with the [Freelancer API Terms](https://www.freelancer.com/about/terms) and Conditions when using this software.
+
+For details on the underlying API endpoints and parameters, refer to the official [Freelancer.com API Documentation](https://developers.freelancer.com/).
 
 ## Contact
 
