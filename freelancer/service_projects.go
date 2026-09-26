@@ -274,6 +274,39 @@ func (s *ProjectsService) Delete(
 	)
 }
 
+// Returns a list of expert guarantees.
+// It maps to the `GET` `/projects/0.1/expert_guarantees` endpoint
+func (s *ProjectsService) ListExpertGuarantees(
+	ctx context.Context,
+	opts *rr.ListExpertGuaranteesOptions,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.ExpertGuarantees,
+		opts,
+		nil,
+	)
+}
+
+// Perform an action on a expert guarantee.
+// It maps to the `PUT` `/projects/0.1/expert_guarantees/{expert_guarantee_id}` endpoint
+func (s *ProjectsService) ActionExpertGuarantee(
+	ctx context.Context,
+	expertGuaranteesID int64,
+	b rr.ActionExpertGuaranteesBody,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPut,
+		endpoints.ExpertGuarantee(expertGuaranteesID),
+		nil,
+		b,
+	)
+}
+
 // --------------------------------------
 // PROJECTS-COLLABORATIONS
 // --------------------------------------
@@ -887,43 +920,6 @@ func (s *ReviewsService) Action(
 		s.client,
 		http.MethodPut,
 		endpoints.Review(reviewID),
-		nil,
-		b,
-	)
-}
-
-// --------------------------------------
-// PROJECTS-OTHERS
-// --------------------------------------
-
-// Returns a list of expert guarantees.
-// It maps to the `GET` `/projects/0.1/expert_guarantees` endpoint
-func (s *ExpertGuaranteesService) List(
-	ctx context.Context,
-	opts *rr.ListExpertGuaranteesOptions,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		s.client,
-		http.MethodGet,
-		endpoints.ExpertGuarantees,
-		opts,
-		nil,
-	)
-}
-
-// Perform an action on a expert guarantee.
-// It maps to the `PUT` `/projects/0.1/expert_guarantees/{expert_guarantee_id}` endpoint
-func (s *ExpertGuaranteesService) Action(
-	ctx context.Context,
-	expertGuaranteesID int64,
-	b rr.ActionExpertGuaranteesBody,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		s.client,
-		http.MethodPut,
-		endpoints.ExpertGuarantee(expertGuaranteesID),
 		nil,
 		b,
 	)
