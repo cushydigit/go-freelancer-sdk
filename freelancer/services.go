@@ -18,9 +18,6 @@ func newServices(c *Client) *Services {
 	s.Projects.Milestones = &MilestonesService{client: c}
 	s.Projects.Reviews = &ReviewsService{client: c}
 	s.Projects.Jobs = &JobsService{client: c}
-	s.Projects.Budgets = &BudgetsService{client: c}
-	s.Projects.Currencies = &CurrenciesService{client: c}
-	s.Projects.Categories = &CategoriesService{client: c}
 	s.Projects.ExpertGuarantees = &ExpertGuaranteesService{client: c}
 
 	// init users services
@@ -48,9 +45,6 @@ type ProjectsService struct {
 	Jobs             *JobsService
 	Milestones       *MilestonesService
 	Reviews          *ReviewsService
-	Budgets          *BudgetsService
-	Currencies       *CurrenciesService
-	Categories       *CategoriesService
 	ExpertGuarantees *ExpertGuaranteesService
 }
 
@@ -61,9 +55,6 @@ type JobsService struct{ client *Client }
 type MilestonesService struct{ client *Client }
 type ReviewsService struct{ client *Client }
 type ExpertGuaranteesService struct{ client *Client }
-type BudgetsService struct{ client *Client }
-type CurrenciesService struct{ client *Client }
-type CategoriesService struct{ client *Client }
 
 type UsersService struct {
 	client      *Client
