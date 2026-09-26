@@ -1956,7 +1956,7 @@ func TestReviewsService_Action(t *testing.T) {
 
 }
 
-func TestExpertGuaranteesService_List(t *testing.T) {
+func TestProjectsService_ListExpertGuaranteesService(t *testing.T) {
 	opts := rr.ListExpertGuaranteesOptions{
 		Projects: []int64{1, 2},
 		Limit:    rr.Int(10),
@@ -1980,13 +1980,13 @@ func TestExpertGuaranteesService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.ExpertGuarantees.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.ListExpertGuarantees(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestExpertGuaranteesService_Action(t *testing.T) {
+func TestProjects_ActionExpertGuaranteesService(t *testing.T) {
 	expertGuaranteesID := int64(100)
 	body := rr.ActionExpertGuaranteesBody{
 		Action: rr.ExpertGuaranteesActionRelease,
@@ -2013,7 +2013,7 @@ func TestExpertGuaranteesService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.ExpertGuarantees.Action(context.Background(), expertGuaranteesID, body)
+	res, _, err := c.Services.Projects.ActionExpertGuarantee(context.Background(), expertGuaranteesID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
