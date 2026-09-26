@@ -586,7 +586,7 @@ func (s *BidRatingsService) Get(
 
 // Fetch bid ratings for multiple bids
 // it maps to the `GET` `/projects/0.1/bid_ratings` endpoint
-func (s *BidRatingsService) GetByListOfBids(
+func (s *BidRatingsService) List(
 	ctx context.Context,
 	opts *rr.GetByListOfBidsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {

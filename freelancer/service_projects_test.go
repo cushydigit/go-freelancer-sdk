@@ -1384,7 +1384,7 @@ func TestBidRatingsService_GetByListOfBids(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.BidRatings.GetByListOfBids(context.Background(), &opts)
+	res, _, err := c.Services.Projects.BidRatings.List(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
