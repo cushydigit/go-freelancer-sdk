@@ -520,7 +520,7 @@ func (s *BidsService) CreateTimeTracking(
 // Return bid edit requests by bid id.
 // It maps to the `GET` `/projects/0.1/bids/{bid_id}/edit_requests` endpoint
 // the original name was Get but it was renamed to List due to returning list of edit requests
-func (s *BidEditRequestsService) List(
+func (s *BidsService) ListEditRequests(
 	ctx context.Context,
 	bidID int64,
 	opts *rr.ListBidEditRequestsOptions,
@@ -537,7 +537,7 @@ func (s *BidEditRequestsService) List(
 
 // Create a bid edit request on a post accept awarded bid. With no pending bid edit request.
 // It maps to the `POST` `/projects/0.1/bids/edit_requests` endpoint
-func (s *BidEditRequestsService) Create(
+func (s *BidsService) CreateEditRequest(
 	ctx context.Context,
 	b rr.CreateBidEditRequestBody,
 ) (*rr.CreateBidEditRequestResponse, *ResponseMeta, error) {
@@ -553,7 +553,7 @@ func (s *BidEditRequestsService) Create(
 
 // Employer perform action on a PENDING bid edit request.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}/edit_requests/{edit_request_id}` endpoint
-func (s *BidEditRequestsService) Action(
+func (s *BidsService) ActionEditRequest(
 	ctx context.Context,
 	bidID, bidEditRequestID int64,
 	b rr.ActionBidEditRequestBody,
@@ -570,7 +570,7 @@ func (s *BidEditRequestsService) Action(
 
 // Fetch bid rating for a bid
 // It maps to the `GET` `/projects/0.1/bids/{bid_id}/bid_ratings` endpoint
-func (s *BidRatingsService) Get(
+func (s *BidsService) GetRating(
 	ctx context.Context,
 	bidID int64,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -586,7 +586,7 @@ func (s *BidRatingsService) Get(
 
 // Fetch bid ratings for multiple bids
 // it maps to the `GET` `/projects/0.1/bid_ratings` endpoint
-func (s *BidRatingsService) List(
+func (s *BidsService) ListRatings(
 	ctx context.Context,
 	opts *rr.GetByListOfBidsOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -602,7 +602,7 @@ func (s *BidRatingsService) List(
 
 // Rates a bid (creates a bid rating)
 // It maps to the `POST` `/projects/0.1/bids/{bid_id}/bid_ratings` endpoint
-func (s *BidRatingsService) Create(
+func (s *BidsService) CreateRating(
 	ctx context.Context,
 	bidID int64,
 	b rr.CreateBidRatingBody,
@@ -619,7 +619,7 @@ func (s *BidRatingsService) Create(
 
 // Updates an existing bid rating
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}/bid_ratings/{bid_rating_id}` endpoint
-func (s *BidRatingsService) Update(
+func (s *BidsService) UpdateRating(
 	ctx context.Context,
 	bidID int64,
 	bidRatingID int64,
@@ -673,7 +673,7 @@ func (s *JobsService) Search(
 
 // Returns a list of job bundles. Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name.
 // It maps to the `GET` `/projects/0.1/job_bundles` endpoint
-func (s *JobBundlesService) List(
+func (s *JobsService) ListBundles(
 	ctx context.Context,
 	opts *rr.ListJobBundlesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -689,7 +689,7 @@ func (s *JobBundlesService) List(
 
 // Returns a list of job bundle categories.
 // It maps to the `GET` `/projects/0.1/job_bundle_categories` endpoint
-func (s *JobBundleCategoriesService) List(
+func (s *JobsService) ListBundleCategories(
 	ctx context.Context,
 	opts *rr.ListJobBundleCategoriesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {

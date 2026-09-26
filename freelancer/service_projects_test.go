@@ -1240,7 +1240,7 @@ func TestBidsService_CreateTimeTracking(t *testing.T) {
 
 }
 
-func TestBidEditRequestsService_List(t *testing.T) {
+func TestBidsService_ListEditRequests(t *testing.T) {
 	bidID := int64(100)
 	opts := rr.ListBidEditRequestsOptions{
 		Statuses:          []rr.BidStatus{rr.BidStatusAccepted},
@@ -1265,13 +1265,13 @@ func TestBidEditRequestsService_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.BidEditRequests.List(context.Background(), bidID, &opts)
+	res, _, err := c.Services.Projects.Bids.ListEditRequests(context.Background(), bidID, &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestBidEditRequestsService_Create(t *testing.T) {
+func TestBidsService_CreateEditRequest(t *testing.T) {
 	body := rr.CreateBidEditRequestBody{
 		BidID:     int64(1),
 		NewAmount: 100,
@@ -1300,13 +1300,13 @@ func TestBidEditRequestsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.BidEditRequests.Create(context.Background(), body)
+	res, _, err := c.Services.Projects.Bids.CreateEditRequest(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestBidEditRequestsService_Action(t *testing.T) {
+func TestBidsService_ActionEditRequests(t *testing.T) {
 	bidID := int64(100)
 	bidEditRequestID := int64(200)
 	body := rr.ActionBidEditRequestBody{
@@ -1333,13 +1333,13 @@ func TestBidEditRequestsService_Action(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.BidEditRequests.Action(context.Background(), bidID, bidEditRequestID, body)
+	res, _, err := c.Services.Projects.Bids.ActionEditRequest(context.Background(), bidID, bidEditRequestID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestBidRatingsService_Get(t *testing.T) {
+func TestBidsService_GetRating(t *testing.T) {
 	bidID := int64(100)
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// method
@@ -1356,13 +1356,13 @@ func TestBidRatingsService_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.BidRatings.Get(context.Background(), bidID)
+	res, _, err := c.Services.Projects.Bids.GetRating(context.Background(), bidID)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestBidRatingsService_GetByListOfBids(t *testing.T) {
+func TestBidsService_ListRatings(t *testing.T) {
 	opts := rr.GetByListOfBidsOptions{
 		Bids: []int64{1, 2, 3},
 	}
@@ -1384,13 +1384,13 @@ func TestBidRatingsService_GetByListOfBids(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.BidRatings.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Bids.ListRatings(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestBidRatingsService_Create(t *testing.T) {
+func TestBidsService_CreateRating(t *testing.T) {
 	bidID := int64(199)
 	body := rr.CreateBidRatingBody{
 		Rating:  10,
@@ -1417,13 +1417,13 @@ func TestBidRatingsService_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.BidRatings.Create(context.Background(), bidID, body)
+	res, _, err := c.Services.Projects.Bids.CreateRating(context.Background(), bidID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestBidRatingsService_Update(t *testing.T) {
+func TestBidsService_UpdateRating(t *testing.T) {
 	bidID := int64(199)
 	bidRatingID := int64(9)
 	body := rr.UpdateBidRatingBody{
@@ -1451,7 +1451,7 @@ func TestBidRatingsService_Update(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.BidRatings.Update(context.Background(), bidID, bidRatingID, body)
+	res, _, err := c.Services.Projects.Bids.UpdateRating(context.Background(), bidID, bidRatingID, body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -1521,7 +1521,7 @@ func TestJobsService_Search(t *testing.T) {
 
 }
 
-func TestJobBundles_List(t *testing.T) {
+func TestJobsService_ListBundles(t *testing.T) {
 	opts := rr.ListJobBundlesOptions{
 		JobBundles: []int64{3, 4},
 		Lang:       rr.String("en"),
@@ -1545,13 +1545,13 @@ func TestJobBundles_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.JobBundles.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Jobs.ListBundles(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestJobBundleCategories_List(t *testing.T) {
+func TestJobsService_ListBundleCategories(t *testing.T) {
 	opts := rr.ListJobBundleCategoriesOptions{
 		JobBundles: []int64{3, 4},
 		Lang:       rr.String("en"),
@@ -1575,7 +1575,7 @@ func TestJobBundleCategories_List(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.JobBundleCategories.List(context.Background(), &opts)
+	res, _, err := c.Services.Projects.Jobs.ListBundleCategories(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
