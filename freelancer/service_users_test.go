@@ -435,7 +435,7 @@ func TestUsersService_ListPortfolios(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
-func TestUsersService_ListPools(t *testing.T) {
+func TestSelfService_ListPools(t *testing.T) {
 	opts := rr.ListPoolsOptions{
 		Pools:      []int64{1, 2},
 		IgnoreTest: rr.Bool(true),
@@ -460,7 +460,7 @@ func TestUsersService_ListPools(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.ListPools(context.Background(), &opts)
+	res, _, err := c.Services.Users.Self.ListPools(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 }

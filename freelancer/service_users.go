@@ -124,22 +124,6 @@ func (s *UsersService) CreateViolationReport(
 	)
 }
 
-// Returns a list of pools belonging to the current user.
-// It maps to the `GET` `/users/0.1/pools` endpoint.
-func (s *UsersService) ListPools(
-	ctx context.Context,
-	opts *rr.ListPoolsOptions,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		s.client,
-		http.MethodGet,
-		endpoints.Pools,
-		opts,
-		nil,
-	)
-}
-
 // --------------------------------------
 // USERS - Authenticated (SELF)
 // --------------------------------------
@@ -269,5 +253,21 @@ func (s *SelfService) UpdateProfile(
 		endpoints.Profiles,
 		nil,
 		b,
+	)
+}
+
+// Returns a list of pools belonging to the current user.
+// It maps to the `GET` `/users/0.1/pools` endpoint.
+func (s *SelfService) ListPools(
+	ctx context.Context,
+	opts *rr.ListPoolsOptions,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodGet,
+		endpoints.Pools,
+		opts,
+		nil,
 	)
 }
