@@ -97,7 +97,7 @@ func (s *SelfService) ListDevices(
 
 // Add a list of jobs to the job list of a current user.
 // It maps to the `POST` `/users/0.1/self/jobs` endpoint.
-func (s *SelfJobsService) Add(
+func (s *SelfService) AddJobs(
 	ctx context.Context,
 	b rr.AddJobsBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -113,7 +113,7 @@ func (s *SelfJobsService) Add(
 
 // Sets a list of jobs to the job list of the current user.
 // It maps to the `PUT` `/users/0.1/self/jobs` endpoint.
-func (s *SelfJobsService) Set(
+func (s *SelfService) UpdateJobs(
 	ctx context.Context,
 	b rr.SetJobsBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -129,7 +129,7 @@ func (s *SelfJobsService) Set(
 
 // Removes a list of jobs from the job list of the current user.
 // It maps to the `DELETE` `/users/0.1/self/jobs` endpoint.
-func (s *SelfJobsService) Delete(
+func (s *SelfService) DeleteJobs(
 	ctx context.Context,
 	b rr.DeleteJobsBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -149,7 +149,7 @@ func (s *SelfJobsService) Delete(
 
 // Create a new profile for a user. Returns the created profile
 // It maps to the `POST` `/users/0.1/profiles` endpoint.
-func (s *ProfilesService) Create(
+func (s *SelfService) CreateProfile(
 	ctx context.Context,
 	b rr.CreateProfileBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
@@ -167,7 +167,7 @@ func (s *ProfilesService) Create(
 
 // Get profile(s)
 // It maps to the `GET` `/users/0.1/profiles` endpoint.
-func (s *ProfilesService) Get(
+func (s *SelfService) GetProfile(
 	ctx context.Context,
 ) (*rr.RawResponse, *ResponseMeta, error) {
 	return execute[*rr.RawResponse](
@@ -182,7 +182,7 @@ func (s *ProfilesService) Get(
 
 // Update a profile
 // It maps to the `PUT` `/users/0.1/profiles` endpoint.
-func (s *ProfilesService) Update(
+func (s *SelfService) UpdateProfile(
 	ctx context.Context,
 	b rr.UpdateProfileBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {

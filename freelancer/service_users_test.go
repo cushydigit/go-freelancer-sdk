@@ -145,7 +145,7 @@ func TestSelfService_ListDevices(t *testing.T) {
 	assert.NotNil(t, res)
 }
 
-func TestSelfJobs_Add(t *testing.T) {
+func TestSelfService_AddJobs(t *testing.T) {
 	body := rr.AddJobsBody{
 		Jobs: []int64{100, 101},
 	}
@@ -171,13 +171,13 @@ func TestSelfJobs_Add(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.SelfJob.Add(context.Background(), body)
+	res, _, err := c.Services.Users.Self.AddJobs(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestSelfJobs_Set(t *testing.T) {
+func TestSelfService_UpdateJobs(t *testing.T) {
 	body := rr.SetJobsBody{
 		Jobs: []int64{100, 101},
 	}
@@ -203,13 +203,13 @@ func TestSelfJobs_Set(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.SelfJob.Set(context.Background(), body)
+	res, _, err := c.Services.Users.Self.UpdateJobs(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestSelfJobs_Delete(t *testing.T) {
+func TestSelfService_DeleteJobs(t *testing.T) {
 	body := rr.DeleteJobsBody{
 		Jobs: []int64{100, 101},
 	}
@@ -235,13 +235,13 @@ func TestSelfJobs_Delete(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.SelfJob.Delete(context.Background(), body)
+	res, _, err := c.Services.Users.Self.DeleteJobs(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestProfiles_Create(t *testing.T) {
+func TestSelfService_CreateProfile(t *testing.T) {
 	body := rr.CreateProfileBody{
 		Tagline:     "test",
 		HourlyRate:  10,
@@ -275,13 +275,13 @@ func TestProfiles_Create(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.Profiles.Create(context.Background(), body)
+	res, _, err := c.Services.Users.Self.CreateProfile(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestProfiles_Get(t *testing.T) {
+func TestSelfService_GetProfile(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// method
 		assert.Equal(t, http.MethodGet, r.Method)
@@ -297,13 +297,13 @@ func TestProfiles_Get(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.Profiles.Get(context.Background())
+	res, _, err := c.Services.Users.Self.GetProfile(context.Background())
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
 }
 
-func TestProfiles_Update(t *testing.T) {
+func TestSelfService_UpdateProfile(t *testing.T) {
 	body := rr.UpdateProfileBody{
 		ProfileID:   int64(1),
 		Tagline:     "test",
@@ -339,7 +339,7 @@ func TestProfiles_Update(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Users.Profiles.Update(context.Background(), body)
+	res, _, err := c.Services.Users.Self.UpdateProfile(context.Background(), body)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 

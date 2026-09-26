@@ -22,8 +22,6 @@ func newServices(c *Client) *Services {
 	// init users services
 	s.Users = &UsersService{client: c}
 	s.Users.Self = &SelfService{client: c}
-	s.Users.SelfJob = &SelfJobsService{client: c}
-	s.Users.Profiles = &ProfilesService{client: c}
 	s.Users.Reputations = &ReputationsService{client: c}
 	s.Users.Enterprises = &EnterprisesService{client: c}
 	s.Users.Portfolios = &PortfoliosService{client: c}
@@ -56,8 +54,6 @@ type ReviewsService struct{ client *Client }
 type UsersService struct {
 	client      *Client
 	Self        *SelfService
-	SelfJob     *SelfJobsService
-	Profiles    *ProfilesService
 	Reputations *ReputationsService
 	Enterprises *EnterprisesService
 	Portfolios  *PortfoliosService
@@ -66,8 +62,6 @@ type UsersService struct {
 }
 
 type SelfService struct{ client *Client }
-type SelfJobsService struct{ client *Client }
-type ProfilesService struct{ client *Client }
 type ReputationsService struct{ client *Client }
 type EnterprisesService struct{ client *Client }
 type PortfoliosService struct{ client *Client }
