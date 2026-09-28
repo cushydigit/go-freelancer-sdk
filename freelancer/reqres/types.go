@@ -6,16 +6,20 @@ import (
 )
 
 type Country struct {
-	Name         string  `json:"name,omitempty"`          // Optional
-	Code         string  `json:"code,omitempty"`          // Optional
-	ISO3         string  `json:"iso3,omitempty"`          // Optional
-	PhoneCode    float64 `json:"phone_code,omitempty"`    // Optional, "Decimal"
-	Demonym      string  `json:"demonym,omitempty"`       // Optional
-	Person       string  `json:"person,omitempty"`        // Optional
-	SEOURL       string  `json:"seo_url,omitempty"`       // Optional
-	Sanction     bool    `json:"sanction,omitempty"`      // Optional, Boolean
-	LanguageCode string  `json:"language_code,omitempty"` // Optional
-	LanguageID   float64 `json:"language_id,omitempty"`   // Optional
+	Name              string  `json:"name,omitempty"`
+	Code              string  `json:"code,omitempty"`
+	ISO3              string  `json:"iso3,omitempty"`
+	PhoneCode         float64 `json:"phone_code,omitempty"`
+	Demonym           string  `json:"demonym,omitempty"`
+	Person            string  `json:"person,omitempty"`
+	SEOURL            string  `json:"seo_url,omitempty"`
+	Sanction          bool    `json:"sanction,omitempty"`
+	LanguageCode      string  `json:"language_code,omitempty"`
+	LanguageID        float64 `json:"language_id,omitempty"`
+	FlagURL           string  `json:"flag_url,omitempty"`
+	HighresFlagURL    string  `json:"highres_flag_url,omitempty"`
+	FlagURLCDN        string  `json:"flag_url_cdn,omitempty"`
+	HighresFlagURLCDN string  `json:"highres_flag_url_cdn,omitempty"`
 }
 
 type Job struct {
@@ -154,25 +158,16 @@ type EmployerReputation struct {
 }
 
 type Location struct {
-	Country                *CountryLocation `json:"country,omitempty"`
-	City                   string           `json:"city,omitempty"`
-	Latitude               *float64         `json:"latitude,omitempty"`
-	Longitude              *float64         `json:"longitude,omitempty"`
-	Vicinity               *string          `json:"vicinity,omitempty"`
-	AdministrativeArea     *string          `json:"administrative_area,omitempty"`
-	FullAddress            *string          `json:"full_address,omitempty"`
-	AdministrativeAreaCode *string          `json:"administrative_area_code,omitempty"`
-	PostalCode             *string          `json:"postal_code,omitempty"`
-	ID                     *int             `json:"id,omitempty"`
-}
-
-type CountryLocation struct {
-	Name              string `json:"name,omitempty"`
-	FlagURL           string `json:"flag_url,omitempty"`
-	Code              string `json:"code,omitempty"`
-	HighresFlagURL    string `json:"highres_flag_url,omitempty"`
-	FlagURLCDN        string `json:"flag_url_cdn,omitempty"`
-	HighresFlagURLCDN string `json:"highres_flag_url_cdn,omitempty"`
+	Country                *Country `json:"country,omitempty"`
+	City                   string   `json:"city,omitempty"`
+	Latitude               *float64 `json:"latitude,omitempty"`
+	Longitude              *float64 `json:"longitude,omitempty"`
+	Vicinity               *string  `json:"vicinity,omitempty"`
+	AdministrativeArea     *string  `json:"administrative_area,omitempty"`
+	FullAddress            *string  `json:"full_address,omitempty"`
+	AdministrativeAreaCode *string  `json:"administrative_area_code,omitempty"`
+	PostalCode             *string  `json:"postal_code,omitempty"`
+	ID                     *int     `json:"id,omitempty"`
 }
 
 type User struct {
