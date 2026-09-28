@@ -10,6 +10,7 @@ type CreateProjectBody struct {
 	HourlyProjectInfo *HourlyProjectInfo `json:"hourly_project_info,omitempty"`
 	HirMe             *bool              `json:"hire_me,omitempty"`
 	HiremeInitialBid  *HiremeInitialBid  `json:"hireme_initial_bid,omitempty"`
+	Location          *Location          `json:"location,omitempty"`
 }
 
 type HourlyProjectInfo struct {
@@ -22,9 +23,10 @@ type Commitment struct {
 }
 
 type HiremeInitialBid struct {
-	BidderID int64   `json:"bidder_id"`
-	Amount   float64 `json:"amount"`
-	Period   int64   `json:"period"`
+	BidderID    int64   `json:"bidder_id"`
+	Amount      float64 `json:"amount"`
+	Period      int64   `json:"period"`
+	Description string  `json:"description"`
 }
 
 type InviteFreelancersBody struct {
