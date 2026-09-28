@@ -73,10 +73,6 @@ type CreateBidEditRequestBody struct {
 	Comment   string `json:"comment"`
 }
 
-type ActionBidEditRequestBody struct {
-	Action BidEditRequestAction `json:"action"`
-}
-
 // Rating required
 type CreateBidRatingBody struct {
 	Rating  int    `json:"rating"`
@@ -96,24 +92,12 @@ type CreateMilestoneBody struct {
 	Description string                `json:"description"`
 }
 
-type ActionMilestoneBody struct {
-	Action      MilestoneAction       `json:"action"`
-	Amount      int                   `json:"amount"`
-	Reason      MilestoneActionReason `json:"reason"`
-	ReasonText  string                `json:"reason_text"`
-	OtherReason string                `json:"other_reason"`
-}
-
 // ProjectID, BidID, Amount and Description are required
 type CreateMilestoneRequestBody struct {
 	ProjectID   int64  `json:"project_id"`
 	BidID       int64  `json:"bid_id"`
 	Amount      int    `json:"amount"`
 	Description string `json:"description"`
-}
-
-type ActionMilestoneRequestBody struct {
-	Action MilestoneActionRequest `json:"action"`
 }
 
 type CreateReviewBody struct {
@@ -123,15 +107,6 @@ type CreateReviewBody struct {
 	ReviewType ReviewType `json:"review_type"`
 	Comment    string     `json:"comment"`
 	Role       RoleType   `json:"role"`
-}
-
-type ActionReviewBody struct {
-	Action     ReviewAction `json:"action"`
-	ReviewType ReviewType   `json:"review_type"`
-}
-
-type ActionExpertGuaranteesBody struct {
-	Action ExpertGuaranteesAction `json:"action"`
 }
 
 type JobsBody struct {

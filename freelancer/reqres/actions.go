@@ -1,13 +1,9 @@
 package reqres
 
-// check : https://developers.freelancer.com/docs/projects/projects#projects-put
-// Performs an action on a project.
 type ActionProjectBody struct {
-	ProjectID int64         `json:"project_id"`
-	Action    ProjectAction `json:"action"`
+	Action ProjectAction `json:"action"`
 }
 
-// action an permissions are required
 type ActionCollaborationBody struct {
 	Action      CollaborationAction `json:"action"`
 	Permissions Permissions         `json:"permissions"`
@@ -20,4 +16,29 @@ type Permissions struct {
 
 type ActionBidBody struct {
 	Action BidAction `json:"action"`
+}
+
+type ActionReviewBody struct {
+	Action     ReviewAction `json:"action"`
+	ReviewType ReviewType   `json:"review_type"`
+}
+
+type ActionExpertGuaranteesBody struct {
+	Action ExpertGuaranteesAction `json:"action"`
+}
+
+type ActionMilestoneBody struct {
+	Action      MilestoneAction       `json:"action"`
+	Amount      int                   `json:"amount"`
+	Reason      MilestoneActionReason `json:"reason"`
+	ReasonText  string                `json:"reason_text"`
+	OtherReason string                `json:"other_reason"`
+}
+
+type ActionBidEditRequestBody struct {
+	Action BidEditRequestAction `json:"action"`
+}
+
+type ActionMilestoneRequestBody struct {
+	Action MilestoneActionRequest `json:"action"`
 }

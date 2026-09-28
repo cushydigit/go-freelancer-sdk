@@ -131,8 +131,7 @@ func TestProjectsService_Action_Base(t *testing.T) {
 
 func TestProjectsService_Action_Body(t *testing.T) {
 	action := rr.ActionProjectBody{
-		ProjectID: 100,
-		Action:    rr.ProjectActionUpgrade,
+		Action: rr.ProjectActionUpgrade,
 	}
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// check the body
@@ -141,7 +140,6 @@ func TestProjectsService_Action_Body(t *testing.T) {
 		assert.NoError(t, err)
 		defer r.Body.Close()
 		assert.Equal(t, action.Action, a.Action)
-		assert.Equal(t, action.ProjectID, a.ProjectID)
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message":"ok"}`))
@@ -151,7 +149,7 @@ func TestProjectsService_Action_Body(t *testing.T) {
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
 
-	res, _, err := c.Services.Projects.Action(context.Background(), action.ProjectID, action)
+	res, _, err := c.Services.Projects.Action(context.Background(), 100, action)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
