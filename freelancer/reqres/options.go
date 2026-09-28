@@ -645,7 +645,6 @@ type ListMilestonesOptions struct {
 }
 
 type GetMilestoneOptions struct {
-	MilestoneID                 int   `url:"milestone_id"`
 	UserAvatar                  *bool `url:"user_avatar"`
 	UserCountryDetails          *bool `url:"user_country_details"`
 	UserProfileDescription      *bool `url:"user_profile_description"`
