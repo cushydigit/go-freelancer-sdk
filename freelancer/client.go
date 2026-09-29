@@ -29,7 +29,7 @@ type Client struct {
 	apiToken string
 	baseURL  string
 
-	Services *Services
+	Resources *Resources
 }
 
 type ClientOption func(*Client)
@@ -61,7 +61,7 @@ func NewClient(apiToken string, opts ...ClientOption) *Client {
 		opt(c)
 	}
 
-	c.Services = newServices(c)
+	c.Resources = newResources(c)
 	return c
 
 }
