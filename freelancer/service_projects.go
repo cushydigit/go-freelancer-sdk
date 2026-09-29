@@ -773,7 +773,7 @@ func (s *MilestonesService) Get(
 	)
 }
 
-// Post a review of a user.
+// Creates a milestone.
 // It maps to the `POST` `/projects/0.1/milestones` endpoint
 func (s *MilestonesService) Create(
 	ctx context.Context,
@@ -789,7 +789,7 @@ func (s *MilestonesService) Create(
 	)
 }
 
-// Performs an action on a review. Note that Reviews are uniquely identified by a combination of review id and review type.
+// Actions to be performed on a milestone.
 // It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
 func (s *MilestonesService) Action(
 	ctx context.Context,
