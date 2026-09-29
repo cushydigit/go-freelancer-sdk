@@ -892,12 +892,30 @@ func (s *ReviewsService) List(
 	)
 }
 
-// Post a review of a user.
+// Post a review for freelancer
 // It maps to the `POST` `/projects/0.1/reviews` endpoint
-func (s *ReviewsService) Create(
+func (s *ReviewsService) CreateForFreelancer(
 	ctx context.Context,
-	b rr.CreateReviewBody,
+	b rr.CreateReviewForFreelancerBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
+	b.Role = rr.RoleFreelancer
+	return execute[*rr.RawResponse](
+		ctx,
+		s.client,
+		http.MethodPost,
+		endpoints.Reviews,
+		nil,
+		b,
+	)
+}
+
+// Post a review for employer
+// It maps to the `POST` `/projects/0.1/reviews` endpoint
+func (s *ReviewsService) CreateForEmployer(
+	ctx context.Context,
+	b rr.CreateReviewForEmployerBody,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	b.Role = rr.RoleEmployer
 	return execute[*rr.RawResponse](
 		ctx,
 		s.client,

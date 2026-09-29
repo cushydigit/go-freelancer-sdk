@@ -100,13 +100,48 @@ type CreateMilestoneRequestBody struct {
 	Description string `json:"description"`
 }
 
-type CreateReviewBody struct {
+type ReviewBody struct {
 	ProjectID  int64      `json:"project_id"`
 	ToUserID   int64      `json:"to_user_id"`
 	FromUserID int64      `json:"from_user_id"`
 	ReviewType ReviewType `json:"review_type"`
 	Comment    string     `json:"comment"`
 	Role       RoleType   `json:"role"`
+}
+type CreateReviewForEmployerBody struct {
+	ReviewBody
+	ReputationData EmployerReputationData `json:"reputation_data"`
+}
+
+type CreateReviewForFreelancerBody struct {
+	ReviewBody
+	ReputationData FreelancerReputationData `json:"reputation_data"`
+}
+
+type EmployerReputationData struct {
+	Category EmployerCategoryRatings `json:"category_ratings"`
+}
+
+type FreelancerReputationData struct {
+	OnBudget int                       `json:"on_budget"`
+	OnTime   int                       `json:"on_time"`
+	Category FreelancerCategoryRatings `json:"category_ratings"`
+}
+
+type FreelancerCategoryRatings struct {
+	Quality         int `json:"quality"`
+	Communication   int `json:"communication"`
+	Expertise       int `json:"expertise"`
+	Professionalism int `json:"professionalism"`
+	HireAgain       int `json:"hire_again"`
+}
+
+type EmployerCategoryRatings struct {
+	Communication   int `json:"communication"`
+	Professionalism int `json:"professionalism"`
+	Clarity         int `json:"clarity_spec"`
+	Payment         int `json:"payment_prom"`
+	WorkForAgain    int `json:"work_for_again"`
 }
 
 type JobsBody struct {
