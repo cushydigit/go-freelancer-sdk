@@ -192,3 +192,127 @@ func TestCommon_ListBudgets(t *testing.T) {
 	assert.NotNil(t, res)
 
 }
+
+func TestCommon_ListJobs(t *testing.T) {
+	opts := rr.ListJobsOptions{
+		Jobs:      []int64{1, 2},
+		JobNames:  []string{"test", "test2"},
+		OnlyLocal: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.Jobs), r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("only_local"))
+		assert.ElementsMatch(t, []string{"1", "2"}, q["jobs[]"])
+		assert.ElementsMatch(t, []string{"test", "test2"}, q["job_names[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Common.ListJobs(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestCommon_SearchJobs(t *testing.T) {
+	opts := rr.SearchJobsOptions{
+		Jobs:      []int64{1, 2},
+		JobNames:  []string{"test", "test2"},
+		OnlyLocal: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.JobsSearch), r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("only_local"))
+		assert.ElementsMatch(t, []string{"1", "2"}, q["jobs[]"])
+		assert.ElementsMatch(t, []string{"test", "test2"}, q["job_names[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Common.SearchJobs(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestCommon_ListJobBundles(t *testing.T) {
+	opts := rr.ListJobBundlesOptions{
+		JobBundles: []int64{3, 4},
+		Lang:       rr.String("en"),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.JobBundles), r.URL.Path)
+		// options
+		assert.Equal(t, "en", q.Get("lang"))
+		assert.ElementsMatch(t, []string{"3", "4"}, q["job_bundles[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Common.ListJobBundles(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestCommon_ListJobBundleCategories(t *testing.T) {
+	opts := rr.ListJobBundleCategoriesOptions{
+		JobBundles: []int64{3, 4},
+		Lang:       rr.String("en"),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.JobBundleCategories), r.URL.Path)
+		// options
+		assert.Equal(t, "en", q.Get("lang"))
+		assert.ElementsMatch(t, []string{"3", "4"}, q["job_bundles[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Common.ListJobBundleCategories(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}

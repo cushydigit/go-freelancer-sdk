@@ -1,0 +1,283 @@
+package freelancer
+
+import (
+	"context"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
+	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	rr "github.com/cushydigit/go-freelancer-sdk/freelancer/reqres"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestMilestones_List(t *testing.T) {
+	opts := rr.ListMilestonesOptions{
+		Projects:   []int64{1, 2},
+		Statuses:   []rr.MilestoneStatus{rr.MilestoneStatusCanceled},
+		SortField:  rr.Enum(rr.SortFieldsBidAvgUsd),
+		UserStatus: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.Milestones), r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_status"))
+		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
+		assert.ElementsMatch(t, []string{"1", "2"}, q["projects[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Milestones.List(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestones_Get(t *testing.T) {
+	milestoneID := int64(100)
+	opts := rr.GetMilestoneOptions{
+		UserAvatar: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.Milestone(milestoneID)), r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_avatar"))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Milestones.Get(context.Background(), milestoneID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestones_Create(t *testing.T) {
+	body := rr.CreateMilestoneBody{
+		ProjectID:   int64(100),
+		BidderID:    int64(199),
+		Amount:      200,
+		Reason:      rr.MilestoneCreateReasonFullPayment,
+		Description: "test2",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.Milestones), r.URL.Path)
+		// body
+		var res rr.CreateBidBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.ProjectID, res.ProjectID)
+		assert.Equal(t, body.BidderID, res.BidderID)
+		assert.Equal(t, body.Reason, body.Reason)
+		assert.Equal(t, body.Amount, body.Amount)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Milestones.Create(context.Background(), body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestones_Action(t *testing.T) {
+	milestoneID := int64(100)
+	body := rr.ActionMilestoneBody{
+		Action: rr.MilestoneActionCancel,
+		Amount: 200,
+		Reason: rr.MilestoneActionReasonAccidentallyCreated,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+
+		assert.Equal(t, string(endpoints.Milestone(milestoneID)), r.URL.Path)
+		// body
+		var res rr.ActionMilestoneBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.Action, res.Action)
+		assert.Equal(t, body.Reason, body.Reason)
+		assert.Equal(t, body.Amount, body.Amount)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Milestones.Action(context.Background(), milestoneID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestoneService_ListRequests(t *testing.T) {
+	opts := rr.ListMilestoneRequestsOptions{
+		Projects:   []int64{1, 2},
+		Statuses:   []rr.MilestoneStatus{rr.MilestoneStatusCanceled},
+		SortField:  rr.Enum(rr.SortFieldsBidAvgUsd),
+		UserStatus: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.MilestoneRequests), r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_status"))
+		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
+		assert.ElementsMatch(t, []string{"1", "2"}, q["projects[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Milestones.ListRequests(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestones_GetRequest(t *testing.T) {
+	milestoneRequestID := int64(100)
+	opts := rr.GetMilestoneRequestOptions{
+		UserAvatar: rr.Bool(true),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.MilestoneRequest(milestoneRequestID)), r.URL.Path)
+		// options
+		assert.Equal(t, "true", q.Get("user_avatar"))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Milestones.GetRequest(context.Background(), milestoneRequestID, &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestones_CreateRequest(t *testing.T) {
+	body := rr.CreateMilestoneRequestBody{
+		ProjectID:   int64(100),
+		Amount:      200,
+		Description: "test2",
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPost, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.MilestoneRequests), r.URL.Path)
+		// body
+		var res rr.CreateMilestoneRequestBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.ProjectID, res.ProjectID)
+		assert.Equal(t, body.Amount, body.Amount)
+		assert.Equal(t, body.Description, res.Description)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Milestones.CreateRequest(context.Background(), body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}
+
+func TestMilestones_ActionRequest(t *testing.T) {
+	milestoneRequestID := int64(100)
+	body := rr.ActionMilestoneRequestBody{
+		Action: rr.MilestoneActionRequestAccept,
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.MilestoneRequest(milestoneRequestID)), r.URL.Path)
+		// body
+		var res rr.ActionMilestoneRequestBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		defer r.Body.Close()
+		assert.NoError(t, err)
+		assert.NotNil(t, r.Body)
+		assert.Equal(t, body.Action, res.Action)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Milestones.ActionRequest(context.Background(), milestoneRequestID, body)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}

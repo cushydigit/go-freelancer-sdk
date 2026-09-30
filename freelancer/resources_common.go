@@ -8,6 +8,10 @@ import (
 	rr "github.com/cushydigit/go-freelancer-sdk/freelancer/reqres"
 )
 
+// --------------------------------------
+// Resource-Common
+// --------------------------------------
+
 // ListCountries fetches a list of countries from the Freelancer API.
 // It maps to the `GET` `/common/0.1/countries` endpoint.
 func (r *Common) ListCountries(
@@ -83,6 +87,70 @@ func (r *Common) ListBudgets(
 		r.client,
 		http.MethodGet,
 		endpoints.Budgets,
+		opts,
+		nil,
+	)
+}
+
+// Returns a list of jobs.
+// It maps to the `GET` `/projects/0.1/jobs` endpoint
+func (r *Common) ListJobs(
+	ctx context.Context,
+	opts *rr.ListJobsOptions,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		r.client,
+		http.MethodGet,
+		endpoints.Jobs,
+		opts,
+		nil,
+	)
+}
+
+// Returns a list of jobs. Note: This performs a sub-string search for all the parameters specified on the jobs.
+// It maps to the `GET` `/projects/0.1/jobs/search` endpoint
+func (r *Common) SearchJobs(
+	ctx context.Context,
+	opts *rr.SearchJobsOptions,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		r.client,
+		http.MethodGet,
+		endpoints.JobsSearch,
+		opts,
+		nil,
+	)
+}
+
+// Returns a list of job bundles. Note: Categories in this context are job bundle categories. These are not the same as job categories even though they share the same name.
+// It maps to the `GET` `/projects/0.1/job_bundles` endpoint
+func (r *Common) ListJobBundles(
+	ctx context.Context,
+	opts *rr.ListJobBundlesOptions,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		r.client,
+		http.MethodGet,
+		endpoints.JobBundles,
+		opts,
+		nil,
+	)
+}
+
+// Returns a list of job bundle categories.
+// It maps to the `GET` `/projects/0.1/job_bundle_categories` endpoint
+func (r *Common) ListJobBundleCategories(
+	ctx context.Context,
+	opts *rr.ListJobBundleCategoriesOptions,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
+		ctx,
+		r.client,
+		http.MethodGet,
+		endpoints.JobBundleCategories,
 		opts,
 		nil,
 	)
