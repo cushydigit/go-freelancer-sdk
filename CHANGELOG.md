@@ -8,12 +8,38 @@
 - Renamed several enums and types to improve naming consistency and API clarity.
 - Replaced the previous debug logging mechanism with Go's structured `slog` logging.
 - Added `IsAPIError` helper for detecting and extracting `*APIError` from wrapped errors.
+- Improved query parameter encoding with explicit error handling.
+- Added support for `time.Time`
+- Project search and other service options now use `*time.Time` as query parameters.
+- Added timestamp helper methods for converting Freelancer API Unix timestamps to `time.Time`.
+- Query encoding errors are now returned instead of silently logged.
+- Query parameter encoding is now centralized in the request execution layer `execute`.
+- Improved internal endpoint handling with typed endpoints and centralized
+  dynamic endpoint construction.
 
 ### Breaking Changes
 
 - Removed explicit client-side rate limiting from the SDK.
 - Added response metadata support for exposing API rate-limit information, including rate-limit limits and windows.
+- Refactor `JobBundleService` and `JobBundleCategories` to main `JobsService`.
+- Refactor `BidEditRequestsService` and `BidRatingsService` to main `BidsService`.
+- Refactor and merge `MilestoneRequestsService` to `MilestonesService`.
+- Refactor and move `CurrenciesService`, `BudgetsService` and `CategoriesService` to `CommonService`.
+- Refactor and merge `SelfJobsService` and `ProfilesService` to `SelfService`.
+- Refactor and merge `ReputationsService`, `EnterprisesService`, `ViolationsService`, `PortfoliosService` and `PoolsService` to main `UsersService`.
+- The top-level `Client.Services` field has been renamed to `Client.Resources`
+to avoid ambiguity with the Freelancer `/services` API resource.
+- Services (Resources) are now exposed as top-level resources instead of being nested
+under `Projects` and `Users`.
 
+This aligns the SDK service structure with the Freelancer API resources.
+
+
+
+### Bug Fixes
+
+- fixes the response type of jon in list category response `ListCategoriesResponse``
+- fixes the URL of sandbox 
 
 ## [1.3.1] - 2025-12-31
 

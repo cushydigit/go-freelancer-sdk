@@ -9,7 +9,7 @@ import (
 )
 
 // --------------------------------------
-// PROJECTS
+// Resource-Projects
 // --------------------------------------
 
 // Create a new project

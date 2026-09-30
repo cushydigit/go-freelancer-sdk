@@ -256,18 +256,9 @@ Manage active and archived projects, retrieve project details, create new projec
 | `Collaborations` | `/projects/0.1/projects/collaboration` |
 | `Services` | `/projects/0.1/services` |
 | `Bids` | `/projects/0.1/bids` |
-| `BidEditRequests` | `/projects/0.1/bids/edit_requests` |
-| `BidRatings` | `/projects/0.1/bids/{bid_id}/bid_ratings` |
 | `Jobs` | `/projects/0.1/jobs` |
-| `JobBundles` | `/projects/0.1/job_bundles` |
-| `JobBundleCategories` | `/projects/0.1/job_bundle_categories` |
 | `Milestones` | `/projects/0.1/milestones` |
-| `MilestoneRequests` | `/projects/0.1/milestone_requests` |
 | `Reviews` | `/projects/0.1/reviews` |
-| `ExpertGuarantees` | `/projects/0.1/expert_guarantees` |
-| `Currencies` | `/projects/0.1/currencies` |
-| `Categories` | `/projects/0.1/categories` |
-| `Budgets` | `/projects/0.1/budgets` |
 
 #### Projects Service Methods
 
@@ -289,136 +280,8 @@ Manage active and archived projects, retrieve project details, create new projec
 | `ListMilestoneRequests(ctx, id, opts)` | `/projects/0.1/projects/{project_id}/milestone_requests` | List of milestone requests for a single project |
 | `GetHourlyContractInfo(ctx, opts)` | `/projects/0.1/hourly_contract_info` | Fetch the hourly contract matching the desired query |
 | `GetIPContractInfo(ctx, id)` | `/projects/0.1/projects/{project_id}/ip_contract_info` | Get the IP contract matching for the project |
-
-##### Searching Active Projects
-
-```go
-from := time.Now().Add(-24 * time.Hour) // 
-
-// Basic search with filters
-opts := rr.SearchActiveProjectsOptions{
-    Query:  rr.String("Go developer"),
-    Limit:  rr.Int(20), // Results per page
-    Offset: rr.Int(0),
-
-    // Filtering options
-    FromTime:    &from, // Filter projects within 24 hours
-    UserDetails: rr.Bool(true), // Include user info
-    // Sort
-    SortField:   rr.Enum(rr.SortFieldsTimeUpdated),
-    ReverseSort: rr.Bool(false), // Newest first
-}
-// Execute search
-res, _, err := c.Services.Projects.SearchActive(ctx, &opts)
-if err == nil && len(res.Result.Projects) > 0 {
-    for _, p := range res.Result.Projects {
-        budgetString := fmt.Sprintf(
-            "[%s%1.f - %s%1.f]",
-            p.Currency.Sign,
-            p.Budget.Minimum,
-            p.Currency.Sign,
-            p.Budget.Minimum,
-        )
-        fmt.Printf("\n-%d: %s %s\n", p.ID, budgetString, p.Title)
-        // access unix time easily
-        time1, time2, time3 := p.SubmitDateAt(), p.UpdatedAt(), p.SubmittedAt()
-        if time1 != nil && time2 != nil && time3 != nil {
-            fmt.Printf(
-                "SubmitDate: %s\tTimeUpdated: %s\tTimeSubmitted: %s\n",
-                time1.Format("Jan 2, 2006 at 15:04"),
-                time2.Format("Jan 2, 2006 at 15:04"),
-                time3.Format("Jan 2, 2006 at 15:04"),
-            )
-        }
-        if p.SubmitDateAt() != nil && p.UpdatedAt() != nil && p.SubmittedAt() != nil {
-
-        }
-    }
-    fmt.Printf("Showing %d of %d total projects\n", len(res.Result.Projects), res.Result.TotalCount)
-}
-```
-
-##### Searching with Geographic Bounds
-
-Use lat/lng coordinates for location-based filtering:
-
-```Go
-opts := rr.SearchActiveProjectsOptions{
-    Query:     rr.String("website"),
-    
-    // Geographic bounding box
-    Latitude:          rr.Float64(40.7128),
-    Longitude:         rr.Float64(-74.0060),  // New York
-    TopRightLatitude:  rr.Float64(41.0),
-    TopRightLongitude: rr.Float64(-73.5),
-    BottomLeftLatitude: rr.Float64(40.4),
-    BottomLeftLongitude: rr.Float64(-74.5),
-}
-
-res, _, err := client.Services.Projects.SearchActive(ctx, &opts)
-```
-
-##### Creating a Project
-
-```Go
-body := reqres.CreateProjectBody{
-    Title:       "Go Developer Needed",
-    Description: "Need an experienced Go developer...",
-
-    Budget: rr.Budget{
-        Minimum:    100.0,
-        Maximum:    250.0,
-        CurrencyID: 1,
-    },
-
-    Type: rr.Enum(rr.ProjectBudgetFixed),
-}
-
-res, _, err := c.Services.Projects.Create(ctx, body)
-if err != nil {
-    fmt.Println(err)
-    return
-}
-```
-
-##### Working with Bids on a Project
-
-```Go
-// List bids for a project
-bidsOpts := rr.ListBidsOptions{
-    Limit:       rr.Int(10),
-    Reputation:  rr.Bool(true),   // Include reputation data
-    UserDetails: rr.Bool(false),  // Don't load full user info yet
-}
-
-res, _, err := client.Services.Projects.ListBids(ctx, projectId, &bidsOpts)
-```
-
-##### Milestones and Milestone Request
-
-```Go
-// List milestones
-mileOpts := rr.ListMilestonesOptions{
-    Projects: []int64{projectId},
-    Limit:    rr.Int(25),
-}
-res, _, err := client.Services.Projects.Milestones.List(ctx, &mileOpts)
-
-// Create a milestone request
-body := reqres.CreateMilestoneRequestBody{
-    ProjectID:   projectId,
-    BidID:       bidId,          // Required: the bid to award this milestone on
-    Amount:      2500,           // Milestone amount
-}
-res, _, err := client.Services.Projects.MilestoneRequests.Create(ctx, body)
-
-// Award (release) a milestone request
-action := rr.MilestoneActionRequestRelease()
-apiBody := reqres.ActionMilestoneRequestBody{
-    Action: rr.Enum(action),
-}
-res, _, err := client.Services.Projects.MilestoneRequests.Action(ctx, requestId, &apiBody)
-```
+| `ListExpertGuarantees(ctx, opts)` | `/projects/0.1/expert_guarantees` | List of expert guarantees |
+| `ActionExpertGuarantees(ctx, id, body)` | `/projects/0.1/expert_guarantees/{expert_guarantee_id}` | Perform an action on a expert guarantee |
 
 #### Collaborations Service Methods
 
@@ -467,111 +330,59 @@ res, _, err := client.Services.Projects.MilestoneRequests.Action(ctx, requestId,
 
 #### Milestones Service Methods
 
-#### MilestoneRequests Service Methods
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `List(ctx, opts)` | `/projects/0.1/milestones` | List of milestones |
+| `Create(ctx, body)` | `/projects/0.1/milestones` | Post or create a review of a user |
+| `Get(ctx, id, opts)` | `/projects/0.1/milestones/{milestone_id}` | Get information about a specific milestone |
+| `Action(ctx, id, body)` | `/projects/0.1/milestones/{milestone_id}` | Perform an action on a review |
+| `ListRequests(ctx, opts)` | `/projects/0.1/milestone_requests` | List of milestone requests |
+| `CreateRequest(ctx, body)` | `/projects/0.1/milestone_requests` | Create a milestone request |
+| `GetRequest(ctx, id, opts)` | `/projects/0.1/milestone_requests/{milestone_request_id}` | Get information about a specific milestone request. |
+| `ActionRequest(ctx, id, body)` | `/projects/0.1/milestone_requests/{milestone_request_id}` | Perform an action on a milestone request |
 
 #### Reviews Service Methods
+
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `List(ctx, opts)` | `/projects/0.1/reviews` | List of project reviews |
+| `Create(ctx, body)` | `/projects/0.1/reviews` | Post or create a review of a user |
+| `Action(ctx, id, body)` | `/projects/0.1/reviews/{review_id}` | Performs an action on a review |
 
 ### User Services
 
 Interact with freelancer profiles, user directory, and personal profile management.
 
-#### Core Users Methods
+| Service | Endpoint |
+| :------ | :------------ |
+| `Users` | `/users/0.1/users` |
+| `Self` | `/users/0.1/self` |
+
+#### Users Service Methods
 
 | Method | Endpoint | Description |
 | :----- | :------- | :---------- |
 | `List(ctx, opts)` | `/users/0.1/users/` | Get users by IDs or usernames |
 | `SearchFreelancer(ctx, opts)` | `/users/0.1/users/directory` | Search freelancer directory |
 | `Get(ctx, id)` | `/users/0.1/users/{user_id}` | Get single user by ID |
-| `GetInfo(ctx, opts)` | `/users/0.1/self` | Get information for current user |
+| `ListReputations(ctx, opts)` | `/users/0.1/reputations` | Gets the reputations for a list of users |
+| `ListEnterprises(ctx, opts)` | `/users/0.1/enterprises` | List of enterprises |
+| `ListPortfolios(ctx, opts)` | `/users/0.1/portfolios` | Gets the portfolios for a list of users |
+| `CreateViolationReport(ctx, body)` | `/users/0.1/violation_reports` | Create a user violation report |
+
+#### Self Service Methods
+
+| Method | Endpoint | Description |
+| :----- | :------- | :---------- |
+| `Get(ctx, opts)` | `/users/0.1/self` | Get information for current user |
 | `ListDevices(ctx)` | `/users/0.1/self/devices` | Get a list of current user's recent logged in devices |
-
-#### Directory Search - Finding Freelancers
-
-```Go
-// Find freelancers matching criteria
-searchOpts := rr.SearchFreelancerOptions{
-    Query:     rr.String("golang"),
-    
-    // Price and skill filters
-    HourlyRateMin: rr.Int(30),
-    ReviewCountMin:  rr.Int(5),        // At least 5 reviews
-    
-    // Pagination
-    Limit:  rr.Int(20),
-    Offset: rr.Int(0),
-    
-    // Include detailed data
-    Reputation:        rr.Bool(true),
-    ProfileDescription: rr.Bool(true),
-}
-
-res, meta, err := client.Services.Users.SearchFreelancer(ctx, &searchOpts)
-if err != nil {
-    log.Printf("Error: %v", err)
-    return nil
-}
-
-// Process results
-freelancers := res.Result.Users
-for _, u := range freelancers {
-    fmt.Printf("- %s: $%.2f/hr, Reviews: %d\n", 
-        u.DisplayName, u.HourlyRate, u.Reputation.Entrity)
-}
-
-fmt.Printf("Found %d freelancers out of %d total\n", 
-    len(freelancers), res.Result.TotalCount)
-```
-
-#### Getting User Details
-
-```Go
-// Direct user lookup by ID
-userData, _, err := client.Services.Users.Get(ctx, userId)
-if err != nil {
-    log.Printf("Error: %v", err)
-    return
-}
-```
-
-#### Working with User Profile
-
-```Go
-// Create a profile for yourself or another user
-createOpts := rr.CreateProfileBody{
-    Tagline:     "Experienced Go developer",
-    HourlyRate:  75,
-    Description: "Full-stack software engineer specializing in Go and Rust.",
-}
-
-res, _, err := client.Services.Users.Profiles.Create(ctx, createOpts)
-if err != nil {
-    log.Printf("Error: %v", err)
-    return
-}
-
-// Update an existing profile
-updateOpts := rr.UpdateProfileBody{
-    HourlyRate:  85,
-    Description: "Senior Go engineer with 8 years experience...",
-}
-
-res, _, err = client.Services.Users.Profiles.Update(ctx, updateOpts)
-```
-
-#### Device Management
-
-```Go
-// List devices used by current user (authenticated endpoint)
-devices, _, err := client.Services.UsersSelfDevices.List(ctx)
-if err != nil {
-    log.Printf("Error: %v", err)
-}
-
-for _, device := range devices.Result.Devices {
-    fmt.Printf("- %s in %s (%d)\n", 
-        device.City, device.Country, device.LastLogin)
-}
-```
+| `AddJobs(ctx, body)` | `/users/0.1/self/jobs` | Add a list of jobs to the job list of current user |
+| `UpdateJobs(ctx, body)` | `/users/0.1/self/jobs` | Sets a list of jobs to the job list of current user |
+| `DeleteJobs(ctx, body)` | `/users/0.1/self/jobs` | Remove a list of jobs to the job list of current user |
+| `CreateProfile(ctx, body)` | `/users/0.1/profiles` | Create a new profile for a user |
+| `GetProfile(ctx, body)` | `/users/0.1/profiles` | Get Profile(s) |
+| `UpdateProfile(ctx, body)` | `/users/0.1/profiles` | Update profile for a user |
+| `ListPools(ctx, opts)` | `/users/0.1/pools` | List of pools belonging to the current user |
 
 ### Common Service
 
@@ -579,9 +390,11 @@ Access platform-wide resources like countries, timezones and currencies.
 
 | Method | Endpoint | Description |
 | :----- | :------- | :---------- |
-| `ListCountries(ctx, opts)` | `/common/countries` | Country list for filtering |
-| `ListTimezones(ctx, opts)` | `/common/timezones` | Timezone data with offsets |
-| `ListCurrencies(ctx, opts)` | `/projects/currencies` | Currency conversion info |
+| `ListCountries(ctx, opts)` | `/common/0.1/countries` | Country list for filtering |
+| `ListTimezones(ctx, opts)` | `/common/0.1/timezones` | Timezone data with offsets |
+| `ListCurrencies(ctx, opts)` | `/projects/0.1/currencies` | Currency conversion info |
+| `ListCategories(ctx, opts)` | `/projects/0.1/categories` | List Categories of projects |
+| `ListBudgets(ctx, opts)` | `/projects/0.1/budgets` | List Budgets of projects |
 
 #### List Countries
 
@@ -635,6 +448,226 @@ if len(res.Result.Currencies) > 0 && err == nil {
 }
 ```
 
+## Use-Cases
+
+### Searching Active Projects
+
+```go
+from := time.Now().Add(-24 * time.Hour) // 
+
+// Basic search with filters
+opts := rr.SearchActiveProjectsOptions{
+    Query:  rr.String("Go developer"),
+    Limit:  rr.Int(20), // Results per page
+    Offset: rr.Int(0),
+
+    // Filtering options
+    FromTime:    &from, // Filter projects within 24 hours
+    UserDetails: rr.Bool(true), // Include user info
+    // Sort
+    SortField:   rr.Enum(rr.SortFieldsTimeUpdated),
+    ReverseSort: rr.Bool(false), // Newest first
+}
+// Execute search
+res, _, err := c.Services.Projects.SearchActive(ctx, &opts)
+if err == nil && len(res.Result.Projects) > 0 {
+    for _, p := range res.Result.Projects {
+        budgetString := fmt.Sprintf(
+            "[%s%1.f - %s%1.f]",
+            p.Currency.Sign,
+            p.Budget.Minimum,
+            p.Currency.Sign,
+            p.Budget.Minimum,
+        )
+        fmt.Printf("\n-%d: %s %s\n", p.ID, budgetString, p.Title)
+        // access unix time easily
+        time1, time2, time3 := p.SubmitDateAt(), p.UpdatedAt(), p.SubmittedAt()
+        if time1 != nil && time2 != nil && time3 != nil {
+            fmt.Printf(
+                "SubmitDate: %s\tTimeUpdated: %s\tTimeSubmitted: %s\n",
+                time1.Format("Jan 2, 2006 at 15:04"),
+                time2.Format("Jan 2, 2006 at 15:04"),
+                time3.Format("Jan 2, 2006 at 15:04"),
+            )
+        }
+        if p.SubmitDateAt() != nil && p.UpdatedAt() != nil && p.SubmittedAt() != nil {
+
+        }
+    }
+    fmt.Printf("Showing %d of %d total projects\n", len(res.Result.Projects), res.Result.TotalCount)
+}
+```
+
+### Searching with Geographic Bounds
+
+Use lat/lng coordinates for location-based filtering:
+
+```Go
+opts := rr.SearchActiveProjectsOptions{
+    Query:     rr.String("website"),
+    
+    // Geographic bounding box
+    Latitude:          rr.Float64(40.7128),
+    Longitude:         rr.Float64(-74.0060),  // New York
+    TopRightLatitude:  rr.Float64(41.0),
+    TopRightLongitude: rr.Float64(-73.5),
+    BottomLeftLatitude: rr.Float64(40.4),
+    BottomLeftLongitude: rr.Float64(-74.5),
+}
+
+res, _, err := client.Services.Projects.SearchActive(ctx, &opts)
+```
+
+### Creating a Project
+
+```Go
+body := reqres.CreateProjectBody{
+    Title:       "Go Developer Needed",
+    Description: "Need an experienced Go developer...",
+
+    Budget: rr.Budget{
+        Minimum:    100.0,
+        Maximum:    250.0,
+        CurrencyID: 1,
+    },
+
+    Type: rr.Enum(rr.ProjectBudgetFixed),
+}
+
+res, _, err := c.Services.Projects.Create(ctx, body)
+if err != nil {
+    fmt.Println(err)
+    return
+}
+```
+
+### Working with Bids on a Project
+
+```Go
+// List bids for a project
+bidsOpts := rr.ListBidsOptions{
+    Limit:       rr.Int(10),
+    Reputation:  rr.Bool(true),   // Include reputation data
+    UserDetails: rr.Bool(false),  // Don't load full user info yet
+}
+
+res, _, err := client.Services.Projects.ListBids(ctx, projectId, &bidsOpts)
+```
+
+### Milestones and Milestone Request
+
+```Go
+// List milestones
+mileOpts := rr.ListMilestonesOptions{
+    Projects: []int64{projectId},
+    Limit:    rr.Int(25),
+}
+res, _, err := client.Services.Projects.Milestones.List(ctx, &mileOpts)
+
+// Create a milestone request
+body := reqres.CreateMilestoneRequestBody{
+    ProjectID:   projectId,
+    BidID:       bidId,          // Required: the bid to award this milestone on
+    Amount:      2500,           // Milestone amount
+}
+res, _, err := client.Services.Projects.MilestoneRequests.Create(ctx, body)
+
+// Award (release) a milestone request
+action := rr.MilestoneActionRequestRelease()
+apiBody := reqres.ActionMilestoneRequestBody{
+    Action: rr.Enum(action),
+}
+res, _, err := client.Services.Projects.MilestoneRequests.Action(ctx, requestId, &apiBody)
+```
+
+### Directory Search - Finding Freelancers
+
+```Go
+// Find freelancers matching criteria
+searchOpts := rr.SearchFreelancerOptions{
+    Query:     rr.String("golang"),
+    
+    // Price and skill filters
+    HourlyRateMin: rr.Int(30),
+    ReviewCountMin:  rr.Int(5),        // At least 5 reviews
+    
+    // Pagination
+    Limit:  rr.Int(20),
+    Offset: rr.Int(0),
+    
+    // Include detailed data
+    Reputation:        rr.Bool(true),
+    ProfileDescription: rr.Bool(true),
+}
+
+res, meta, err := client.Services.Users.SearchFreelancer(ctx, &searchOpts)
+if err != nil {
+    log.Printf("Error: %v", err)
+    return nil
+}
+
+// Process results
+freelancers := res.Result.Users
+for _, u := range freelancers {
+    fmt.Printf("- %s: $%.2f/hr, Reviews: %d\n", 
+        u.DisplayName, u.HourlyRate, u.Reputation.Entrity)
+}
+
+fmt.Printf("Found %d freelancers out of %d total\n", 
+    len(freelancers), res.Result.TotalCount)
+```
+
+### Getting User Details
+
+```Go
+// Direct user lookup by ID
+userData, _, err := client.Services.Users.Get(ctx, userId)
+if err != nil {
+    log.Printf("Error: %v", err)
+    return
+}
+```
+
+### Working with User Profile
+
+```Go
+// Create a profile for yourself or another user
+createOpts := rr.CreateProfileBody{
+    Tagline:     "Experienced Go developer",
+    HourlyRate:  75,
+    Description: "Full-stack software engineer specializing in Go and Rust.",
+}
+
+res, _, err := client.Services.Users.Profiles.Create(ctx, createOpts)
+if err != nil {
+    log.Printf("Error: %v", err)
+    return
+}
+
+// Update an existing profile
+updateOpts := rr.UpdateProfileBody{
+    HourlyRate:  85,
+    Description: "Senior Go engineer with 8 years experience...",
+}
+
+res, _, err = client.Services.Users.Profiles.Update(ctx, updateOpts)
+```
+
+### Device Management
+
+```Go
+// List devices used by current user (authenticated endpoint)
+devices, _, err := client.Services.UsersSelfDevices.List(ctx)
+if err != nil {
+    log.Printf("Error: %v", err)
+}
+
+for _, device := range devices.Result.Devices {
+    fmt.Printf("- %s in %s (%d)\n", 
+        device.City, device.Country, device.LastLogin)
+}
+```
+
 ## Project Structure
 
 This SDK follows a modular service design. All core logic is located in `freelancer`.
@@ -666,7 +699,7 @@ Current version covers **Projects**, **Users**, and **Common** services.
 ### Stability & Quality
 
 - [x] **Static Analysis:**
-- [x] **Unit Testing:** (32% coverage)
+- [x] **Unit Testing:** (74.8% coverage)
 - [ ] **Use Case:**
 
 ### Upcoming Features

@@ -32,11 +32,13 @@ test-race:
 
 test-cover:
 	@echo "Running tests with coverage..."
-	@go test -cover ./...
+	@go test -coverprofile=coverage.out ./freelancer/...
+	@go tool cover -func=coverage.out
 
 test-cover-show:
 	@echo "Generating coverage report..."
-	@go test -coverprofile=coverage.out ./...
+	@go test -coverprofile=coverage.out ./freelancer/...
+	@go tool cover -func=coverage.out
 	@go tool cover -html=coverage.out
 
 check:

@@ -10,7 +10,6 @@ type Collaborations struct{ resource }
 type Services struct{ resource }
 type Reviews struct{ resource }
 type Bids struct{ resource }
-type Jobs struct{ resource }
 type Milestones struct{ resource }
 type Users struct{ resource }
 type Self struct{ resource }
@@ -34,7 +33,6 @@ type Resources struct {
 	Collaborations
 	Reviews
 	Bids
-	Jobs
 	Milestones
 	Services
 	Users
@@ -49,7 +47,6 @@ func newResources(c *Client) *Resources {
 		Collaborations: Collaborations{r},
 		Reviews:        Reviews{r},
 		Bids:           Bids{r},
-		Jobs:           Jobs{r},
 		Milestones:     Milestones{r},
 		Services:       Services{r},
 		Users:          Users{r},
