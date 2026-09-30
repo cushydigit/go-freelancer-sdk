@@ -73,43 +73,64 @@ func TestCollaborations_Create(t *testing.T) {
 func TestCollaborations_Action(t *testing.T) {
 	projectID := int64(100)
 	collaborationID := int64(4)
-	body := rr.ActionCollaborationBody{
-		Action: rr.CollaborationActionRevoke,
-		Permissions: rr.Permissions{
-			Chat:     true,
-			BidAward: false,
+	chatPermission := true
+	bidAwardPermission := false
+	tests := []struct {
+		name   string
+		action rr.CollaborationAction
+		call   func(*Collaborations, context.Context, int64, int64, bool, bool) (*rr.RawResponse, *ResponseMeta, error)
+	}{
+		{
+			name:   "Revoke",
+			action: rr.CollaborationActionRevoke,
+			call:   (*Collaborations).Revoke,
+		},
+		{
+			name:   "Update-Permissions",
+			action: rr.CollaborationActionUpdatePermissions,
+			call:   (*Collaborations).UpdatePermissions,
 		},
 	}
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// method
-		assert.Equal(t, http.MethodPut, r.Method)
-		// path
-		assert.Equal(
-			t,
-			string(endpoints.ProjectCollaborationsActions(projectID, collaborationID)),
-			r.URL.Path,
+	for _, tt := range tests {
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// method
+			assert.Equal(t, http.MethodPut, r.Method)
+			// path
+			assert.Equal(
+				t,
+				string(endpoints.ProjectCollaborationsActions(projectID, collaborationID)),
+				r.URL.Path,
+			)
+			// body
+			assert.NotNil(t, r.Body)
+			defer r.Body.Close()
+			var res rr.ActionCollaborationBody
+			err := json.NewDecoder(r.Body).Decode(&res)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.action, res.Action)
+			assert.Equal(t, chatPermission, res.Permissions.Chat)
+			assert.Equal(t, bidAwardPermission, res.Permissions.BidAward)
+
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"message":"ok"}`))
+		}))
+		defer ts.Close()
+
+		c := NewClient("token", WithHttpClient(ts.Client()))
+		c.SetBaseUrl(ts.URL)
+
+		res, _, err := tt.call(
+			&c.Resources.Collaborations,
+			context.Background(),
+			projectID, collaborationID,
+			chatPermission, bidAwardPermission,
 		)
-		// body
-		assert.NotNil(t, r.Body)
-		defer r.Body.Close()
-		var res rr.ActionCollaborationBody
-		err := json.NewDecoder(r.Body).Decode(&res)
+
 		assert.NoError(t, err)
-		assert.Equal(t, body.Action, res.Action)
-		assert.Equal(t, body.Permissions.Chat, res.Permissions.Chat)
-		assert.Equal(t, body.Permissions.BidAward, res.Permissions.BidAward)
+		assert.NotNil(t, res)
 
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message":"ok"}`))
-	}))
-	defer ts.Close()
+	}
 
-	c := NewClient("token", WithHttpClient(ts.Client()))
-	c.SetBaseUrl(ts.URL)
-
-	res, _, err := c.Resources.Collaborations.Action(context.Background(), projectID, collaborationID, body)
-	assert.NoError(t, err)
-	assert.NotNil(t, res)
 }
 
 func TestCollaborations_ListAll(t *testing.T) {

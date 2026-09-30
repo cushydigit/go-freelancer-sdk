@@ -44,9 +44,49 @@ func (r *Collaborations) Create(
 	)
 }
 
+// Revoke a collaboration
+// it maps to the `PUT` `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` endpoint
+func (r *Collaborations) Revoke(
+	ctx context.Context,
+	projectID, collaborationID int64,
+	chatPermission, bidAwardPermission bool,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		projectID, collaborationID,
+		rr.ActionCollaborationBody{
+			Action: rr.CollaborationActionRevoke,
+			Permissions: rr.Permissions{
+				Chat:     chatPermission,
+				BidAward: bidAwardPermission,
+			},
+		},
+	)
+}
+
+// Change permission on a collaboration
+// it maps to the `PUT` `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` endpoint
+func (r *Collaborations) UpdatePermissions(
+	ctx context.Context,
+	projectID, collaborationID int64,
+	chatPermission, bidAwardPermission bool,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		projectID, collaborationID,
+		rr.ActionCollaborationBody{
+			Action: rr.CollaborationActionUpdatePermissions,
+			Permissions: rr.Permissions{
+				Chat:     chatPermission,
+				BidAward: bidAwardPermission,
+			},
+		},
+	)
+}
+
 // Performs an action on a collaboration.
 // it maps to the `PUT` `/projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` endpoint
-func (r *Collaborations) Action(
+func (r *Collaborations) action(
 	ctx context.Context,
 	projectID int64,
 	collaborationID int64,
