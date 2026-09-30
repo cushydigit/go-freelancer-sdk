@@ -61,12 +61,12 @@ func (r *Bids) Create(
 	)
 }
 
-// Performs an action on a bid.
+// Updates an existing bid on a project. An existing bids information (description,amount,milestone_percentage) can be updated by sending a JSON encoded Bid struct.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
-func (r *Bids) Action(
+func (r *Bids) Update(
 	ctx context.Context,
 	bidID int64,
-	b rr.ActionBidBody,
+	b rr.UpdateBidBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
 	return execute[*rr.RawResponse](
 		ctx,
@@ -78,12 +78,192 @@ func (r *Bids) Action(
 	)
 }
 
-// Updates an existing bid on a project. An existing bids information (description,amount,milestone_percentage) can be updated by sending a JSON encoded Bid struct.
+// Bid owner accepts the bid award from the project owner.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
-func (r *Bids) Update(
+func (r *Bids) Accept(
 	ctx context.Context,
 	bidID int64,
-	b rr.UpdateBidBody,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionAccept,
+		},
+	)
+}
+
+// Bid owner denies the bid award from the project owner.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Deny(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionDeny,
+		},
+	)
+}
+
+// Bid owner retracts the bid from the project before it has been awarded.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Retract(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionRetract,
+		},
+	)
+}
+
+// Bid owner highlights a bid.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Highlight(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionHighlight,
+		},
+	)
+}
+
+// Bid owner sponsors a bid.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Sponsor(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionSponsor,
+		},
+	)
+}
+
+// Project owner awards a bid to the bid owner.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Award(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionAward,
+		},
+	)
+}
+
+// Project owner revoke an awarded bid.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Revoke(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionRevoke,
+		},
+	)
+}
+
+// Project owner add a bid to the shortlist.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Shortlist(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionShortlist,
+		},
+	)
+}
+
+// Project owner remove a bid from the shortlist.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Unshortlist(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionUnshortlist,
+		},
+	)
+}
+
+// Project owner hide a bid.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Hide(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionHide,
+		},
+	)
+}
+
+// Project owner unhide a bid.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) Unhide(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionUnhide,
+		},
+	)
+}
+
+// Project owner send a request for location sharing to the freelancer.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) RequestLocationSharing(
+	ctx context.Context,
+	bidID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		bidID,
+		rr.ActionBidBody{
+			Action: rr.BidActionRequestLocationSharing,
+		},
+	)
+}
+
+// Performs an action on a bid.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}` endpoint
+func (r *Bids) action(
+	ctx context.Context,
+	bidID int64,
+	b rr.ActionBidBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
 	return execute[*rr.RawResponse](
 		ctx,
@@ -136,8 +316,8 @@ func (r *Bids) ListEditRequests(
 	ctx context.Context,
 	bidID int64,
 	opts *rr.ListBidEditRequestsOptions,
-) (*rr.ListBidEditRequestsResponse, *ResponseMeta, error) {
-	return execute[*rr.ListBidEditRequestsResponse](
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
 		ctx,
 		r.client,
 		http.MethodGet,
@@ -152,8 +332,8 @@ func (r *Bids) ListEditRequests(
 func (r *Bids) CreateEditRequest(
 	ctx context.Context,
 	b rr.CreateBidEditRequestBody,
-) (*rr.CreateBidEditRequestResponse, *ResponseMeta, error) {
-	return execute[*rr.CreateBidEditRequestResponse](
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
 		ctx,
 		r.client,
 		http.MethodPost,
@@ -163,14 +343,44 @@ func (r *Bids) CreateEditRequest(
 	)
 }
 
+// Employer accepts the purposed amount and period in the bid edit request.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}/edit_requests/{edit_request_id}` endpoint
+func (r *Bids) AcceptEditRequest(
+	ctx context.Context,
+	bidID, editRequestID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.actionEditRequest(
+		ctx,
+		bidID, editRequestID,
+		rr.ActionBidEditRequestBody{
+			Action: rr.BidEditRequestActionAccept,
+		},
+	)
+}
+
+// Employer declines the purposed amount and period in the bid edit request.
+// It maps to the `PUT` `/projects/0.1/bids/{bid_id}/edit_requests/{edit_request_id}` endpoint
+func (r *Bids) DeclineEditRequest(
+	ctx context.Context,
+	bidID, editRequestID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.actionEditRequest(
+		ctx,
+		bidID, editRequestID,
+		rr.ActionBidEditRequestBody{
+			Action: rr.BidEditRequestActionDecline,
+		},
+	)
+}
+
 // Employer perform action on a PENDING bid edit request.
 // It maps to the `PUT` `/projects/0.1/bids/{bid_id}/edit_requests/{edit_request_id}` endpoint
-func (r *Bids) ActionEditRequest(
+func (r *Bids) actionEditRequest(
 	ctx context.Context,
 	bidID, bidEditRequestID int64,
 	b rr.ActionBidEditRequestBody,
-) (*rr.ActionBidEditRequestResponse, *ResponseMeta, error) {
-	return execute[*rr.ActionBidEditRequestResponse](
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
 		ctx,
 		r.client,
 		http.MethodPut,

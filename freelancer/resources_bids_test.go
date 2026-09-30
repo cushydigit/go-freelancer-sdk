@@ -114,38 +114,6 @@ func TestBids_Create(t *testing.T) {
 
 }
 
-func TestBids_Action(t *testing.T) {
-	bidID := int64(100)
-	body := rr.ActionBidBody{
-		Action: rr.BidActionAward,
-	}
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// method
-		assert.Equal(t, http.MethodPut, r.Method)
-		// path
-		assert.Equal(t, string(endpoints.Bid(bidID)), r.URL.Path)
-		// body
-		var res rr.ActionBidBody
-		err := json.NewDecoder(r.Body).Decode(&res)
-		assert.NoError(t, err)
-		assert.NotNil(t, res)
-		assert.Equal(t, body.Action, res.Action)
-
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message":"ok"}`))
-
-	}))
-	defer ts.Close()
-
-	c := NewClient("token", WithHttpClient(ts.Client()))
-	c.SetBaseUrl(ts.URL)
-
-	res, _, err := c.Resources.Bids.Action(context.Background(), bidID, body)
-	assert.NoError(t, err)
-	assert.NotNil(t, res)
-
-}
-
 func TestBids_Update(t *testing.T) {
 	bidID := int64(100)
 	body := rr.UpdateBidBody{
@@ -178,6 +146,135 @@ func TestBids_Update(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
+}
+
+func TestBids_Actions(t *testing.T) {
+	bidID := int64(100)
+
+	tests := []struct {
+		name   string
+		action rr.BidAction
+		call   func(*Bids, context.Context, int64) (*rr.RawResponse, *ResponseMeta, error)
+	}{
+		{
+			name:   "Accept",
+			action: rr.BidActionAccept,
+			call:   (*Bids).Accept,
+		},
+		{
+			name:   "Deny",
+			action: rr.BidActionDeny,
+			call:   (*Bids).Deny,
+		},
+		{
+			name:   "Retract",
+			action: rr.BidActionRetract,
+			call:   (*Bids).Retract,
+		},
+		{
+			name:   "Highlight",
+			action: rr.BidActionHighlight,
+			call:   (*Bids).Highlight,
+		},
+		{
+			name:   "Sponsor",
+			action: rr.BidActionSponsor,
+			call:   (*Bids).Sponsor,
+		},
+		{
+			name:   "Award",
+			action: rr.BidActionAward,
+			call:   (*Bids).Award,
+		},
+		{
+			name:   "Revoke",
+			action: rr.BidActionRevoke,
+			call:   (*Bids).Revoke,
+		},
+		{
+			name:   "Shortlist",
+			action: rr.BidActionShortlist,
+			call:   (*Bids).Shortlist,
+		},
+		{
+			name:   "Unshortlist",
+			action: rr.BidActionUnshortlist,
+			call:   (*Bids).Unshortlist,
+		},
+		{
+			name:   "Hide",
+			action: rr.BidActionHide,
+			call:   (*Bids).Hide,
+		},
+		{
+			name:   "Unhide",
+			action: rr.BidActionUnhide,
+			call:   (*Bids).Unhide,
+		},
+		{
+			name:   "RequestLocationSharing",
+			action: rr.BidActionRequestLocationSharing,
+			call:   (*Bids).RequestLocationSharing,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				assert.Equal(t, http.MethodPut, r.Method)
+				assert.Equal(t, string(endpoints.Bid(bidID)), r.URL.Path)
+
+				var body rr.ActionBidBody
+				err := json.NewDecoder(r.Body).Decode(&body)
+				assert.NoError(t, err)
+				assert.Equal(t, tt.action, body.Action)
+
+				w.WriteHeader(http.StatusOK)
+				_, _ = w.Write([]byte(`{"message":"ok"}`))
+			}))
+			defer ts.Close()
+
+			c := NewClient("token", WithHttpClient(ts.Client()))
+			c.SetBaseUrl(ts.URL)
+
+			res, _, err := tt.call(
+				&c.Resources.Bids,
+				context.Background(),
+				bidID,
+			)
+
+			assert.NoError(t, err)
+			assert.NotNil(t, res)
+		})
+	}
+}
+
+func TestBids_Accept(t *testing.T) {
+	bidID := int64(100)
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodPut, r.Method)
+		// path
+		assert.Equal(t, string(endpoints.Bid(bidID)), r.URL.Path)
+		// body
+		var res rr.ActionBidBody
+		err := json.NewDecoder(r.Body).Decode(&res)
+		assert.NoError(t, err)
+		assert.NotNil(t, res)
+		assert.Equal(t, rr.BidActionAccept, res.Action)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Bids.Accept(context.Background(), bidID)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
 }
 
 func TestBids_GetTimeTracking(t *testing.T) {
@@ -310,37 +407,59 @@ func TestBids_CreateEditRequest(t *testing.T) {
 
 }
 
-func TestBids_ActionEditRequests(t *testing.T) {
+func TestBids_EditRequestsActions(t *testing.T) {
 	bidID := int64(100)
-	bidEditRequestID := int64(200)
-	body := rr.ActionBidEditRequestBody{
-		Action: rr.BidEditRequestActionAccept,
+	bidEditRequestID := int64(1000)
+	tests := []struct {
+		name   string
+		action rr.BidEditRequestAction
+		call   func(*Bids, context.Context, int64, int64) (*rr.RawResponse, *ResponseMeta, error)
+	}{
+		{
+			name:   "Accept",
+			action: rr.BidEditRequestActionAccept,
+			call:   (*Bids).AcceptEditRequest,
+		},
+		{
+			name:   "Decline",
+			action: rr.BidEditRequestActionDecline,
+			call:   (*Bids).DeclineEditRequest,
+		},
 	}
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// method
-		assert.Equal(t, http.MethodPut, r.Method)
-		// path
-		assert.Equal(t, string(endpoints.BidEditRequest(bidID, bidEditRequestID)), r.URL.Path)
-		// body
-		var res rr.ActionBidEditRequestBody
-		err := json.NewDecoder(r.Body).Decode(&res)
-		assert.NoError(t, err)
-		assert.NotNil(t, res)
-		assert.Equal(t, body.Action, res.Action)
 
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message":"ok"}`))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-	}))
-	defer ts.Close()
+				assert.Equal(t, http.MethodPut, r.Method)
 
-	c := NewClient("token", WithHttpClient(ts.Client()))
-	c.SetBaseUrl(ts.URL)
+				assert.Equal(t, string(endpoints.BidEditRequest(bidID, bidEditRequestID)), r.URL.Path)
 
-	res, _, err := c.Resources.Bids.ActionEditRequest(context.Background(), bidID, bidEditRequestID, body)
-	assert.NoError(t, err)
-	assert.NotNil(t, res)
+				var res rr.ActionBidEditRequestBody
+				err := json.NewDecoder(r.Body).Decode(&res)
+				assert.NoError(t, err)
+				assert.NotNil(t, res)
+				assert.Equal(t, tt.action, res.Action)
 
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`{"message":"ok"}`))
+			}))
+			defer ts.Close()
+			c := NewClient("token", WithHttpClient(ts.Client()))
+			c.SetBaseUrl(ts.URL)
+
+			res, _, err := tt.call(
+				&c.Resources.Bids,
+				context.Background(),
+				bidID,
+				bidEditRequestID,
+			)
+
+			assert.NoError(t, err)
+			assert.NotNil(t, res)
+
+		})
+	}
 }
 
 func TestBids_GetRating(t *testing.T) {

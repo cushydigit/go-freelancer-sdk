@@ -26,11 +26,7 @@ func GetBids(ctx context.Context, c *freelancer.Client) {
 }
 
 func AwardBid(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Bids.Action(
-		ctx,
-		1, // the bid id
-		rr.ActionBidBody{Action: rr.BidActionAward},
-	)
+	res, _, err := c.Resources.Bids.Award(ctx, 1)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -40,11 +36,7 @@ func AwardBid(ctx context.Context, c *freelancer.Client) {
 }
 
 func AcceptBid(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Bids.Action(
-		ctx,
-		1, // the bid id
-		rr.ActionBidBody{Action: rr.BidActionAccept},
-	)
+	res, _, err := c.Resources.Bids.Accept(ctx, 1)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -54,11 +46,7 @@ func AcceptBid(ctx context.Context, c *freelancer.Client) {
 }
 
 func RevokeBid(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Bids.Action(
-		ctx,
-		1, // the bid id
-		rr.ActionBidBody{Action: rr.BidActionRevoke},
-	)
+	res, _, err := c.Resources.Bids.Revoke(ctx, 1)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -68,11 +56,7 @@ func RevokeBid(ctx context.Context, c *freelancer.Client) {
 }
 
 func RetractBid(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Bids.Action(
-		ctx,
-		1, // the bid id
-		rr.ActionBidBody{Action: rr.BidActionRetract},
-	)
+	res, _, err := c.Resources.Bids.Revoke(ctx, 1)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -82,11 +66,7 @@ func RetractBid(ctx context.Context, c *freelancer.Client) {
 }
 
 func HighlightBid(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Bids.Action(
-		ctx,
-		1, // the bid id
-		rr.ActionBidBody{Action: rr.BidActionHighlight},
-	)
+	res, _, err := c.Resources.Bids.Highlight(ctx, 1)
 	if err != nil {
 		fmt.Println(err)
 		return
