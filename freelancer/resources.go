@@ -11,6 +11,7 @@ type Services struct{ resource }
 type Reviews struct{ resource }
 type Bids struct{ resource }
 type Milestones struct{ resource }
+type ExpertGuarantees struct{ resource }
 type Users struct{ resource }
 type Self struct{ resource }
 type Common struct{ resource }
@@ -34,6 +35,7 @@ type Resources struct {
 	Reviews
 	Bids
 	Milestones
+	ExpertGuarantees
 	Services
 	Users
 	Self
@@ -43,14 +45,15 @@ type Resources struct {
 func newResources(c *Client) *Resources {
 	r := resource{client: c}
 	return &Resources{
-		Projects:       Projects{r},
-		Collaborations: Collaborations{r},
-		Reviews:        Reviews{r},
-		Bids:           Bids{r},
-		Milestones:     Milestones{r},
-		Services:       Services{r},
-		Users:          Users{r},
-		Self:           Self{r},
-		Common:         Common{r},
+		Projects:         Projects{r},
+		Collaborations:   Collaborations{r},
+		Reviews:          Reviews{r},
+		Bids:             Bids{r},
+		Milestones:       Milestones{r},
+		ExpertGuarantees: ExpertGuarantees{r},
+		Services:         Services{r},
+		Users:            Users{r},
+		Self:             Self{r},
+		Common:           Common{r},
 	}
 }

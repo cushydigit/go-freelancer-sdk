@@ -363,36 +363,3 @@ func (r *Projects) Delete(
 		nil,
 	)
 }
-
-// Returns a list of expert guarantees.
-// It maps to the `GET` `/projects/0.1/expert_guarantees` endpoint
-func (r *Projects) ListExpertGuarantees(
-	ctx context.Context,
-	opts *rr.ListExpertGuaranteesOptions,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		r.client,
-		http.MethodGet,
-		endpoints.ExpertGuarantees,
-		opts,
-		nil,
-	)
-}
-
-// Perform an action on a expert guarantee.
-// It maps to the `PUT` `/projects/0.1/expert_guarantees/{expert_guarantee_id}` endpoint
-func (r *Projects) ActionExpertGuarantee(
-	ctx context.Context,
-	expertGuaranteesID int64,
-	b rr.ActionExpertGuaranteesBody,
-) (*rr.RawResponse, *ResponseMeta, error) {
-	return execute[*rr.RawResponse](
-		ctx,
-		r.client,
-		http.MethodPut,
-		endpoints.ExpertGuarantee(expertGuaranteesID),
-		nil,
-		b,
-	)
-}
