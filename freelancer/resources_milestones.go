@@ -61,9 +61,108 @@ func (r *Milestones) Create(
 	)
 }
 
+// Project owner release a milestone payment.
+// It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
+func (r *Milestones) Release(
+	ctx context.Context,
+	milestoneID int64,
+	amount int,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		milestoneID,
+		rr.ActionMilestoneBody{
+			Action: rr.MilestoneActionRelease,
+			Amount: amount,
+		},
+	)
+}
+
+// Project owner update the description of a milestone
+// It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
+func (r *Milestones) Update(
+	ctx context.Context,
+	milestoneID int64,
+	description string,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		milestoneID,
+		rr.ActionMilestoneBody{
+			Action:      rr.MilestoneActionUpdate,
+			OtherReason: description,
+		},
+	)
+}
+
+// Project owner request the bid owner to cancel the milestone
+// if project owner choose other for reason so the reasonText should be contain description.
+// It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
+func (r *Milestones) RequestCancel(
+	ctx context.Context,
+	milestoneID int64,
+	reason rr.MilestoneRequestCancelReason,
+	reasonText string,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		milestoneID,
+		rr.ActionMilestoneBody{
+			Action:     rr.MilestoneActionRequestCancel,
+			Reason:     reason,
+			ReasonText: reasonText,
+		},
+	)
+}
+
+// Freelancer request the release of a milestone.
+// It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
+func (r *Milestones) RequestRelease(
+	ctx context.Context,
+	milestoneID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		milestoneID,
+		rr.ActionMilestoneBody{
+			Action: rr.MilestoneActionRequestRelease,
+		},
+	)
+}
+
+// Freelancer cancel a milestone.
+// It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
+func (r *Milestones) Cancel(
+	ctx context.Context,
+	milestoneID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		milestoneID,
+		rr.ActionMilestoneBody{
+			Action: rr.MilestoneActionCancel,
+		},
+	)
+}
+
+// Freelancer reject the project owner's request to cancel the milestone.
+// It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
+func (r *Milestones) RejectCancel(
+	ctx context.Context,
+	milestoneID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		milestoneID,
+		rr.ActionMilestoneBody{
+			Action: rr.MilestoneActionRejectCancel,
+		},
+	)
+}
+
 // Actions to be performed on a milestone.
 // It maps to the `PUT` `/projects/0.1/milestones/{milestone_id}` endpoint
-func (r *Milestones) Action(
+func (r *Milestones) action(
 	ctx context.Context,
 	milestoneID int64,
 	b rr.ActionMilestoneBody,

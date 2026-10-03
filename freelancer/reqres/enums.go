@@ -29,7 +29,7 @@ type BidEditRequestAction string
 type MilestoneStatus string
 type MilestoneCreateReason string
 type MilestoneAction string
-type MilestoneActionReason string
+type MilestoneRequestCancelReason string
 type MilestoneActionRequest string
 type ExpertGuaranteesStatus string
 type ExpertGuaranteesAction string
@@ -157,10 +157,11 @@ const (
 	MilestoneActionCancel         MilestoneAction = "cancel"
 	MilestoneActionRejectCancel   MilestoneAction = "reject_cancel"
 
-	MilestoneActionReasonAccidentallyCreated          MilestoneActionReason = "accidentally_created"
-	MilestoneActionReasonNoLongerNeeded               MilestoneActionReason = "no_longer_needed"
-	MilestoneActionReasonFreelancerDidNotMeetDeadline MilestoneActionReason = "freelancer_did_not_meet_deadline"
-	MilestoneActionReasonFreelancerDidNotCompleteTask MilestoneActionReason = "freelancer_did_not_complete_task"
+	MilestoneRequestCancelReasonAccidentallyCreated          MilestoneRequestCancelReason = "accidentally_created"
+	MilestoneRequestCancelReasonNoLongerNeeded               MilestoneRequestCancelReason = "no_longer_needed"
+	MilestoneRequestCancelReasonFreelancerDidNotMeetDeadline MilestoneRequestCancelReason = "freelancer_did_not_meet_deadline"
+	MilestoneRequestCancelReasonDidNotCompleteTask           MilestoneRequestCancelReason = "freelancer_did_not_complete_task"
+	MilestoneRequestCancelOther                              MilestoneRequestCancelReason = "other"
 
 	MilestoneActionRequestAccept MilestoneActionRequest = "accept"
 	MilestoneActionRequestReject MilestoneActionRequest = "reject"

@@ -28,11 +28,11 @@ type ActionExpertGuaranteesBody struct {
 }
 
 type ActionMilestoneBody struct {
-	Action      MilestoneAction       `json:"action"`
-	Amount      int                   `json:"amount"`
-	Reason      MilestoneActionReason `json:"reason"`
-	ReasonText  string                `json:"reason_text"`
-	OtherReason string                `json:"other_reason"`
+	Action      MilestoneAction              `json:"action"`
+	Amount      int                          `json:"amount"`
+	Reason      MilestoneRequestCancelReason `json:"reason"`
+	ReasonText  string                       `json:"reason_text"`
+	OtherReason string                       `json:"other_reason"`
 }
 
 type ActionBidEditRequestBody struct {
