@@ -5,6 +5,7 @@ type ProjectBudgetType string
 type ContextType string
 type ProjectUpgradeType string
 type ProjectStatusType string
+type ProjectEndStatusType string
 type ProjectAction string
 type ProjectFrontendStatus string
 type IntervalType string
@@ -53,13 +54,14 @@ const (
 	ProjectStatusOpen    ProjectStatusType = "open"
 	ProjectStatusPast    ProjectStatusType = "close"
 
-	ProjectActionSignNDA       ProjectAction = "sign_nda"
-	ProjectActionUpgrade       ProjectAction = "upgrade"
-	ProjectActionUpdate        ProjectAction = "update"
-	ProjectActionSetLocation   ProjectAction = "set_location"
-	ProjectActionClose         ProjectAction = "close"
-	ProjectActionAddAttachment ProjectAction = "add_attachment"
-	ProjectActionEnd           ProjectAction = "end"
+	ProjectEndStatusComplete   ProjectEndStatusType = "complete"
+	ProjectEndStatusIncomplete ProjectEndStatusType = "incomplete"
+
+	ProjectActionSignNDA ProjectAction = "sign_nda"
+	ProjectActionUpgrade ProjectAction = "upgrade"
+	ProjectActionUpdate  ProjectAction = "update"
+	ProjectActionClose   ProjectAction = "close"
+	ProjectActionEnd     ProjectAction = "end"
 
 	ProjectFrontendStatusOpen           ProjectFrontendStatus = "open"
 	ProjectFrontendStatusComplete       ProjectFrontendStatus = "complete"

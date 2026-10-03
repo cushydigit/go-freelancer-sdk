@@ -291,10 +291,10 @@ type SearchAllProjectsOptions struct {
 }
 
 type ListUpgradesFeesOptions struct {
-	Currencies         []int64 `url:"currencies[]"`
-	Project            *int64  `url:"project"`
-	FreeUpgradeDetails *bool   `url:"fee_upgrade_details"`
-	TaxIncluded        *bool   `url:"tax_included"`
+	Currencies        []int64 `url:"currencies[]"`
+	Project           *int64  `url:"project"`
+	FeeUpgradeDetails *bool   `url:"fee_upgrade_details"`
+	TaxIncluded       *bool   `url:"tax_included"`
 }
 
 type ListProjectBidsOptions struct {

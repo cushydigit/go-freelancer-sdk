@@ -108,51 +108,156 @@ func TestProjects_Create_Response(t *testing.T) {
 	assert.False(t, resp.Result.Deleted)
 }
 
-func TestProjects_Action_Base(t *testing.T) {
+func TestProjects_Actions(t *testing.T) {
 	projectID := int64(100)
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// method
-		assert.Equal(t, http.MethodPut, r.Method)
+	bidID := int64(200)
+	description := "updated project description"
 
-		// path
-		assert.Equal(t, string(endpoints.Project(projectID)), r.URL.Path)
+	tests := []struct {
+		name string
+		call func(*Projects, context.Context, int64) (*rr.RawResponse, *ResponseMeta, error)
+		test func(*testing.T, *http.Request)
+	}{
+		{
+			name: "SignNDA",
+			call: func(r *Projects, ctx context.Context, id int64) (*rr.RawResponse, *ResponseMeta, error) {
+				return r.SignNDA(
+					ctx,
+					id,
+					"John Doe",
+					"123 Main St",
+					"New York",
+					"NY",
+					"+123456789",
+					"US",
+				)
+			},
+			test: func(t *testing.T, req *http.Request) {
+				var body rr.ActionProjectSignNDA
+				err := json.NewDecoder(req.Body).Decode(&body)
+				assert.NoError(t, err)
 
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message":"ok"}`))
-	}))
+				assert.Equal(t, rr.ProjectActionSignNDA, body.Action)
+				assert.Equal(t, "John Doe", body.FullName)
+				assert.Equal(t, "123 Main St", body.Address)
+				assert.Equal(t, "New York", body.City)
+				assert.Equal(t, "NY", body.State)
+				assert.Equal(t, "+123456789", body.Phone)
+				assert.Equal(t, "US", body.Country)
+			},
+		},
+		{
+			name: "Upgrades",
+			call: func(r *Projects, ctx context.Context, id int64) (*rr.RawResponse, *ResponseMeta, error) {
+				return r.Upgrades(
+					ctx,
+					id,
+					[]rr.ProjectUpgradeType{
+						rr.ProjectUpgradeAssisted,
+						rr.ProjectUpgradeFeatured,
+						rr.ProjectUpgradeIpContract,
+					},
+				)
+			},
+			test: func(t *testing.T, req *http.Request) {
+				var body rr.ActionProjectUpgrade
+				err := json.NewDecoder(req.Body).Decode(&body)
+				assert.NoError(t, err)
 
-	c := NewClient("token", WithHttpClient(ts.Client()))
-	c.SetBaseUrl(ts.URL)
+				assert.Equal(t, rr.ProjectActionUpgrade, body.Action)
+				expected := []rr.ProjectUpgradeType{
+					rr.ProjectUpgradeAssisted,
+					rr.ProjectUpgradeFeatured,
+					rr.ProjectUpgradeIpContract,
+				}
 
-	res, _, err := c.Resources.Projects.Action(context.Background(), int64(projectID), rr.ActionProjectBody{})
-	assert.NoError(t, err)
-	assert.NotNil(t, res)
-}
+				assert.Equal(t, expected, body.Upgrades)
+			},
+		},
+		{
+			name: "Update",
+			call: func(r *Projects, ctx context.Context, id int64) (*rr.RawResponse, *ResponseMeta, error) {
+				return r.Update(
+					ctx,
+					id,
+					[]int64{10, 20, 30},
+					&description,
+				)
+			},
+			test: func(t *testing.T, req *http.Request) {
+				var body rr.ActionProjectUpdate
+				err := json.NewDecoder(req.Body).Decode(&body)
+				assert.NoError(t, err)
 
-func TestProjects_Action_Body(t *testing.T) {
-	action := rr.ActionProjectBody{
-		Action: rr.ProjectActionUpgrade,
+				assert.Equal(t, rr.ProjectActionClose, body.Action)
+				assert.Equal(t, []int64{10, 20, 30}, body.JonIDs)
+				assert.Equal(t, description, *body.Description)
+			},
+		},
+		{
+			name: "Close",
+			call: func(r *Projects, ctx context.Context, id int64) (*rr.RawResponse, *ResponseMeta, error) {
+				return r.Close(ctx, id)
+			},
+			test: func(t *testing.T, req *http.Request) {
+				var body rr.ActionProjectClose
+				err := json.NewDecoder(req.Body).Decode(&body)
+				assert.NoError(t, err)
+
+				assert.Equal(t, rr.ProjectActionClose, body.Action)
+			},
+		},
+		{
+			name: "End",
+			call: func(r *Projects, ctx context.Context, id int64) (*rr.RawResponse, *ResponseMeta, error) {
+				return r.End(
+					ctx,
+					id,
+					bidID,
+					rr.ProjectEndStatusType("complete"),
+				)
+			},
+			test: func(t *testing.T, req *http.Request) {
+				var body rr.ActionProjectEnd
+				err := json.NewDecoder(req.Body).Decode(&body)
+				assert.NoError(t, err)
+
+				assert.Equal(t, rr.ProjectActionEnd, body.Action)
+				assert.Equal(t, bidID, body.BidID)
+				assert.Equal(t, rr.ProjectEndStatusType("complete"), body.Status)
+			},
+		},
 	}
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// check the body
-		var a rr.ActionProjectBody
-		err := json.NewDecoder(r.Body).Decode(&a)
-		assert.NoError(t, err)
-		defer r.Body.Close()
-		assert.Equal(t, action.Action, a.Action)
 
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message":"ok"}`))
-	}))
-	defer ts.Close()
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				assert.Equal(t, http.MethodPut, r.Method)
+				assert.Equal(t, string(endpoints.Project(projectID)), r.URL.Path)
 
-	c := NewClient("token", WithHttpClient(ts.Client()))
-	c.SetBaseUrl(ts.URL)
+				tt.test(t, r)
 
-	res, _, err := c.Resources.Projects.Action(context.Background(), 100, action)
-	assert.NoError(t, err)
-	assert.NotNil(t, res)
+				w.WriteHeader(http.StatusOK)
+				_, _ = w.Write([]byte(`{"message":"ok"}`))
+			}))
+			defer ts.Close()
 
+			c := NewClient(
+				"token",
+				WithHttpClient(ts.Client()),
+			)
+			c.SetBaseUrl(ts.URL)
+
+			res, _, err := tt.call(
+				&c.Resources.Projects,
+				context.Background(),
+				projectID,
+			)
+
+			assert.NoError(t, err)
+			assert.NotNil(t, res)
+		})
+	}
 }
 
 func TestProjects_List_Base(t *testing.T) {

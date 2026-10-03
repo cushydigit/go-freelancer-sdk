@@ -28,12 +28,94 @@ func (r *Projects) Create(
 	)
 }
 
-// Perform an action on a project
-// It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
-func (r *Projects) Action(
+func (r *Projects) SignNDA(
 	ctx context.Context,
 	projectID int64,
-	b rr.ActionProjectBody,
+	FullName, Address, City, State, Phone, Country string,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		projectID,
+		rr.ActionProjectSignNDA{
+			Action:   rr.ProjectActionSignNDA,
+			FullName: FullName,
+			Address:  Address,
+			City:     City,
+			State:    State,
+			Phone:    Phone,
+			Country:  Country,
+		},
+	)
+}
+
+func (r *Projects) Upgrades(
+	ctx context.Context,
+	projectID int64,
+	upgrades []rr.ProjectUpgradeType,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		projectID,
+		rr.ActionProjectUpgrade{
+			Action:   rr.ProjectActionUpgrade,
+			Upgrades: upgrades,
+		},
+	)
+}
+
+func (r *Projects) Update(
+	ctx context.Context,
+	projectID int64,
+	jobIDs []int64,
+	description *string,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		projectID,
+		rr.ActionProjectUpdate{
+			Action:      rr.ProjectActionClose,
+			Description: description,
+			JonIDs:      jobIDs,
+		},
+	)
+}
+
+func (r *Projects) Close(
+	ctx context.Context,
+	projectID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		projectID,
+		rr.ActionProjectClose{
+			Action: rr.ProjectActionClose,
+		},
+	)
+}
+
+func (r *Projects) End(
+	ctx context.Context,
+	projectID int64,
+	bidID int64,
+	status rr.ProjectEndStatusType,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.action(
+		ctx,
+		projectID,
+		rr.ActionProjectEnd{
+			Action: rr.ProjectActionEnd,
+			BidID:  bidID,
+			Status: status,
+		},
+	)
+}
+
+// Perform an action on a project
+// It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
+func (r *Projects) action(
+	ctx context.Context,
+	projectID int64,
+	b any,
 ) (*rr.RawResponse, *ResponseMeta, error) {
 	return execute[*rr.RawResponse](
 		ctx,
