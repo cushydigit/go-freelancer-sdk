@@ -226,9 +226,54 @@ func (r *Milestones) CreateRequest(
 	)
 }
 
+// Project owner accept a milestone from the milestone request.
+// It maps to the `PUT` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
+func (r *Milestones) AcceptRequest(
+	ctx context.Context,
+	milestoneRequestID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.actionRequest(
+		ctx,
+		milestoneRequestID,
+		rr.ActionMilestoneRequestBody{
+			Action: rr.MilestoneActionAcceptRequest,
+		},
+	)
+}
+
+// Project owner rejects the milestone request.
+// It maps to the `PUT` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
+func (r *Milestones) RejectRequest(
+	ctx context.Context,
+	milestoneRequestID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.actionRequest(
+		ctx,
+		milestoneRequestID,
+		rr.ActionMilestoneRequestBody{
+			Action: rr.MilestoneActionRejectRequest,
+		},
+	)
+}
+
+// Bid owner deletes the milestone request.
+// It maps to the `PUT` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
+func (r *Milestones) DeleteRequest(
+	ctx context.Context,
+	milestoneRequestID int64,
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return r.actionRequest(
+		ctx,
+		milestoneRequestID,
+		rr.ActionMilestoneRequestBody{
+			Action: rr.MilestoneActionDeleteRequest,
+		},
+	)
+}
+
 // Perform an action on a milestone request.
 // It maps to the `PUT` `/projects/0.1/milestone_requests/{milestone_request_id}` endpoint
-func (r *Milestones) ActionRequest(
+func (r *Milestones) actionRequest(
 	ctx context.Context,
 	milestoneRequestID int64,
 	b rr.ActionMilestoneRequestBody,

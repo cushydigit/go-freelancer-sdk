@@ -163,9 +163,9 @@ const (
 	MilestoneRequestCancelReasonDidNotCompleteTask           MilestoneRequestCancelReason = "freelancer_did_not_complete_task"
 	MilestoneRequestCancelOther                              MilestoneRequestCancelReason = "other"
 
-	MilestoneActionRequestAccept MilestoneActionRequest = "accept"
-	MilestoneActionRequestReject MilestoneActionRequest = "reject"
-	MilestoneActionRequestDelete MilestoneActionRequest = "delete"
+	MilestoneActionAcceptRequest MilestoneActionRequest = "accept"
+	MilestoneActionRejectRequest MilestoneActionRequest = "reject"
+	MilestoneActionDeleteRequest MilestoneActionRequest = "delete"
 
 	CollaborationActionRevoke            CollaborationAction = "revoke"
 	CollaborationActionUpdatePermissions CollaborationAction = "update_permissions"

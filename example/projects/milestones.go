@@ -68,13 +68,7 @@ func CreateMilestoneRequestExample(ctx context.Context, c *freelancer.Client) {
 }
 
 func DeleteMilestoneRequestExample(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Milestones.ActionRequest(
-		ctx,
-		1, // milestone id
-		rr.ActionMilestoneRequestBody{
-			Action: rr.MilestoneActionRequestDelete,
-		},
-	)
+	res, _, err := c.Resources.Milestones.DeleteRequest(ctx, 1)
 
 	if err != nil {
 		log.Fatal(err)
@@ -84,13 +78,7 @@ func DeleteMilestoneRequestExample(ctx context.Context, c *freelancer.Client) {
 }
 
 func RejectMilestoneRequestExample(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Milestones.ActionRequest(
-		ctx,
-		1, // milestone id
-		rr.ActionMilestoneRequestBody{
-			Action: rr.MilestoneActionRequestReject,
-		},
-	)
+	res, _, err := c.Resources.Milestones.RejectRequest(ctx, 1)
 
 	if err != nil {
 		log.Fatal(err)
@@ -101,13 +89,7 @@ func RejectMilestoneRequestExample(ctx context.Context, c *freelancer.Client) {
 
 func AcceptMilestoneRequestExample(ctx context.Context, c *freelancer.Client) {
 
-	res, _, err := c.Resources.Milestones.ActionRequest(
-		ctx,
-		1, // milestone request id
-		rr.ActionMilestoneRequestBody{
-			Action: rr.MilestoneActionRequestAccept,
-		},
-	)
+	res, _, err := c.Resources.Milestones.AcceptRequest(ctx, 1)
 
 	if err != nil {
 		log.Fatal(err)
