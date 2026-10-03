@@ -28,6 +28,7 @@ func (r *Projects) Create(
 	)
 }
 
+// It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
 func (r *Projects) SignNDA(
 	ctx context.Context,
 	projectID int64,
@@ -48,6 +49,7 @@ func (r *Projects) SignNDA(
 	)
 }
 
+// It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
 func (r *Projects) Upgrades(
 	ctx context.Context,
 	projectID int64,
@@ -63,6 +65,8 @@ func (r *Projects) Upgrades(
 	)
 }
 
+// Update Project’s Description and Skill.
+// It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
 func (r *Projects) Update(
 	ctx context.Context,
 	projectID int64,
@@ -80,6 +84,8 @@ func (r *Projects) Update(
 	)
 }
 
+// Close a project which is still open for bidding. Freelancers cannot bid on a project which has been closed.
+// It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
 func (r *Projects) Close(
 	ctx context.Context,
 	projectID int64,
@@ -93,6 +99,8 @@ func (r *Projects) Close(
 	)
 }
 
+// End a project that has been awarded to, and accepted by a freelancer. Ending a project cancels the contract between the freelancer and employer.
+// It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
 func (r *Projects) End(
 	ctx context.Context,
 	projectID int64,
