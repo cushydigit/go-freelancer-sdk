@@ -136,13 +136,7 @@ func CreateMilestoneExample(ctx context.Context, c *freelancer.Client) {
 }
 
 func RequestReleaseMilestoneExample(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Milestones.Action(
-		ctx,
-		1, // milestone id
-		rr.ActionMilestoneBody{
-			Action: rr.MilestoneActionRequestRelease,
-		},
-	)
+	res, _, err := c.Resources.Milestones.RequestRelease(ctx, 1)
 
 	if err != nil {
 		log.Fatal(err)
@@ -152,13 +146,7 @@ func RequestReleaseMilestoneExample(ctx context.Context, c *freelancer.Client) {
 }
 
 func ReleaseMilestoneExample(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Milestones.Action(
-		ctx,
-		1, // milestone id
-		rr.ActionMilestoneBody{
-			Action: rr.MilestoneActionRelease,
-		},
-	)
+	res, _, err := c.Resources.Milestones.Release(ctx, 1, 25)
 
 	if err != nil {
 		log.Fatal(err)
@@ -168,15 +156,7 @@ func ReleaseMilestoneExample(ctx context.Context, c *freelancer.Client) {
 }
 
 func CancelMilestoneExample(ctx context.Context, c *freelancer.Client) {
-	res, _, err := c.Resources.Milestones.Action(
-		ctx,
-		1, // milestone id
-		rr.ActionMilestoneBody{
-			Action:     rr.MilestoneActionCancel,
-			Reason:     rr.MilestoneActionReasonFreelancerDidNotCompleteTask,
-			ReasonText: "More details about canceling the payment",
-		},
-	)
+	res, _, err := c.Resources.Milestones.Cancel(ctx, 1)
 
 	if err != nil {
 		log.Fatal(err)
