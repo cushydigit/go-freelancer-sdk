@@ -17,8 +17,8 @@ import (
 func (r *Projects) Create(
 	ctx context.Context,
 	b rr.CreateProjectBody,
-) (*rr.CreateProjectResponse, *ResponseMeta, error) {
-	return execute[*rr.CreateProjectResponse](
+) (*rr.ProjectResponse, *ResponseMeta, error) {
+	return execute[*rr.ProjectResponse](
 		ctx,
 		r.client,
 		http.MethodPost,
@@ -32,25 +32,25 @@ func (r *Projects) Create(
 func (r *Projects) SignNDA(
 	ctx context.Context,
 	projectID int64,
-	FullName, Address, City, State, Phone, Country string,
+	fullName, address, city, state, phone, country string,
 ) (*rr.RawResponse, *ResponseMeta, error) {
 	return r.action(
 		ctx,
 		projectID,
-		rr.ActionProjectSignNDA{
+		rr.ActionProjectBody{
 			Action:   rr.ProjectActionSignNDA,
-			FullName: FullName,
-			Address:  Address,
-			City:     City,
-			State:    State,
-			Phone:    Phone,
-			Country:  Country,
+			FullName: fullName,
+			Address:  address,
+			City:     city,
+			State:    state,
+			Phone:    phone,
+			Country:  country,
 		},
 	)
 }
 
 // It maps to the `PUT` `/projects/0.1/projects/{project_id}` endpoint
-func (r *Projects) Upgrades(
+func (r *Projects) Upgrade(
 	ctx context.Context,
 	projectID int64,
 	upgrades []rr.ProjectUpgradeType,
@@ -58,7 +58,7 @@ func (r *Projects) Upgrades(
 	return r.action(
 		ctx,
 		projectID,
-		rr.ActionProjectUpgrade{
+		rr.ActionProjectBody{
 			Action:   rr.ProjectActionUpgrade,
 			Upgrades: upgrades,
 		},
@@ -76,8 +76,8 @@ func (r *Projects) Update(
 	return r.action(
 		ctx,
 		projectID,
-		rr.ActionProjectUpdate{
-			Action:      rr.ProjectActionClose,
+		rr.ActionProjectBody{
+			Action:      rr.ProjectActionUpdate,
 			Description: description,
 			JonIDs:      jobIDs,
 		},
@@ -93,7 +93,7 @@ func (r *Projects) Close(
 	return r.action(
 		ctx,
 		projectID,
-		rr.ActionProjectClose{
+		rr.ActionProjectBody{
 			Action: rr.ProjectActionClose,
 		},
 	)
@@ -110,7 +110,7 @@ func (r *Projects) End(
 	return r.action(
 		ctx,
 		projectID,
-		rr.ActionProjectEnd{
+		rr.ActionProjectBody{
 			Action: rr.ProjectActionEnd,
 			BidID:  bidID,
 			Status: status,
@@ -123,7 +123,7 @@ func (r *Projects) End(
 func (r *Projects) action(
 	ctx context.Context,
 	projectID int64,
-	b any,
+	b rr.ActionProjectBody,
 ) (*rr.RawResponse, *ResponseMeta, error) {
 	return execute[*rr.RawResponse](
 		ctx,
@@ -151,30 +151,14 @@ func (r *Projects) List(
 	)
 }
 
-// Returns the logged in user’s projects/contests they either created or participated in (by bidding or submitting an entry).
-// it maps to the `GET` `/projects/0.1/self` endpoint
-func (r *Projects) ListSelf(
-	ctx context.Context,
-	opts *rr.ListSelfProjectsOptions,
-) (*rr.ListProjectsResponse, *ResponseMeta, error) {
-	return execute[*rr.ListProjectsResponse](
-		ctx,
-		r.client,
-		http.MethodGet,
-		endpoints.ProjectsSelf,
-		opts,
-		nil,
-	)
-}
-
 // Get information about a specific project. The full range of users projection options can be specified as part of this request by first setting theuser_detailsparameter to true.
 // It maps to the `GET` `/projects/0.1/projects/{project_id}` endpoint
 func (r *Projects) Get(
 	ctx context.Context,
 	projectID int64,
 	opts *rr.GetProjectOptions,
-) (*rr.GetProjectResponse, *ResponseMeta, error) {
-	return execute[*rr.GetProjectResponse](
+) (*rr.ProjectResponse, *ResponseMeta, error) {
+	return execute[*rr.ProjectResponse](
 		ctx,
 		r.client,
 		http.MethodGet,
@@ -235,7 +219,7 @@ func (r *Projects) InviteFreelancer(
 
 // Returns the project upgrade fees for a given list of currencies. Also checks if the current user is eligible for free upgrades if requested.
 // It maps to the `GET` `/projects/0.1/projects/fees` endpoint
-func (r *Projects) ListUpgradesFees(
+func (r *Projects) ListUpgradeFees(
 	ctx context.Context,
 	opts *rr.ListUpgradesFeesOptions,
 ) (*rr.RawResponse, *ResponseMeta, error) {

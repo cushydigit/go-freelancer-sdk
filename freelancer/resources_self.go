@@ -106,3 +106,19 @@ func (r *Self) ListPools(
 		nil,
 	)
 }
+
+// Returns the logged in user’s projects/contests they either created or participated in (by bidding or submitting an entry).
+// it maps to the `GET` `/projects/0.1/self` endpoint
+func (r *Self) ListProjects(
+	ctx context.Context,
+	opts *rr.ListSelfProjectsOptions,
+) (*rr.ListProjectsResponse, *ResponseMeta, error) {
+	return execute[*rr.ListProjectsResponse](
+		ctx,
+		r.client,
+		http.MethodGet,
+		endpoints.ProjectsSelf,
+		opts,
+		nil,
+	)
+}

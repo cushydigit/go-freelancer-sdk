@@ -133,7 +133,7 @@ func TestProjects_Actions(t *testing.T) {
 				)
 			},
 			test: func(t *testing.T, req *http.Request) {
-				var body rr.ActionProjectSignNDA
+				var body rr.ActionProjectBody
 				err := json.NewDecoder(req.Body).Decode(&body)
 				assert.NoError(t, err)
 
@@ -149,7 +149,7 @@ func TestProjects_Actions(t *testing.T) {
 		{
 			name: "Upgrades",
 			call: func(r *Projects, ctx context.Context, id int64) (*rr.RawResponse, *ResponseMeta, error) {
-				return r.Upgrades(
+				return r.Upgrade(
 					ctx,
 					id,
 					[]rr.ProjectUpgradeType{
@@ -160,7 +160,7 @@ func TestProjects_Actions(t *testing.T) {
 				)
 			},
 			test: func(t *testing.T, req *http.Request) {
-				var body rr.ActionProjectUpgrade
+				var body rr.ActionProjectBody
 				err := json.NewDecoder(req.Body).Decode(&body)
 				assert.NoError(t, err)
 
@@ -185,11 +185,11 @@ func TestProjects_Actions(t *testing.T) {
 				)
 			},
 			test: func(t *testing.T, req *http.Request) {
-				var body rr.ActionProjectUpdate
+				var body rr.ActionProjectBody
 				err := json.NewDecoder(req.Body).Decode(&body)
 				assert.NoError(t, err)
 
-				assert.Equal(t, rr.ProjectActionClose, body.Action)
+				assert.Equal(t, rr.ProjectActionUpdate, body.Action)
 				assert.Equal(t, []int64{10, 20, 30}, body.JonIDs)
 				assert.Equal(t, description, *body.Description)
 			},
@@ -200,7 +200,7 @@ func TestProjects_Actions(t *testing.T) {
 				return r.Close(ctx, id)
 			},
 			test: func(t *testing.T, req *http.Request) {
-				var body rr.ActionProjectClose
+				var body rr.ActionProjectBody
 				err := json.NewDecoder(req.Body).Decode(&body)
 				assert.NoError(t, err)
 
@@ -218,7 +218,7 @@ func TestProjects_Actions(t *testing.T) {
 				)
 			},
 			test: func(t *testing.T, req *http.Request) {
-				var body rr.ActionProjectEnd
+				var body rr.ActionProjectBody
 				err := json.NewDecoder(req.Body).Decode(&body)
 				assert.NoError(t, err)
 
@@ -303,53 +303,6 @@ func TestProjects_List_Options(t *testing.T) {
 	c.SetBaseUrl(ts.URL)
 
 	res, _, err := c.Resources.Projects.List(context.Background(), &opts)
-	assert.NoError(t, err)
-	assert.NotNil(t, res)
-
-}
-
-func TestProjects_ListSelf_Base(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// method
-		assert.Equal(t, http.MethodGet, r.Method)
-		assert.Equal(t, string(endpoints.ProjectsSelf), r.URL.Path)
-
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message":"ok"}`))
-	}))
-	defer ts.Close()
-
-	c := NewClient("token", WithHttpClient(ts.Client()))
-	c.SetBaseUrl(ts.URL)
-
-	res, _, err := c.Resources.Projects.ListSelf(context.Background(), nil)
-	assert.NoError(t, err)
-	assert.NotNil(t, res)
-}
-
-func TestProjectService_ListSelf_Options(t *testing.T) {
-	opts := rr.ListSelfProjectsOptions{
-		Status: rr.Enum(rr.ProjectStatusActive),
-		Types:  []rr.ProjectType{rr.Projects, rr.Contests},
-		Query:  rr.String("python golang"),
-		Offset: rr.Int(10),
-	}
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		q := r.URL.Query()
-		assert.Equal(t, string(*opts.Status), q.Get("status"))
-		assert.Equal(t, string(*opts.Query), q.Get("query"))
-		assert.Equal(t, "10", q.Get("offset"))
-		assert.ElementsMatch(t, []string{string(opts.Types[0]), string(opts.Types[1])}, q["type[]"])
-
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message":"ok"}`))
-	}))
-	defer ts.Close()
-
-	c := NewClient("token", WithHttpClient(ts.Client()))
-	c.SetBaseUrl(ts.URL)
-
-	res, _, err := c.Resources.Projects.ListSelf(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 
@@ -710,7 +663,7 @@ func TestProjectService_ListUpgradesFees(t *testing.T) {
 
 	c := NewClient("token", WithHttpClient(ts.Client()))
 	c.SetBaseUrl(ts.URL)
-	res, _, err := c.Resources.Projects.ListUpgradesFees(context.Background(), &opts)
+	res, _, err := c.Resources.Projects.ListUpgradeFees(context.Background(), &opts)
 	assert.NoError(t, err)
 	assert.NotNil(t, res)
 

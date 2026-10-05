@@ -155,3 +155,50 @@ func TestSelf_DeleteJobs(t *testing.T) {
 	assert.NotNil(t, res)
 
 }
+
+func TestProjects_ListSelf_Base(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// method
+		assert.Equal(t, http.MethodGet, r.Method)
+		assert.Equal(t, string(endpoints.ProjectsSelf), r.URL.Path)
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Self.ListProjects(context.Background(), nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+}
+
+func TestProjectService_ListSelf_Options(t *testing.T) {
+	opts := rr.ListSelfProjectsOptions{
+		Status: rr.Enum(rr.ProjectStatusActive),
+		Types:  []rr.ProjectType{rr.Projects, rr.Contests},
+		Query:  rr.String("python golang"),
+		Offset: rr.Int(10),
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		assert.Equal(t, string(*opts.Status), q.Get("status"))
+		assert.Equal(t, string(*opts.Query), q.Get("query"))
+		assert.Equal(t, "10", q.Get("offset"))
+		assert.ElementsMatch(t, []string{string(opts.Types[0]), string(opts.Types[1])}, q["type[]"])
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message":"ok"}`))
+	}))
+	defer ts.Close()
+
+	c := NewClient("token", WithHttpClient(ts.Client()))
+	c.SetBaseUrl(ts.URL)
+
+	res, _, err := c.Resources.Self.ListProjects(context.Background(), &opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, res)
+
+}

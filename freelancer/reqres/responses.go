@@ -62,12 +62,7 @@ func (r *ListUsersResponse) Users() []*User {
 	return users
 }
 
-type GetProjectResponse struct {
-	base
-	Result *Project `json:"result"`
-}
-
-type CreateProjectResponse struct {
+type ProjectResponse struct {
 	base
 	Result *Project `json:"result"`
 }

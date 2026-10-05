@@ -39,33 +39,26 @@ type ActionMilestoneRequestBody struct {
 	Action MilestoneActionRequest `json:"action"`
 }
 
-type ActionProjectSignNDA struct {
-	Action   ProjectAction `json:"action"`
-	FullName string        `json:"fullname"`
-	Address  string        `json:"address"`
-	City     string        `json:"city"`
-	State    string        `json:"state"`
-	Phone    string        `json:"phone"`
-	Country  string        `json:"country"`
-}
-
-type ActionProjectUpdate struct {
-	Action      ProjectAction `json:"action"`
-	Description *string       `json:"description"`
-	JonIDs      []int64       `json:"job_ids"`
-}
-
-type ActionProjectUpgrade struct {
-	Action   ProjectAction        `json:"action"`
-	Upgrades []ProjectUpgradeType `json:"upgrades"`
-}
-
-type ActionProjectClose struct {
+type ActionProjectBody struct {
+	// General Action
 	Action ProjectAction `json:"action"`
-}
 
-type ActionProjectEnd struct {
-	Action ProjectAction        `json:"action"`
+	// SignNDA
+	FullName string `json:"fullname"`
+	Address  string `json:"address"`
+	City     string `json:"city"`
+	State    string `json:"state"`
+	Phone    string `json:"phone"`
+	Country  string `json:"country"`
+
+	// Update
+	Description *string `json:"description"`
+	JonIDs      []int64 `json:"job_ids"`
+
+	// Upgrade
+	Upgrades []ProjectUpgradeType `json:"upgrades"`
+
+	// End
 	BidID  int64                `json:"bid_id"`
 	Status ProjectEndStatusType `json:"status"`
 }
