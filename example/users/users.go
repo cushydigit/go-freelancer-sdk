@@ -20,7 +20,6 @@ func FetchAndDisplayFreelancers(ctx context.Context, c *freelancer.Client) {
 	}
 
 	res, _, err := c.Resources.Users.SearchFreelancer(ctx, &searchOpts)
-	fmt.Println(res.Result.TotalCount)
 	if err == nil && len(res.Result.Users) > 0 {
 		for _, u := range res.Result.Users {
 			fmt.Printf("-%d: %s\n", u.ID, u.DisplayName)
