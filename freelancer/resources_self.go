@@ -17,8 +17,8 @@ import (
 func (r *Self) Get(
 	ctx context.Context,
 	opts *rr.GetSelfInfoOptions,
-) (*rr.GetSelfInfoResponse, *ResponseMeta, error) {
-	return execute[*rr.GetSelfInfoResponse](
+) (*rr.UserResponse, *ResponseMeta, error) {
+	return execute[*rr.UserResponse](
 		ctx,
 		r.client,
 		http.MethodGet,

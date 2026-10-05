@@ -33,8 +33,8 @@ func (r *Users) List(
 func (r *Users) Get(
 	ctx context.Context,
 	userID int64,
-) (*rr.GetUserResponse, *ResponseMeta, error) {
-	return execute[*rr.GetUserResponse](
+) (*rr.UserResponse, *ResponseMeta, error) {
+	return execute[*rr.UserResponse](
 		ctx,
 		r.client,
 		http.MethodGet,
@@ -49,8 +49,8 @@ func (r *Users) Get(
 func (r *Users) SearchFreelancer(
 	ctx context.Context,
 	opts *rr.SearchFreelancerOptions,
-) (*rr.SearchFreelancersResponse, *ResponseMeta, error) {
-	return execute[*rr.SearchFreelancersResponse](
+) (*rr.ListUsersResponse, *ResponseMeta, error) {
+	return execute[*rr.ListUsersResponse](
 		ctx,
 		r.client,
 		http.MethodGet,
@@ -97,8 +97,8 @@ func (r *Users) ListEnterprises(
 func (r *Users) ListPortfolios(
 	ctx context.Context,
 	opts *rr.ListPortfoliosOptions,
-) (*rr.ListUsersPortfoliosResponse, *ResponseMeta, error) {
-	return execute[*rr.ListUsersPortfoliosResponse](
+) (*rr.RawResponse, *ResponseMeta, error) {
+	return execute[*rr.RawResponse](
 		ctx,
 		r.client,
 		http.MethodGet,

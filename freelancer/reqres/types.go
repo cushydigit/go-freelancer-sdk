@@ -276,31 +276,6 @@ func (d *Device) LastLoginAt() *time.Time {
 	return unixTime(d.LastLogin)
 }
 
-type BidEditRequest struct {
-	ID            int     `json:"id"`
-	BidID         int     `json:"bid_id"`
-	Status        string  `json:"status"` // "pending", "accepted", "declined"
-	Comment       string  `json:"comment,omitempty"`
-	NewAmount     float64 `json:"new_amount"`
-	NewPeriod     int     `json:"new_period"`
-	OldAmount     float64 `json:"old_amount"`
-	OldPeriod     int     `json:"old_period"`
-	TimeRequested *int64  `json:"time_requested,omitempty"` // Unix timestamp
-	TimeResponded *int64  `json:"time_responded,omitempty"` // optional, Unix timestamp
-}
-
-// RequestedTimeAt returns bid edit request `TimeRequested` as time.Time.
-// it returns nil when the field is not provided.
-func (b *BidEditRequest) RequestedTimeAt() *time.Time {
-	return unixTime(b.TimeRequested)
-}
-
-// RespondedTimeAt returns bid edit request `TimeResponded` as time.Time.
-// it returns nil when the field is not provided.
-func (b *BidEditRequest) RespondedTimeAt() *time.Time {
-	return unixTime(b.TimeResponded)
-}
-
 func unixTime(v *int64) *time.Time {
 	if v == nil {
 		return nil
