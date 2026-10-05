@@ -14,6 +14,7 @@ type Milestones struct{ resource }
 type ExpertGuarantees struct{ resource }
 type Users struct{ resource }
 type Self struct{ resource }
+type Profiles struct{ resource }
 type Common struct{ resource }
 
 // Resources provides access to the Freelancer API resources.
@@ -39,6 +40,7 @@ type Resources struct {
 	Services
 	Users
 	Self
+	Profiles
 	Common
 }
 
@@ -54,6 +56,7 @@ func newResources(c *Client) *Resources {
 		Services:         Services{r},
 		Users:            Users{r},
 		Self:             Self{r},
+		Profiles:         Profiles{r},
 		Common:           Common{r},
 	}
 }
