@@ -94,6 +94,7 @@ func (r *Users) ListEnterprises(
 
 // The service gets the portfolios for a list of users
 // Returns a list of portfolios of users. Number of portfolios of all users can be limited by the offset and limit parameters.
+// It maps to the `GET` `/users/0.1/portfolios` endpoint.
 func (r *Users) ListPortfolios(
 	ctx context.Context,
 	opts *rr.ListPortfoliosOptions,

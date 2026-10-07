@@ -244,159 +244,219 @@ if err != nil {
 }
 ```
 
-## Services
+## Project Structure
 
-### Project Services
+This SDK follows a modular service design. All core logic is located in `freelancer`.
 
-Manage active and archived projects, retrieve project details, create new projects, and work with bids, milestones, and reviews.
+- **`client.go`**: It holds core logic
+- **`types.go`**: Shared data structures
+- **`responses`**: The wrappers for API replies
+- **`enums.go`**: Custom types and constants for statuses, roles, and types
+- **`resources.go`**: The entry point for all services.
+- **`resources_*.go`**: Each file encapsulates logic for a specific API domain
 
-| Service | Endpoint |
-| :------ | :------------ |
+## Resources (Services)
+
+This SDK wraps the Freelancer API through typed resource services. Every public method accepts `context.Context` for cancellation and timeout control, returns `(*RawResponse, *ResponseMeta, error)` (or a typed response where the API defines one), and delegates to a shared internal `execute` pipeline handling authentication, base-URL resolution, and JSON round-tripping.
+
+| Resource (Service) | Endpoint |
+| :----------------- | :------- |
 | `Projects` | `/projects/0.1/projects` |
 | `Collaborations` | `/projects/0.1/projects/collaboration` |
 | `Services` | `/projects/0.1/services` |
-| `Bids` | `/projects/0.1/bids` |
-| `Jobs` | `/projects/0.1/jobs` |
-| `Milestones` | `/projects/0.1/milestones` |
 | `Reviews` | `/projects/0.1/reviews` |
+| `Bids` | `/projects/0.1/bids` |
+| `Milestones` | `/projects/0.1/milestones` |
+| `ExpertGuarantees` | `/projects/0.1/expert_guarantees/` |
+| `Users` | `/users/0.1/users/` |
+| `Profiles` | `/users/0.1/profiles` |
+| `Self` | various endpoints |
+| `Common` | various endpoints most static resource |
 
-#### Projects Service Methods
+### Projects — `freelancer/resources_projects.go`
 
-| Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `Action(ctx, body)` | `/projects/0.1/projects/{project_id}` | Perform action on a project |
-| `Get(ctx, id, opts)` | `/projects/0.1/projects/{project_id}` | Get single project |
-| `Delete(ctx, id)` | `/projects/0.1/projects/{project_id}` | Delete project |
-| `Create(ctx, body)` | `/projects/0.1/projects` | Create new project |
-| `List(ctx, opts)` | `/projects/0.1/projects` | List projects by projects Ids |
-| `SearchActive(ctx, opts)` | `/projects/0.1/projects/active` | Search active projects |
-| `SearchAll(ctx, opts)` | `/projects/0.1/projects/all` | Search archived and active projects |
-| `ListSelf(ctx, opts)` | `/projects/0.1/self` | List current authenticated user's projects |
-| `InviteFreelancer(ctx, id, body)` | `/projects/0.1/projects/{project_id}/invite` | Invite freelancer to bid on the project |
-| `ListUpgradesFees(ctx, opts)` | `/projects/0.1/projects/fees` | List Project upgrade fees for a given list of currencies |
-| `ListBids(ctx, id, opts)` | `/projects/0.1/projects/{project_id}/bids` | List of bids for a single project |
-| `GetBidInfo(ctx, id)` | `/projects/0.1/projects/{project_id}/bids_info` | Get information for posting bids on a project |
-| `ListMilestones(ctx, id, opts)` | `/projects/0.1/projects/{project_id}/milestones` | List of milestones for a single project |
-| `ListMilestoneRequests(ctx, id, opts)` | `/projects/0.1/projects/{project_id}/milestone_requests` | List of milestone requests for a single project |
-| `GetHourlyContractInfo(ctx, opts)` | `/projects/0.1/hourly_contract_info` | Fetch the hourly contract matching the desired query |
-| `GetIPContractInfo(ctx, id)` | `/projects/0.1/projects/{project_id}/ip_contract_info` | Get the IP contract matching for the project |
-| `ListExpertGuarantees(ctx, opts)` | `/projects/0.1/expert_guarantees` | List of expert guarantees |
-| `ActionExpertGuarantees(ctx, id, body)` | `/projects/0.1/expert_guarantees/{expert_guarantee_id}` | Perform an action on a expert guarantee |
-
-#### Collaborations Service Methods
+Projects is the largest service: full project lifecycle (create, update, close, end, delete), search, upgrade fees, and per-project views of bids, milestones, contract info, and freelancer invitations.
 
 | Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `List(ctx, id)` | `/projects/0.1/projects/{project_id}/collaborations` | List of project collaboration data for a project |
-| `Create(ctx, id)` | `/projects/0.1/projects/{project_id}/collaborations` | Create a new project collaboration |
-| `Action(ctx, id, coll_id, body)` | `/projects/0.1/projects/{project_id}/collaborations/{coll_id}/actions` | Perform action an a collaboration |
-| `ListAll(ctx)` | `/projects/0.1/projects/collaborations` |
+|---|---|---|
+| `Create` | `POST /projects/0.1/projects` | Creates a new project |
+| `SignNDA` | `PUT /projects/0.1/projects/{project_id}` | Signs a project NDA with identity details |
+| `Upgrade` | `PUT /projects/0.1/projects/{project_id}` | Applies selected upgrades to a project |
+| `Update` | `PUT /projects/0.1/projects/{project_id}` | Updates project description and skills |
+| `Close` | `PUT /projects/0.1/projects/{project_id}` | Closes an open project to new bids |
+| `End` | `PUT /projects/0.1/projects/{project_id}` | Ends an awarded/accepted project, cancelling the contract |
+| `List` | `GET /projects/0.1/projects` | Returns the user's projects (newest first) |
+| `Get` | `GET /projects/0.1/projects/{project_id}` | Returns a specific project (with user projection options) |
+| `SearchActive` | `GET /projects/0.1/projects/active` | Searches active projects |
+| `SearchAll` | `GET /projects/0.1/projects/all` | Searches all projects |
+| `InviteFreelancer` | `POST /projects/0.1/projects/{project_id}/invite` | Invites specific freelancers to bid |
+| `ListUpgradeFees` | `GET /projects/0.1/projects/fees` | Returns upgrade fees per currency and free-upgrade eligibility |
+| `ListBids` | `GET /projects/0.1/projects/{project_id}/bids` | Returns bids for a project (expensive — avoid full user projections) |
+| `GetBidInfo` | `GET /projects/0.1/projects/{project_id}/bids_info` | Returns information needed to post a bid |
+| `ListMilestones` | `GET /projects/0.1/projects/{project_id}/milestones` | Returns milestones on a project |
+| `ListMilestoneRequests` | `GET /projects/0.1/projects/{project_id}/milestone_requests` | Returns milestone requests on a project |
+| `GetHourlyContractInfo` | `GET /projects/0.1/hourly_contract_info` | Fetches the hourly contract matching the query |
+| `GetIPContractInfo` | `GET /projects/0.1/projects/{project_id}/ip_contract_info` | Fetches IP contract info for a project |
+| `Delete` | `DELETE /projects/0.1/projects/{project_id}` | Deletes a project (pending/rejected states only) |
 
-#### Services Service Methods
+### Collaborations — `freelancer/resources_collaborations.go`
 
-| Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `List(ctx, opts)` | `/projects/0.1/services` | List of service |
-| `ListActive(ctx, opts)` | `/projects/0.1/services/active` | List of active services |
-| `Order(ctx, service_id, service_type)` | `/projects/0.1/services/{service_type}/{service_id}/order` | Orders one of the available services |
-
-#### Bids Service Methods
-
-| Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `List(ctx, opts)` | `/projects/0.1/bids` | List of bids that match the specific criteria |
-| `Create(ctx, body)` | `/projects/0.1/bids` | Create a bid on a project |
-| `Get(ctx, id, opts)` | `/projects/0.1/bids/{bid_id}` | Get information about specific bid |
-| `Action(ctx, id, body)` | `/projects/0.1/bids/{bid_id}` | Performs an action on a bid |
-| `Update(ctx, id, body)` | `/projects/0.1/bids/{bid_id}` | Update and existing bid on a project |
-| `GetTimeTracking(ctx, id, opts)` | `/projects/0.1/bids/{bid_id}/time_tracking` | Return a list of aggregate time tracking data for a bid |
-| `CreateTimeTracking(ctx, id, body)` | `/projects/0.1/bids/{bid_id}/time_tracking` | Create a time time tracking session for a specific bid |
-| `ListEditRequests(ctx, id ,opts)` | `/projects/0.1/bids/{bid_id}/edit_requests` | List of bid edit requests by bid id |
-| `CreateEditRequest(ctx, body)` | `/projects/0.1/bids/edit_requests` | Create a bid edit request on a post that awarded bid |
-| `ActionEditRequest(ctx, id, body)` | `/projects/0.1/bids/{bid_id}/edit_requests` | Employer perform action on a PENDING bid edit request |
-| `GetRating(ctx, id)` | `/projects/0.1/bids/{bid_id}/bid_ratings` | Fetch bid rating for a bid |
-| `ListRatings(ctx, id ,opts)` | `/projects/0.1/bid_ratings` | List of bid ratings for a list of bids |
-| `CreateRating(ctx, bid_id ,body)` | `/projects/0.1/bids/{bid_id}/edit_requests` | Rates a bid (create a bid rating) |
-| `UpdateRating(ctx, id, bid_rating_id, body)` | `/projects/0.1/bids/{bid_id}/bid_ratings/{bid_rating_id}` | Update an existing bid rating |
-
-#### Jobs Service Methods
+Collaborations manage shared access to projects and control the permissions collaborators hold (chat and bid award).
 
 | Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `List(ctx, opts)` | `/projects/0.1/jobs` | List of jobs |
-| `Search(ctx, opts)` | `/projects/0.1/jobs/search` | Search for job by all parameters specified on the job |
-| `ListBundles(ctx, opts)` | `/projects/0.1/job_bundles` | List of job bundles |
-| `ListBundleCategories(ctx, id, opts)` | `/projects/0.1/job_bundle_categories` | List of job bundle categories |
+|---|---|---|
+| `List` | `GET /projects/0.1/projects/{project_id}/collaborations` | Returns project collaborations for a project |
+| `Create` | `POST /projects/0.1/projects/{project_id}/collaborations` | Creates a new project collaboration |
+| `Revoke` | `PUT /projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` | Revokes a collaboration with permission overrides |
+| `UpdatePermissions` | `PUT /projects/0.1/projects/{project_id}/collaborations/{collaboration_id}/actions` | Changes chat and bid award permissions on a collaboration |
+| `ListAll` | `GET /projects/0.1/projects/collaborations` | Returns all collaborations for the authenticated user |
 
-#### Milestones Service Methods
+### Bids — `freelancer/resources_bids.go`
 
-| Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `List(ctx, opts)` | `/projects/0.1/milestones` | List of milestones |
-| `Create(ctx, body)` | `/projects/0.1/milestones` | Post or create a review of a user |
-| `Get(ctx, id, opts)` | `/projects/0.1/milestones/{milestone_id}` | Get information about a specific milestone |
-| `Action(ctx, id, body)` | `/projects/0.1/milestones/{milestone_id}` | Perform an action on a review |
-| `ListRequests(ctx, opts)` | `/projects/0.1/milestone_requests` | List of milestone requests |
-| `CreateRequest(ctx, body)` | `/projects/0.1/milestone_requests` | Create a milestone request |
-| `GetRequest(ctx, id, opts)` | `/projects/0.1/milestone_requests/{milestone_request_id}` | Get information about a specific milestone request. |
-| `ActionRequest(ctx, id, body)` | `/projects/0.1/milestone_requests/{milestone_request_id}` | Perform an action on a milestone request |
-
-#### Reviews Service Methods
+Bids manage the full bid lifecycle on a project: creation, award/acceptance actions, time tracking, edit requests, and ratings.
 
 | Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `List(ctx, opts)` | `/projects/0.1/reviews` | List of project reviews |
-| `Create(ctx, body)` | `/projects/0.1/reviews` | Post or create a review of a user |
-| `Action(ctx, id, body)` | `/projects/0.1/reviews/{review_id}` | Performs an action on a review |
+|---|---|---|
+| `List` | `GET /projects/0.1/bids` | Returns bids matching the specified criteria |
+| `Get` | `GET /projects/0.1/bids/{bid_id}` | Returns a specific bid |
+| `Create` | `POST /projects/0.1/bids` | Places a bid on a project |
+| `Update` | `PUT /projects/0.1/bids/{bid_id}` | Updates description, amount, or milestone percentage of a bid |
+| `Accept` | `PUT /projects/0.1/bids/{bid_id}` | Bid owner accepts the award |
+| `Deny` | `PUT /projects/0.1/bids/{bid_id}` | Bid owner declines the award |
+| `Retract` | `PUT /projects/0.1/bids/{bid_id}` | Bid owner retracts a bid before it is awarded |
+| `Highlight` | `PUT /projects/0.1/bids/{bid_id}` | Bid owner highlights a bid |
+| `Sponsor` | `PUT /projects/0.1/bids/{bid_id}` | Bid owner sponsors a bid |
+| `Award` | `PUT /projects/0.1/bids/{bid_id}` | Project owner awards a bid to a freelancer |
+| `Revoke` | `PUT /projects/0.1/bids/{bid_id}` | Project owner revokes an awarded bid |
+| `Shortlist` | `PUT /projects/0.1/bids/{bid_id}` | Project owner adds a bid to the shortlist |
+| `Unshortlist` | `PUT /projects/0.1/bids/{bid_id}` | Project owner removes a bid from the shortlist |
+| `Hide` | `PUT /projects/0.1/bids/{bid_id}` | Project owner hides a bid |
+| `Unhide` | `PUT /projects/0.1/bids/{bid_id}` | Project owner unhides a bid |
+| `RequestLocationSharing` | `PUT /projects/0.1/bids/{bid_id}` | Project owner requests location sharing from the freelancer |
+| `GetTimeTracking` | `GET /projects/0.1/bids/{bid_id}/time_tracking` | Returns aggregate time tracking data for a bid |
+| `CreateTimeTracking` | `POST /projects/0.1/bids/{bid_id}/time_tracking` | Creates a time tracking session for a bid |
+| `ListEditRequests` | `GET /projects/0.1/bids/{bid_id}/edit_requests` | Returns edit requests for a bid |
+| `CreateEditRequest` | `POST /projects/0.1/bids/edit_requests` | Creates a bid edit request (accepted/awarded bids only) |
+| `AcceptEditRequest` | `PUT /projects/0.1/bids/{bid_id}/edit_requests/{edit_request_id}` | Employer accepts the proposed amount and period |
+| `DeclineEditRequest` | `PUT /projects/0.1/bids/{bid_id}/edit_requests/{edit_request_id}` | Employer declines the proposed amount and period |
+| `GetRating` | `GET /projects/0.1/bids/{bid_id}/bid_ratings` | Fetches the rating of a single bid |
+| `ListRatings` | `GET /projects/0.1/bid_ratings` | Fetches ratings for multiple bids |
+| `CreateRating` | `POST /projects/0.1/bids/{bid_id}/bid_ratings` | Rates a bid |
+| `UpdateRating` | `PUT /projects/0.1/bids/{bid_id}/bid_ratings/{bid_rating_id}` | Updates an existing bid rating |
 
-### User Services
+### Common — `freelancer/resources_common.go`
 
-Interact with freelancer profiles, user directory, and personal profile management.
-
-| Service | Endpoint |
-| :------ | :------------ |
-| `Users` | `/users/0.1/users` |
-| `Self` | `/users/0.1/self` |
-
-#### Users Service Methods
-
-| Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `List(ctx, opts)` | `/users/0.1/users/` | Get users by IDs or usernames |
-| `SearchFreelancer(ctx, opts)` | `/users/0.1/users/directory` | Search freelancer directory |
-| `Get(ctx, id)` | `/users/0.1/users/{user_id}` | Get single user by ID |
-| `ListReputations(ctx, opts)` | `/users/0.1/reputations` | Gets the reputations for a list of users |
-| `ListEnterprises(ctx, opts)` | `/users/0.1/enterprises` | List of enterprises |
-| `ListPortfolios(ctx, opts)` | `/users/0.1/portfolios` | Gets the portfolios for a list of users |
-| `CreateViolationReport(ctx, body)` | `/users/0.1/violation_reports` | Create a user violation report |
-
-#### Self Service Methods
-
-| Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `Get(ctx, opts)` | `/users/0.1/self` | Get information for current user |
-| `ListDevices(ctx)` | `/users/0.1/self/devices` | Get a list of current user's recent logged in devices |
-| `AddJobs(ctx, body)` | `/users/0.1/self/jobs` | Add a list of jobs to the job list of current user |
-| `UpdateJobs(ctx, body)` | `/users/0.1/self/jobs` | Sets a list of jobs to the job list of current user |
-| `DeleteJobs(ctx, body)` | `/users/0.1/self/jobs` | Remove a list of jobs to the job list of current user |
-| `CreateProfile(ctx, body)` | `/users/0.1/profiles` | Create a new profile for a user |
-| `GetProfile(ctx, body)` | `/users/0.1/profiles` | Get Profile(s) |
-| `UpdateProfile(ctx, body)` | `/users/0.1/profiles` | Update profile for a user |
-| `ListPools(ctx, opts)` | `/users/0.1/pools` | List of pools belonging to the current user |
-
-### Common Service
-
-Access platform-wide resources like countries, timezones and currencies.
+Common exposes platform-wide reference data and job discovery: countries, timezones, currencies, categories, budgets, jobs, and job bundles.
 
 | Method | Endpoint | Description |
-| :----- | :------- | :---------- |
-| `ListCountries(ctx, opts)` | `/common/0.1/countries` | Country list for filtering |
-| `ListTimezones(ctx, opts)` | `/common/0.1/timezones` | Timezone data with offsets |
-| `ListCurrencies(ctx, opts)` | `/projects/0.1/currencies` | Currency conversion info |
-| `ListCategories(ctx, opts)` | `/projects/0.1/categories` | List Categories of projects |
-| `ListBudgets(ctx, opts)` | `/projects/0.1/budgets` | List Budgets of projects |
+|---|---|---|
+| `ListCountries` | `GET /common/0.1/countries` | Lists countries |
+| `ListTimezones` | `GET /common/0.1/timezones` | Lists timezones |
+| `ListCurrencies` | `GET /projects/0.1/currencies` | Lists currencies |
+| `ListCategories` | `GET /projects/0.1/categories` | Lists categories (optionally with jobs per category) |
+| `ListBudgets` | `GET /projects/0.1/budgets` | Lists budgets by currency |
+| `ListJobs` | `GET /projects/0.1/jobs` | Lists jobs |
+| `SearchJobs` | `GET /projects/0.1/jobs/search` | Searches jobs (substring match across all parameters) |
+| `ListJobBundles` | `GET /projects/0.1/job_bundles` | Lists job bundles |
+| `ListJobBundleCategories` | `GET /projects/0.1/job_bundle_categories` | Lists job bundle categories |
 
-#### List Countries
+### Expert Guarantees — `freelancer/resources_expertguarantees.go`
+
+ExpertGuarantees manages expert guarantee listings and their release flow between the guarantee creator and the project owner.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `List` | `GET /projects/0.1/expert_guarantees` | Returns expert guarantees |
+| `Release` | `PUT /projects/0.1/expert_guarantees/{expert_guarantee_id}` | Project owner releases an expert guarantee |
+| `RequestRelease` | `PUT /projects/0.1/expert_guarantees/{expert_guarantee_id}` | Guarantee creator requests a release |
+
+### Milestones — `freelancer/resources_milestones.go`
+
+Milestones covers both milestone CRUD with release/cancel actions and the separate milestone request lifecycle (request, accept, reject, delete).
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `List` | `GET /projects/0.1/milestones` | Returns milestones (excludes un-awarded prepaid) |
+| `Get` | `GET /projects/0.1/milestones/{milestone_id}` | Returns a specific milestone |
+| `Create` | `POST /projects/0.1/milestones` | Creates a milestone |
+| `Release` | `PUT /projects/0.1/milestones/{milestone_id}` | Project owner releases a milestone payment |
+| `Update` | `PUT /projects/0.1/milestones/{milestone_id}` | Project owner updates the milestone description |
+| `RequestCancel` | `PUT /projects/0.1/milestones/{milestone_id}` | Project owner requests milestone cancellation |
+| `RequestRelease` | `PUT /projects/0.1/milestones/{milestone_id}` | Freelancer requests milestone release |
+| `Cancel` | `PUT /projects/0.1/milestones/{milestone_id}` | Freelancer cancels a milestone |
+| `RejectCancel` | `PUT /projects/0.1/milestones/{milestone_id}` | Freelancer rejects a cancellation request |
+| `ListRequests` | `GET /projects/0.1/milestone_requests` | Returns milestone requests |
+| `GetRequest` | `GET /projects/0.1/milestone_requests/{milestone_request_id}` | Returns a specific milestone request |
+| `CreateRequest` | `POST /projects/0.1/milestone_requests` | Creates a milestone request |
+| `AcceptRequest` | `PUT /projects/0.1/milestone_requests/{milestone_request_id}` | Project owner accepts a milestone request |
+| `RejectRequest` | `PUT /projects/0.1/milestone_requests/{milestone_request_id}` | Project owner rejects a milestone request |
+| `DeleteRequest` | `PUT /projects/0.1/milestone_requests/{milestone_request_id}` | Bid owner deletes a milestone request |
+
+### Profiles — `freelancer/resources_profiles.go`
+
+Profiles provides CRUD for the authenticated user's public profile.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `Create` | `POST /users/0.1/profiles` | Creates a new profile (returns the created profile) |
+| `Get` | `GET /users/0.1/profiles` | Gets the user's profile(s) |
+| `Update` | `PUT /users/0.1/profiles` | Updates the user's profile |
+
+### Reviews — `freelancer/resources_reviews.go`
+
+Reviews handles posting reviews (per role) and featuring/unfeaturing them by review type (project or contest).
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `List` | `GET /projects/0.1/reviews` | Returns project reviews |
+| `CreateForFreelancer` | `POST /projects/0.1/reviews` | Posts a review as a freelancer |
+| `CreateForEmployer` | `POST /projects/0.1/reviews` | Posts a review as an employer |
+| `FeatureProject` | `PUT /projects/0.1/reviews/{review_id}` | Features a project review |
+| `UnfeatureProject` | `PUT /projects/0.1/reviews/{review_id}` | Unfeatures a project review |
+| `FeatureContest` | `PUT /projects/0.1/reviews/{review_id}` | Features a contest review |
+| `UnfeatureContest` | `PUT /projects/0.1/reviews/{review_id}` | Unfeatures a contest review |
+
+### Self — `freelancer/resources_self.go`
+
+Self covers the authenticated user's own account state: identity, devices, job preferences, pools, and their own projects/contests.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `Get` | `GET /users/0.1/self` | Returns information about the current user |
+| `ListDevices` | `GET /users/0.1/self/devices` | Returns recently logged-in devices |
+| `AddJobs` | `POST /users/0.1/self/jobs` | Adds jobs to the user's job list |
+| `UpdateJobs` | `PUT /users/0.1/self/jobs` | Replaces the user's job list |
+| `DeleteJobs` | `DELETE /users/0.1/self/jobs` | Removes jobs from the user's job list |
+| `ListPools` | `GET /users/0.1/pools` | Returns pools belonging to the current user |
+| `ListProjects` | `GET /projects/0.1/self` | Returns projects/contests the user created or participated in |
+
+### Services — `freelancer/resources_services.go`
+
+Services covers the platform's orderable services (list, search, and ordering).
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `Order` | `POST /projects/0.1/services/{service_type}/{service_id}/order` | Orders a service |
+| `List` | `GET /projects/0.1/services` | Returns services |
+| `SearchActive` | `GET /projects/0.1/services/active` | Returns active services |
+
+### Users — `freelancer/resources_users.go`
+
+Users covers the public user directory: users, freelancer search, reputations, enterprises, portfolios, and violation reports.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `List` | `GET /users/0.1/users` | Returns a list of users |
+| `Get` | `GET /users/0.1/users/{user_id}` | Returns a specific user |
+| `SearchFreelancer` | `GET /users/0.1/users/directory` | Returns a paginated list of eligible freelancers |
+| `ListReputations` | `GET /users/0.1/reputations` | Returns reputations for a list of users |
+| `ListEnterprises` | `GET /users/0.1/enterprises` | Returns a list of enterprises |
+| `ListPortfolios` | `GET /users/0.1/portfolios` | Returns portfolios for a list of users |
+| `CreateViolationReport` | `POST /users/0.1/violation_reports` | Creates a user violation report |
+
+## Use-Cases
+
+### List Countries
 
 ```Go
 opts := rr.ListCountriesOptions{
@@ -413,7 +473,7 @@ if err == nil && len(res.Result.Countries) > 0 {
 }
 ```
 
-#### Listing Timezones
+### Listing Timezones
 
 ```Go
 opts := rr.ListTimezonesOptions{
@@ -434,7 +494,7 @@ if len(res.Result.Timezones) > 0 && err == nil {
 }
 ```
 
-#### Listing Currencies
+### Listing Currencies
 
 ```Go
 res, _, err := c.Services.Projects.Currencies.List(ctx, nil)
@@ -447,8 +507,6 @@ if len(res.Result.Currencies) > 0 && err == nil {
     fmt.Printf("Fetched %d countries\n", len(res.Result.Currencies))
 }
 ```
-
-## Use-Cases
 
 ### Searching Active Projects
 
@@ -668,17 +726,6 @@ for _, device := range devices.Result.Devices {
 }
 ```
 
-## Project Structure
-
-This SDK follows a modular service design. All core logic is located in `freelancer`.
-
-- **`client.go`**: It holds core logic
-- **`types.go`**: Shared data structures
-- **`responses`**: The wrappers for API replies
-- **`enums.go`**: Custom types and constants for statuses, roles, and types
-- **`services.go`**: The entry point for all services.
-- **`service_*.go`**: Each file encapsulates logic for a specific API domain
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -699,7 +746,7 @@ Current version covers **Projects**, **Users**, and **Common** services.
 ### Stability & Quality
 
 - [x] **Static Analysis:**
-- [x] **Unit Testing:** (74.8% coverage)
+- [x] **Unit Testing:** (77.5% coverage)
 - [ ] **Use Case:**
 
 ### Upcoming Features
