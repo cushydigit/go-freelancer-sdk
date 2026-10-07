@@ -1,11 +1,14 @@
-package freelancer
+package reqres
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type base struct {
 	Status    string `json:"status"`
 	RequestID string `json:"request_id"`
 }
+
 type RawResponse struct {
 	base
 	Result json.RawMessage `json:"result"`
@@ -30,7 +33,8 @@ type ListCategoriesResponse struct {
 	base
 	Result struct {
 		Categories []*Category `json:"categories"`
-		Jobs       []*Job      `json:"jobs,omitempty"`
+		// jobs is dictionary with category ID as key and list of jobs as value
+		Jobs map[string][]Job `json:"jobs,omitempty"`
 	} `json:"result"`
 }
 
@@ -49,16 +53,20 @@ type ListUsersResponse struct {
 	} `json:"result"`
 }
 
-type GetProjectResponse struct {
-	base
-	Result *Project `json:"result"`
+// Users returns the users as a slice
+func (r *ListUsersResponse) Users() []*User {
+	users := make([]*User, 0, len(r.Result.Users))
+	for _, user := range r.Result.Users {
+		users = append(users, user)
+	}
+	return users
 }
 
-type CreateProjectResponse struct {
+type ProjectResponse struct {
 	base
 	Result *Project `json:"result"`
 }
-type GetUserResponse struct {
+type UserResponse struct {
 	base
 	Result *User `json:"result"`
 }
@@ -66,19 +74,6 @@ type GetUserResponse struct {
 type ListUsersReputationsResponse struct {
 	base
 	Result map[string]*Reputation `json:"result"`
-}
-
-type SearchFreelancersResponse struct {
-	base
-	Result struct {
-		Users      []*User `json:"users"`
-		TotalCount int     `json:"total_count"`
-	} `json:"result"`
-}
-
-type GetSelfInfoResponse struct {
-	base
-	Result *User `json:"result"`
 }
 
 type ListBudgetsResponse struct {
@@ -94,31 +89,10 @@ type ListCurrenciesResponse struct {
 		Currencies []*Currency `json:"currencies"`
 	} `json:"result"`
 }
-type ListUsersPortfoliosResponse struct {
-	base
-	Result json.RawMessage `json:"result"`
-}
 
-type ListSelfLoginDevicesResponse struct {
+type ListSelfDevicesResponse struct {
 	base
 	Result struct {
 		Devices []*Device `json:"devices"`
 	} `json:"result"`
-}
-
-type ListBidEditRequestsResponse struct {
-	base
-	Result struct {
-		BidEditRequests []*BidEditRequest `json:"bid_edit_requests"`
-	} `json:"result"`
-}
-
-type CreateBidEditRequestResponse struct {
-	base
-	Result *BidEditRequest `json:"result"`
-}
-
-type ActionBidEditRequestResponse struct {
-	base
-	Result *BidEditRequest `json:"result"`
 }

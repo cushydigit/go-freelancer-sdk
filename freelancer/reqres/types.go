@@ -1,31 +1,34 @@
-package freelancer
+package reqres
 
 import (
 	"fmt"
-
-	"github.com/cushydigit/go-freelancer-sdk/freelancer/internal/endpoints"
+	"time"
 )
 
 type Country struct {
-	Name         string  `json:"name,omitempty"`          // Optional
-	Code         string  `json:"code,omitempty"`          // Optional
-	ISO3         string  `json:"iso3,omitempty"`          // Optional
-	PhoneCode    float64 `json:"phone_code,omitempty"`    // Optional, "Decimal"
-	Demonym      string  `json:"demonym,omitempty"`       // Optional
-	Person       string  `json:"person,omitempty"`        // Optional
-	SEOURL       string  `json:"seo_url,omitempty"`       // Optional
-	Sanction     bool    `json:"sanction,omitempty"`      // Optional, Boolean
-	LanguageCode string  `json:"language_code,omitempty"` // Optional
-	LanguageID   float64 `json:"language_id,omitempty"`   // Optional
+	Name              string  `json:"name,omitempty"`
+	Code              string  `json:"code,omitempty"`
+	ISO3              string  `json:"iso3,omitempty"`
+	PhoneCode         float64 `json:"phone_code,omitempty"`
+	Demonym           string  `json:"demonym,omitempty"`
+	Person            string  `json:"person,omitempty"`
+	SEOURL            string  `json:"seo_url,omitempty"`
+	Sanction          bool    `json:"sanction,omitempty"`
+	LanguageCode      string  `json:"language_code,omitempty"`
+	LanguageID        float64 `json:"language_id,omitempty"`
+	FlagURL           string  `json:"flag_url,omitempty"`
+	HighresFlagURL    string  `json:"highres_flag_url,omitempty"`
+	FlagURLCDN        string  `json:"flag_url_cdn,omitempty"`
+	HighresFlagURLCDN string  `json:"highres_flag_url_cdn,omitempty"`
 }
 
 type Job struct {
 	ID                 int64     `json:"id"`
-	Name               *string   `json:"name,omitempty"`
+	Name               string    `json:"name,omitempty"`
 	Category           *Category `json:"category,omitempty"`
 	ActiveProjectCount float64   `json:"active_project_count"`
-	SeoURL             *string   `json:"seo_url,omitempty"`
-	Local              *bool     `json:"local,omitempty"`
+	SeoURL             string    `json:"seo_url,omitempty"`
+	Local              bool      `json:"local,omitempty"`
 }
 
 type JobHistory struct {
@@ -61,11 +64,11 @@ type Currency struct {
 }
 
 type Budget struct {
-	Minimum     float64     `json:"minimum"`
-	Maximum     float64     `json:"maximum"`
-	Name        string      `json:"name"`
-	ProjectType ProjectType `json:"project_type"`
-	CurrencyID  int         `json:"currency_id"`
+	Minimum     float64           `json:"minimum"`
+	Maximum     float64           `json:"maximum"`
+	Name        string            `json:"name"`
+	ProjectType ProjectBudgetType `json:"project_type"`
+	CurrencyID  int               `json:"currency_id"`
 }
 
 type Upgrades struct {
@@ -155,25 +158,16 @@ type EmployerReputation struct {
 }
 
 type Location struct {
-	Country                *CountryLocation `json:"country,omitempty"`
-	City                   string           `json:"city,omitempty"`
-	Latitude               *float64         `json:"latitude,omitempty"`
-	Longitude              *float64         `json:"longitude,omitempty"`
-	Vicinity               *string          `json:"vicinity,omitempty"`
-	AdministrativeArea     *string          `json:"administrative_area,omitempty"`
-	FullAddress            *string          `json:"full_address,omitempty"`
-	AdministrativeAreaCode *string          `json:"administrative_area_code,omitempty"`
-	PostalCode             *string          `json:"postal_code,omitempty"`
-	ID                     *int             `json:"id,omitempty"`
-}
-
-type CountryLocation struct {
-	Name              string `json:"name,omitempty"`
-	FlagURL           string `json:"flag_url,omitempty"`
-	Code              string `json:"code,omitempty"`
-	HighresFlagURL    string `json:"highres_flag_url,omitempty"`
-	FlagURLCDN        string `json:"flag_url_cdn,omitempty"`
-	HighresFlagURLCDN string `json:"highres_flag_url_cdn,omitempty"`
+	Country                *Country `json:"country,omitempty"`
+	City                   string   `json:"city,omitempty"`
+	Latitude               *float64 `json:"latitude,omitempty"`
+	Longitude              *float64 `json:"longitude,omitempty"`
+	Vicinity               *string  `json:"vicinity,omitempty"`
+	AdministrativeArea     *string  `json:"administrative_area,omitempty"`
+	FullAddress            *string  `json:"full_address,omitempty"`
+	AdministrativeAreaCode *string  `json:"administrative_area_code,omitempty"`
+	PostalCode             *string  `json:"postal_code,omitempty"`
+	ID                     *int     `json:"id,omitempty"`
 }
 
 type User struct {
@@ -189,7 +183,7 @@ type User struct {
 	Jobs               []Job               `json:"jobs,omitempty"`
 	ProfileDescription *string             `json:"profile_description"`
 	HourlyRate         *float64            `json:"hourly_rate,omitempty"`
-	RegistrationDate   int64               `json:"registration_date,omitempty"`
+	RegistrationDate   *int64              `json:"registration_date,omitempty"`
 	LimitedAccount     bool                `json:"limited_account,omitempty"`
 	DisplayName        string              `json:"display_name,omitempty"`
 	Tagline            *string             `json:"tagline,omitempty"`
@@ -206,6 +200,12 @@ type User struct {
 	PublicName         string              `json:"public_name,omitempty"`
 }
 
+// RegisteredDateAt return the user's `RegistrationDate` as time.Time.
+// it returns nil when the field is not provided.
+func (u *User) RegisteredDateAt() *time.Time {
+	return unixTime(u.RegistrationDate)
+}
+
 type Project struct {
 	ID             int64    `json:"id"`
 	OwnerID        int64    `json:"owner_id"`
@@ -214,7 +214,6 @@ type Project struct {
 	SeoURL         string   `json:"seo_url"`
 	Currency       Currency `json:"currency"`
 	Description    string   `json:"description"`
-	SubmitDate     int64    `json:"submitdate"`
 	PreviewDesc    string   `json:"preview_description"`
 	Deleted        bool     `json:"deleted"`
 	Nonpublic      bool     `json:"nonpublic"`
@@ -224,8 +223,9 @@ type Project struct {
 	Budget         Budget   `json:"budget"`
 	Featured       bool     `json:"featured"`
 	Urgent         bool     `json:"urgent"`
-	TimeSubmitted  int64    `json:"time_submitted"`
-	TimeUpdated    int64    `json:"time_updated"`
+	SubmitDate     *int64   `json:"submitdate,omitempty"`
+	TimeSubmitted  *int64   `json:"time_submitted,omitempty"`
+	TimeUpdated    *int64   `json:"time_updated,omitempty"`
 	Upgrades       Upgrades `json:"upgrades"`
 	Language       string   `json:"language"`
 	FrontendStatus string   `json:"frontend_project_status"`
@@ -234,7 +234,25 @@ type Project struct {
 }
 
 func (p *Project) GetFullUrl() string {
-	return fmt.Sprintf("%s/%s", endpoints.BaseProjects, p.SeoURL)
+	return fmt.Sprintf("%s/projects/%s", "https://www.freelancer.com", p.SeoURL)
+}
+
+// SubmittedAt return the project's `TimeSubmitted` field as time.Time.
+// it returns nil when the field is not provided.
+func (p *Project) SubmittedAt() *time.Time {
+	return unixTime(p.TimeSubmitted)
+}
+
+// UpdatedAt return the project's `TimeUpdated` field as time.Time.
+// it returns nil when the field is not provided.
+func (p *Project) UpdatedAt() *time.Time {
+	return unixTime(p.TimeUpdated)
+}
+
+// SubmitDateAt return the project's `SubmitDate` field as time.Time.
+// it returns nil when this field is not provided.
+func (p *Project) SubmitDateAt() *time.Time {
+	return unixTime(p.SubmitDate)
 }
 
 type Timezone struct {
@@ -249,18 +267,20 @@ type Device struct {
 	Platform  string `json:"platform"`
 	City      string `json:"city"`
 	Country   string `json:"country"`
-	LastLogin int64  `json:"last_login"`
+	LastLogin *int64 `json:"last_login,omitempty"`
 }
 
-type BidEditRequest struct {
-	ID            int     `json:"id"`
-	BidID         int     `json:"bid_id"`
-	Status        string  `json:"status"` // "pending", "accepted", "declined"
-	Comment       string  `json:"comment,omitempty"`
-	NewAmount     float64 `json:"new_amount"`
-	NewPeriod     int     `json:"new_period"`
-	OldAmount     float64 `json:"old_amount"`
-	OldPeriod     int     `json:"old_period"`
-	TimeRequested int64   `json:"time_requested"`           // Unix timestamp
-	TimeResponded *int64  `json:"time_responded,omitempty"` // optional, Unix timestamp
+// LastLoginAt returns the device's `LastLogin` field as time.Time.
+// it returns nil when the field is not provided.
+func (d *Device) LastLoginAt() *time.Time {
+	return unixTime(d.LastLogin)
+}
+
+func unixTime(v *int64) *time.Time {
+	if v == nil {
+		return nil
+	}
+
+	t := time.Unix(*v, 0)
+	return &t
 }

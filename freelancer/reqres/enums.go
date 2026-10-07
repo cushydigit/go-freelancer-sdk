@@ -1,10 +1,11 @@
-package freelancer
+package reqres
 
-type TypeType string
 type ProjectType string
+type ProjectBudgetType string
 type ContextType string
 type ProjectUpgradeType string
 type ProjectStatusType string
+type ProjectEndStatusType string
 type ProjectAction string
 type ProjectFrontendStatus string
 type IntervalType string
@@ -15,7 +16,7 @@ type RoleType string
 type ViolationContext string
 type ViolationReason string
 type ViolationAdditionalReason string
-type ProjectCollaborationAction string
+type CollaborationAction string
 type ServiceType string
 type ServiceStatusType string
 type SortType string
@@ -29,7 +30,7 @@ type BidEditRequestAction string
 type MilestoneStatus string
 type MilestoneCreateReason string
 type MilestoneAction string
-type MilestoneActionReason string
+type MilestoneRequestCancelReason string
 type MilestoneActionRequest string
 type ExpertGuaranteesStatus string
 type ExpertGuaranteesAction string
@@ -38,11 +39,11 @@ type CompletionStatus string
 type ReviewAction string
 
 const (
-	Projects TypeType = "projects"
-	Contests TypeType = "contests"
+	Projects ProjectType = "projects"
+	Contests ProjectType = "contests"
 
-	ProjectFixed  ProjectType = "fixed"
-	ProjectHourly ProjectType = "hourly"
+	ProjectBudgetFixed  ProjectBudgetType = "fixed"
+	ProjectBudgetHourly ProjectBudgetType = "hourly"
 
 	IntervalWeek  IntervalType = "WEEK"
 	IntervalMonth IntervalType = "MONTH"
@@ -53,13 +54,14 @@ const (
 	ProjectStatusOpen    ProjectStatusType = "open"
 	ProjectStatusPast    ProjectStatusType = "close"
 
-	ProjectActionSignNDA       ProjectAction = "sign_nda"
-	ProjectActionUpgrade       ProjectAction = "upgrade"
-	ProjectActionUpdate        ProjectAction = "update"
-	ProjectActionSetLocation   ProjectAction = "set_location"
-	ProjectActionClose         ProjectAction = "close"
-	ProjectActionAddAttachment ProjectAction = "add_attachment"
-	ProjectActionEnd           ProjectAction = "end"
+	ProjectEndStatusComplete   ProjectEndStatusType = "complete"
+	ProjectEndStatusIncomplete ProjectEndStatusType = "incomplete"
+
+	ProjectActionSignNDA ProjectAction = "sign_nda"
+	ProjectActionUpgrade ProjectAction = "upgrade"
+	ProjectActionUpdate  ProjectAction = "update"
+	ProjectActionClose   ProjectAction = "close"
+	ProjectActionEnd     ProjectAction = "end"
 
 	ProjectFrontendStatusOpen           ProjectFrontendStatus = "open"
 	ProjectFrontendStatusComplete       ProjectFrontendStatus = "complete"
@@ -157,17 +159,18 @@ const (
 	MilestoneActionCancel         MilestoneAction = "cancel"
 	MilestoneActionRejectCancel   MilestoneAction = "reject_cancel"
 
-	MilestoneActionReasonAccidentallyCreated          MilestoneActionReason = "accidentally_created"
-	MilestoneActionReasonNoLongerNeeded               MilestoneActionReason = "no_longer_needed"
-	MilestoneActionReasonFreelancerDidNotMeetDeadline MilestoneActionReason = "freelancer_did_not_meet_deadline"
-	MilestoneActionReasonFreelancerDidNotCompleteTask MilestoneActionReason = "freelancer_did_not_complete_task"
+	MilestoneRequestCancelReasonAccidentallyCreated          MilestoneRequestCancelReason = "accidentally_created"
+	MilestoneRequestCancelReasonNoLongerNeeded               MilestoneRequestCancelReason = "no_longer_needed"
+	MilestoneRequestCancelReasonFreelancerDidNotMeetDeadline MilestoneRequestCancelReason = "freelancer_did_not_meet_deadline"
+	MilestoneRequestCancelReasonDidNotCompleteTask           MilestoneRequestCancelReason = "freelancer_did_not_complete_task"
+	MilestoneRequestCancelOther                              MilestoneRequestCancelReason = "other"
 
-	MilestoneActionRequestAccept MilestoneActionRequest = "accept"
-	MilestoneActionRequestReject MilestoneActionRequest = "reject"
-	MilestoneActionRequestDelete MilestoneActionRequest = "delete"
+	MilestoneActionAcceptRequest MilestoneActionRequest = "accept"
+	MilestoneActionRejectRequest MilestoneActionRequest = "reject"
+	MilestoneActionDeleteRequest MilestoneActionRequest = "delete"
 
-	ProjectCollaborationActionRevoke            ProjectCollaborationAction = "revoke"
-	ProjectCollaborationActionUpdatePermissions ProjectCollaborationAction = "update_permissions"
+	CollaborationActionRevoke            CollaborationAction = "revoke"
+	CollaborationActionUpdatePermissions CollaborationAction = "update_permissions"
 
 	ServiceRegular ServiceType = "regular"
 	ServiceLocal   ServiceType = "local"
