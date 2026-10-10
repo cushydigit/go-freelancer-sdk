@@ -28,6 +28,7 @@ type BidAction string
 type BidStatus string
 type BidEditRequestAction string
 type MilestoneStatus string
+type MilestoneRequestStatus string
 type MilestoneCreateReason string
 type MilestoneAction string
 type MilestoneRequestCancelReason string
@@ -137,14 +138,15 @@ const (
 	ViolationAdditionalReasonWorkDoesNotMatchRequirements   ViolationAdditionalReason = "work_does_not_match_requirements"
 	ViolationAdditionalReasonOther                          ViolationAdditionalReason = "other"
 
-	MilestoneStatusDeleted          MilestoneStatus = "deleted"
-	MilestoneStatusRejected         MilestoneStatus = "rejected"
-	MilestoneStatusPending          MilestoneStatus = "pending"
-	MilestoneStatusCreated          MilestoneStatus = "created"
+	MilestoneRequestStatusDeleted  MilestoneRequestStatus = "deleted"
+	MilestoneRequestStatusRejected MilestoneRequestStatus = "rejected"
+	MilestoneRequestStatusPending  MilestoneRequestStatus = "pending"
+	MilestoneRequestStatusCreated  MilestoneRequestStatus = "created"
+
 	MilestoneStatusDisputed         MilestoneStatus = "disputed"
 	MilestoneStatusRequestedRelease MilestoneStatus = "requested_release"
 	MilestoneStatusCleared          MilestoneStatus = "cleared"
-	MilestoneStatusFrozen           MilestoneStatus = "cleared"
+	MilestoneStatusFrozen           MilestoneStatus = "frozen"
 	MilestoneStatusCanceled         MilestoneStatus = "canceled"
 
 	MilestoneCreateReasonFullPayment     MilestoneCreateReason = "full_payment"
