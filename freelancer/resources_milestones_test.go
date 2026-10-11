@@ -209,7 +209,7 @@ func TestMilestones_Actions(t *testing.T) {
 func TestMilestoneService_ListRequests(t *testing.T) {
 	opts := rr.ListMilestoneRequestsOptions{
 		Projects:   []int64{1, 2},
-		Statuses:   []rr.MilestoneStatus{rr.MilestoneStatusCanceled},
+		Statuses:   []rr.MilestoneRequestStatus{rr.MilestoneRequestStatusCreated},
 		SortField:  rr.Enum(rr.SortFieldsBidAvgUsd),
 		UserStatus: rr.Bool(true),
 	}
@@ -221,7 +221,7 @@ func TestMilestoneService_ListRequests(t *testing.T) {
 		assert.Equal(t, string(endpoints.MilestoneRequests), r.URL.Path)
 		// options
 		assert.Equal(t, "true", q.Get("user_status"))
-		assert.ElementsMatch(t, []string{string(rr.MilestoneStatusCanceled)}, q["statuses[]"])
+		assert.ElementsMatch(t, []string{string(rr.MilestoneRequestStatusCreated)}, q["statuses[]"])
 		assert.ElementsMatch(t, []string{"1", "2"}, q["projects[]"])
 
 		w.WriteHeader(http.StatusOK)
