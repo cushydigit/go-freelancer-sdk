@@ -1,4 +1,4 @@
-package main
+package examples
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/cushydigit/go-freelancer-sdk/example/client"
-	"github.com/cushydigit/go-freelancer-sdk/example/common"
+	usecases "github.com/cushydigit/go-freelancer-sdk/example/use-cases"
 )
 
 func main() {
@@ -18,13 +18,9 @@ func main() {
 	)
 	useSandBox := false
 	c := client.Init(l, useSandBox)
-	// common.FetchAndDisplayTimezones(ctx, c)
-	common.FetchAndDisplayCountries(ctx, c)
-	// projects.FetchAndDisplayCurrencies(ctx, c)
-	// projects.FetchAndDisplayBudget(ctx, c)
-	// projects.FetchAndDisplayCategories(ctx, c)
-	// projects.FetchAndDisplayProjects(ctx, c)
-	// projects.CreateProject(ctx, c)
-	// users.FetchAndDisplayFreelancers(ctx, c)
-	// users.FetchAndDisplayDevices(ctx, c)
+	usecases.ListActiveProjects(ctx, c)
+	usecases.FetchAndDisplayBudget(ctx, c)
+	usecases.FetchAndDisplayTimezones(ctx, c)
+	usecases.ListAndDisplayFreelancers(ctx, c)
+
 }
