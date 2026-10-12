@@ -73,7 +73,7 @@ func main() {
 The examples assume these environment variable:
 
 | Variable | Description | Example |
-| : ------ | :---------- | :------ |
+| :------ | :---------- | :------ |
 | FREELANCER_ACCESS_TOKEN | OAuth2 access token | frl_xxxxxxxxxxxx |
 | (Optional) PROXY_ADDR | SOCKS proxy address | socks5://localhost:1080 |
 
