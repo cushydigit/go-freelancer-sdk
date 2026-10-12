@@ -24,8 +24,6 @@ A Go (Golang) SDK for interacting with the [Freelancer.com API](https://develope
 
 This library provides a simple, typed client for accessing Freelancer.com services like projects, bids, users, currencies, and more.
 
- --- 
-
 ## Why I built this SDK?
 
 As a freelancer, I spend a lot of time on the platform. I wanted to build automated tools (like bidding bots and project monitors) to streamline my workflow, but I realized there was no comprehensive Go client available.
@@ -75,7 +73,7 @@ func main() {
 The examples assume these environment variable:
 
 | Variable | Description | Example |
-| : ---  --- - | : ---  ---  --- - | : ---  ---  |
+| : ------ | :---------- | :------ |
 | FREELANCER_ACCESS_TOKEN | OAuth2 access token | frl_xxxxxxxxxxxx |
 | (Optional) PROXY_ADDR | SOCKS proxy address | socks5://localhost:1080 |
 
