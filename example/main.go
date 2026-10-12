@@ -13,7 +13,7 @@ func main() {
 	ctx := context.Background()
 	l := slog.New(
 		slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-			Level: slog.LevelDebug,
+			Level: slog.LevelError,
 		}),
 	)
 	useSandBox := false
@@ -21,6 +21,4 @@ func main() {
 	usecases.ListActiveProjects(ctx, c)
 	usecases.FetchAndDisplayBudget(ctx, c)
 	usecases.FetchAndDisplayTimezones(ctx, c)
-	usecases.ListAndDisplayFreelancers(ctx, c)
-
 }
