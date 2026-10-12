@@ -38,8 +38,6 @@ I spent a significant amount of time hand-coding these service wrappers to handl
 - **Context Support:** All methods support `context.Context` for timeouts and cancellation.
 - **License:** MIT Licensed — free to use and modify
 
- --- 
-
 ## Installation
 
 to add this SDK to your project:
