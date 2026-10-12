@@ -106,7 +106,7 @@ func main() {
     
     // Step 3: Fetch projects with context for timeout control
     ctx := context.Background()
-    res, meta, err := client.Services.Projects.SearchActive(ctx, &opts)
+    res, meta, err := client.Resources.Projects.SearchActive(ctx, &opts)
     if err != nil {
         log.Fatalf("Search failed: %v", err)
     }
@@ -231,7 +231,7 @@ if meta.RateLimit.Remaining == 0 {
 ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 defer cancel()
 
-res, meta, err := client.Services.Projects.SearchActive(ctx, opts)
+res, meta, err := client.resources.Projects.SearchActive(ctx, opts)
 if err != nil {
     if errors.Is(err, ctx.Err()) {
         fmt.Println("Request timed out or was cancelled")
@@ -258,7 +258,7 @@ This SDK follows a modular service design. All core logic is located in `freelan
 This SDK wraps the Freelancer API through typed resource services. Every public method accepts `context.Context` for cancellation and timeout control, returns `(*RawResponse, *ResponseMeta, error)` (or a typed response where the API defines one), and delegates to a shared internal `execute` pipeline handling authentication, base-URL resolution, and JSON round-tripping.
 
 | Resource (Service) | Endpoint |
-| : ---  ---  ---  ---  --- -- | : ---  --- - |
+| :----------------- | :------- |
 | `Projects` | `/projects/0.1/projects` |
 | `Collaborations` | `/projects/0.1/projects/collaboration` |
 | `Services` | `/projects/0.1/services` |
