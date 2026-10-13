@@ -1,0 +1,98 @@
+package reqres
+
+import (
+	"encoding/json"
+)
+
+type base struct {
+	Status    string `json:"status"`
+	RequestID string `json:"request_id"`
+}
+
+type RawResponse struct {
+	base
+	Result json.RawMessage `json:"result"`
+}
+
+// Common Responses
+type ListCountriesResponse struct {
+	base
+	Result struct {
+		Countries []*Country `json:"countries"`
+	} `json:"result"`
+}
+
+type ListTimezonesResponse struct {
+	base
+	Result struct {
+		Timezones []*Timezone `json:"timezones"`
+	} `json:"result"`
+}
+
+type ListCategoriesResponse struct {
+	base
+	Result struct {
+		Categories []*Category `json:"categories"`
+		// jobs is dictionary with category ID as key and list of jobs as value
+		Jobs map[string][]Job `json:"jobs,omitempty"`
+	} `json:"result"`
+}
+
+type ListProjectsResponse struct {
+	base
+	Result struct {
+		Projects   []*Project `json:"projects"`
+		TotalCount int        `json:"total_count"`
+	} `json:"result"`
+}
+
+type ListUsersResponse struct {
+	base
+	Result struct {
+		Users map[string]*User `json:"users"`
+	} `json:"result"`
+}
+
+// Users returns the users as a slice
+func (r *ListUsersResponse) Users() []*User {
+	users := make([]*User, 0, len(r.Result.Users))
+	for _, user := range r.Result.Users {
+		users = append(users, user)
+	}
+	return users
+}
+
+type ProjectResponse struct {
+	base
+	Result *Project `json:"result"`
+}
+type UserResponse struct {
+	base
+	Result *User `json:"result"`
+}
+
+type ListUsersReputationsResponse struct {
+	base
+	Result map[string]*Reputation `json:"result"`
+}
+
+type ListBudgetsResponse struct {
+	base
+	Result struct {
+		Budgets []*Budget `json:"budgets"`
+	} `json:"result"`
+}
+
+type ListCurrenciesResponse struct {
+	base
+	Result struct {
+		Currencies []*Currency `json:"currencies"`
+	} `json:"result"`
+}
+
+type ListSelfDevicesResponse struct {
+	base
+	Result struct {
+		Devices []*Device `json:"devices"`
+	} `json:"result"`
+}

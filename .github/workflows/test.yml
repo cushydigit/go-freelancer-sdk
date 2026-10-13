@@ -11,22 +11,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.24'
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+          cache: true
 
-    - name: Tidy modules
-      run: go mod tidy
+      - name: Check modules
+        run: |
+          go mod tidy
+          git diff --exit-code go.mod go.sum
 
-    - name: Build SDK
-      run: go build ./freelancer/...
+      - name: Check formatting
+        run: |
+          test -z "$(gofmt -l .)" || {
+            echo "The following files are not formatted:"
+            gofmt -l .
+            exit 1
+          }
 
-    - name: Vet SDK
-      run: go vet ./freelancer/...
+      - name: Build SDK
+        run: go build ./freelancer/...
 
-    - name: Run SDK tests
-      run: go test -v ./freelancer/...
+      - name: Vet SDK
+        run: go vet ./freelancer/...
+
+      - name: Run SDK tests
+        run: go test -v ./freelancer/...
+
+      - name: Run race detector
+        run: go test -race ./freelancer/...
